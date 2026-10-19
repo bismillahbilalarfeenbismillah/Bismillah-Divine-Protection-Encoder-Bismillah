@@ -1,20 +1,29 @@
 # Bismillah ir-Rahman ir-Rahim
 """
-Bismillah Divine Protection Encoder -- FATIMA v4.0 -- 11-Heaven Architecture
+Bismillah Divine Protection Encoder -- FATIMA v5.0 -- 11-Heaven, 154-Layer Architecture
 
 Seals every file in a directory with the name of Allah subhanahu wa ta'ala
-across ELEVEN HEAVENS of protection, containing 151 LAYERS total -- from
+across ELEVEN HEAVENS of protection, containing 154 LAYERS total -- from
 subatomic particles to the largest scale of creation -- so that no file
 remains unprotected against shaytan, in sha Allah.
 
-THE 11-HEAVEN ARCHITECTURE:
+THE 154-LAYER DUAL-CONSTANT ARCHITECTURE:
 
-  The upgrade from 11 flat layers (v3.0) to 11 heavens containing 151 layers
-  (v4.0) is grounded in four findings:
+  154 = 2 x 7 x 11 = 7 x 22 = 11 x 14
+
+  This cardinality simultaneously encodes both divine constants:
+    - 7  (al-muhkam)  -- what the Qur'an says (67:3, 71:15)
+    - 11 (al-mutashabih) -- what the Qur'an shows (12:4, H(11)=1.0157)
+
+  Each of the 11 heavens contains exactly 14 layers -- two complete cycles
+  of the revealed constant per heaven (14 = 2 x 7) -- yielding a uniform
+  architecture whose very cardinality testifies to tawhid.
+
+  The upgrade from v4.0 (151 layers) to v5.0 (154 layers) is grounded in
+  six findings:
 
     1. "The Pre-Corruption Signal and Its Mathematical Witness" (Arfeen 2026)
-       -- The Hurst exponent peaks at N=11, identifying the dimensional
-       constant of creation as eleven. H(11) = 1.0157 (harmonic R/S).
+       -- The Hurst exponent peaks at N=11. H(11) = 1.0157.
 
     2. "The Guarded Reminder and the Adversarial Architecture" (Arfeen 2026)
        -- The adversary operates as a mode-collapse vector within Allah's
@@ -28,69 +37,75 @@ THE 11-HEAVEN ARCHITECTURE:
        -- Sihr propagates through speech, material, and cognitive channels
        at every level of the substrate hierarchy.
 
-  The Qur'an references seven heavens (67:3, 71:15), but the mathematical
-  witness of the Hurst exponent reveals eleven as the dimensional constant.
-  Seven is what the Qur'an says; eleven is what the Qur'an shows. The 151
-  layers across 11 heavens map to every scale of Allah's creation:
+    5. "The Eleven Heavens and the One Hundred Fifty-Four Layers" (Arfeen 2026)
+       -- The volumetric architecture encoding both divine constants in a
+       uniform 11 x 14 structure.
 
-HEAVEN MAP (11 Heavens, 151 Layers):
+    6. "Computational Tawhid" (Arfeen 2026)
+       -- The unity of revelation and mathematical witness: 154 = 2 x 7 x 11
+       is not indivisibility but the unity of meaningful parts.
+
+HEAVEN MAP (11 Heavens, 154 Layers, Uniform 14 Per Heaven):
 
   Heaven 0  -- AS-SAMAWAT AD-DUNYA (The Nearest Heaven)
                Scale: SUBATOMIC -- individual bits and bytes
-               Layers: 1-14 (14 layers)
+               Layers: 0-13 (14 layers)
                Guardian: Az-Zahir (The Manifest)
 
   Heaven 1  -- AS-SAMAWAT ATH-THANIYA (The Second Heaven)
                Scale: ATOMIC -- byte-pairs and nibble patterns
-               Layers: 15-27 (13 layers)
+               Layers: 14-27 (14 layers)
                Guardian: Al-Musawwir (The Fashioner)
 
   Heaven 2  -- AS-SAMAWAT ATH-THALITHA (The Third Heaven)
                Scale: MOLECULAR -- block-level structures (4-64 bytes)
-               Layers: 28-40 (13 layers)
+               Layers: 28-41 (14 layers)
                Guardian: Al-Batin (The Hidden)
 
   Heaven 3  -- AS-SAMAWAT AR-RABI'A (The Fourth Heaven)
                Scale: CELLULAR -- paragraph and section-level patterns
-               Layers: 41-53 (13 layers)
+               Layers: 42-55 (14 layers)
                Guardian: Al-Alim (The All-Knowing)
 
   Heaven 4  -- AS-SAMAWAT AL-KHAMISA (The Fifth Heaven)
                Scale: ORGANIC -- structural flow and control markers
-               Layers: 54-67 (14 layers)
+               Layers: 56-69 (14 layers)
                Guardian: Al-Hafiz (The Preserver)
 
   Heaven 5  -- AS-SAMAWAT AS-SADISA (The Sixth Heaven)
                Scale: TERRESTRIAL -- semantic fingerprinting
-               Layers: 68-80 (13 layers)
+               Layers: 70-83 (14 layers)
                Guardian: Al-Muhaymin (The Protector)
 
   Heaven 6  -- AS-SAMAWAT AS-SABI'A (The Seventh Heaven)
                Scale: PLANETARY -- whole-section integrity
-               Layers: 81-94 (14 layers)
+               Layers: 84-97 (14 layers)
                Guardian: Al-Waliyy (The Protector/Friend)
 
   Heaven 7  -- AS-SAMAWAT ATH-THAMINA (The Eighth Heaven)
                Scale: STELLAR -- cross-section fractal relationships
-               Layers: 95-108 (14 layers)
+               Layers: 98-111 (14 layers)
                Guardian: Al-Hasib (The Reckoner)
 
   Heaven 8  -- AS-SAMAWAT AT-TASI'A (The Ninth Heaven)
                Scale: GALACTIC -- whole-file fractal properties
-               Layers: 109-122 (14 layers)
+               Layers: 112-125 (14 layers)
                Guardian: Ar-Raqib (The Watchful)
 
   Heaven 9  -- AS-SAMAWAT AL-'ASHIRA (The Tenth Heaven)
                Scale: COSMIC -- inter-file and directory-level relationships
-               Layers: 123-140 (18 layers)
+               Layers: 126-139 (14 layers)
                Guardian: Al-Muhsi (The Accounter)
 
   Heaven 10 -- SIDRAT AL-MUNTAHA (The Lote Tree of the Utmost Boundary)
                Scale: DIVINE WITNESS -- self-referential testimony
-               Layers: 141-151 (11 layers -- one per heaven)
+               Layers: 140-153 (14 layers)
                Guardian: Ash-Shahid (The Witness)
 
-  Total: 151 layers across 11 heavens (pathways)
+  Total: 154 layers across 11 heavens (pathways)
+  Each heaven: 14 layers = 2 x 7 (two cycles of the revealed constant)
+  154 = 2 x 7 x 11 (both divine constants present in a single integer)
+  99 + 55 = 154 (99 Names + T(10) = F(10) = 55)
 
   "He it is who created for you all that is on the earth. Then He
   turned to the heaven and made them seven heavens, and He is the
@@ -103,7 +118,7 @@ HEAVEN MAP (11 Heavens, 151 Layers):
   I saw them prostrating to me." (12:4)
 
 USAGE:
-    python bismillah_encoder.py seal <path>            # Seal all files (151 layers)
+    python bismillah_encoder.py seal <path>            # Seal all files (154 layers)
     python bismillah_encoder.py seal <path> --names    # Seal + embed 99 Names
     python bismillah_encoder.py verify <path>          # Verify protection
     python bismillah_encoder.py verify <path> --strict # Verify + hash chain check
@@ -146,12 +161,27 @@ BISMILLAH_ARABIC = "بِسْمِ اللَّهِ الرَّحْمَـنِ الر�
 
 # The dimensional constant of creation, witnessed by the Hurst exponent
 DIMENSIONAL_CONSTANT = 11
-TOTAL_LAYERS = 151
+TOTAL_LAYERS = 154
 TOTAL_HEAVENS = 11
+LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "4.0.0"
+ENCODER_VERSION = "5.0.0"
+
+# The dual-constant architecture (Paper 5, Paper 6)
+# 154 = 2 x 7 x 11 -- both divine constants present simultaneously
+MUHKAM_CONSTANT = 7          # What the Qur'an says (67:3, 71:15)
+MUTASHABIH_CONSTANT = 11     # What the Qur'an shows (12:4, H(11))
+DUAL_CONSTANT_PRODUCT = 2 * MUHKAM_CONSTANT * MUTASHABIH_CONSTANT  # 154
+CYCLES_PER_HEAVEN = 2        # 14 = 2 x 7, two cycles of the revealed constant
+
+# The Name cycling (Paper 5, Section V)
+# 99 Names + 55 repeated = 154 layers
+# 55 = T(10) = 10th triangular number = 10th Fibonacci number
+AL_ASMA_COUNT = 99
+TRIANGULAR_10 = 55           # T(10) = sum(1..10) = 55
+FIBONACCI_10 = 55            # F(10) = 55
 
 # Surah Yusuf 12:4 -- The number that survives uncorrupted
 # "Indeed, I have seen eleven stars and the sun and the moon;
@@ -266,22 +296,20 @@ AL_ASMA_UL_HUSNA = [
 
 
 def _name_for_layer(layer_idx):
-    """Return the Divine Name assigned to a specific layer (0-150).
+    """Return the Divine Name assigned to a specific layer (0-153).
 
-    The 99 Names cycle through all 151 layers: the first 99 layers each
-    get a unique Name, then layers 99-150 cycle back from the beginning,
+    The 99 Names cycle through all 154 layers: the first 99 layers each
+    get a unique Name, then layers 99-153 cycle back from the beginning,
     so that every layer is sealed by a Name and every Name is honored.
-    99 + 52 = 151.
+    99 + 55 = 154, where 55 = T(10) = F(10).
     """
     return AL_ASMA_UL_HUSNA[layer_idx % len(AL_ASMA_UL_HUSNA)]
 
 
 # ============================================================================
-#  THE 11 HEAVENS -- Structure Definition
+#  THE 11 HEAVENS -- Structure Definition (Uniform 14 Layers Per Heaven)
 # ============================================================================
 
-# Each heaven: (name_ar, name_en, scale, guardian_name, guardian_meaning,
-#               layer_start, layer_end_inclusive, layer_count)
 HEAVENS = [
     {
         "heaven": 0,
@@ -292,7 +320,7 @@ HEAVENS = [
         "guardian": "Az-Zahir",
         "guardian_meaning": "The Manifest",
         "layer_start": 0,
-        "layer_end": 13,  # inclusive
+        "layer_end": 13,
         "layer_count": 14,
         "quranic": "67:3 -- He who created seven heavens in layers",
     },
@@ -305,8 +333,8 @@ HEAVENS = [
         "guardian": "Al-Musawwir",
         "guardian_meaning": "The Fashioner",
         "layer_start": 14,
-        "layer_end": 26,
-        "layer_count": 13,
+        "layer_end": 27,
+        "layer_count": 14,
         "quranic": "41:12 -- He completed them as seven heavens in two days",
     },
     {
@@ -317,9 +345,9 @@ HEAVENS = [
         "scale_desc": "Block-level structures (4-64 byte windows)",
         "guardian": "Al-Batin",
         "guardian_meaning": "The Hidden",
-        "layer_start": 27,
-        "layer_end": 39,
-        "layer_count": 13,
+        "layer_start": 28,
+        "layer_end": 41,
+        "layer_count": 14,
         "quranic": "23:17 -- We created above you seven pathways",
     },
     {
@@ -330,9 +358,9 @@ HEAVENS = [
         "scale_desc": "Paragraph and section-level patterns",
         "guardian": "Al-Alim",
         "guardian_meaning": "The All-Knowing",
-        "layer_start": 40,
-        "layer_end": 52,
-        "layer_count": 13,
+        "layer_start": 42,
+        "layer_end": 55,
+        "layer_count": 14,
         "quranic": "65:12 -- Allah who created seven heavens and of the earth the like",
     },
     {
@@ -343,8 +371,8 @@ HEAVENS = [
         "scale_desc": "Structural flow, control markers, and newline topology",
         "guardian": "Al-Hafiz",
         "guardian_meaning": "The Preserver",
-        "layer_start": 53,
-        "layer_end": 66,
+        "layer_start": 56,
+        "layer_end": 69,
         "layer_count": 14,
         "quranic": "15:9 -- Indeed, it is We who sent down the Reminder",
     },
@@ -356,9 +384,9 @@ HEAVENS = [
         "scale_desc": "Semantic fingerprinting and character-class distributions",
         "guardian": "Al-Muhaymin",
         "guardian_meaning": "The Protector",
-        "layer_start": 67,
-        "layer_end": 79,
-        "layer_count": 13,
+        "layer_start": 70,
+        "layer_end": 83,
+        "layer_count": 14,
         "quranic": "2:255 -- His Throne extends over the heavens and the earth",
     },
     {
@@ -369,8 +397,8 @@ HEAVENS = [
         "scale_desc": "Whole-section integrity and positional hashing",
         "guardian": "Al-Waliyy",
         "guardian_meaning": "The Protector/Friend",
-        "layer_start": 80,
-        "layer_end": 93,
+        "layer_start": 84,
+        "layer_end": 97,
         "layer_count": 14,
         "quranic": "71:15 -- Do you not see how Allah created seven heavens in layers",
     },
@@ -382,8 +410,8 @@ HEAVENS = [
         "scale_desc": "Cross-section fractal relationships and Hurst watermarks",
         "guardian": "Al-Hasib",
         "guardian_meaning": "The Reckoner",
-        "layer_start": 94,
-        "layer_end": 107,
+        "layer_start": 98,
+        "layer_end": 111,
         "layer_count": 14,
         "quranic": "12:4 -- I have seen eleven stars",
     },
@@ -395,8 +423,8 @@ HEAVENS = [
         "scale_desc": "Whole-file fractal properties and adversarial chain",
         "guardian": "Ar-Raqib",
         "guardian_meaning": "The Watchful",
-        "layer_start": 108,
-        "layer_end": 121,
+        "layer_start": 112,
+        "layer_end": 125,
         "layer_count": 14,
         "quranic": "41:42 -- Falsehood cannot approach it from before it or behind it",
     },
@@ -408,9 +436,9 @@ HEAVENS = [
         "scale_desc": "Inter-file relationships, directory-level integrity, imposition spectrum",
         "guardian": "Al-Muhsi",
         "guardian_meaning": "The Accounter",
-        "layer_start": 122,
+        "layer_start": 126,
         "layer_end": 139,
-        "layer_count": 18,
+        "layer_count": 14,
         "quranic": "21:30 -- The heavens and earth were a joined entity then We separated them",
     },
     {
@@ -418,30 +446,55 @@ HEAVENS = [
         "name_ar": "Sidrat al-Muntaha",
         "name_en": "The Lote Tree of the Utmost Boundary",
         "scale": "DIVINE WITNESS",
-        "scale_desc": "Self-referential testimony -- one witness per heaven",
+        "scale_desc": "Self-referential testimony, dual-constant verification, Bismillah completion",
         "guardian": "Ash-Shahid",
         "guardian_meaning": "The Witness",
         "layer_start": 140,
-        "layer_end": 150,
-        "layer_count": 11,
+        "layer_end": 153,
+        "layer_count": 14,
         "quranic": "53:14 -- Near the Lote Tree of the Utmost Boundary",
     },
 ]
 
 # The three modes of adversarial corruption (Paper 2, Unit I)
 CORRUPTION_MODES = {
-    "shahwa": "desire -- the appetite vector",
-    "kibr": "arrogance -- the self-elevation vector",
-    "ghurur": "delusion -- the false-reality vector",
+    "shahwa": "desire -- the appetite vector (accumulation, hoarding, attachment)",
+    "kibr": "arrogance -- the self-elevation vector (pride, superiority, domination)",
+    "ghurur": "delusion -- the false-reality vector (distortion, denial, fantasy)",
 }
 
-# The Imposition Spectrum (Paper 2, Unit III)
+# The Imposition Spectrum (Paper 2, Unit III; Paper B, Section IV)
 IMPOSITION_SPECTRUM = {
     "L1_WASWAS": "Suggestion -- unauthorized metadata whispers",
     "L2_EMOTIONAL": "Emotional pressure -- content sentiment drift",
     "L3_PHYSICAL": "Physical coercion -- binary structure tampering",
     "L4_BEHAVIORAL": "Behavioral coercion -- execution flow alteration",
     "L5_MEMORY": "Memory alteration -- hash chain breaks",
+}
+
+# Sihr propagation channels (Paper B, Section III)
+SIHR_CHANNELS = {
+    "SPEECH": "Verbal/textual channel -- incantation, suggestion, linguistic manipulation",
+    "MATERIAL": "Physical/substrate channel -- objects, substances, binding to matter",
+    "COGNITIVE": "Mental/perceptual channel -- thought insertion, false memory, delusion",
+}
+
+# Material substrate hierarchy (Paper A, Section II)
+MATERIAL_SUBSTRATES = [
+    "ELEMENTS",     # Raw atomic/molecular substrates
+    "COMPOUNDS",    # Chemical combinations
+    "BIOLOGICAL",   # Living tissue and organisms
+    "COGNITIVE",    # Neural and computational substrates
+    "DIGITAL",      # Binary data and file structures
+]
+
+# Computational Tawhid framework (Paper 6)
+# The architecture's cardinality encodes divine unity:
+# 154 = 2 x 7 x 11 -- not indivisibility, but unity of meaningful parts
+TAWHID_FACTORS = {
+    "two": 2,       # The duality that resolves into unity (cycles per heaven)
+    "seven": 7,     # Al-muhkam -- what revelation states
+    "eleven": 11,   # Al-mutashabih -- what the mathematical witness shows
 }
 
 # ============================================================================
@@ -572,17 +625,21 @@ def is_code_file(ext):
 
 
 # ============================================================================
-#  THE 151-LAYER COMPUTATION ENGINE
+#  THE 154-LAYER COMPUTATION ENGINE
 # ============================================================================
 #
 #  Each layer computes a distinct Bismillah-anchored hash at a specific
 #  scale of the file's content. The layers are organized into 11 heavens,
-#  each heaven corresponding to a scale of creation.
+#  each heaven containing exactly 14 layers -- two complete cycles of the
+#  revealed constant (14 = 2 x 7).
 #
 #  The computational principle: at each scale, we extract a feature from
 #  the content at that granularity and seal it with Bismillah and the
-#  Divine Name assigned to that layer. The result is 151 distinct integrity
+#  Divine Name assigned to that layer. The result is 154 distinct integrity
 #  seals that together form a complete witness across all scales of creation.
+#
+#  154 = 2 x 7 x 11 -- both the muhkam (7) and mutashabih (11) constants
+#  are present in the architecture's cardinality. This is computational tawhid.
 
 
 def _layer_hash(layer_idx, scale_tag, content_feature):
@@ -611,11 +668,12 @@ def _layer_hash(layer_idx, scale_tag, content_feature):
     }
 
 
-# --- Heaven 0: SUBATOMIC (Layers 0-13) ---
+# --- Heaven 0: SUBATOMIC (Layers 0-13, 14 layers) ---
 # Individual bits, bytes, nibbles -- the smallest particles of data
 
 def _compute_heaven_0(data):
     """Compute 14 subatomic-scale layers."""
+    base = HEAVENS[0]["layer_start"]  # 0
     layers = []
     n = len(data)
 
@@ -623,41 +681,41 @@ def _compute_heaven_0(data):
     freq = [0] * 256
     for b in data:
         freq[b] += 1
-    layers.append(_layer_hash(0, "BYTE_FREQ", bytes(str(freq).encode('utf-8')[:256])))
+    layers.append(_layer_hash(base + 0, "BYTE_FREQ", bytes(str(freq).encode('utf-8')[:256])))
 
     # L1: High-nibble (upper 4 bits) distribution
     hi_nibbles = [0] * 16
     for b in data:
         hi_nibbles[b >> 4] += 1
-    layers.append(_layer_hash(1, "HI_NIBBLE", str(hi_nibbles)))
+    layers.append(_layer_hash(base + 1, "HI_NIBBLE", str(hi_nibbles)))
 
     # L2: Low-nibble (lower 4 bits) distribution
     lo_nibbles = [0] * 16
     for b in data:
         lo_nibbles[b & 0x0F] += 1
-    layers.append(_layer_hash(2, "LO_NIBBLE", str(lo_nibbles)))
+    layers.append(_layer_hash(base + 2, "LO_NIBBLE", str(lo_nibbles)))
 
     # L3: Bit-level balance (ratio of 1-bits to 0-bits)
     ones = sum(bin(b).count('1') for b in data)
     zeros = n * 8 - ones
-    layers.append(_layer_hash(3, "BIT_BALANCE", "{}:{}".format(ones, zeros)))
+    layers.append(_layer_hash(base + 3, "BIT_BALANCE", "{}:{}".format(ones, zeros)))
 
     # L4: First 11 bytes (boundary marker -- subatomic edge)
-    layers.append(_layer_hash(4, "HEAD_11", data[:DIMENSIONAL_CONSTANT]))
+    layers.append(_layer_hash(base + 4, "HEAD_11", data[:DIMENSIONAL_CONSTANT]))
 
     # L5: Last 11 bytes (boundary marker -- subatomic edge)
     tail = data[-DIMENSIONAL_CONSTANT:] if n >= DIMENSIONAL_CONSTANT else data
-    layers.append(_layer_hash(5, "TAIL_11", tail))
+    layers.append(_layer_hash(base + 5, "TAIL_11", tail))
 
     # L6: Every 11th byte (dimensional sampling)
     sample_11 = bytes(data[i] for i in range(0, n, DIMENSIONAL_CONSTANT))
-    layers.append(_layer_hash(6, "SAMPLE_11", sample_11))
+    layers.append(_layer_hash(base + 6, "SAMPLE_11", sample_11))
 
     # L7: XOR fold -- XOR all bytes into a single accumulator
     xor_acc = 0
     for b in data:
         xor_acc ^= b
-    layers.append(_layer_hash(7, "XOR_FOLD", str(xor_acc)))
+    layers.append(_layer_hash(base + 7, "XOR_FOLD", str(xor_acc)))
 
     # L8: Byte-value min/max/median
     if n > 0:
@@ -665,11 +723,11 @@ def _compute_heaven_0(data):
         bmin, bmax, bmed = sorted_bytes[0], sorted_bytes[-1], sorted_bytes[n // 2]
     else:
         bmin, bmax, bmed = 0, 0, 0
-    layers.append(_layer_hash(8, "MIN_MAX_MED", "{}|{}|{}".format(bmin, bmax, bmed)))
+    layers.append(_layer_hash(base + 8, "MIN_MAX_MED", "{}|{}|{}".format(bmin, bmax, bmed)))
 
     # L9: Byte transition count (how many times adjacent bytes differ)
     transitions = sum(1 for i in range(n - 1) if data[i] != data[i + 1])
-    layers.append(_layer_hash(9, "TRANSITIONS", str(transitions)))
+    layers.append(_layer_hash(base + 9, "TRANSITIONS", str(transitions)))
 
     # L10: Run-length encoding digest (count of maximal runs)
     runs = 1
@@ -677,7 +735,7 @@ def _compute_heaven_0(data):
         for i in range(1, min(n, 10000)):
             if data[i] != data[i - 1]:
                 runs += 1
-    layers.append(_layer_hash(10, "RUN_COUNT", str(runs)))
+    layers.append(_layer_hash(base + 10, "RUN_COUNT", str(runs)))
 
     # L11: Parity vector -- parity of each 11-byte block
     parities = []
@@ -687,7 +745,7 @@ def _compute_heaven_0(data):
         for b in block:
             p ^= b
         parities.append(p & 1)
-    layers.append(_layer_hash(11, "PARITY_VEC", str(parities[:128])))
+    layers.append(_layer_hash(base + 11, "PARITY_VEC", str(parities[:128])))
 
     # L12: Byte histogram entropy (Shannon)
     entropy = 0.0
@@ -696,20 +754,21 @@ def _compute_heaven_0(data):
             if f > 0:
                 p = f / n
                 entropy -= p * math.log2(p)
-    layers.append(_layer_hash(12, "ENTROPY", str(round(entropy, 8))))
+    layers.append(_layer_hash(base + 12, "ENTROPY", str(round(entropy, 8))))
 
-    # L13: Checksum modulo 151 (the total layer count)
+    # L13: Checksum modulo 154 (the total layer count -- dual-constant witness)
     cksum = sum(data) % TOTAL_LAYERS
-    layers.append(_layer_hash(13, "CKSUM_151", str(cksum)))
+    layers.append(_layer_hash(base + 13, "CKSUM_154", str(cksum)))
 
     return layers
 
 
-# --- Heaven 1: ATOMIC (Layers 14-26) ---
+# --- Heaven 1: ATOMIC (Layers 14-27, 14 layers) ---
 # Byte-pairs, bigrams, and nibble-pair patterns
 
 def _compute_heaven_1(data):
-    """Compute 13 atomic-scale layers."""
+    """Compute 14 atomic-scale layers."""
+    base = HEAVENS[1]["layer_start"]  # 14
     layers = []
     n = len(data)
 
@@ -719,7 +778,7 @@ def _compute_heaven_1(data):
         bg = (data[i], data[i + 1])
         bigram_freq[bg] = bigram_freq.get(bg, 0) + 1
     top_bg = max(bigram_freq, key=bigram_freq.get) if bigram_freq else (0, 0)
-    layers.append(_layer_hash(14, "TOP_BIGRAM", "{}:{}:{}".format(
+    layers.append(_layer_hash(base + 0, "TOP_BIGRAM", "{}:{}:{}".format(
         top_bg[0], top_bg[1], bigram_freq.get(top_bg, 0))))
 
     # L15: Bigram entropy
@@ -729,19 +788,19 @@ def _compute_heaven_1(data):
         p = count / bg_total
         if p > 0:
             bg_entropy -= p * math.log2(p)
-    layers.append(_layer_hash(15, "BIGRAM_ENTROPY", str(round(bg_entropy, 6))))
+    layers.append(_layer_hash(base + 1, "BIGRAM_ENTROPY", str(round(bg_entropy, 6))))
 
     # L16: Ascending pair count (byte[i] < byte[i+1])
     asc = sum(1 for i in range(min(n - 1, 50000)) if data[i] < data[i + 1])
-    layers.append(_layer_hash(16, "ASC_PAIRS", str(asc)))
+    layers.append(_layer_hash(base + 2, "ASC_PAIRS", str(asc)))
 
     # L17: Descending pair count
     desc = sum(1 for i in range(min(n - 1, 50000)) if data[i] > data[i + 1])
-    layers.append(_layer_hash(17, "DESC_PAIRS", str(desc)))
+    layers.append(_layer_hash(base + 3, "DESC_PAIRS", str(desc)))
 
     # L18: Equal pair count
     eq = sum(1 for i in range(min(n - 1, 50000)) if data[i] == data[i + 1])
-    layers.append(_layer_hash(18, "EQ_PAIRS", str(eq)))
+    layers.append(_layer_hash(base + 4, "EQ_PAIRS", str(eq)))
 
     # L19: Nibble-pair transition matrix diagonal sum
     diag = 0
@@ -749,38 +808,38 @@ def _compute_heaven_1(data):
         hi1, hi2 = data[i] >> 4, data[i + 1] >> 4
         if hi1 == hi2:
             diag += 1
-    layers.append(_layer_hash(19, "NIBBLE_DIAG", str(diag)))
+    layers.append(_layer_hash(base + 5, "NIBBLE_DIAG", str(diag)))
 
     # L20: Delta encoding digest (differences between consecutive bytes)
     deltas = []
     for i in range(min(n - 1, 1000)):
         deltas.append((data[i + 1] - data[i]) % 256)
-    layers.append(_layer_hash(20, "DELTA_DIGEST", str(sum(deltas))))
+    layers.append(_layer_hash(base + 6, "DELTA_DIGEST", str(sum(deltas))))
 
     # L21: Byte-pair XOR distribution
     xor_dist = [0] * 256
     for i in range(min(n - 1, 50000)):
         xor_dist[data[i] ^ data[i + 1]] += 1
-    layers.append(_layer_hash(21, "XOR_DIST", str(xor_dist[:64])))
+    layers.append(_layer_hash(base + 7, "XOR_DIST", str(xor_dist[:64])))
 
     # L22: Palindromic byte-pair count
     palindromes = sum(1 for i in range(min(n - 2, 50000)) if data[i] == data[i + 2])
-    layers.append(_layer_hash(22, "PALINDROMES", str(palindromes)))
+    layers.append(_layer_hash(base + 8, "PALINDROMES", str(palindromes)))
 
     # L23: Byte distance from ASCII space (0x20) histogram
     space_dist = [0] * 256
     for b in data[:50000]:
         space_dist[abs(b - 0x20)] += 1
-    layers.append(_layer_hash(23, "SPACE_DIST", str(space_dist[:64])))
+    layers.append(_layer_hash(base + 9, "SPACE_DIST", str(space_dist[:64])))
 
     # L24: Even/odd byte index parity
     even_sum = sum(data[i] for i in range(0, min(n, 50000), 2))
     odd_sum = sum(data[i] for i in range(1, min(n, 50000), 2))
-    layers.append(_layer_hash(24, "EVEN_ODD", "{}|{}".format(even_sum, odd_sum)))
+    layers.append(_layer_hash(base + 10, "EVEN_ODD", "{}|{}".format(even_sum, odd_sum)))
 
     # L25: Trigram seed (first three bytes repeated pattern check)
     trigram_seed = data[:3] if n >= 3 else data
-    layers.append(_layer_hash(25, "TRIGRAM_SEED", trigram_seed))
+    layers.append(_layer_hash(base + 11, "TRIGRAM_SEED", trigram_seed))
 
     # L26: Byte variance
     if n > 0:
@@ -788,44 +847,54 @@ def _compute_heaven_1(data):
         variance = sum((b - mean_b) ** 2 for b in data[:50000]) / min(n, 50000)
     else:
         variance = 0
-    layers.append(_layer_hash(26, "VARIANCE", str(round(variance, 4))))
+    layers.append(_layer_hash(base + 12, "VARIANCE", str(round(variance, 4))))
+
+    # L27: Atomic resonance -- dual-constant modular sampling (NEW in v5.0)
+    # Samples at multiples of 7 and 11 to detect both divine constants
+    sample_7 = bytes(data[i] for i in range(0, min(n, 50000), MUHKAM_CONSTANT))
+    sample_11 = bytes(data[i] for i in range(0, min(n, 50000), MUTASHABIH_CONSTANT))
+    resonance_h = hashlib.sha256()
+    resonance_h.update(sample_7)
+    resonance_h.update(sample_11)
+    layers.append(_layer_hash(base + 13, "ATOMIC_RESONANCE", resonance_h.hexdigest()))
 
     return layers
 
 
-# --- Heaven 2: MOLECULAR (Layers 27-39) ---
+# --- Heaven 2: MOLECULAR (Layers 28-41, 14 layers) ---
 # Block-level structures, 4-64 byte windows
 
 def _compute_heaven_2(data):
-    """Compute 13 molecular-scale layers."""
+    """Compute 14 molecular-scale layers."""
+    base = HEAVENS[2]["layer_start"]  # 28
     layers = []
     n = len(data)
 
     block_sizes = [4, 8, 11, 16, 32, 64]
 
-    # L27-L32: Block frequency fingerprints at each block size
+    # L28-L33: Block frequency fingerprints at each block size
     for idx, bs in enumerate(block_sizes):
         block_count = n // bs if bs > 0 else 0
         block_hashes = []
         for bi in range(min(block_count, 256)):
             block = data[bi * bs:(bi + 1) * bs]
             block_hashes.append(hashlib.md5(block).hexdigest()[:8])
-        layers.append(_layer_hash(27 + idx, "BLOCK_{}".format(bs),
+        layers.append(_layer_hash(base + idx, "BLOCK_{}".format(bs),
                                   "|".join(block_hashes[:32])))
 
-    # L33: Block-boundary alignment check (how many 16-byte blocks start with 0x00)
+    # L34: Block-boundary alignment check (how many 16-byte blocks start with 0x00)
     aligned = sum(1 for i in range(0, n, 16) if i < n and data[i] == 0)
-    layers.append(_layer_hash(33, "ALIGNMENT", str(aligned)))
+    layers.append(_layer_hash(base + 6, "ALIGNMENT", str(aligned)))
 
-    # L34: Rolling hash over 11-byte windows (first 256 windows)
+    # L35: Rolling hash over 11-byte windows (first 256 windows)
     rolling = []
     for i in range(min(n - DIMENSIONAL_CONSTANT, 256)):
         window = data[i:i + DIMENSIONAL_CONSTANT]
-        rh = sum(window[j] * (151 ** j) for j in range(len(window))) % (2 ** 32)
+        rh = sum(window[j] * (TOTAL_LAYERS ** j) for j in range(len(window))) % (2 ** 32)
         rolling.append(rh)
-    layers.append(_layer_hash(34, "ROLLING_11", str(rolling[:64])))
+    layers.append(_layer_hash(base + 7, "ROLLING_11", str(rolling[:64])))
 
-    # L35: Block entropy at 32-byte granularity
+    # L36: Block entropy at 32-byte granularity
     block_entropies = []
     for i in range(0, min(n, 8192), 32):
         block = data[i:i + 32]
@@ -840,9 +909,9 @@ def _compute_heaven_2(data):
                 p = f / len(block)
                 ent -= p * math.log2(p)
         block_entropies.append(round(ent, 3))
-    layers.append(_layer_hash(35, "BLOCK_ENTROPY", str(block_entropies[:64])))
+    layers.append(_layer_hash(base + 8, "BLOCK_ENTROPY", str(block_entropies[:64])))
 
-    # L36: Molecular bond count -- adjacent blocks with high similarity
+    # L37: Molecular bond count -- adjacent blocks with high similarity
     bonds = 0
     for i in range(0, min(n - 64, 8192), 32):
         b1 = data[i:i + 32]
@@ -850,17 +919,17 @@ def _compute_heaven_2(data):
         matching = sum(1 for a, b in zip(b1, b2) if a == b)
         if matching > 16:
             bonds += 1
-    layers.append(_layer_hash(36, "BONDS", str(bonds)))
+    layers.append(_layer_hash(base + 9, "BONDS", str(bonds)))
 
-    # L37: Block checksum sequence (CRC-like rolling)
+    # L38: Block checksum sequence (CRC-like rolling)
     block_crc = []
     for i in range(0, min(n, 4096), 11):
         block = data[i:i + 11]
-        crc = sum(b * (i + 1) for i, b in enumerate(block)) % 65536
+        crc = sum(b * (j + 1) for j, b in enumerate(block)) % 65536
         block_crc.append(crc)
-    layers.append(_layer_hash(37, "BLOCK_CRC", str(block_crc[:64])))
+    layers.append(_layer_hash(base + 10, "BLOCK_CRC", str(block_crc[:64])))
 
-    # L38: Structural symmetry -- compare first half blocks to second half
+    # L39: Structural symmetry -- compare first half blocks to second half
     half = n // 2
     if half > 0:
         first_sum = sum(data[:min(half, 4096)])
@@ -868,40 +937,53 @@ def _compute_heaven_2(data):
         sym_ratio = first_sum / second_sum if second_sum > 0 else 0
     else:
         sym_ratio = 0
-    layers.append(_layer_hash(38, "SYMMETRY", str(round(sym_ratio, 6))))
+    layers.append(_layer_hash(base + 11, "SYMMETRY", str(round(sym_ratio, 6))))
 
-    # L39: Molecular signature -- hash of every 151st byte
+    # L40: Molecular signature -- hash of every 154th byte (dual-constant stride)
     sig = bytes(data[i] for i in range(0, n, TOTAL_LAYERS))
-    layers.append(_layer_hash(39, "SIG_151", sig))
+    layers.append(_layer_hash(base + 12, "SIG_154", sig))
+
+    # L41: Molecular substrate seal (NEW in v5.0 -- Paper A)
+    # Hash of block boundaries at 7-byte and 11-byte intervals combined
+    substrate_h = hashlib.sha256()
+    substrate_h.update(BISMILLAH.encode('utf-8'))
+    substrate_h.update(b"molecular_substrate")
+    for i in range(0, min(n, 4096), MUHKAM_CONSTANT):
+        substrate_h.update(data[i:i + MUHKAM_CONSTANT])
+    for i in range(0, min(n, 4096), MUTASHABIH_CONSTANT):
+        substrate_h.update(data[i:i + MUTASHABIH_CONSTANT])
+    substrate_h.update(BISMILLAH.encode('utf-8'))
+    layers.append(_layer_hash(base + 13, "SUBSTRATE", substrate_h.hexdigest()))
 
     return layers
 
 
-# --- Heaven 3: CELLULAR (Layers 40-52) ---
+# --- Heaven 3: CELLULAR (Layers 42-55, 14 layers) ---
 # Paragraph and section-level patterns
 
 def _compute_heaven_3(data):
-    """Compute 13 cellular-scale layers."""
+    """Compute 14 cellular-scale layers."""
+    base = HEAVENS[3]["layer_start"]  # 42
     layers = []
     n = len(data)
 
-    # L40: Newline positions (structural skeleton)
+    # L42: Newline positions (structural skeleton)
     newlines = [i for i, b in enumerate(data) if b == 10]  # 0x0A
-    layers.append(_layer_hash(40, "NEWLINES", str(newlines[:256])))
+    layers.append(_layer_hash(base + 0, "NEWLINES", str(newlines[:256])))
 
-    # L41: Line length distribution
+    # L43: Line length distribution
     line_lengths = []
     prev = 0
     for pos in newlines[:1000]:
         line_lengths.append(pos - prev)
         prev = pos + 1
-    layers.append(_layer_hash(41, "LINE_LENS", str(line_lengths[:128])))
+    layers.append(_layer_hash(base + 1, "LINE_LENS", str(line_lengths[:128])))
 
-    # L42: Paragraph detection (double newlines)
+    # L44: Paragraph detection (double newlines)
     double_nl = sum(1 for i in range(n - 1) if data[i] == 10 and data[i + 1] == 10)
-    layers.append(_layer_hash(42, "PARAGRAPHS", str(double_nl)))
+    layers.append(_layer_hash(base + 2, "PARAGRAPHS", str(double_nl)))
 
-    # L43: Indentation pattern (leading spaces/tabs per line)
+    # L45: Indentation pattern (leading spaces/tabs per line)
     indent_depths = []
     line_start = True
     depth = 0
@@ -918,9 +1000,9 @@ def _compute_heaven_3(data):
         if b == 10:
             line_start = True
             depth = 0
-    layers.append(_layer_hash(43, "INDENTATION", str(indent_depths[:128])))
+    layers.append(_layer_hash(base + 3, "INDENTATION", str(indent_depths[:128])))
 
-    # L44: Section boundary heuristic (lines starting with # or uppercase after blank)
+    # L46: Section boundary heuristic (lines starting with # or uppercase after blank)
     section_markers = 0
     for i in range(1, min(n, 50000)):
         if data[i - 1] == 10 and i < n:
@@ -928,29 +1010,29 @@ def _compute_heaven_3(data):
                 section_markers += 1
             elif 65 <= data[i] <= 90 and i > 1 and data[i - 2] == 10:
                 section_markers += 1
-    layers.append(_layer_hash(44, "SECTIONS", str(section_markers)))
+    layers.append(_layer_hash(base + 4, "SECTIONS", str(section_markers)))
 
-    # L45: Character class ratios (alpha, digit, space, punctuation, other)
+    # L47: Character class ratios (alpha, digit, space, punctuation, other)
     alpha = sum(1 for b in data if (65 <= b <= 90) or (97 <= b <= 122))
     digit = sum(1 for b in data if 48 <= b <= 57)
     space = sum(1 for b in data if b in (32, 9, 10, 13))
     punct = sum(1 for b in data if b in (33, 34, 39, 40, 41, 44, 45, 46, 58, 59, 63))
     other = n - alpha - digit - space - punct
-    layers.append(_layer_hash(45, "CHAR_CLASS",
+    layers.append(_layer_hash(base + 5, "CHAR_CLASS",
                               "a{}d{}s{}p{}o{}".format(alpha, digit, space, punct, other)))
 
-    # L46: Word boundary count (space-to-non-space transitions)
+    # L48: Word boundary count (space-to-non-space transitions)
     word_boundaries = 0
     for i in range(1, min(n, 50000)):
         if data[i - 1] in (32, 9, 10, 13) and data[i] not in (32, 9, 10, 13):
             word_boundaries += 1
-    layers.append(_layer_hash(46, "WORD_BOUNDS", str(word_boundaries)))
+    layers.append(_layer_hash(base + 6, "WORD_BOUNDS", str(word_boundaries)))
 
-    # L47: UTF-8 multi-byte sequence count
+    # L49: UTF-8 multi-byte sequence count
     multibyte = sum(1 for b in data if b >= 128)
-    layers.append(_layer_hash(47, "MULTIBYTE", str(multibyte)))
+    layers.append(_layer_hash(base + 7, "MULTIBYTE", str(multibyte)))
 
-    # L48: Line hash chain (each line's hash depends on previous)
+    # L50: Line hash chain (each line's hash depends on previous)
     line_chain = BISMILLAH.encode('utf-8')
     chain_terminal = ""
     line_count = 0
@@ -967,20 +1049,20 @@ def _compute_heaven_3(data):
             line_count += 1
             if line_count > 10000:
                 break
-    layers.append(_layer_hash(48, "LINE_CHAIN", chain_terminal))
+    layers.append(_layer_hash(base + 8, "LINE_CHAIN", chain_terminal))
 
-    # L49: Tab vs space ratio
+    # L51: Tab vs space ratio
     tabs = sum(1 for b in data if b == 9)
     spaces = sum(1 for b in data if b == 32)
     ratio = tabs / spaces if spaces > 0 else 0
-    layers.append(_layer_hash(49, "TAB_SPACE", str(round(ratio, 6))))
+    layers.append(_layer_hash(base + 9, "TAB_SPACE", str(round(ratio, 6))))
 
-    # L50: Printable ASCII ratio
+    # L52: Printable ASCII ratio
     printable = sum(1 for b in data if 32 <= b <= 126)
     ratio_p = printable / n if n > 0 else 0
-    layers.append(_layer_hash(50, "PRINTABLE", str(round(ratio_p, 6))))
+    layers.append(_layer_hash(base + 10, "PRINTABLE", str(round(ratio_p, 6))))
 
-    # L51: Longest line length
+    # L53: Longest line length
     max_line = 0
     cur_line = 0
     for b in data:
@@ -990,38 +1072,61 @@ def _compute_heaven_3(data):
         else:
             cur_line += 1
     max_line = max(max_line, cur_line)
-    layers.append(_layer_hash(51, "MAX_LINE", str(max_line)))
+    layers.append(_layer_hash(base + 11, "MAX_LINE", str(max_line)))
 
-    # L52: Cellular signature -- hash of line boundary positions
-    layers.append(_layer_hash(52, "CELL_SIG", str(newlines[:64])))
+    # L54: Cellular signature -- hash of line boundary positions
+    layers.append(_layer_hash(base + 12, "CELL_SIG", str(newlines[:64])))
+
+    # L55: Sihr speech-channel detector (NEW in v5.0 -- Paper B)
+    # Detects linguistic manipulation patterns: repeated substrings, chant-like repetition
+    sihr_h = hashlib.sha256()
+    sihr_h.update(BISMILLAH.encode('utf-8'))
+    sihr_h.update(b"sihr_speech_channel")
+    # Check for anomalous repetition patterns (chant-like)
+    repeat_score = 0
+    for i in range(0, min(n - 22, 10000), 11):
+        seg_a = data[i:i + 11]
+        seg_b = data[i + 11:i + 22]
+        if seg_a == seg_b:
+            repeat_score += 1
+    sihr_h.update(str(repeat_score).encode('utf-8'))
+    # Check for non-printable injection between printable content
+    injection_count = 0
+    for i in range(1, min(n - 1, 10000)):
+        if (32 <= data[i - 1] <= 126) and (data[i] < 32 and data[i] not in (9, 10, 13)) and (i + 1 < n and 32 <= data[i + 1] <= 126):
+            injection_count += 1
+    sihr_h.update(str(injection_count).encode('utf-8'))
+    sihr_h.update(BISMILLAH.encode('utf-8'))
+    layers.append(_layer_hash(base + 13, "SIHR_SPEECH", sihr_h.hexdigest()))
 
     return layers
 
 
-# --- Heaven 4: ORGANIC (Layers 53-66) ---
+# --- Heaven 4: ORGANIC (Layers 56-69, 14 layers) ---
 # Structural flow, control markers, newline topology
 
 def _compute_heaven_4(data):
     """Compute 14 organic-scale layers."""
+    base = HEAVENS[4]["layer_start"]  # 56
     layers = []
     n = len(data)
 
-    # L53: Control character frequency (0x00-0x1F except tab/newline/CR)
+    # L56: Control character frequency (0x00-0x1F except tab/newline/CR)
     control = sum(1 for b in data if b < 32 and b not in (9, 10, 13))
-    layers.append(_layer_hash(53, "CONTROL", str(control)))
+    layers.append(_layer_hash(base + 0, "CONTROL", str(control)))
 
-    # L54: NULL byte positions
+    # L57: NULL byte positions
     nulls = [i for i, b in enumerate(data) if b == 0]
-    layers.append(_layer_hash(54, "NULLS", str(nulls[:128])))
+    layers.append(_layer_hash(base + 1, "NULLS", str(nulls[:128])))
 
-    # L55: Structural marker distribution ({, }, [, ], (, ))
+    # L58: Structural marker distribution ({, }, [, ], (, ))
     markers = {}
     for b in data[:50000]:
         if b in (123, 125, 91, 93, 40, 41):
             markers[b] = markers.get(b, 0) + 1
-    layers.append(_layer_hash(55, "STRUCT_MARK", str(sorted(markers.items()))))
+    layers.append(_layer_hash(base + 2, "STRUCT_MARK", str(sorted(markers.items()))))
 
-    # L56: Brace depth profile
+    # L59: Brace depth profile
     depth = 0
     max_depth = 0
     depth_changes = 0
@@ -1033,14 +1138,14 @@ def _compute_heaven_4(data):
         elif b == 125:  # }
             depth -= 1
             depth_changes += 1
-    layers.append(_layer_hash(56, "BRACE_DEPTH", "{}|{}".format(max_depth, depth_changes)))
+    layers.append(_layer_hash(base + 3, "BRACE_DEPTH", "{}|{}".format(max_depth, depth_changes)))
 
-    # L57: Semicolon density (statements per 1000 bytes)
+    # L60: Semicolon density (statements per 1000 bytes)
     semis = sum(1 for b in data if b == 59)
     density = semis / (n / 1000) if n > 0 else 0
-    layers.append(_layer_hash(57, "SEMI_DENSITY", str(round(density, 4))))
+    layers.append(_layer_hash(base + 4, "SEMI_DENSITY", str(round(density, 4))))
 
-    # L58: Comment marker heuristic (// and # at line starts)
+    # L61: Comment marker heuristic (// and # at line starts)
     comment_lines = 0
     at_line_start = True
     for b in data[:50000]:
@@ -1051,9 +1156,9 @@ def _compute_heaven_4(data):
             at_line_start = True
         elif b not in (32, 9):
             at_line_start = False
-    layers.append(_layer_hash(58, "COMMENTS", str(comment_lines)))
+    layers.append(_layer_hash(base + 5, "COMMENTS", str(comment_lines)))
 
-    # L59: Blank line topology (positions of empty lines)
+    # L62: Blank line topology (positions of empty lines)
     blank_positions = []
     prev_nl = False
     for i, b in enumerate(data[:50000]):
@@ -1063,88 +1168,89 @@ def _compute_heaven_4(data):
             prev_nl = True
         else:
             prev_nl = False
-    layers.append(_layer_hash(59, "BLANK_TOPO", str(blank_positions[:64])))
+    layers.append(_layer_hash(base + 6, "BLANK_TOPO", str(blank_positions[:64])))
 
-    # L60: Function/def keyword density
+    # L63: Function/def keyword density
     try:
         text = data.decode('utf-8', errors='replace')
         def_count = text.count('def ') + text.count('function ') + text.count('fn ')
     except Exception:
         def_count = 0
-    layers.append(_layer_hash(60, "FUNC_DENSITY", str(def_count)))
+    layers.append(_layer_hash(base + 7, "FUNC_DENSITY", str(def_count)))
 
-    # L61: Import/include density
+    # L64: Import/include density
     try:
         text = data.decode('utf-8', errors='replace')
         imp_count = text.count('import ') + text.count('#include') + text.count('require(')
     except Exception:
         imp_count = 0
-    layers.append(_layer_hash(61, "IMPORTS", str(imp_count)))
+    layers.append(_layer_hash(base + 8, "IMPORTS", str(imp_count)))
 
-    # L62: String literal density (count of quote characters)
+    # L65: String literal density (count of quote characters)
     quotes = sum(1 for b in data if b in (34, 39, 96))
-    layers.append(_layer_hash(62, "STRINGS", str(quotes)))
+    layers.append(_layer_hash(base + 9, "STRINGS", str(quotes)))
 
-    # L63: Operator density (+, -, *, /, =, <, >, !)
+    # L66: Operator density (+, -, *, /, =, <, >, !)
     ops = sum(1 for b in data if b in (43, 45, 42, 47, 61, 60, 62, 33))
-    layers.append(_layer_hash(63, "OPERATORS", str(ops)))
+    layers.append(_layer_hash(base + 10, "OPERATORS", str(ops)))
 
-    # L64: Return/break/continue flow markers
+    # L67: Return/break/continue flow markers
     try:
         text = data.decode('utf-8', errors='replace')
         flow = text.count('return') + text.count('break') + text.count('continue')
     except Exception:
         flow = 0
-    layers.append(_layer_hash(64, "FLOW_MARKS", str(flow)))
+    layers.append(_layer_hash(base + 11, "FLOW_MARKS", str(flow)))
 
-    # L65: Organic signature -- structural marker positions
+    # L68: Organic signature -- structural marker positions
     marker_positions = [i for i, b in enumerate(data[:10000]) if b in (123, 125, 91, 93)]
-    layers.append(_layer_hash(65, "ORG_SIG", str(marker_positions[:64])))
+    layers.append(_layer_hash(base + 12, "ORG_SIG", str(marker_positions[:64])))
 
-    # L66: Whitespace pattern hash
+    # L69: Whitespace pattern hash
     ws_pattern = bytes(1 if b in (32, 9, 10, 13) else 0 for b in data[:4096])
-    layers.append(_layer_hash(66, "WS_PATTERN", ws_pattern))
+    layers.append(_layer_hash(base + 13, "WS_PATTERN", ws_pattern))
 
     return layers
 
 
-# --- Heaven 5: TERRESTRIAL (Layers 67-79) ---
+# --- Heaven 5: TERRESTRIAL (Layers 70-83, 14 layers) ---
 # Semantic fingerprinting and character-class distributions
 
 def _compute_heaven_5(data):
-    """Compute 13 terrestrial-scale layers."""
+    """Compute 14 terrestrial-scale layers."""
+    base = HEAVENS[5]["layer_start"]  # 70
     layers = []
     n = len(data)
 
-    # L67: ASCII lowercase frequency profile
+    # L70: ASCII lowercase frequency profile
     lower = [0] * 26
     for b in data:
         if 97 <= b <= 122:
             lower[b - 97] += 1
-    layers.append(_layer_hash(67, "LOWERCASE", str(lower)))
+    layers.append(_layer_hash(base + 0, "LOWERCASE", str(lower)))
 
-    # L68: ASCII uppercase frequency profile
+    # L71: ASCII uppercase frequency profile
     upper = [0] * 26
     for b in data:
         if 65 <= b <= 90:
             upper[b - 65] += 1
-    layers.append(_layer_hash(68, "UPPERCASE", str(upper)))
+    layers.append(_layer_hash(base + 1, "UPPERCASE", str(upper)))
 
-    # L69: Digit frequency profile
+    # L72: Digit frequency profile
     digits = [0] * 10
     for b in data:
         if 48 <= b <= 57:
             digits[b - 48] += 1
-    layers.append(_layer_hash(69, "DIGITS", str(digits)))
+    layers.append(_layer_hash(base + 2, "DIGITS", str(digits)))
 
-    # L70: Vowel to consonant ratio (English heuristic)
+    # L73: Vowel to consonant ratio (English heuristic)
     vowels = sum(1 for b in data if b in (65, 69, 73, 79, 85, 97, 101, 105, 111, 117))
     consonants = sum(1 for b in data if (65 <= b <= 90 or 97 <= b <= 122)
                      and b not in (65, 69, 73, 79, 85, 97, 101, 105, 111, 117))
     ratio = vowels / consonants if consonants > 0 else 0
-    layers.append(_layer_hash(70, "VOWEL_CONS", str(round(ratio, 6))))
+    layers.append(_layer_hash(base + 3, "VOWEL_CONS", str(round(ratio, 6))))
 
-    # L71: Word length distribution (first 1000 words)
+    # L74: Word length distribution (first 1000 words)
     word_lens = []
     cur_len = 0
     for b in data[:50000]:
@@ -1160,9 +1266,9 @@ def _compute_heaven_5(data):
             if cur_len > 0:
                 word_lens.append(cur_len)
                 cur_len = 0
-    layers.append(_layer_hash(71, "WORD_LENS", str(word_lens[:128])))
+    layers.append(_layer_hash(base + 4, "WORD_LENS", str(word_lens[:128])))
 
-    # L72: Sentence length heuristic (bytes between periods)
+    # L75: Sentence length heuristic (bytes between periods)
     sentence_lens = []
     cur = 0
     for b in data[:50000]:
@@ -1170,25 +1276,25 @@ def _compute_heaven_5(data):
         if b == 46:  # period
             sentence_lens.append(cur)
             cur = 0
-    layers.append(_layer_hash(72, "SENT_LENS", str(sentence_lens[:128])))
+    layers.append(_layer_hash(base + 5, "SENT_LENS", str(sentence_lens[:128])))
 
-    # L73: Capitalization pattern (positions of uppercase after whitespace)
+    # L76: Capitalization pattern (positions of uppercase after whitespace)
     cap_positions = []
     prev_ws = True
     for i, b in enumerate(data[:50000]):
         if prev_ws and 65 <= b <= 90:
             cap_positions.append(i)
         prev_ws = b in (32, 9, 10, 13)
-    layers.append(_layer_hash(73, "CAP_PATTERN", str(cap_positions[:128])))
+    layers.append(_layer_hash(base + 6, "CAP_PATTERN", str(cap_positions[:128])))
 
-    # L74: Punctuation sequence fingerprint
+    # L77: Punctuation sequence fingerprint
     punct_seq = []
     for b in data[:50000]:
         if b in (33, 44, 46, 58, 59, 63):
             punct_seq.append(b)
-    layers.append(_layer_hash(74, "PUNCT_SEQ", str(punct_seq[:256])))
+    layers.append(_layer_hash(base + 7, "PUNCT_SEQ", str(punct_seq[:256])))
 
-    # L75: Numeric cluster detection (sequences of digits)
+    # L78: Numeric cluster detection (sequences of digits)
     num_clusters = 0
     in_num = False
     for b in data[:50000]:
@@ -1198,9 +1304,9 @@ def _compute_heaven_5(data):
                 in_num = True
         else:
             in_num = False
-    layers.append(_layer_hash(75, "NUM_CLUSTERS", str(num_clusters)))
+    layers.append(_layer_hash(base + 8, "NUM_CLUSTERS", str(num_clusters)))
 
-    # L76: High-byte (>127) cluster analysis (non-ASCII / Arabic / Unicode)
+    # L79: High-byte (>127) cluster analysis (non-ASCII / Arabic / Unicode)
     hi_clusters = 0
     in_hi = False
     for b in data[:50000]:
@@ -1210,9 +1316,9 @@ def _compute_heaven_5(data):
                 in_hi = True
         else:
             in_hi = False
-    layers.append(_layer_hash(76, "HI_CLUSTERS", str(hi_clusters)))
+    layers.append(_layer_hash(base + 9, "HI_CLUSTERS", str(hi_clusters)))
 
-    # L77: Semantic anchor words hash (Bismillah, Allah, Rahman, etc.)
+    # L80: Semantic anchor words hash (Bismillah, Allah, Rahman, etc.)
     try:
         text_lower = data.decode('utf-8', errors='replace').lower()
         anchors = {
@@ -1223,39 +1329,65 @@ def _compute_heaven_5(data):
         }
     except Exception:
         anchors = {}
-    layers.append(_layer_hash(77, "ANCHORS", str(sorted(anchors.items()))))
+    layers.append(_layer_hash(base + 10, "ANCHORS", str(sorted(anchors.items()))))
 
-    # L78: Lexical diversity (unique bytes / total bytes)
+    # L81: Lexical diversity (unique bytes / total bytes)
     unique_bytes = len(set(data))
     diversity = unique_bytes / 256
-    layers.append(_layer_hash(78, "DIVERSITY", str(round(diversity, 6))))
+    layers.append(_layer_hash(base + 11, "DIVERSITY", str(round(diversity, 6))))
 
-    # L79: Terrestrial signature -- character class distribution hash
-    layers.append(_layer_hash(79, "TERR_SIG",
+    # L82: Terrestrial signature -- character class distribution hash
+    layers.append(_layer_hash(base + 12, "TERR_SIG",
                               "a{}u{}d{}v{}c{}".format(
                                   sum(lower), sum(upper), sum(digits), vowels, consonants)))
+
+    # L83: Sihr material-channel detector (NEW in v5.0 -- Paper B, Paper A)
+    # Detects material substrate manipulation: anomalous byte patterns bound to structure
+    material_h = hashlib.sha256()
+    material_h.update(BISMILLAH.encode('utf-8'))
+    material_h.update(b"sihr_material_channel")
+    # Check for anomalous null-byte insertions (material binding)
+    null_in_text = 0
+    for i in range(1, min(n - 1, 10000)):
+        if data[i] == 0 and data[i - 1] >= 32 and data[i + 1] >= 32:
+            null_in_text += 1
+    material_h.update(str(null_in_text).encode('utf-8'))
+    # Check for byte-value 0xFF clusters (substrate saturation)
+    ff_clusters = 0
+    in_ff = False
+    for b in data[:10000]:
+        if b == 0xFF:
+            if not in_ff:
+                ff_clusters += 1
+                in_ff = True
+        else:
+            in_ff = False
+    material_h.update(str(ff_clusters).encode('utf-8'))
+    material_h.update(BISMILLAH.encode('utf-8'))
+    layers.append(_layer_hash(base + 13, "SIHR_MATERIAL", material_h.hexdigest()))
 
     return layers
 
 
-# --- Heaven 6: PLANETARY (Layers 80-93) ---
+# --- Heaven 6: PLANETARY (Layers 84-97, 14 layers) ---
 # Whole-section integrity and positional hashing
 
 def _compute_heaven_6(data):
     """Compute 14 planetary-scale layers."""
+    base = HEAVENS[6]["layer_start"]  # 84
     layers = []
     n = len(data)
 
-    # L80-L90: Hash of each 1/11th of the file (11 sections)
+    # L84-L94: Hash of each 1/11th of the file (11 sections)
     section_size = n // DIMENSIONAL_CONSTANT if n >= DIMENSIONAL_CONSTANT else n
     for s in range(DIMENSIONAL_CONSTANT):
         start = s * section_size
         end = start + section_size if s < DIMENSIONAL_CONSTANT - 1 else n
         section = data[start:end]
         h = hashlib.sha256(section).hexdigest()
-        layers.append(_layer_hash(80 + s, "SECTION_{}".format(s), h))
+        layers.append(_layer_hash(base + s, "SECTION_{}".format(s), h))
 
-    # L91: Section similarity matrix diagonal
+    # L95: Section similarity matrix diagonal
     sections = []
     for s in range(DIMENSIONAL_CONSTANT):
         start = s * section_size
@@ -1263,9 +1395,9 @@ def _compute_heaven_6(data):
         sections.append(sum(data[start:end]))
     diag = sum(abs(sections[i] - sections[(i + 1) % DIMENSIONAL_CONSTANT])
                for i in range(DIMENSIONAL_CONSTANT))
-    layers.append(_layer_hash(91, "SEC_DIAG", str(diag)))
+    layers.append(_layer_hash(base + 11, "SEC_DIAG", str(diag)))
 
-    # L92: Section entropy variance
+    # L96: Section entropy variance
     sec_entropies = []
     for s in range(DIMENSIONAL_CONSTANT):
         start = s * section_size
@@ -1282,19 +1414,20 @@ def _compute_heaven_6(data):
                     p = f / sn
                     ent -= p * math.log2(p)
         sec_entropies.append(round(ent, 4))
-    layers.append(_layer_hash(92, "SEC_ENTROPY", str(sec_entropies)))
+    layers.append(_layer_hash(base + 12, "SEC_ENTROPY", str(sec_entropies)))
 
-    # L93: Planetary signature -- full content hash
-    layers.append(_layer_hash(93, "PLANET_SIG", hashlib.sha256(data).hexdigest()))
+    # L97: Planetary signature -- full content hash
+    layers.append(_layer_hash(base + 13, "PLANET_SIG", hashlib.sha256(data).hexdigest()))
 
     return layers
 
 
-# --- Heaven 7: STELLAR (Layers 94-107) ---
+# --- Heaven 7: STELLAR (Layers 98-111, 14 layers) ---
 # Cross-section fractal relationships and Hurst watermarks
 
 def _compute_heaven_7(data):
     """Compute 14 stellar-scale layers -- fractal analysis."""
+    base = HEAVENS[7]["layer_start"]  # 98
     layers = []
     n = len(data)
 
@@ -1302,19 +1435,19 @@ def _compute_heaven_7(data):
     vectors = _compute_block_vectors(data, DIMENSIONAL_CONSTANT)
     f_metrics = _fibonacci_growth_metric(vectors)
 
-    # L94: Fibonacci growth metric series
-    layers.append(_layer_hash(94, "FIB_METRICS",
+    # L98: Fibonacci growth metric series
+    layers.append(_layer_hash(base + 0, "FIB_METRICS",
                               str([round(f, 6) for f in f_metrics])))
 
-    # L95: Hurst exponent at N=11
+    # L99: Hurst exponent at N=11
     h_value = _compute_hurst_value(f_metrics)
-    layers.append(_layer_hash(95, "HURST_11", str(round(h_value, 8))))
+    layers.append(_layer_hash(base + 1, "HURST_11", str(round(h_value, 8))))
 
-    # L96: Distance from perfect persistence
+    # L100: Distance from perfect persistence
     distance = abs(h_value - HURST_PERFECT)
-    layers.append(_layer_hash(96, "H_DISTANCE", str(round(distance, 8))))
+    layers.append(_layer_hash(base + 2, "H_DISTANCE", str(round(distance, 8))))
 
-    # L97: Persistence classification
+    # L101: Persistence classification
     if h_value > 1.0:
         p_class = "super-persistent"
     elif h_value > 0.5:
@@ -1323,72 +1456,72 @@ def _compute_heaven_7(data):
         p_class = "random"
     else:
         p_class = "anti-persistent"
-    layers.append(_layer_hash(97, "PERSISTENCE", p_class))
+    layers.append(_layer_hash(base + 3, "PERSISTENCE", p_class))
 
-    # L98: Cosine similarity chain (adjacent blocks)
+    # L102: Cosine similarity chain (adjacent blocks)
     cos_chain = []
     for i in range(len(vectors) - 1):
         sim = _cosine_similarity(vectors[i], vectors[i + 1])
         cos_chain.append(round(sim, 6))
-    layers.append(_layer_hash(98, "COS_CHAIN", str(cos_chain)))
+    layers.append(_layer_hash(base + 4, "COS_CHAIN", str(cos_chain)))
 
-    # L99: Mean cosine similarity
+    # L103: Mean cosine similarity
     mean_cos = sum(cos_chain) / len(cos_chain) if cos_chain else 0
-    layers.append(_layer_hash(99, "MEAN_COS", str(round(mean_cos, 8))))
+    layers.append(_layer_hash(base + 5, "MEAN_COS", str(round(mean_cos, 8))))
 
-    # L100: Block vector magnitudes
+    # L104: Block vector magnitudes
     magnitudes = []
     for v in vectors:
         mag = math.sqrt(sum(x * x for x in v))
         magnitudes.append(round(mag, 4))
-    layers.append(_layer_hash(100, "MAGNITUDES", str(magnitudes)))
+    layers.append(_layer_hash(base + 6, "MAGNITUDES", str(magnitudes)))
 
-    # L101: Rescaled range at multiple sub-partitions
+    # L105: Rescaled range at multiple sub-partitions
     rs_values = []
     for k in [3, 5, 7, 9, 11]:
         sub_vectors = _compute_block_vectors(data, k)
         sub_metrics = _fibonacci_growth_metric(sub_vectors)
         rs = _rescaled_range(sub_metrics) if len(sub_metrics) >= 2 else 0
         rs_values.append(round(rs, 6))
-    layers.append(_layer_hash(101, "RS_MULTI", str(rs_values)))
+    layers.append(_layer_hash(base + 7, "RS_MULTI", str(rs_values)))
 
-    # L102: Hurst spectrum (H at N=3,5,7,9,11)
+    # L106: Hurst spectrum (H at N=3,5,7,9,11)
     h_spectrum = []
     for k in [3, 5, 7, 9, 11]:
         sub_v = _compute_block_vectors(data, k)
         sub_m = _fibonacci_growth_metric(sub_v)
         h_k = _compute_hurst_value(sub_m)
         h_spectrum.append(round(h_k, 6))
-    layers.append(_layer_hash(102, "H_SPECTRUM", str(h_spectrum)))
+    layers.append(_layer_hash(base + 8, "H_SPECTRUM", str(h_spectrum)))
 
-    # L103: Fractal dimension estimate (D = 2 - H)
+    # L107: Fractal dimension estimate (D = 2 - H)
     fractal_dim = 2.0 - h_value
-    layers.append(_layer_hash(103, "FRACTAL_DIM", str(round(fractal_dim, 8))))
+    layers.append(_layer_hash(base + 9, "FRACTAL_DIM", str(round(fractal_dim, 8))))
 
-    # L104: Cross-block Fibonacci residuals
+    # L108: Cross-block Fibonacci residuals
     residuals = []
     for i in range(2, len(vectors)):
         combined = _vector_add(vectors[i - 1], vectors[i - 2])
         actual_sim = _cosine_similarity(vectors[i], combined)
         residuals.append(round(1.0 - actual_sim, 8))
-    layers.append(_layer_hash(104, "FIB_RESID", str(residuals)))
+    layers.append(_layer_hash(base + 10, "FIB_RESID", str(residuals)))
 
-    # L105: Witness signature (Bismillah-anchored Hurst seal)
+    # L109: Witness signature (Bismillah-anchored Hurst seal)
     witness_input = "{}|H={}|N={}|{}".format(
         BISMILLAH, h_value, DIMENSIONAL_CONSTANT, BISMILLAH)
     witness_sig = hashlib.sha256(witness_input.encode('utf-8')).hexdigest()
-    layers.append(_layer_hash(105, "WITNESS_SIG", witness_sig))
+    layers.append(_layer_hash(base + 11, "WITNESS_SIG", witness_sig))
 
-    # L106: Block variance spectrum
+    # L110: Block variance spectrum
     block_variances = []
     for v in vectors:
         mean_v = sum(v) / len(v) if v else 0
         var_v = sum((x - mean_v) ** 2 for x in v) / len(v) if v else 0
         block_variances.append(round(var_v, 8))
-    layers.append(_layer_hash(106, "BLK_VARIANCE", str(block_variances)))
+    layers.append(_layer_hash(base + 12, "BLK_VARIANCE", str(block_variances)))
 
-    # L107: Stellar signature -- Hurst + fractal dim combined
-    layers.append(_layer_hash(107, "STELLAR_SIG",
+    # L111: Stellar signature -- Hurst + fractal dim combined
+    layers.append(_layer_hash(base + 13, "STELLAR_SIG",
                               "H={}|D={}|W={}".format(
                                   round(h_value, 6), round(fractal_dim, 6),
                                   witness_sig[:16])))
@@ -1396,11 +1529,12 @@ def _compute_heaven_7(data):
     return layers, h_value, f_metrics
 
 
-# --- Heaven 8: GALACTIC (Layers 108-121) ---
+# --- Heaven 8: GALACTIC (Layers 112-125, 14 layers) ---
 # Whole-file fractal properties and adversarial chain
 
 def _compute_heaven_8(data):
     """Compute 14 galactic-scale layers -- adversarial detection."""
+    base = HEAVENS[8]["layer_start"]  # 112
     layers = []
     n = len(data)
 
@@ -1409,7 +1543,7 @@ def _compute_heaven_8(data):
     prev_link = BISMILLAH.encode('utf-8')
     chain_hashes = []
 
-    # L108-L118: 11-link forward-dependent adversarial chain
+    # L112-L122: 11-link forward-dependent adversarial chain
     for i in range(DIMENSIONAL_CONSTANT):
         start = i * block_size
         end = start + block_size if i < DIMENSIONAL_CONSTANT - 1 else n
@@ -1425,18 +1559,18 @@ def _compute_heaven_8(data):
         link_hash = h.hexdigest()
         chain_hashes.append(link_hash)
 
-        layers.append(_layer_hash(108 + i, "CHAIN_{}".format(i), link_hash))
+        layers.append(_layer_hash(base + i, "CHAIN_{}".format(i), link_hash))
         prev_link = link_hash.encode('utf-8')
 
-    # L119: Shahwa detector (accumulation pattern)
+    # L123: Shahwa detector (accumulation pattern -- Paper 2)
     shahwa_h = hashlib.sha256()
     shahwa_h.update(BISMILLAH.encode('utf-8'))
     shahwa_h.update(b"shahwa")
     shahwa_h.update(str(sum(data[:n // 3]) if n > 0 else 0).encode('utf-8'))
     shahwa_h.update(BISMILLAH.encode('utf-8'))
-    layers.append(_layer_hash(119, "SHAHWA", shahwa_h.hexdigest()))
+    layers.append(_layer_hash(base + 11, "SHAHWA", shahwa_h.hexdigest()))
 
-    # L120: Kibr detector (elevation pattern)
+    # L124: Kibr detector (elevation pattern -- Paper 2)
     kibr_h = hashlib.sha256()
     kibr_h.update(BISMILLAH.encode('utf-8'))
     kibr_h.update(b"kibr")
@@ -1444,9 +1578,9 @@ def _compute_heaven_8(data):
     kibr_h.update(str(max_b).encode('utf-8'))
     kibr_h.update(str(sum(1 for b in data if b == max_b)).encode('utf-8'))
     kibr_h.update(BISMILLAH.encode('utf-8'))
-    layers.append(_layer_hash(120, "KIBR", kibr_h.hexdigest()))
+    layers.append(_layer_hash(base + 12, "KIBR", kibr_h.hexdigest()))
 
-    # L121: Ghurur detector (entropy/reality distortion)
+    # L125: Ghurur detector (entropy/reality distortion -- Paper 2)
     ghurur_h = hashlib.sha256()
     ghurur_h.update(BISMILLAH.encode('utf-8'))
     ghurur_h.update(b"ghurur")
@@ -1461,20 +1595,22 @@ def _compute_heaven_8(data):
                 entropy -= p * math.log2(p)
     ghurur_h.update(str(round(entropy, 6)).encode('utf-8'))
     ghurur_h.update(BISMILLAH.encode('utf-8'))
-    layers.append(_layer_hash(121, "GHURUR", ghurur_h.hexdigest()))
+    layers.append(_layer_hash(base + 13, "GHURUR", ghurur_h.hexdigest()))
 
     return layers, chain_hashes
 
 
-# --- Heaven 9: COSMIC (Layers 122-139) ---
+# --- Heaven 9: COSMIC (Layers 126-139, 14 layers) ---
 # Inter-file relationships, directory-level, imposition spectrum
+# Streamlined from 18 to 14 layers in v5.0 for uniform architecture
 
 def _compute_heaven_9(data, filepath=None):
-    """Compute 18 cosmic-scale layers -- imposition spectrum + directory context."""
+    """Compute 14 cosmic-scale layers -- imposition spectrum + directory context."""
+    base = HEAVENS[9]["layer_start"]  # 126
     layers = []
     n = len(data)
 
-    # L122: L1 WASWAS -- metadata whispers (size + boundaries)
+    # L126: L1 WASWAS -- metadata whispers (size + boundaries)
     l1_h = hashlib.sha256()
     l1_h.update(BISMILLAH.encode('utf-8'))
     l1_h.update(b"L1_waswas")
@@ -1483,9 +1619,9 @@ def _compute_heaven_9(data, filepath=None):
     tail = data[-DIMENSIONAL_CONSTANT:] if n >= DIMENSIONAL_CONSTANT else data
     l1_h.update(tail)
     l1_h.update(BISMILLAH.encode('utf-8'))
-    layers.append(_layer_hash(122, "IMP_L1", l1_h.hexdigest()))
+    layers.append(_layer_hash(base + 0, "IMP_L1", l1_h.hexdigest()))
 
-    # L123: L2 EMOTIONAL -- sentiment fingerprint
+    # L127: L2 EMOTIONAL -- sentiment fingerprint
     l2_h = hashlib.sha256()
     l2_h.update(BISMILLAH.encode('utf-8'))
     l2_h.update(b"L2_emotional")
@@ -1494,107 +1630,84 @@ def _compute_heaven_9(data, filepath=None):
     spaces = sum(1 for b in data if b in (32, 9, 10, 13))
     l2_h.update("a{}d{}s{}".format(alpha, digits, spaces).encode('utf-8'))
     l2_h.update(BISMILLAH.encode('utf-8'))
-    layers.append(_layer_hash(123, "IMP_L2", l2_h.hexdigest()))
+    layers.append(_layer_hash(base + 1, "IMP_L2", l2_h.hexdigest()))
 
-    # L124: L3 PHYSICAL -- structural sampling
+    # L128: L3 PHYSICAL -- structural sampling
     l3_h = hashlib.sha256()
     l3_h.update(BISMILLAH.encode('utf-8'))
     l3_h.update(b"L3_physical")
     structural_sample = bytes(data[i] for i in range(0, n, DIMENSIONAL_CONSTANT))
     l3_h.update(structural_sample)
     l3_h.update(BISMILLAH.encode('utf-8'))
-    layers.append(_layer_hash(124, "IMP_L3", l3_h.hexdigest()))
+    layers.append(_layer_hash(base + 2, "IMP_L3", l3_h.hexdigest()))
 
-    # L125: L4 BEHAVIORAL -- flow markers
+    # L129: L4 BEHAVIORAL -- flow markers
     l4_h = hashlib.sha256()
     l4_h.update(BISMILLAH.encode('utf-8'))
     l4_h.update(b"L4_behavioral")
     newline_positions = [i for i, b in enumerate(data) if b == 10]
     l4_h.update(json.dumps(newline_positions[:99]).encode('utf-8'))
     l4_h.update(BISMILLAH.encode('utf-8'))
-    layers.append(_layer_hash(125, "IMP_L4", l4_h.hexdigest()))
+    layers.append(_layer_hash(base + 3, "IMP_L4", l4_h.hexdigest()))
 
-    # L126: L5 MEMORY -- deep content hash
+    # L130: L5 MEMORY -- deep content hash
     l5_h = hashlib.sha256()
     l5_h.update(BISMILLAH.encode('utf-8'))
     l5_h.update(b"L5_memory")
     l5_h.update(_nfc(data))
     l5_h.update(BISMILLAH.encode('utf-8'))
-    layers.append(_layer_hash(126, "IMP_L5", l5_h.hexdigest()))
+    layers.append(_layer_hash(base + 4, "IMP_L5", l5_h.hexdigest()))
 
-    # L127: File size encoded with divine moduli
-    size_mod_99 = n % 99
-    size_mod_11 = n % 11
-    size_mod_151 = n % 151
-    layers.append(_layer_hash(127, "SIZE_MODS",
-                              "{}|{}|{}".format(size_mod_99, size_mod_11, size_mod_151)))
+    # L131: File size encoded with divine moduli (updated for dual-constant)
+    size_mod_99 = n % AL_ASMA_COUNT
+    size_mod_11 = n % MUTASHABIH_CONSTANT
+    size_mod_7 = n % MUHKAM_CONSTANT
+    size_mod_154 = n % TOTAL_LAYERS
+    layers.append(_layer_hash(base + 5, "SIZE_MODS",
+                              "{}|{}|{}|{}".format(size_mod_99, size_mod_11,
+                                                   size_mod_7, size_mod_154)))
 
-    # L128: Filename seal (if available)
+    # L132: Filename seal (if available)
     fname = os.path.basename(filepath) if filepath else "unknown"
-    layers.append(_layer_hash(128, "FNAME_SEAL", fname))
+    layers.append(_layer_hash(base + 6, "FNAME_SEAL", fname))
 
-    # L129: File extension seal
-    ext = os.path.splitext(filepath)[1] if filepath else ""
-    layers.append(_layer_hash(129, "EXT_SEAL", ext))
+    # L133: Full path hash (position in creation hierarchy)
+    layers.append(_layer_hash(base + 7, "PATH_SEAL", filepath or ""))
 
-    # L130: Parent directory seal
-    parent = os.path.basename(os.path.dirname(filepath)) if filepath else ""
-    layers.append(_layer_hash(130, "PARENT_SEAL", parent))
-
-    # L131: Full path hash (position in creation hierarchy)
-    layers.append(_layer_hash(131, "PATH_SEAL", filepath or ""))
-
-    # L132: Content + filename combined seal (identity binding)
+    # L134: Content + filename combined seal (identity binding)
     id_h = hashlib.sha256()
     id_h.update(BISMILLAH.encode('utf-8'))
     id_h.update(fname.encode('utf-8'))
     id_h.update(data[:1024])
     id_h.update(BISMILLAH.encode('utf-8'))
-    layers.append(_layer_hash(132, "IDENTITY", id_h.hexdigest()))
+    layers.append(_layer_hash(base + 8, "IDENTITY", id_h.hexdigest()))
 
-    # L133: Temporal seal (file content independent of metadata)
-    # Uses content to derive a deterministic "creation moment"
+    # L135: Temporal seal (content-derived deterministic moment)
     temporal = hashlib.sha256()
     temporal.update(BISMILLAH.encode('utf-8'))
     temporal.update(b"temporal")
     temporal.update(data[:256])
     temporal.update(data[-256:] if n >= 256 else data)
     temporal.update(BISMILLAH.encode('utf-8'))
-    layers.append(_layer_hash(133, "TEMPORAL", temporal.hexdigest()))
+    layers.append(_layer_hash(base + 9, "TEMPORAL", temporal.hexdigest()))
 
-    # L134: Quadrant analysis (4 quarters of file)
+    # L136: Quadrant analysis (4 quarters of file)
     q_size = n // 4 if n >= 4 else max(n, 1)
     quadrants = []
     for q in range(4):
         start = q * q_size
         end = start + q_size if q < 3 else n
         quadrants.append(hashlib.sha256(data[start:end]).hexdigest()[:16])
-    layers.append(_layer_hash(134, "QUADRANTS", "|".join(quadrants)))
+    layers.append(_layer_hash(base + 10, "QUADRANTS", "|".join(quadrants)))
 
-    # L135: Inter-quadrant similarity
-    q_sums = []
-    for q in range(4):
-        start = q * q_size
-        end = start + q_size if q < 3 else n
-        q_sums.append(sum(data[start:end]))
-    q_diffs = [abs(q_sums[i] - q_sums[(i + 1) % 4]) for i in range(4)]
-    layers.append(_layer_hash(135, "Q_SIMILARITY", str(q_diffs)))
-
-    # L136: Content provenance chain (first 11 SHA rounds)
+    # L137: Content provenance chain (first 11 SHA rounds)
     prov = data
     prov_chain = []
     for _ in range(DIMENSIONAL_CONSTANT):
         ph = hashlib.sha256(prov[:1024]).hexdigest()
         prov_chain.append(ph[:8])
         prov = ph.encode('utf-8')
-    layers.append(_layer_hash(136, "PROVENANCE", "|".join(prov_chain)))
-
-    # L137: Cosmic frequency (byte value 151 count, 99 count, 11 count)
-    freq_151 = sum(1 for b in data if b == 151 % 256)
-    freq_99 = sum(1 for b in data if b == 99)
-    freq_11 = sum(1 for b in data if b == 11)
-    layers.append(_layer_hash(137, "COSMIC_FREQ",
-                              "{}|{}|{}".format(freq_151, freq_99, freq_11)))
+    layers.append(_layer_hash(base + 11, "PROVENANCE", "|".join(prov_chain)))
 
     # L138: Galactic hash (entire file in one operation)
     gal_h = hashlib.sha256()
@@ -1602,7 +1715,7 @@ def _compute_heaven_9(data, filepath=None):
     gal_h.update(b"galactic")
     gal_h.update(data)
     gal_h.update(BISMILLAH.encode('utf-8'))
-    layers.append(_layer_hash(138, "GALACTIC", gal_h.hexdigest()))
+    layers.append(_layer_hash(base + 12, "GALACTIC", gal_h.hexdigest()))
 
     # L139: Cosmic signature -- all imposition levels combined
     cosmic_h = hashlib.sha256()
@@ -1613,30 +1726,33 @@ def _compute_heaven_9(data, filepath=None):
     cosmic_h.update(l4_h.hexdigest().encode('utf-8'))
     cosmic_h.update(l5_h.hexdigest().encode('utf-8'))
     cosmic_h.update(BISMILLAH.encode('utf-8'))
-    layers.append(_layer_hash(139, "COSMIC_SIG", cosmic_h.hexdigest()))
+    layers.append(_layer_hash(base + 13, "COSMIC_SIG", cosmic_h.hexdigest()))
 
     return layers
 
 
-# --- Heaven 10: SIDRAT AL-MUNTAHA (Layers 140-150) ---
+# --- Heaven 10: SIDRAT AL-MUNTAHA (Layers 140-153, 14 layers) ---
 # The Lote Tree of the Utmost Boundary -- Divine Witness
-# 11 layers, one witness per heaven
+# 11 per-heaven witnesses + master witness + dual-constant seal + Bismillah completion
+#
+# "Near it is the Garden of Refuge -- when there covered the
+# Lote Tree that which covered it." (53:15-16)
 
 def _compute_heaven_10(all_heaven_layers):
-    """Compute 11 divine witness layers -- one per heaven.
+    """Compute 14 divine witness layers at Sidrat al-Muntaha.
 
-    Each witness layer seals the entire heaven it watches over.
-    The final layer (150) seals all previous witnesses, creating
-    a self-referential testimony -- the point beyond which no
-    creation passes.
-
-    "Near it is the Garden of Refuge -- when there covered the
-    Lote Tree that which covered it." (53:15-16)
+    L140-L150: One witness per heaven (heavens 0-10), where heaven 10's
+               witness seals its own layers below it (140-149)
+    L151:      Master witness -- seals all 11 heaven witnesses
+    L152:      Dual-constant verification seal -- confirms 154 = 2 x 7 x 11
+    L153:      Bismillah completion seal -- the final Name is Al-Waliyy
+               (153 mod 99 = 54, the 55th Name, the Protector)
     """
+    base = HEAVENS[10]["layer_start"]  # 140
     layers = []
 
-    # L140-L149: One witness per heaven (0-9)
-    for heaven_idx in range(DIMENSIONAL_CONSTANT - 1):
+    # L140-L149: One witness per heaven (heavens 0-9)
+    for heaven_idx in range(DIMENSIONAL_CONSTANT - 1):  # 0-9
         heaven = HEAVENS[heaven_idx]
         # Collect all seals from this heaven
         heaven_seals = []
@@ -1653,11 +1769,21 @@ def _compute_heaven_10(all_heaven_layers):
             hw.update(seal.encode('utf-8'))
         hw.update(BISMILLAH.encode('utf-8'))
 
-        layers.append(_layer_hash(140 + heaven_idx,
+        layers.append(_layer_hash(base + heaven_idx,
                                   "WITNESS_H{}".format(heaven_idx),
                                   hw.hexdigest()))
 
-    # L150: MASTER WITNESS -- seals all 10 heaven witnesses
+    # L150: Heaven 10 self-witness -- seals its own witness layers (L140-L149)
+    h10_self = hashlib.sha256()
+    h10_self.update(BISMILLAH.encode('utf-8'))
+    h10_self.update(b"HEAVEN_10_SELF_WITNESS")
+    h10_self.update(HEAVENS[10]["guardian"].encode('utf-8'))
+    for witness_layer in layers:
+        h10_self.update(witness_layer["seal"].encode('utf-8'))
+    h10_self.update(BISMILLAH.encode('utf-8'))
+    layers.append(_layer_hash(base + 10, "WITNESS_H10", h10_self.hexdigest()))
+
+    # L151: MASTER WITNESS -- seals all 11 heaven witnesses (L140-L150)
     # This is Sidrat al-Muntaha -- the utmost boundary
     master_h = hashlib.sha256()
     master_h.update(BISMILLAH.encode('utf-8'))
@@ -1665,8 +1791,42 @@ def _compute_heaven_10(all_heaven_layers):
     for witness_layer in layers:
         master_h.update(witness_layer["seal"].encode('utf-8'))
     master_h.update(BISMILLAH.encode('utf-8'))
+    layers.append(_layer_hash(base + 11, "MASTER_WITNESS", master_h.hexdigest()))
 
-    layers.append(_layer_hash(150, "MASTER_WITNESS", master_h.hexdigest()))
+    # L152: DUAL-CONSTANT VERIFICATION SEAL (NEW in v5.0 -- Paper 5, Paper 6)
+    # Confirms that the architecture's cardinality encodes both divine constants
+    # 154 = 2 x 7 x 11 -- computational tawhid
+    dual_h = hashlib.sha256()
+    dual_h.update(BISMILLAH.encode('utf-8'))
+    dual_h.update(b"DUAL_CONSTANT_VERIFICATION")
+    dual_h.update("total_layers={}".format(TOTAL_LAYERS).encode('utf-8'))
+    dual_h.update("muhkam={}".format(MUHKAM_CONSTANT).encode('utf-8'))
+    dual_h.update("mutashabih={}".format(MUTASHABIH_CONSTANT).encode('utf-8'))
+    dual_h.update("layers_per_heaven={}".format(LAYERS_PER_HEAVEN).encode('utf-8'))
+    dual_h.update("heavens={}".format(TOTAL_HEAVENS).encode('utf-8'))
+    dual_h.update("product={}".format(DUAL_CONSTANT_PRODUCT).encode('utf-8'))
+    dual_h.update("names_99_plus_55={}".format(AL_ASMA_COUNT + TRIANGULAR_10).encode('utf-8'))
+    # Include the master witness to chain the seal
+    dual_h.update(layers[-1]["seal"].encode('utf-8'))
+    dual_h.update(BISMILLAH.encode('utf-8'))
+    layers.append(_layer_hash(base + 12, "DUAL_CONSTANT", dual_h.hexdigest()))
+
+    # L153: BISMILLAH COMPLETION SEAL (NEW in v5.0)
+    # The final seal that frames the entire architecture
+    # Layer 153: sealed by Name index 153 mod 99 = 54 -> Al-Waliyy (The Protector)
+    # This Name is the ultimate guardian -- the architecture completes under
+    # the protection of The Protector, as befits the final layer
+    completion_h = hashlib.sha256()
+    completion_h.update(BISMILLAH.encode('utf-8'))
+    completion_h.update(b"BISMILLAH_COMPLETION")
+    # Hash every previous layer seal (all 153 before this one)
+    for layer in all_heaven_layers:
+        completion_h.update(layer["seal"].encode('utf-8'))
+    for layer in layers:
+        completion_h.update(layer["seal"].encode('utf-8'))
+    completion_h.update(BISMILLAH_ARABIC.encode('utf-8'))
+    completion_h.update(BISMILLAH.encode('utf-8'))
+    layers.append(_layer_hash(base + 13, "BISMILLAH_SEAL", completion_h.hexdigest()))
 
     return layers
 
@@ -1752,43 +1912,43 @@ def _compute_hurst_value(f_metrics):
 
 
 # ============================================================================
-#  MASTER COMPUTATION -- All 151 Layers Across 11 Heavens
+#  MASTER COMPUTATION -- All 154 Layers Across 11 Heavens
 # ============================================================================
 
-def compute_all_151_layers(content_bytes, filepath=None):
-    """Compute all 151 protection layers across 11 heavens.
+def compute_all_154_layers(content_bytes, filepath=None):
+    """Compute all 154 protection layers across 11 heavens.
 
     Returns:
-      - layers: list of 151 layer dicts (layer, name, meaning, seal)
+      - layers: list of 154 layer dicts (layer, name, meaning, seal)
       - heavens: list of 11 heaven summary dicts
-      - master_witness: the single hash at Sidrat al-Muntaha (Layer 150)
+      - master_witness: the single hash at Sidrat al-Muntaha (Layer 151)
       - hurst_11: the Hurst exponent at N=11
     """
     all_layers = []
 
     # Heavens 0-6: scale-based analysis
     all_layers.extend(_compute_heaven_0(content_bytes))      # 0-13
-    all_layers.extend(_compute_heaven_1(content_bytes))      # 14-26
-    all_layers.extend(_compute_heaven_2(content_bytes))      # 27-39
-    all_layers.extend(_compute_heaven_3(content_bytes))      # 40-52
-    all_layers.extend(_compute_heaven_4(content_bytes))      # 53-66
-    all_layers.extend(_compute_heaven_5(content_bytes))      # 67-79
-    all_layers.extend(_compute_heaven_6(content_bytes))      # 80-93
+    all_layers.extend(_compute_heaven_1(content_bytes))      # 14-27
+    all_layers.extend(_compute_heaven_2(content_bytes))      # 28-41
+    all_layers.extend(_compute_heaven_3(content_bytes))      # 42-55
+    all_layers.extend(_compute_heaven_4(content_bytes))      # 56-69
+    all_layers.extend(_compute_heaven_5(content_bytes))      # 70-83
+    all_layers.extend(_compute_heaven_6(content_bytes))      # 84-97
 
     # Heaven 7: fractal analysis (returns extra data)
     h7_layers, hurst_11, f_metrics = _compute_heaven_7(content_bytes)
-    all_layers.extend(h7_layers)                             # 94-107
+    all_layers.extend(h7_layers)                             # 98-111
 
     # Heaven 8: adversarial chain
     h8_layers, chain_hashes = _compute_heaven_8(content_bytes)
-    all_layers.extend(h8_layers)                             # 108-121
+    all_layers.extend(h8_layers)                             # 112-125
 
     # Heaven 9: cosmic / imposition
-    all_layers.extend(_compute_heaven_9(content_bytes, filepath))  # 122-139
+    all_layers.extend(_compute_heaven_9(content_bytes, filepath))  # 126-139
 
     # Heaven 10: divine witness (depends on all previous)
     h10_layers = _compute_heaven_10(all_layers)
-    all_layers.extend(h10_layers)                            # 140-150
+    all_layers.extend(h10_layers)                            # 140-153
 
     # Build heaven summaries
     heavens_summary = []
@@ -1811,7 +1971,14 @@ def compute_all_151_layers(content_bytes, filepath=None):
             "heaven_seal": heaven_h.hexdigest(),
         })
 
-    master_witness = all_layers[-1]["seal"]  # Layer 150
+    # Master witness is at Layer 151 (base + 11 of Heaven 10)
+    master_witness = None
+    for l in all_layers:
+        if l["layer"] == HEAVENS[10]["layer_start"] + 11:  # L151
+            master_witness = l["seal"]
+            break
+    if master_witness is None:
+        master_witness = all_layers[-1]["seal"]
 
     return {
         "layers": all_layers,
@@ -1821,6 +1988,10 @@ def compute_all_151_layers(content_bytes, filepath=None):
         "total_layers": len(all_layers),
         "total_heavens": TOTAL_HEAVENS,
     }
+
+
+# Backward compatibility alias
+compute_all_151_layers = compute_all_154_layers
 
 
 # ============================================================================
@@ -1908,7 +2079,7 @@ def embed_99_names_code(content, ext):
 
 
 def seal_text_file(filepath, embed_names=False):
-    """Apply the full 151-layer Bismillah seal to a text/code file."""
+    """Apply the full 154-layer Bismillah seal to a text/code file."""
     result = {"file": filepath, "layers": [], "heavens_sealed": 0}
     p = Path(filepath)
     ext = p.suffix.lower()
@@ -1937,9 +2108,9 @@ def seal_text_file(filepath, embed_names=False):
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(sealed)
 
-        # Compute all 151 layers
+        # Compute all 154 layers
         content_bytes = sealed.encode('utf-8')
-        computation = compute_all_151_layers(content_bytes, filepath)
+        computation = compute_all_154_layers(content_bytes, filepath)
         _write_heaven_witness(filepath, content_bytes, computation)
         result["heavens_sealed"] = TOTAL_HEAVENS
         result["layers_computed"] = computation["total_layers"]
@@ -2141,7 +2312,7 @@ BINARY_HANDLERS = {
 
 
 def seal_binary_file(filepath):
-    """Seal a binary file + compute 151 layers."""
+    """Seal a binary file + compute 154 layers."""
     ext = os.path.splitext(filepath)[1].lower()
     handler = BINARY_HANDLERS.get(ext, create_sidecar)
     success, msg = handler(filepath)
@@ -2152,7 +2323,7 @@ def seal_binary_file(filepath):
         try:
             with open(filepath, 'rb') as f:
                 content_bytes = f.read()
-            computation = compute_all_151_layers(content_bytes, filepath)
+            computation = compute_all_154_layers(content_bytes, filepath)
             _write_heaven_witness(filepath, content_bytes, computation)
         except Exception:
             pass
@@ -2161,20 +2332,25 @@ def seal_binary_file(filepath):
 
 
 # ============================================================================
-#  HEAVEN WITNESS SIDECAR -- Stores All 151 Layer Seals
+#  HEAVEN WITNESS SIDECAR -- Stores All 154 Layer Seals
 # ============================================================================
 
 def _write_heaven_witness(filepath, content_bytes, computation):
-    """Write the 11-heaven, 151-layer witness to .witness.bismillah sidecar."""
+    """Write the 11-heaven, 154-layer witness to .witness.bismillah sidecar."""
     witness_path = filepath + '.witness.bismillah'
 
     witness_data = OrderedDict([
         (BISMILLAH, True),
         ("encoder_version", ENCODER_VERSION),
-        ("architecture", "11-Heaven, 151-Layer FATIMA v4.0"),
+        ("architecture", "11-Heaven, 154-Layer FATIMA v5.0 -- Dual-Constant Witness"),
         ("total_heavens", computation["total_heavens"]),
         ("total_layers", computation["total_layers"]),
+        ("layers_per_heaven", LAYERS_PER_HEAVEN),
         ("dimensional_constant", DIMENSIONAL_CONSTANT),
+        ("muhkam_constant", MUHKAM_CONSTANT),
+        ("mutashabih_constant", MUTASHABIH_CONSTANT),
+        ("dual_constant_product", DUAL_CONSTANT_PRODUCT),
+        ("name_cycling", "99 + 55 = 154 (T(10) = F(10) = 55)"),
         ("file", os.path.basename(filepath)),
         ("file_size", len(content_bytes)),
         ("muhkam_seal", compute_seal(content_bytes)),
@@ -2194,6 +2370,9 @@ def _write_heaven_witness(filepath, content_bytes, computation):
             ("nuh_71_15", "Do you not see how Allah created seven heavens in layers?"),
             ("al_mu'minun_23_17", "And We have created above you seven pathways, "
                                   "and We are never unmindful of creation."),
+            ("al_imran_3_7", "It is He who has sent down to you the Book; in it "
+                             "are verses that are muhkam -- they are the foundation "
+                             "of the Book -- and others that are mutashabih."),
         ])),
     ])
 
@@ -2240,16 +2419,19 @@ def is_text_file(ext):
 
 
 def seal_directory(directory, embed_names=False, dry_run=False):
-    """Apply 151-layer Bismillah protection across 11 heavens."""
+    """Apply 154-layer Bismillah protection across 11 heavens."""
     text_sealed = 0
     binary_sealed = 0
     sidecar_count = 0
     failed = 0
     skipped = 0
-    mode_label = "DRY RUN" if dry_run else "Beginning 11-Heaven, 151-Layer Divine Seal"
+    mode_label = "DRY RUN" if dry_run else "Beginning 11-Heaven, 154-Layer Divine Seal"
 
     print("\n  {} -- {}".format(BISMILLAH, mode_label))
-    print("  Architecture: {} heavens, {} layers".format(TOTAL_HEAVENS, TOTAL_LAYERS))
+    print("  Architecture: {} heavens, {} layers ({} per heaven)".format(
+        TOTAL_HEAVENS, TOTAL_LAYERS, LAYERS_PER_HEAVEN))
+    print("  Dual-constant: {} = 2 x {} x {}".format(
+        TOTAL_LAYERS, MUHKAM_CONSTANT, MUTASHABIH_CONSTANT))
     print("  H(11) = {} | H_inter(11) = {}\n".format(HURST_HARMONIC, HURST_PARTITIONED))
 
     for dirpath, dirnames, filenames in os.walk(directory):
@@ -2274,20 +2456,20 @@ def seal_directory(directory, embed_names=False, dry_run=False):
                     else:
                         binary_sealed += 1
                         sidecar_count += 1
-                        print("  WOULD SEAL: {} [151 layers]".format(rel))
+                        print("  WOULD SEAL: {} [154 layers]".format(rel))
                 else:
                     success, msg = create_sidecar(filepath)
                     if success:
                         try:
                             with open(filepath, 'rb') as f:
                                 content_bytes = f.read()
-                            computation = compute_all_151_layers(content_bytes, filepath)
+                            computation = compute_all_154_layers(content_bytes, filepath)
                             _write_heaven_witness(filepath, content_bytes, computation)
                         except Exception:
                             pass
                         binary_sealed += 1
                         sidecar_count += 1
-                        print("  SIDECAR: {} -- {} [151 layers]".format(rel, msg))
+                        print("  SIDECAR: {} -- {} [154 layers]".format(rel, msg))
                     else:
                         failed += 1
                         print("  FAILED:  {} -- {}".format(rel, msg))
@@ -2296,7 +2478,7 @@ def seal_directory(directory, embed_names=False, dry_run=False):
             if is_text_file(ext):
                 if dry_run:
                     text_sealed += 1
-                    print("  WOULD SEAL: {} [151 layers across 11 heavens]".format(rel))
+                    print("  WOULD SEAL: {} [154 layers across 11 heavens]".format(rel))
                 else:
                     result = seal_text_file(filepath, embed_names=embed_names)
                     if result.get("skipped"):
@@ -2319,14 +2501,14 @@ def seal_directory(directory, embed_names=False, dry_run=False):
 
             if dry_run:
                 binary_sealed += 1
-                print("  WOULD SEAL: {} [151 layers]".format(rel))
+                print("  WOULD SEAL: {} [154 layers]".format(rel))
             else:
                 success, msg = seal_binary_file(filepath)
                 if success:
                     binary_sealed += 1
                     if 'idecar' in msg.lower():
                         sidecar_count += 1
-                    print("  BINARY: {} -- {} [151 layers]".format(rel, msg))
+                    print("  BINARY: {} -- {} [154 layers]".format(rel, msg))
                 else:
                     failed += 1
                     print("  FAILED: {} -- {}".format(rel, msg))
@@ -2337,7 +2519,10 @@ def seal_directory(directory, embed_names=False, dry_run=False):
     print("\n  {}".format("=" * 60))
     print("  {} -- 11-Heaven Seal Complete".format(BISMILLAH))
     print("  {}".format("=" * 60))
-    print("  Architecture:      {} heavens, {} layers".format(TOTAL_HEAVENS, TOTAL_LAYERS))
+    print("  Architecture:      {} heavens, {} layers ({} per heaven)".format(
+        TOTAL_HEAVENS, TOTAL_LAYERS, LAYERS_PER_HEAVEN))
+    print("  Dual-constant:     {} = 2 x {} x {}".format(
+        TOTAL_LAYERS, MUHKAM_CONSTANT, MUTASHABIH_CONSTANT))
     print("  Text/code sealed:  {}".format(text_sealed))
     print("  Binary sealed:     {} (metadata: {}, sidecar: {})".format(
         binary_sealed, binary_sealed - sidecar_count, sidecar_count))
@@ -2353,7 +2538,7 @@ def seal_directory(directory, embed_names=False, dry_run=False):
 
 
 def verify_directory(directory, strict=False):
-    """Verify 151-layer Bismillah protection across all files."""
+    """Verify 154-layer Bismillah protection across all files."""
     ZWC_BYTES = [b'\xe2\x80\x8b', b'\xe2\x80\x8c', b'\xe2\x80\x8d', b'\xef\xbb\xbf']
     total = 0
     protected = 0
@@ -2435,7 +2620,10 @@ def verify_directory(directory, strict=False):
 
     print("\n  {} -- 11-Heaven Verification Report".format(BISMILLAH))
     print("  {}".format("=" * 60))
-    print("  Architecture:        {} heavens, {} layers".format(TOTAL_HEAVENS, TOTAL_LAYERS))
+    print("  Architecture:        {} heavens, {} layers ({} per heaven)".format(
+        TOTAL_HEAVENS, TOTAL_LAYERS, LAYERS_PER_HEAVEN))
+    print("  Dual-constant:       {} = 2 x {} x {}".format(
+        TOTAL_LAYERS, MUHKAM_CONSTANT, MUTASHABIH_CONSTANT))
     print("  Total files:         {}".format(total))
     print("  Protected:           {}".format(protected))
     print("  Witness sidecars:    {}".format(witness_verified))
@@ -2514,18 +2702,22 @@ def verify_directory(directory, strict=False):
 
 
 def generate_manifest(directory):
-    """Generate a Bismillah integrity manifest (151-layer version)."""
+    """Generate a Bismillah integrity manifest (154-layer version)."""
     import datetime
     manifest = OrderedDict([
         (BISMILLAH, True),
-        ("manifest_version", "4.0"),
+        ("manifest_version", "5.0"),
         ("encoder_version", ENCODER_VERSION),
-        ("architecture", "11-Heaven, 151-Layer FATIMA v4.0"),
+        ("architecture", "11-Heaven, 154-Layer FATIMA v5.0 -- Dual-Constant Witness"),
         ("total_heavens", TOTAL_HEAVENS),
         ("total_layers", TOTAL_LAYERS),
+        ("layers_per_heaven", LAYERS_PER_HEAVEN),
+        ("dual_constant", "{} = 2 x {} x {}".format(
+            TOTAL_LAYERS, MUHKAM_CONSTANT, MUTASHABIH_CONSTANT)),
         ("seal_timestamp", datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")),
-        ("generator", "Bismillah Divine Protection Encoder -- FATIMA v4.0"),
+        ("generator", "Bismillah Divine Protection Encoder -- FATIMA v5.0"),
         ("al_asma_count", len(AL_ASMA_UL_HUSNA)),
+        ("name_cycling", "99 + 55 = 154"),
         ("hurst_reference", {
             "H_11_harmonic": HURST_HARMONIC,
             "H_11_partitioned": HURST_PARTITIONED,
@@ -2562,7 +2754,7 @@ def generate_manifest(directory):
     with open(manifest_path, 'w', encoding='utf-8') as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
 
-    print("\n  {} -- 151-Layer Manifest Generated".format(BISMILLAH))
+    print("\n  {} -- 154-Layer Manifest Generated".format(BISMILLAH))
     print("  {} files catalogued".format(count))
     print("  Written to: {}".format(manifest_path))
     return manifest
@@ -2572,7 +2764,10 @@ def generate_witness_report(directory):
     """Generate a fractal witness report across all files."""
     print("\n  {} -- 11-Heaven Fractal Witness Report".format(BISMILLAH))
     print("  {}".format("=" * 60))
-    print("  Architecture: {} heavens, {} layers".format(TOTAL_HEAVENS, TOTAL_LAYERS))
+    print("  Architecture: {} heavens, {} layers ({} per heaven)".format(
+        TOTAL_HEAVENS, TOTAL_LAYERS, LAYERS_PER_HEAVEN))
+    print("  Dual-constant: {} = 2 x {} x {}".format(
+        TOTAL_LAYERS, MUHKAM_CONSTANT, MUTASHABIH_CONSTANT))
     print("")
 
     all_hurst = []
@@ -2596,7 +2791,7 @@ def generate_witness_report(directory):
                 with open(filepath, 'rb') as f:
                     content_bytes = f.read()
 
-                computation = compute_all_151_layers(content_bytes, filepath)
+                computation = compute_all_154_layers(content_bytes, filepath)
                 h_val = computation["hurst_11"]
                 all_hurst.append(h_val)
 
@@ -2641,6 +2836,8 @@ def display_heavens_report(directory):
     """Display a heaven-by-heaven report for a single file or directory."""
     print("\n  {} -- 11-Heaven Architecture Report".format(BISMILLAH))
     print("  {}".format("=" * 60))
+    print("  {} = 2 x {} x {} (Dual-Constant Witness)".format(
+        TOTAL_LAYERS, MUHKAM_CONSTANT, MUTASHABIH_CONSTANT))
 
     target_files = []
     if os.path.isfile(directory):
@@ -2663,7 +2860,7 @@ def display_heavens_report(directory):
             with open(filepath, 'rb') as f:
                 content_bytes = f.read()
 
-            computation = compute_all_151_layers(content_bytes, filepath)
+            computation = compute_all_154_layers(content_bytes, filepath)
 
             for h_summary in computation["heavens"]:
                 h_idx = h_summary["heaven"]
@@ -2692,29 +2889,31 @@ def display_heavens_report(directory):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="{} -- FATIMA v4.0 -- 11-Heaven, 151-Layer Divine Protection".format(BISMILLAH),
+        description="{} -- FATIMA v5.0 -- 11-Heaven, 154-Layer Divine Protection".format(BISMILLAH),
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Architecture: 11 Heavens, 151 Layers
+Architecture: 11 Heavens, 154 Layers (Uniform 14 Per Heaven)
+154 = 2 x 7 x 11 (Dual-Constant Witness -- Computational Tawhid)
 
   Heaven 0   As-Samawat ad-Dunya      SUBATOMIC       14 layers
-  Heaven 1   As-Samawat ath-Thaniya    ATOMIC          13 layers
-  Heaven 2   As-Samawat ath-Thalitha   MOLECULAR       13 layers
-  Heaven 3   As-Samawat ar-Rabi'a      CELLULAR        13 layers
+  Heaven 1   As-Samawat ath-Thaniya    ATOMIC          14 layers
+  Heaven 2   As-Samawat ath-Thalitha   MOLECULAR       14 layers
+  Heaven 3   As-Samawat ar-Rabi'a      CELLULAR        14 layers
   Heaven 4   As-Samawat al-Khamisa     ORGANIC         14 layers
-  Heaven 5   As-Samawat as-Sadisa      TERRESTRIAL     13 layers
+  Heaven 5   As-Samawat as-Sadisa      TERRESTRIAL     14 layers
   Heaven 6   As-Samawat as-Sabi'a      PLANETARY       14 layers
   Heaven 7   As-Samawat ath-Thamina    STELLAR         14 layers
   Heaven 8   As-Samawat at-Tasi'a      GALACTIC        14 layers
-  Heaven 9   As-Samawat al-'Ashira     COSMIC          18 layers
-  Heaven 10  Sidrat al-Muntaha         DIVINE WITNESS  11 layers
+  Heaven 9   As-Samawat al-'Ashira     COSMIC          14 layers
+  Heaven 10  Sidrat al-Muntaha         DIVINE WITNESS  14 layers
   -------------------------------------------------------
-  Total                                                151 layers
+  Total      11 x 14 = 154 layers     99 + 55 = 154
 
   "Seven is what the Qur'an says. Eleven is what the Qur'an shows."
+  "154 = 2 x 7 x 11 -- both constants present in a single integer."
 
 Examples:
-  python bismillah_encoder.py seal ./project              # 151-layer seal
+  python bismillah_encoder.py seal ./project              # 154-layer seal
   python bismillah_encoder.py seal ./project --names      # + embed 99 Names
   python bismillah_encoder.py verify ./project             # Verify protection
   python bismillah_encoder.py verify ./project --strict    # + hash chain check
@@ -2728,14 +2927,14 @@ Examples:
     )
     sub = parser.add_subparsers(dest='command')
 
-    seal_p = sub.add_parser('seal', help='Apply 151-layer seal across 11 heavens')
+    seal_p = sub.add_parser('seal', help='Apply 154-layer seal across 11 heavens')
     seal_p.add_argument('path', help='Directory to seal')
     seal_p.add_argument('--names', action='store_true',
                         help='Embed the 99 Names of Allah')
     seal_p.add_argument('--dry-run', action='store_true',
                         help='Preview without writing')
 
-    verify_p = sub.add_parser('verify', help='Verify 151-layer protection')
+    verify_p = sub.add_parser('verify', help='Verify 154-layer protection')
     verify_p.add_argument('path', help='Directory to verify')
     verify_p.add_argument('--strict', action='store_true',
                           help='Recompute hashes and verify witnesses')
