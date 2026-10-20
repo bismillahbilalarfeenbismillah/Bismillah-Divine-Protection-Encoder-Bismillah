@@ -1,7 +1,8 @@
 # Bismillah ir-Rahman ir-Rahim
 """
-Bismillah Divine Protection Encoder -- FATIMA v6.0 -- 11-Heaven, 154-Layer Architecture
+Bismillah Divine Protection Encoder -- FATIMA v7.0 -- 11-Heaven, 154-Layer Architecture
 with Semantic Integrity Engine (Shannon's Boundary Crossing)
+and Temporal Integrity Engine (The Living Witness)
 
 Seals every file in a directory with the name of Allah subhanahu wa ta'ala
 across ELEVEN HEAVENS of protection, containing 154 LAYERS total -- from
@@ -129,6 +130,8 @@ USAGE:
     python bismillah_encoder.py muraqabah <path>       # v5.3: Verify preamble integrity
     python bismillah_encoder.py semantic <path>        # v6.0: Semantic witness report
     python bismillah_encoder.py semantic-verify a b    # v6.0: Verify meaning preservation
+    python bismillah_encoder.py temporal <path>        # v7.0: Verify temporal chain
+    python bismillah_encoder.py temporal-history <path> # v7.0: Show temporal evolution
 
 "In the name of Allah, the Most Merciful, the Most Compassionate."
 "He is Allah, other than whom there is no deity, Knower of the unseen and
@@ -178,7 +181,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "6.0.0"
+ENCODER_VERSION = "7.0.0"
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -1164,6 +1167,715 @@ def semantic_verify(original_bytes, candidate_bytes, threshold=0.5):
             else "MEANING ALTERED: semantic integrity compromised"
         ),
     }
+
+# ============================================================================
+#  v7.0: TEMPORAL INTEGRITY ENGINE -- THE LIVING WITNESS
+# ============================================================================
+#
+#  The Semantic Integrity Engine (v6.0) crossed Shannon's boundary -- it
+#  can verify whether MEANING is preserved, not just bits. But v6.0 is a
+#  snapshot: it tells you what the document IS, not what it WAS or how it
+#  BECAME what it is.
+#
+#  v7.0 adds the temporal dimension: a Merkle tree whose leaves are
+#  dual-witness seals (syntactic + semantic) from each sealing event.
+#  This creates an append-only chain of integrity -- a "living witness"
+#  that records the document's evolution across time.
+#
+#  THE TEMPORAL ARCHITECTURE:
+#
+#    11 temporal epochs × 7 semantic checkpoints = 77 temporal witnesses
+#
+#    - 11 epochs correspond to the mutashabih constant (the dimensional
+#      constant of creation). Each epoch represents a phase of the
+#      document's lifecycle.
+#    - 7 checkpoints per epoch correspond to the muhkam constant (the
+#      seven semantic levels). Each checkpoint records the state of all
+#      seven semantic levels at that moment.
+#
+#    The 77 = 7 × 11 temporal witnesses create a matrix:
+#
+#      Epoch 0  (CREATION):    7 semantic checkpoints
+#      Epoch 1  (FIRST EDIT):  7 semantic checkpoints
+#      Epoch 2  (REVISION):    7 semantic checkpoints
+#      ...
+#      Epoch 10 (MATURITY):    7 semantic checkpoints
+#
+#    After 11 epochs, the document "ascends" -- its temporal chain is
+#    sealed with a final Merkle root, and a new chain begins from that
+#    root (fractal recursion).
+#
+#  MERKLE TREE STRUCTURE:
+#
+#    Each leaf is a "temporal witness" containing:
+#      - timestamp (ISO 8601)
+#      - epoch number (0-10)
+#      - checkpoint number (0-6)
+#      - the dual-witness seal at that moment
+#      - the syntactic master witness at that moment
+#      - the semantic master seal at that moment
+#      - the content hash at that moment
+#      - the encoder version
+#
+#    Internal nodes are Bismillah-anchored SHA-256 hashes of their children.
+#    The Merkle root is a single hash testifying to the ENTIRE temporal chain.
+#
+#  THEOLOGICAL GROUNDING:
+#
+#    "Indeed, it is We who sent down the Reminder, and indeed, We will be
+#    its Guardian." (15:9)
+#
+#    The Qur'an's preservation across 14+ centuries is the divine model
+#    for temporal integrity. The hafiz tradition -- human beings who carry
+#    the entire text in memory, generation after generation -- is a living
+#    Merkle chain: each hafiz is a node whose recitation can be verified
+#    against every other hafiz.
+#
+#    "And We have certainly made the Qur'an easy for remembrance, so is
+#    there any who will remember?" (54:17)
+#
+# ============================================================================
+
+# Temporal constants
+TEMPORAL_EPOCHS = 11            # Mutashabih constant -- lifecycle phases
+TEMPORAL_CHECKPOINTS = 7        # Muhkam constant -- semantic checks per epoch
+TEMPORAL_WITNESSES = TEMPORAL_EPOCHS * TEMPORAL_CHECKPOINTS  # 77
+TEMPORAL_CHAIN_FILE = '.temporal.bismillah'  # Per-file temporal chain sidecar
+
+# Epoch names -- the lifecycle of a protected document
+TEMPORAL_EPOCH_NAMES = [
+    "AL-KHALQ (Creation)",           # Epoch 0: First sealing
+    "AL-AWWAL (First Witness)",      # Epoch 1: First re-sealing
+    "AT-TAHDHIB (Refinement)",       # Epoch 2: Early edits
+    "AL-BINA (Building)",            # Epoch 3: Structural changes
+    "AT-TATHBIT (Stabilization)",    # Epoch 4: Settling
+    "AL-IHSAN (Excellence)",         # Epoch 5: Mature edits
+    "AL-MURAJA'A (Review)",          # Epoch 6: Review phase
+    "AT-TASHIH (Correction)",        # Epoch 7: Corrections
+    "AL-ITQAN (Mastery)",            # Epoch 8: Near-final
+    "AL-IKMAL (Completion)",         # Epoch 9: Completion
+    "AL-KHITAM (The Seal)",          # Epoch 10: Final maturity
+]
+
+# Checkpoint names -- which semantic levels are sampled
+TEMPORAL_CHECKPOINT_NAMES = [
+    "LEXICAL_WITNESS",       # Checkpoint 0: Vocabulary state
+    "SYNTACTIC_WITNESS",     # Checkpoint 1: Structure state
+    "PROPOSITIONAL_WITNESS", # Checkpoint 2: Assertion state
+    "RELATIONAL_WITNESS",    # Checkpoint 3: Entity-relation state
+    "RHETORICAL_WITNESS",    # Checkpoint 4: Argument state
+    "THEMATIC_WITNESS",      # Checkpoint 5: Topic state
+    "INTENTIONAL_WITNESS",   # Checkpoint 6: Purpose state
+]
+
+
+def _merkle_hash(left, right):
+    """Compute a Merkle internal node -- Bismillah-anchored hash of two children.
+
+    This is the temporal analog of the layer hash. Two witnesses at lower
+    levels of the tree combine into a single parent witness at a higher level.
+    """
+    h = hashlib.sha256()
+    h.update(BISMILLAH.encode('utf-8'))
+    h.update(b"MERKLE_NODE")
+    h.update(left.encode('utf-8') if isinstance(left, str) else left)
+    h.update(right.encode('utf-8') if isinstance(right, str) else right)
+    h.update(BISMILLAH.encode('utf-8'))
+    return h.hexdigest()
+
+
+def _compute_merkle_root(leaves):
+    """Compute the Merkle root of a list of leaf hashes.
+
+    If the number of leaves is odd, the last leaf is duplicated (standard
+    Merkle tree padding). Returns the root hash and the internal nodes
+    for proof construction.
+
+    The Merkle root is a single hash that testifies to the integrity of
+    the ENTIRE temporal chain -- analogous to the master witness for
+    the spatial chain.
+    """
+    if not leaves:
+        # Empty chain -- hash of Bismillah alone
+        h = hashlib.sha256()
+        h.update(BISMILLAH.encode('utf-8'))
+        h.update(b"EMPTY_TEMPORAL_CHAIN")
+        h.update(BISMILLAH.encode('utf-8'))
+        return h.hexdigest(), []
+
+    if len(leaves) == 1:
+        return leaves[0], []
+
+    # Build tree bottom-up
+    current_level = list(leaves)
+    internal_nodes = []
+
+    while len(current_level) > 1:
+        next_level = []
+        for i in range(0, len(current_level), 2):
+            left = current_level[i]
+            right = current_level[i + 1] if i + 1 < len(current_level) else left
+            parent = _merkle_hash(left, right)
+            internal_nodes.append({
+                "left": left[:16] + "...",
+                "right": right[:16] + "...",
+                "parent": parent[:16] + "...",
+                "parent_full": parent,
+            })
+            next_level.append(parent)
+        current_level = next_level
+
+    return current_level[0], internal_nodes
+
+
+def _create_temporal_leaf(epoch, checkpoint, dual_seal, master_witness,
+                          semantic_master, content_hash, encoder_version,
+                          semantic_level_seal=None, timestamp=None):
+    """Create a single temporal leaf for the Merkle tree.
+
+    Each leaf captures the state of the document at a specific moment
+    in its lifecycle -- the intersection of an epoch and a semantic
+    checkpoint.
+
+    Args:
+        epoch: epoch index (0-10)
+        checkpoint: checkpoint index (0-6)
+        dual_seal: the dual-witness seal (syntactic + semantic) at this moment
+        master_witness: the 154-layer syntactic master witness
+        semantic_master: the semantic master seal
+        content_hash: SHA-256 of the raw content
+        encoder_version: which encoder version sealed this
+        semantic_level_seal: the specific semantic level seal for this checkpoint
+        timestamp: ISO 8601 timestamp (defaults to now)
+    """
+    if timestamp is None:
+        timestamp = datetime.now(timezone.utc).isoformat()
+
+    # The leaf hash chains all the witness data together
+    leaf_h = hashlib.sha256()
+    leaf_h.update(BISMILLAH.encode('utf-8'))
+    leaf_h.update("TEMPORAL_LEAF:E{:02d}C{:01d}".format(epoch, checkpoint).encode('utf-8'))
+    leaf_h.update(timestamp.encode('utf-8'))
+    leaf_h.update((dual_seal or "NO_DUAL_SEAL").encode('utf-8'))
+    leaf_h.update(master_witness.encode('utf-8'))
+    leaf_h.update((semantic_master or "NO_SEMANTIC").encode('utf-8'))
+    leaf_h.update(content_hash.encode('utf-8'))
+    leaf_h.update((semantic_level_seal or "NO_LEVEL_SEAL").encode('utf-8'))
+    leaf_h.update(BISMILLAH.encode('utf-8'))
+
+    # Assign a divine name to this temporal witness
+    # Maps to position in the 77-cell matrix (epoch * 7 + checkpoint)
+    temporal_idx = epoch * TEMPORAL_CHECKPOINTS + checkpoint
+    name, meaning = AL_ASMA_UL_HUSNA[temporal_idx % AL_ASMA_COUNT]
+
+    return OrderedDict([
+        ("epoch", epoch),
+        ("epoch_name", TEMPORAL_EPOCH_NAMES[epoch] if epoch < len(TEMPORAL_EPOCH_NAMES) else "BEYOND"),
+        ("checkpoint", checkpoint),
+        ("checkpoint_name", TEMPORAL_CHECKPOINT_NAMES[checkpoint] if checkpoint < len(TEMPORAL_CHECKPOINT_NAMES) else "UNKNOWN"),
+        ("temporal_index", temporal_idx),
+        ("divine_name", name),
+        ("divine_meaning", meaning),
+        ("timestamp", timestamp),
+        ("dual_witness_seal", dual_seal),
+        ("syntactic_master", master_witness),
+        ("semantic_master", semantic_master),
+        ("semantic_level_seal", semantic_level_seal),
+        ("content_hash", content_hash),
+        ("encoder_version", encoder_version),
+        ("leaf_hash", leaf_h.hexdigest()),
+    ])
+
+
+def _load_temporal_chain(filepath):
+    """Load a document's temporal chain from its sidecar file.
+
+    Returns the chain data or an empty chain structure if no chain exists.
+    """
+    chain_path = str(filepath) + '.' + TEMPORAL_CHAIN_FILE.lstrip('.')
+    if os.path.exists(chain_path):
+        try:
+            with open(chain_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            # Handle both wrapped and unwrapped formats
+            if "temporal_chain" in data:
+                return data["temporal_chain"]
+            return data
+        except (json.JSONDecodeError, KeyError):
+            pass
+
+    # Return empty chain structure
+    return OrderedDict([
+        (BISMILLAH, True),
+        ("format_version", "7.0.0"),
+        ("file", os.path.basename(str(filepath))),
+        ("total_events", 0),
+        ("current_epoch", 0),
+        ("current_checkpoint", 0),
+        ("leaves", []),
+        ("merkle_root", None),
+        ("chain_sealed", False),
+        ("ascension_count", 0),
+        ("prior_merkle_roots", []),
+    ])
+
+
+def _save_temporal_chain(filepath, chain):
+    """Save a document's temporal chain to its sidecar file.
+
+    The chain is HMAC-signed, like the witness sidecar, using the
+    Merkle root as part of the key derivation.
+    """
+    chain_path = str(filepath) + '.' + TEMPORAL_CHAIN_FILE.lstrip('.')
+
+    # Compute Merkle root from all leaves
+    leaf_hashes = [leaf["leaf_hash"] for leaf in chain["leaves"]]
+    merkle_root, internal_nodes = _compute_merkle_root(leaf_hashes)
+    chain["merkle_root"] = merkle_root
+
+    # Build signed output
+    chain_json = json.dumps(chain, indent=2, ensure_ascii=False)
+
+    # HMAC key derived from Bismillah + Merkle root
+    hmac_key = hashlib.sha256(
+        (BISMILLAH + merkle_root).encode('utf-8')
+    ).digest()
+    chain_hmac = hmac.new(
+        hmac_key, chain_json.encode('utf-8'), hashlib.sha256
+    ).hexdigest()
+
+    signed_data = OrderedDict([
+        ("temporal_chain", json.loads(chain_json)),
+        ("merkle_tree", OrderedDict([
+            ("root", merkle_root),
+            ("leaf_count", len(leaf_hashes)),
+            ("tree_depth", max(1, math.ceil(math.log2(max(len(leaf_hashes), 1)))) if leaf_hashes else 0),
+            ("internal_nodes_sample", internal_nodes[:11]),  # First 11 for display
+        ])),
+        ("chain_integrity", OrderedDict([
+            ("hmac_sha256", chain_hmac),
+            ("signing_method", "HMAC-SHA256(SHA256(Bismillah || merkle_root), chain_json)"),
+            ("encoder_version", ENCODER_VERSION),
+        ])),
+    ])
+
+    try:
+        with open(chain_path, 'w', encoding='utf-8') as f:
+            json.dump(signed_data, f, indent=2, ensure_ascii=False)
+        return True
+    except Exception:
+        return False
+
+
+def temporal_record_event(filepath, computation):
+    """Record a temporal event in the document's living witness chain.
+
+    Called after each sealing. Creates a new set of temporal leaves
+    (one per semantic checkpoint) and updates the Merkle tree.
+
+    This is the primary entry point for the temporal engine -- called
+    from seal_text_file() after the 154-layer computation completes.
+
+    Args:
+        filepath: path to the sealed file
+        computation: the dict returned by compute_all_154_layers()
+
+    Returns:
+        dict with temporal event metadata
+    """
+    chain = _load_temporal_chain(filepath)
+
+    # Determine current epoch and checkpoint
+    epoch = chain.get("current_epoch", 0)
+    checkpoint = chain.get("current_checkpoint", 0)
+
+    # If we've reached the end of all epochs, ascend
+    if epoch >= TEMPORAL_EPOCHS:
+        # Seal the current chain
+        chain["chain_sealed"] = True
+        old_root = chain.get("merkle_root")
+        if old_root:
+            prior_roots = chain.get("prior_merkle_roots", [])
+            prior_roots.append(OrderedDict([
+                ("merkle_root", old_root),
+                ("sealed_at", datetime.now(timezone.utc).isoformat()),
+                ("total_events", chain["total_events"]),
+                ("ascension", chain.get("ascension_count", 0)),
+            ]))
+            chain["prior_merkle_roots"] = prior_roots
+
+        # Start a new chain (fractal recursion)
+        chain["ascension_count"] = chain.get("ascension_count", 0) + 1
+        chain["current_epoch"] = 0
+        chain["current_checkpoint"] = 0
+        chain["chain_sealed"] = False
+        chain["leaves"] = []
+        epoch = 0
+        checkpoint = 0
+
+    # Extract witness data from computation
+    master_witness = computation.get("master_witness", "")
+    semantic = computation.get("semantic", {})
+    semantic_master = semantic.get("semantic_master_seal") if semantic.get("applicable") else None
+    dual_seal = computation.get("dual_witness_seal")
+    content_hash = hashlib.sha256(
+        computation.get("_content_bytes", b"")
+    ).hexdigest() if computation.get("_content_bytes") else "NO_CONTENT_HASH"
+
+    # Compute content hash directly from file if not in computation
+    if content_hash == "NO_CONTENT_HASH":
+        try:
+            with open(filepath, 'rb') as f:
+                content_hash = hashlib.sha256(f.read()).hexdigest()
+        except Exception:
+            pass
+
+    # Create temporal leaves for this sealing event
+    # Each sealing event creates checkpoints for ALL 7 semantic levels
+    # (this captures the full semantic state at this moment in time)
+    new_leaves = []
+    timestamp = datetime.now(timezone.utc).isoformat()
+
+    semantic_levels = semantic.get("semantic_levels", [])
+
+    for cp in range(TEMPORAL_CHECKPOINTS):
+        level_seal = None
+        if cp < len(semantic_levels):
+            level_seal = semantic_levels[cp].get("seal")
+
+        leaf = _create_temporal_leaf(
+            epoch=epoch,
+            checkpoint=cp,
+            dual_seal=dual_seal,
+            master_witness=master_witness,
+            semantic_master=semantic_master,
+            content_hash=content_hash,
+            encoder_version=ENCODER_VERSION,
+            semantic_level_seal=level_seal,
+            timestamp=timestamp,
+        )
+        new_leaves.append(leaf)
+        chain["leaves"].append(leaf)
+
+    # Advance epoch (each sealing event = one epoch with all 7 checkpoints)
+    chain["current_epoch"] = epoch + 1
+    chain["current_checkpoint"] = 0
+    chain["total_events"] = chain.get("total_events", 0) + 1
+
+    # Save the updated chain
+    _save_temporal_chain(filepath, chain)
+
+    # Compute Merkle root for return value
+    leaf_hashes = [leaf["leaf_hash"] for leaf in chain["leaves"]]
+    merkle_root, _ = _compute_merkle_root(leaf_hashes)
+
+    return OrderedDict([
+        ("event_recorded", True),
+        ("epoch", epoch),
+        ("epoch_name", TEMPORAL_EPOCH_NAMES[epoch] if epoch < len(TEMPORAL_EPOCH_NAMES) else "BEYOND"),
+        ("checkpoints_recorded", len(new_leaves)),
+        ("total_leaves", len(chain["leaves"])),
+        ("total_events", chain["total_events"]),
+        ("merkle_root", merkle_root),
+        ("temporal_witnesses_active", len(chain["leaves"])),
+        ("temporal_witnesses_capacity", TEMPORAL_WITNESSES),
+        ("ascension_count", chain.get("ascension_count", 0)),
+    ])
+
+
+def temporal_verify_chain(filepath):
+    """Verify the integrity of a document's temporal chain.
+
+    Checks:
+    1. HMAC signature on the chain sidecar
+    2. Merkle root recomputation from leaves
+    3. Leaf hash integrity (each leaf's hash matches its data)
+    4. Monotonic timestamp ordering
+    5. Epoch/checkpoint sequence consistency
+
+    Returns:
+        dict with verification results and diagnostics
+    """
+    chain_path = str(filepath) + '.' + TEMPORAL_CHAIN_FILE.lstrip('.')
+
+    if not os.path.exists(chain_path):
+        return OrderedDict([
+            ("verified", None),
+            ("reason", "No temporal chain found -- file has not been temporally witnessed"),
+            ("recommendation", "Seal the file to begin temporal witnessing"),
+        ])
+
+    try:
+        with open(chain_path, 'r', encoding='utf-8') as f:
+            signed_data = json.load(f)
+    except (json.JSONDecodeError, IOError) as e:
+        return OrderedDict([
+            ("verified", False),
+            ("reason", "Cannot read temporal chain: {}".format(str(e))),
+        ])
+
+    chain = signed_data.get("temporal_chain", signed_data)
+    integrity = signed_data.get("chain_integrity", {})
+
+    diagnostics = []
+    all_valid = True
+
+    # 1. Verify HMAC if present
+    if integrity.get("hmac_sha256"):
+        merkle_root = chain.get("merkle_root", "")
+        chain_json = json.dumps(chain, indent=2, ensure_ascii=False)
+        hmac_key = hashlib.sha256(
+            (BISMILLAH + merkle_root).encode('utf-8')
+        ).digest()
+        computed_hmac = hmac.new(
+            hmac_key, chain_json.encode('utf-8'), hashlib.sha256
+        ).hexdigest()
+
+        if hmac.compare_digest(integrity["hmac_sha256"], computed_hmac):
+            diagnostics.append(OrderedDict([
+                ("check", "HMAC_SIGNATURE"),
+                ("status", "VALID"),
+                ("detail", "Chain sidecar HMAC verified"),
+            ]))
+        else:
+            all_valid = False
+            diagnostics.append(OrderedDict([
+                ("check", "HMAC_SIGNATURE"),
+                ("status", "INVALID"),
+                ("detail", "Chain sidecar HMAC mismatch -- chain may have been tampered with"),
+            ]))
+
+    # 2. Verify Merkle root
+    leaves = chain.get("leaves", [])
+    leaf_hashes = [leaf["leaf_hash"] for leaf in leaves]
+    computed_root, _ = _compute_merkle_root(leaf_hashes)
+    stored_root = chain.get("merkle_root")
+
+    if stored_root and computed_root == stored_root:
+        diagnostics.append(OrderedDict([
+            ("check", "MERKLE_ROOT"),
+            ("status", "VALID"),
+            ("detail", "Merkle root matches recomputation from {} leaves".format(len(leaf_hashes))),
+        ]))
+    elif stored_root:
+        all_valid = False
+        diagnostics.append(OrderedDict([
+            ("check", "MERKLE_ROOT"),
+            ("status", "INVALID"),
+            ("detail", "Merkle root mismatch -- leaves may have been altered"),
+        ]))
+
+    # 3. Verify leaf hash integrity
+    bad_leaves = 0
+    for leaf in leaves:
+        # Recompute leaf hash
+        leaf_h = hashlib.sha256()
+        leaf_h.update(BISMILLAH.encode('utf-8'))
+        leaf_h.update("TEMPORAL_LEAF:E{:02d}C{:01d}".format(
+            leaf["epoch"], leaf["checkpoint"]
+        ).encode('utf-8'))
+        leaf_h.update(leaf["timestamp"].encode('utf-8'))
+        leaf_h.update((leaf.get("dual_witness_seal") or "NO_DUAL_SEAL").encode('utf-8'))
+        leaf_h.update(leaf["syntactic_master"].encode('utf-8'))
+        leaf_h.update((leaf.get("semantic_master") or "NO_SEMANTIC").encode('utf-8'))
+        leaf_h.update(leaf["content_hash"].encode('utf-8'))
+        leaf_h.update((leaf.get("semantic_level_seal") or "NO_LEVEL_SEAL").encode('utf-8'))
+        leaf_h.update(BISMILLAH.encode('utf-8'))
+
+        if leaf_h.hexdigest() != leaf["leaf_hash"]:
+            bad_leaves += 1
+
+    if bad_leaves == 0:
+        diagnostics.append(OrderedDict([
+            ("check", "LEAF_INTEGRITY"),
+            ("status", "VALID"),
+            ("detail", "All {} leaf hashes verified".format(len(leaves))),
+        ]))
+    else:
+        all_valid = False
+        diagnostics.append(OrderedDict([
+            ("check", "LEAF_INTEGRITY"),
+            ("status", "INVALID"),
+            ("detail", "{} of {} leaves have corrupted hashes".format(bad_leaves, len(leaves))),
+        ]))
+
+    # 4. Verify monotonic timestamps
+    timestamps = [leaf["timestamp"] for leaf in leaves]
+    monotonic = all(timestamps[i] <= timestamps[i + 1] for i in range(len(timestamps) - 1))
+    if monotonic or len(timestamps) <= 1:
+        diagnostics.append(OrderedDict([
+            ("check", "TEMPORAL_ORDER"),
+            ("status", "VALID"),
+            ("detail", "Timestamps are monotonically ordered"),
+        ]))
+    else:
+        all_valid = False
+        diagnostics.append(OrderedDict([
+            ("check", "TEMPORAL_ORDER"),
+            ("status", "INVALID"),
+            ("detail", "Timestamp ordering violated -- temporal chain may have been reordered"),
+        ]))
+
+    # 5. Verify epoch/checkpoint sequence
+    expected_epoch = 0
+    sequence_valid = True
+    for i in range(0, len(leaves), TEMPORAL_CHECKPOINTS):
+        batch = leaves[i:i + TEMPORAL_CHECKPOINTS]
+        if batch and batch[0]["epoch"] != expected_epoch:
+            sequence_valid = False
+            break
+        for j, leaf in enumerate(batch):
+            if leaf["checkpoint"] != j:
+                sequence_valid = False
+                break
+        if not sequence_valid:
+            break
+        expected_epoch += 1
+
+    if sequence_valid:
+        diagnostics.append(OrderedDict([
+            ("check", "EPOCH_SEQUENCE"),
+            ("status", "VALID"),
+            ("detail", "Epoch/checkpoint sequence is consistent"),
+        ]))
+    else:
+        all_valid = False
+        diagnostics.append(OrderedDict([
+            ("check", "EPOCH_SEQUENCE"),
+            ("status", "INVALID"),
+            ("detail", "Epoch/checkpoint sequence is inconsistent"),
+        ]))
+
+    # 6. Semantic drift analysis -- how much has meaning changed across epochs?
+    drift_analysis = []
+    epochs_seen = set()
+    epoch_seals = {}
+    for leaf in leaves:
+        e = leaf["epoch"]
+        if e not in epoch_seals:
+            epoch_seals[e] = {}
+        epoch_seals[e][leaf["checkpoint"]] = leaf.get("semantic_level_seal")
+        epochs_seen.add(e)
+
+    if len(epochs_seen) >= 2:
+        sorted_epochs = sorted(epochs_seen)
+        for i in range(len(sorted_epochs) - 1):
+            e1, e2 = sorted_epochs[i], sorted_epochs[i + 1]
+            matches = 0
+            total = 0
+            for cp in range(TEMPORAL_CHECKPOINTS):
+                s1 = epoch_seals.get(e1, {}).get(cp)
+                s2 = epoch_seals.get(e2, {}).get(cp)
+                if s1 and s2:
+                    total += 1
+                    if s1 == s2:
+                        matches += 1
+            if total > 0:
+                drift_analysis.append(OrderedDict([
+                    ("from_epoch", e1),
+                    ("to_epoch", e2),
+                    ("semantic_preservation", "{}/{}".format(matches, total)),
+                    ("proportion", round(matches / total, 4)),
+                    ("assessment",
+                     "MEANING_PRESERVED" if matches == total
+                     else "MEANING_EVOLVED" if matches > total // 2
+                     else "MEANING_ALTERED"),
+                ]))
+
+    return OrderedDict([
+        ("verified", all_valid),
+        ("file", os.path.basename(str(filepath)),),
+        ("total_events", chain.get("total_events", 0)),
+        ("total_leaves", len(leaves)),
+        ("current_epoch", chain.get("current_epoch", 0)),
+        ("merkle_root", chain.get("merkle_root")),
+        ("ascension_count", chain.get("ascension_count", 0)),
+        ("diagnostics", diagnostics),
+        ("semantic_drift", drift_analysis),
+        ("temporal_coverage", OrderedDict([
+            ("epochs_witnessed", len(epochs_seen)),
+            ("epochs_capacity", TEMPORAL_EPOCHS),
+            ("witnesses_recorded", len(leaves)),
+            ("witnesses_capacity", TEMPORAL_WITNESSES),
+            ("coverage_proportion", round(len(leaves) / TEMPORAL_WITNESSES, 4)
+             if TEMPORAL_WITNESSES > 0 else 0),
+        ])),
+        ("quranic_grounding", OrderedDict([
+            ("al_hijr_15_9", "Indeed, it is We who sent down the Reminder, "
+                             "and indeed, We will be its Guardian."),
+            ("al_qamar_54_17", "And We have certainly made the Qur'an easy "
+                               "for remembrance, so is there any who will remember?"),
+        ])),
+    ])
+
+
+def temporal_history(filepath):
+    """Display the temporal history of a document.
+
+    Returns a structured timeline showing how the document evolved
+    across epochs, with semantic drift analysis.
+    """
+    chain_path = str(filepath) + '.' + TEMPORAL_CHAIN_FILE.lstrip('.')
+
+    if not os.path.exists(chain_path):
+        return OrderedDict([
+            ("has_history", False),
+            ("reason", "No temporal chain found"),
+        ])
+
+    try:
+        with open(chain_path, 'r', encoding='utf-8') as f:
+            signed_data = json.load(f)
+    except (json.JSONDecodeError, IOError):
+        return OrderedDict([
+            ("has_history", False),
+            ("reason", "Cannot read temporal chain"),
+        ])
+
+    chain = signed_data.get("temporal_chain", signed_data)
+    leaves = chain.get("leaves", [])
+
+    if not leaves:
+        return OrderedDict([
+            ("has_history", False),
+            ("reason", "Temporal chain exists but has no events"),
+        ])
+
+    # Group leaves by epoch
+    epochs = OrderedDict()
+    for leaf in leaves:
+        e = leaf["epoch"]
+        if e not in epochs:
+            epochs[e] = OrderedDict([
+                ("epoch", e),
+                ("epoch_name", leaf.get("epoch_name", "UNKNOWN")),
+                ("timestamp", leaf["timestamp"]),
+                ("content_hash", leaf["content_hash"]),
+                ("dual_witness_seal", leaf.get("dual_witness_seal")),
+                ("checkpoints", []),
+            ])
+        epochs[e]["checkpoints"].append(OrderedDict([
+            ("checkpoint", leaf["checkpoint"]),
+            ("name", leaf.get("checkpoint_name", "UNKNOWN")),
+            ("divine_name", leaf["divine_name"]),
+            ("level_seal", leaf.get("semantic_level_seal", "")[:16] + "..." if leaf.get("semantic_level_seal") else None),
+        ]))
+
+    return OrderedDict([
+        ("has_history", True),
+        ("file", os.path.basename(str(filepath))),
+        ("total_events", chain.get("total_events", 0)),
+        ("current_epoch", chain.get("current_epoch", 0)),
+        ("ascension_count", chain.get("ascension_count", 0)),
+        ("merkle_root", chain.get("merkle_root")),
+        ("prior_merkle_roots", chain.get("prior_merkle_roots", [])),
+        ("epochs", list(epochs.values())),
+        ("total_witnesses", OrderedDict([
+            ("active", len(leaves)),
+            ("capacity", TEMPORAL_WITNESSES),
+            ("dimensional_encoding", "11 epochs x 7 checkpoints = 77"),
+        ])),
+    ])
 
 
 # ============================================================================
@@ -2686,6 +3398,11 @@ def seal_text_file(filepath, embed_names=False, muraqabah=True):
         result["heavens_sealed"] = TOTAL_HEAVENS
         result["layers_computed"] = computation["total_layers"]
 
+        # v7.0: Record temporal event (The Living Witness)
+        computation["_content_bytes"] = content_bytes
+        temporal_event = temporal_record_event(filepath, computation)
+        result["temporal"] = temporal_event
+
         # v5.2: Record experience
         record_experience("seal", filepath, "success", {
             "layers": result["layers"],
@@ -2694,6 +3411,7 @@ def seal_text_file(filepath, embed_names=False, muraqabah=True):
             "muraqabah": muraqabah and not is_code_file(ext),
             "placement_strategy": get_adaptive_config(str(filepath)).get(
                 "zwc_placement", "distributed"),
+            "temporal_epoch": temporal_event.get("epoch", -1),
         })
 
     except (UnicodeDecodeError, ValueError):
@@ -2909,6 +3627,9 @@ def seal_binary_file(filepath):
                 content_bytes = f.read()
             computation = compute_all_154_layers(content_bytes, filepath)
             _write_heaven_witness(filepath, content_bytes, computation)
+            # v7.0: Record temporal event
+            computation["_content_bytes"] = content_bytes
+            temporal_record_event(filepath, computation)
         except Exception:
             pass
 
@@ -2926,7 +3647,7 @@ def _write_heaven_witness(filepath, content_bytes, computation):
     witness_data = OrderedDict([
         (BISMILLAH, True),
         ("encoder_version", ENCODER_VERSION),
-        ("architecture", "11-Heaven, 154-Layer FATIMA v5.0 -- Dual-Constant Witness"),
+        ("architecture", "11-Heaven, 154-Layer FATIMA v7.0 -- Dual-Constant Witness with Temporal Integrity"),
         ("total_heavens", computation["total_heavens"]),
         ("total_layers", computation["total_layers"]),
         ("layers_per_heaven", LAYERS_PER_HEAVEN),
@@ -3385,7 +4106,7 @@ def generate_manifest(directory):
         (BISMILLAH, True),
         ("manifest_version", "5.0"),
         ("encoder_version", ENCODER_VERSION),
-        ("architecture", "11-Heaven, 154-Layer FATIMA v5.0 -- Dual-Constant Witness"),
+        ("architecture", "11-Heaven, 154-Layer FATIMA v7.0 -- Dual-Constant Witness with Temporal Integrity"),
         ("total_heavens", TOTAL_HEAVENS),
         ("total_layers", TOTAL_LAYERS),
         ("layers_per_heaven", LAYERS_PER_HEAVEN),
@@ -5714,6 +6435,15 @@ Examples:
     semverify_p.add_argument('--threshold', type=float, default=0.5,
                               help='Minimum match proportion (0.0-1.0, default: 0.5)')
 
+    # v7.0: Temporal integrity commands
+    temporal_p = sub.add_parser('temporal',
+                                 help='v7.0: Verify temporal chain (The Living Witness)')
+    temporal_p.add_argument('path', help='File to verify temporal chain for')
+
+    temporal_hist_p = sub.add_parser('temporal-history',
+                                      help='v7.0: Show temporal evolution history')
+    temporal_hist_p.add_argument('path', help='File to show temporal history for')
+
     heal_p = sub.add_parser('heal', help='v5.2: Self-heal degraded files')
     heal_p.add_argument('path', help='File or directory to heal')
     heal_p.add_argument('--force', action='store_true',
@@ -6000,6 +6730,103 @@ Examples:
                         print("  * {}".format(d))
         else:
             print("  ERROR: Both files must exist")
+            sys.exit(1)
+
+    elif args.command == 'temporal':
+        if os.path.isfile(args.path):
+            result = temporal_verify_chain(args.path)
+            if result.get("verified") is None:
+                print("\n  {}".format(result.get("reason", "No temporal chain")))
+                if result.get("recommendation"):
+                    print("  Recommendation: {}".format(result["recommendation"]))
+            else:
+                status = "VALID" if result["verified"] else "CORRUPTED"
+                print("\n  {} TEMPORAL CHAIN: {} {}".format(
+                    "=" * 15, status, "=" * 15))
+                print("  File: {}".format(result.get("file", "")))
+                print("  Total events: {}".format(result.get("total_events", 0)))
+                print("  Total leaves: {}".format(result.get("total_leaves", 0)))
+                print("  Current epoch: {}".format(result.get("current_epoch", 0)))
+                print("  Merkle root: {}".format(
+                    result.get("merkle_root", "")[:32] + "..." if result.get("merkle_root") else "None"))
+                print("  Ascensions: {}".format(result.get("ascension_count", 0)))
+
+                coverage = result.get("temporal_coverage", {})
+                print("\n  Temporal Coverage:")
+                print("    Epochs witnessed: {}/{}".format(
+                    coverage.get("epochs_witnessed", 0),
+                    coverage.get("epochs_capacity", TEMPORAL_EPOCHS)))
+                print("    Witnesses recorded: {}/{}".format(
+                    coverage.get("witnesses_recorded", 0),
+                    coverage.get("witnesses_capacity", TEMPORAL_WITNESSES)))
+                print("    Coverage: {:.1%}".format(
+                    coverage.get("coverage_proportion", 0)))
+
+                print("\n  Diagnostics:")
+                for diag in result.get("diagnostics", []):
+                    icon = "OK" if diag["status"] == "VALID" else "XX"
+                    print("    [{}] {}: {}".format(
+                        icon, diag["check"], diag["detail"]))
+
+                drift = result.get("semantic_drift", [])
+                if drift:
+                    print("\n  Semantic Drift Analysis:")
+                    for d in drift:
+                        print("    Epoch {} -> {}: {} ({})".format(
+                            d["from_epoch"], d["to_epoch"],
+                            d["semantic_preservation"],
+                            d["assessment"]))
+        else:
+            print("  ERROR: {} does not exist or is not a file".format(args.path))
+            sys.exit(1)
+
+    elif args.command == 'temporal-history':
+        if os.path.isfile(args.path):
+            result = temporal_history(args.path)
+            if not result.get("has_history"):
+                print("\n  {}".format(result.get("reason", "No history")))
+            else:
+                print("\n  {} TEMPORAL HISTORY {} ".format("=" * 15, "=" * 15))
+                print("  File: {}".format(result.get("file", "")))
+                print("  Total events: {}".format(result.get("total_events", 0)))
+                print("  Current epoch: {}".format(result.get("current_epoch", 0)))
+                print("  Ascensions: {}".format(result.get("ascension_count", 0)))
+                print("  Merkle root: {}".format(
+                    result.get("merkle_root", "")[:32] + "..." if result.get("merkle_root") else "None"))
+
+                witnesses = result.get("total_witnesses", {})
+                print("\n  Witnesses: {} / {} ({})".format(
+                    witnesses.get("active", 0),
+                    witnesses.get("capacity", TEMPORAL_WITNESSES),
+                    witnesses.get("dimensional_encoding", "")))
+
+                prior_roots = result.get("prior_merkle_roots", [])
+                if prior_roots:
+                    print("\n  Prior Merkle Roots (Ascensions):")
+                    for pr in prior_roots:
+                        print("    Ascension {}: {} (sealed {})".format(
+                            pr.get("ascension", "?"),
+                            pr["merkle_root"][:24] + "...",
+                            pr.get("sealed_at", "?")[:19]))
+
+                print("\n  Epoch Timeline:")
+                for epoch_data in result.get("epochs", []):
+                    print("\n    Epoch {} -- {}".format(
+                        epoch_data["epoch"],
+                        epoch_data.get("epoch_name", "")))
+                    print("      Timestamp: {}".format(
+                        epoch_data.get("timestamp", "")[:19]))
+                    print("      Content hash: {}...".format(
+                        epoch_data.get("content_hash", "")[:24]))
+                    print("      Checkpoints:")
+                    for cp in epoch_data.get("checkpoints", []):
+                        print("        [{}] {} -- {} {}".format(
+                            cp["checkpoint"],
+                            cp.get("name", ""),
+                            cp.get("divine_name", ""),
+                            "({})".format(cp["level_seal"]) if cp.get("level_seal") else ""))
+        else:
+            print("  ERROR: {} does not exist or is not a file".format(args.path))
             sys.exit(1)
 
     elif args.command == 'unseal':
