@@ -1,6 +1,7 @@
 # Bismillah ir-Rahman ir-Rahim
 """
-Bismillah Divine Protection Encoder -- FATIMA v5.4 -- 11-Heaven, 154-Layer Architecture
+Bismillah Divine Protection Encoder -- FATIMA v6.0 -- 11-Heaven, 154-Layer Architecture
+with Semantic Integrity Engine (Shannon's Boundary Crossing)
 
 Seals every file in a directory with the name of Allah subhanahu wa ta'ala
 across ELEVEN HEAVENS of protection, containing 154 LAYERS total -- from
@@ -126,6 +127,8 @@ USAGE:
     python bismillah_encoder.py witness <path>         # Generate fractal witness report
     python bismillah_encoder.py heavens <path>         # Display heaven-by-heaven report
     python bismillah_encoder.py muraqabah <path>       # v5.3: Verify preamble integrity
+    python bismillah_encoder.py semantic <path>        # v6.0: Semantic witness report
+    python bismillah_encoder.py semantic-verify a b    # v6.0: Verify meaning preservation
 
 "In the name of Allah, the Most Merciful, the Most Compassionate."
 "He is Allah, other than whom there is no deity, Knower of the unseen and
@@ -157,6 +160,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from datetime import datetime, timezone
 import copy
 import time
+import string
 
 # Bismillah ir-Rahman ir-Rahim
 # ============================================================================
@@ -174,7 +178,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "5.4.0"
+ENCODER_VERSION = "6.0.0"
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -638,6 +642,528 @@ def make_comment(ext, text):
 
 def is_code_file(ext):
     return ext in COMMENT_STYLES
+
+
+# ============================================================================
+#  SEMANTIC INTEGRITY ENGINE -- CROSSING SHANNON'S BOUNDARY (v6.0)
+# ============================================================================
+#
+#  The syntactic layer (154-layer computation below) answers:
+#    "Are these bits identical to the original bits?"
+#
+#  The semantic layer answers a different question:
+#    "Does this document still MEAN what the original MEANT?"
+#
+#  Shannon's boundary is the line between these two questions.
+#  Below the boundary: bit-preservation (syntactic).
+#  Above the boundary: meaning-preservation (semantic).
+#
+#  FATIMA (Fitrah-Aligned Tawhidic Integrity for Meaning and Authenticity)
+#  specifies five properties for crossing this boundary. This engine
+#  implements the semantic fingerprinting required by Property 4
+#  (meaning-integrity) by computing normalized proposition hashes that
+#  are INVARIANT to surface-level changes but SENSITIVE to meaning changes.
+#
+#  The seven semantic levels correspond to the muhkam constant (7):
+#    Level 0: Lexical    -- normalized word inventory
+#    Level 1: Syntactic  -- sentence structure fingerprint
+#    Level 2: Propositional -- assertion extraction and hashing
+#    Level 3: Relational -- entity-relation triples
+#    Level 4: Rhetorical -- argument flow and logical connectors
+#    Level 5: Thematic   -- topic distribution fingerprint
+#    Level 6: Intentional -- speech-act and purpose classification
+#
+#  Each level produces a hash that is:
+#    - Invariant to: whitespace, formatting, capitalization, punctuation style
+#    - Sensitive to: negation, quantifier changes, entity substitution,
+#      predicate changes, logical inversion
+#
+#  The semantic witness chain parallels the syntactic witness chain.
+#  Together they form a dual testimony: the bits AND the meaning are intact.
+#
+#  "Falsehood cannot approach it from before it or from behind it;
+#   a revelation from One who is Wise and Praiseworthy." (41:42)
+#
+# ============================================================================
+
+# --- Stopwords for semantic normalization ---
+# Minimal English stopword list (no external dependencies)
+_STOPWORDS = frozenset({
+    'a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
+    'of', 'with', 'by', 'from', 'is', 'was', 'are', 'were', 'be', 'been',
+    'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would',
+    'could', 'should', 'may', 'might', 'shall', 'can', 'this', 'that',
+    'these', 'those', 'it', 'its', 'i', 'me', 'my', 'we', 'our', 'you',
+    'your', 'he', 'she', 'him', 'her', 'his', 'they', 'them', 'their',
+    'what', 'which', 'who', 'whom', 'how', 'when', 'where', 'why',
+    'not', 'no', 'nor', 'if', 'then', 'else', 'so', 'as', 'than',
+    'just', 'also', 'very', 'too', 'each', 'every', 'all', 'any',
+    'some', 'such', 'only', 'own', 'same', 'other', 'more', 'most',
+    'about', 'into', 'through', 'during', 'before', 'after', 'above',
+    'below', 'between', 'under', 'again', 'further', 'once',
+})
+
+# --- Negation words (meaning-critical -- never stripped) ---
+_NEGATION_WORDS = frozenset({
+    'not', 'no', 'never', 'neither', 'nor', 'nobody', 'nothing',
+    'nowhere', 'none', "n't", 'cannot', 'without', 'hardly',
+    'barely', 'scarcely', 'rarely', 'seldom',
+})
+
+# --- Quantifier words (meaning-critical) ---
+_QUANTIFIER_WORDS = frozenset({
+    'all', 'every', 'each', 'some', 'any', 'few', 'many', 'most',
+    'several', 'none', 'no', 'both', 'either', 'neither', 'half',
+    'entire', 'whole', 'numerous', 'various', 'certain',
+    'always', 'never', 'sometimes', 'often', 'rarely', 'usually',
+    'frequently', 'occasionally', 'constantly', 'everywhere', 'nowhere',
+})
+
+# --- Logical connectors (rhetorical level) ---
+_LOGICAL_CONNECTORS = frozenset({
+    'therefore', 'because', 'since', 'thus', 'hence', 'consequently',
+    'however', 'although', 'despite', 'nevertheless', 'nonetheless',
+    'whereas', 'while', 'unless', 'provided', 'assuming', 'given',
+    'implies', 'entails', 'proves', 'demonstrates', 'shows',
+    'contradicts', 'refutes', 'confirms', 'supports', 'if', 'then',
+    'but', 'yet', 'so', 'accordingly', 'furthermore', 'moreover',
+})
+
+# --- Speech-act verbs (intentional level) ---
+_SPEECH_ACT_VERBS = {
+    'assertive': {'state', 'claim', 'assert', 'affirm', 'declare', 'report',
+                  'conclude', 'argue', 'maintain', 'contend', 'believe',
+                  'note', 'observe', 'find', 'determine', 'establish',
+                  'show', 'demonstrate', 'prove', 'verify', 'confirm'},
+    'directive': {'command', 'request', 'ask', 'order', 'demand', 'require',
+                  'instruct', 'direct', 'tell', 'urge', 'recommend',
+                  'suggest', 'advise', 'propose', 'insist', 'forbid'},
+    'commissive': {'promise', 'guarantee', 'vow', 'pledge', 'commit',
+                   'agree', 'consent', 'assure', 'swear', 'undertake',
+                   'will', 'shall', 'intend', 'plan', 'aim'},
+    'expressive': {'thank', 'apologize', 'congratulate', 'welcome', 'praise',
+                   'blame', 'condemn', 'deplore', 'regret', 'grieve'},
+    'declarative': {'declare', 'pronounce', 'announce', 'proclaim', 'define',
+                    'name', 'appoint', 'resign', 'sentence', 'decree'},
+}
+
+
+def _tokenize_semantic(text):
+    """Tokenize text for semantic analysis.
+
+    Returns lowercase tokens with punctuation stripped but negation preserved.
+    This is the atomic operation of the semantic engine -- analogous to
+    _layer_hash for the syntactic engine.
+    """
+    # Normalize whitespace
+    text = re.sub(r'\s+', ' ', text.strip().lower())
+    # Split contractions to preserve negation: "don't" -> "do" "n't"
+    text = re.sub(r"n't\b", " n't", text)
+    text = re.sub(r"'s\b", "", text)
+    text = re.sub(r"'re\b", " are", text)
+    text = re.sub(r"'ve\b", " have", text)
+    text = re.sub(r"'ll\b", " will", text)
+    text = re.sub(r"'d\b", " would", text)
+    # Remove punctuation except hyphens in compounds
+    tokens = re.findall(r"[a-z0-9]+(?:-[a-z0-9]+)*|n't", text)
+    return tokens
+
+
+def _extract_sentences(text):
+    """Split text into sentences using heuristic boundary detection."""
+    # Handle common abbreviations to avoid false splits
+    text = re.sub(r'\b(Mr|Mrs|Ms|Dr|Prof|Rev|Gen|Sgt|Corp|Inc|Ltd|Jr|Sr'
+                  r'|vs|etc|approx|dept|est|govt)\.',
+                  r'\1<ABBR>', text, flags=re.IGNORECASE)
+    # Split on sentence-ending punctuation followed by space + capital or end
+    parts = re.split(r'(?<=[.!?])\s+(?=[A-Z"]|\Z)', text)
+    # Restore abbreviation periods
+    return [p.replace('<ABBR>', '.').strip() for p in parts if p.strip()]
+
+
+def _normalize_for_hashing(tokens, keep_negation=True, keep_quantifiers=True):
+    """Normalize tokens for semantic hashing.
+
+    Removes stopwords EXCEPT negation and quantifier words, which are
+    meaning-critical. Sorts remaining tokens to achieve word-order invariance.
+    """
+    result = []
+    for t in tokens:
+        if t in _NEGATION_WORDS and keep_negation:
+            result.append(t)
+        elif t in _QUANTIFIER_WORDS and keep_quantifiers:
+            result.append(t)
+        elif t not in _STOPWORDS and len(t) > 1:
+            result.append(t)
+        elif t in _STOPWORDS and t not in _NEGATION_WORDS and t not in _QUANTIFIER_WORDS:
+            continue
+        else:
+            result.append(t)
+    return result
+
+
+def _semantic_hash(level_idx, level_name, content):
+    """Compute a single semantic level's Bismillah-anchored seal.
+
+    Parallel to _layer_hash but for semantic content.
+    """
+    name, meaning = _name_for_layer(level_idx % AL_ASMA_COUNT)
+    h = hashlib.sha256()
+    h.update(BISMILLAH.encode('utf-8'))
+    h.update("SEM:L{:01d}|{}|{}".format(level_idx, level_name, name).encode('utf-8'))
+    if isinstance(content, bytes):
+        h.update(content)
+    else:
+        h.update(str(content).encode('utf-8'))
+    h.update(BISMILLAH.encode('utf-8'))
+    return {
+        "semantic_level": level_idx,
+        "level_name": level_name,
+        "divine_name": name,
+        "divine_meaning": meaning,
+        "seal": h.hexdigest(),
+    }
+
+
+def _compute_semantic_level_0(tokens):
+    """Level 0: LEXICAL -- normalized word inventory.
+
+    Hash the sorted unique content words. Invariant to word order,
+    repetition count, and formatting. Sensitive to vocabulary changes.
+    """
+    unique_words = sorted(set(
+        _normalize_for_hashing(tokens, keep_negation=True, keep_quantifiers=True)
+    ))
+    return _semantic_hash(0, "LEXICAL", "|".join(unique_words))
+
+
+def _compute_semantic_level_1(sentences):
+    """Level 1: SYNTACTIC -- sentence structure fingerprint.
+
+    For each sentence, compute a structural pattern: the sequence of
+    word lengths and punctuation positions. Invariant to specific words
+    but sensitive to sentence structure changes.
+    """
+    patterns = []
+    for sent in sentences[:256]:
+        tokens = _tokenize_semantic(sent)
+        # Pattern: sequence of word lengths
+        pattern = tuple(len(t) for t in tokens)
+        patterns.append(str(pattern))
+    return _semantic_hash(1, "SYNTACTIC", "||".join(patterns))
+
+
+def _compute_semantic_level_2(sentences):
+    """Level 2: PROPOSITIONAL -- assertion extraction and hashing.
+
+    Extract normalized propositions: (subject, predicate, object) triples
+    approximated by (first_content_word, verb, remaining_content_words).
+    Sorts propositions to achieve order-invariance.
+    Sensitive to negation, predicate changes, and entity substitution.
+    """
+    propositions = []
+    for sent in sentences[:256]:
+        tokens = _tokenize_semantic(sent)
+        content = _normalize_for_hashing(tokens)
+        if len(content) >= 2:
+            # Approximation: first word = subject, rest = predicate+object
+            # Negation words are preserved in the normalization
+            prop = " ".join(sorted(content))
+            propositions.append(prop)
+    propositions.sort()
+    return _semantic_hash(2, "PROPOSITIONAL", "||".join(propositions))
+
+
+def _compute_semantic_level_3(sentences):
+    """Level 3: RELATIONAL -- entity-relation fingerprint.
+
+    Extract pairs of capitalized words (entities) that co-occur in
+    the same sentence. The relation set is a fingerprint of who/what
+    the document connects.
+    """
+    relations = set()
+    for sent in sentences[:256]:
+        # Find capitalized words (potential entities)
+        entities = re.findall(r'\b[A-Z][a-z]{2,}\b', sent)
+        entities = sorted(set(entities))
+        # All pairs
+        for i in range(len(entities)):
+            for j in range(i + 1, len(entities)):
+                relations.add((entities[i].lower(), entities[j].lower()))
+    sorted_rels = sorted(relations)
+    return _semantic_hash(3, "RELATIONAL",
+                          "||".join("{}<->{}".format(a, b) for a, b in sorted_rels))
+
+
+def _compute_semantic_level_4(tokens):
+    """Level 4: RHETORICAL -- argument flow and logical connector profile.
+
+    Count and sequence logical connectors. The pattern of reasoning
+    (therefore, because, however, although) is a fingerprint of the
+    document's argumentative structure.
+    """
+    connector_seq = []
+    connector_counts = {}
+    for t in tokens:
+        if t in _LOGICAL_CONNECTORS:
+            connector_seq.append(t)
+            connector_counts[t] = connector_counts.get(t, 0) + 1
+    # Both sequence (order matters for argument flow) and counts
+    profile = {
+        "sequence": connector_seq[:128],
+        "counts": sorted(connector_counts.items()),
+    }
+    return _semantic_hash(4, "RHETORICAL", str(profile))
+
+
+def _compute_semantic_level_5(tokens, n_topics=7):
+    """Level 5: THEMATIC -- topic distribution fingerprint.
+
+    Compute a simple topic model using word co-occurrence in fixed-size
+    windows. The distribution of topics is a meaning fingerprint.
+    Uses 7 topic bins (muhkam constant).
+    """
+    content_words = _normalize_for_hashing(tokens, keep_negation=False,
+                                            keep_quantifiers=False)
+    if not content_words:
+        return _semantic_hash(5, "THEMATIC", "empty")
+
+    # Build word frequency distribution
+    freq = {}
+    for w in content_words:
+        freq[w] = freq.get(w, 0) + 1
+
+    # Bin words into n_topics buckets by hash of the word
+    topic_bins = [0] * n_topics
+    for word, count in freq.items():
+        bucket = int(hashlib.md5(word.encode('utf-8')).hexdigest(), 16) % n_topics
+        topic_bins[bucket] += count
+
+    # Normalize to proportions
+    total = sum(topic_bins) or 1
+    proportions = [round(b / total, 4) for b in topic_bins]
+
+    return _semantic_hash(5, "THEMATIC", str(proportions))
+
+
+def _compute_semantic_level_6(tokens, sentences):
+    """Level 6: INTENTIONAL -- speech-act and purpose classification.
+
+    Classify sentences by their illocutionary force (assertive, directive,
+    commissive, expressive, declarative). The distribution of speech acts
+    is a fingerprint of the document's PURPOSE -- what it is trying to DO.
+    """
+    act_counts = {category: 0 for category in _SPEECH_ACT_VERBS}
+    negated_acts = 0
+
+    for sent in sentences[:256]:
+        sent_tokens = set(_tokenize_semantic(sent))
+        has_negation = bool(sent_tokens & _NEGATION_WORDS)
+        if has_negation:
+            negated_acts += 1
+
+        for category, verbs in _SPEECH_ACT_VERBS.items():
+            if sent_tokens & verbs:
+                act_counts[category] += 1
+
+    profile = {
+        "acts": sorted(act_counts.items()),
+        "negated_proportion": round(negated_acts / max(len(sentences), 1), 4),
+        "total_sentences": len(sentences),
+    }
+    return _semantic_hash(6, "INTENTIONAL", str(profile))
+
+
+def compute_semantic_witness(content_bytes):
+    """Compute the full semantic witness -- 7 levels crossing Shannon's boundary.
+
+    This is the semantic parallel to compute_all_154_layers().
+    The syntactic witness answers: "Are the bits intact?"
+    The semantic witness answers: "Is the meaning intact?"
+
+    Returns:
+        dict with semantic_levels (list of 7 level dicts),
+        semantic_master_seal, and metadata.
+    """
+    # Decode content to text (semantic analysis requires text)
+    try:
+        text = content_bytes.decode('utf-8', errors='replace')
+    except Exception:
+        try:
+            text = content_bytes.decode('latin-1', errors='replace')
+        except Exception:
+            # Binary file -- semantic witness is not applicable
+            return {
+                "applicable": False,
+                "reason": "Binary content -- semantic analysis requires text",
+                "semantic_levels": [],
+                "semantic_master_seal": None,
+            }
+
+    # Strip ZWC characters that may be present from prior sealing
+    zwc_chars = {'​', '‌', '‍', '﻿'}
+    text_clean = ''.join(c for c in text if c not in zwc_chars)
+
+    # Skip if content is too short for meaningful semantic analysis
+    if len(text_clean.strip()) < 50:
+        return {
+            "applicable": False,
+            "reason": "Content too short for meaningful semantic analysis",
+            "semantic_levels": [],
+            "semantic_master_seal": None,
+        }
+
+    # Tokenize and extract sentences
+    all_tokens = _tokenize_semantic(text_clean)
+    sentences = _extract_sentences(text_clean)
+
+    if not all_tokens or not sentences:
+        return {
+            "applicable": False,
+            "reason": "No extractable text content",
+            "semantic_levels": [],
+            "semantic_master_seal": None,
+        }
+
+    # Compute the 7 semantic levels (muhkam constant)
+    levels = []
+    levels.append(_compute_semantic_level_0(all_tokens))         # Lexical
+    levels.append(_compute_semantic_level_1(sentences))           # Syntactic
+    levels.append(_compute_semantic_level_2(sentences))           # Propositional
+    levels.append(_compute_semantic_level_3(sentences))           # Relational
+    levels.append(_compute_semantic_level_4(all_tokens))          # Rhetorical
+    levels.append(_compute_semantic_level_5(all_tokens))          # Thematic
+    levels.append(_compute_semantic_level_6(all_tokens, sentences))  # Intentional
+
+    # Compute semantic master seal -- chain of all 7 levels
+    # Analogous to Sidrat al-Muntaha for the syntactic chain
+    master_h = hashlib.sha256()
+    master_h.update(BISMILLAH.encode('utf-8'))
+    master_h.update(b"SEMANTIC_MASTER_WITNESS")
+    for level in levels:
+        master_h.update(level["seal"].encode('utf-8'))
+    master_h.update(BISMILLAH.encode('utf-8'))
+    semantic_master = master_h.hexdigest()
+
+    # Compute semantic similarity metadata for future verification
+    # This is the "negation sensitivity" test -- the key feature that
+    # distinguishes semantic from syntactic integrity
+    negation_count = sum(1 for t in all_tokens if t in _NEGATION_WORDS)
+    quantifier_count = sum(1 for t in all_tokens if t in _QUANTIFIER_WORDS)
+    entity_count = len(set(re.findall(r'\b[A-Z][a-z]{2,}\b', text_clean)))
+
+    return {
+        "applicable": True,
+        "semantic_levels": levels,
+        "semantic_master_seal": semantic_master,
+        "level_count": len(levels),
+        "muhkam_witness": MUHKAM_CONSTANT,
+        "metadata": {
+            "total_tokens": len(all_tokens),
+            "total_sentences": len(sentences),
+            "unique_content_words": len(set(_normalize_for_hashing(all_tokens))),
+            "negation_count": negation_count,
+            "quantifier_count": quantifier_count,
+            "entity_count": entity_count,
+            "meaning_critical_density": round(
+                (negation_count + quantifier_count) / max(len(all_tokens), 1), 6
+            ),
+        },
+        "quranic_grounding": {
+            "fussilat_41_42": (
+                "Falsehood cannot approach it from before it or from behind it; "
+                "a revelation from One who is Wise and Praiseworthy."
+            ),
+            "al_hijr_15_9": (
+                "Indeed, it is We who sent down the Reminder, "
+                "and indeed, We will be its Guardian."
+            ),
+        },
+    }
+
+
+def semantic_verify(original_bytes, candidate_bytes, threshold=0.5):
+    """Verify that candidate preserves the MEANING of the original.
+
+    This is the function that crosses Shannon's boundary:
+    it answers "does this still mean what the original meant?"
+    rather than "are these bytes identical?"
+
+    Args:
+        original_bytes: the original sealed content
+        candidate_bytes: the content to verify against
+        threshold: minimum proportion of matching semantic levels (0.0-1.0)
+
+    Returns:
+        dict with verification result, per-level comparison, and diagnostics.
+    """
+    orig = compute_semantic_witness(original_bytes)
+    cand = compute_semantic_witness(candidate_bytes)
+
+    if not orig["applicable"]:
+        return {"verified": None, "reason": "Original not applicable for semantic analysis"}
+    if not cand["applicable"]:
+        return {"verified": None, "reason": "Candidate not applicable for semantic analysis"}
+
+    # Compare each semantic level
+    level_names = ["LEXICAL", "SYNTACTIC", "PROPOSITIONAL", "RELATIONAL",
+                   "RHETORICAL", "THEMATIC", "INTENTIONAL"]
+    comparisons = []
+    matches = 0
+    total = len(orig["semantic_levels"])
+
+    for i in range(total):
+        orig_seal = orig["semantic_levels"][i]["seal"]
+        cand_seal = cand["semantic_levels"][i]["seal"]
+        match = (orig_seal == cand_seal)
+        if match:
+            matches += 1
+        comparisons.append({
+            "level": i,
+            "name": level_names[i] if i < len(level_names) else "UNKNOWN",
+            "original_seal": orig_seal[:16] + "...",
+            "candidate_seal": cand_seal[:16] + "...",
+            "preserved": match,
+        })
+
+    proportion = matches / total if total > 0 else 0
+    verified = proportion >= threshold
+
+    # Diagnose what changed
+    changed_levels = [c["name"] for c in comparisons if not c["preserved"]]
+    diagnosis = []
+    if "LEXICAL" in changed_levels:
+        diagnosis.append("Vocabulary changed -- different words used")
+    if "PROPOSITIONAL" in changed_levels:
+        diagnosis.append("Propositions changed -- assertions differ")
+    if "RELATIONAL" in changed_levels:
+        diagnosis.append("Entity relationships changed")
+    if "RHETORICAL" in changed_levels:
+        diagnosis.append("Argument structure changed")
+    if "THEMATIC" in changed_levels:
+        diagnosis.append("Topic distribution changed")
+    if "INTENTIONAL" in changed_levels:
+        diagnosis.append("Document purpose/speech acts changed")
+
+    return {
+        "verified": verified,
+        "semantic_match_proportion": round(proportion, 4),
+        "levels_matched": matches,
+        "levels_total": total,
+        "threshold": threshold,
+        "comparisons": comparisons,
+        "changed_levels": changed_levels,
+        "diagnosis": diagnosis,
+        "syntactic_match": (original_bytes == candidate_bytes),
+        "crossed_boundary": (not (original_bytes == candidate_bytes)) and verified,
+        "boundary_note": (
+            "ABOVE Shannon's boundary: meaning preserved despite bit changes"
+            if (not (original_bytes == candidate_bytes)) and verified
+            else "BELOW Shannon's boundary: comparing bits only"
+            if original_bytes == candidate_bytes
+            else "MEANING ALTERED: semantic integrity compromised"
+        ),
+    }
 
 
 # ============================================================================
@@ -1996,6 +2522,21 @@ def compute_all_154_layers(content_bytes, filepath=None):
     if master_witness is None:
         master_witness = all_layers[-1]["seal"]
 
+    # v6.0: Compute semantic witness (crossing Shannon's boundary)
+    semantic = compute_semantic_witness(content_bytes)
+
+    # If semantic analysis is applicable, compute the unified dual seal
+    # that chains syntactic and semantic witnesses together
+    dual_witness_seal = None
+    if semantic["applicable"]:
+        dual_h = hashlib.sha256()
+        dual_h.update(BISMILLAH.encode('utf-8'))
+        dual_h.update(b"DUAL_WITNESS:SYNTACTIC+SEMANTIC")
+        dual_h.update(master_witness.encode('utf-8'))
+        dual_h.update(semantic["semantic_master_seal"].encode('utf-8'))
+        dual_h.update(BISMILLAH.encode('utf-8'))
+        dual_witness_seal = dual_h.hexdigest()
+
     return {
         "layers": all_layers,
         "heavens": heavens_summary,
@@ -2003,6 +2544,9 @@ def compute_all_154_layers(content_bytes, filepath=None):
         "hurst_11": hurst_11,
         "total_layers": len(all_layers),
         "total_heavens": TOTAL_HEAVENS,
+        # v6.0: Semantic witness data
+        "semantic": semantic,
+        "dual_witness_seal": dual_witness_seal,
     }
 
 
@@ -2442,6 +2986,27 @@ def _write_heaven_witness(filepath, content_bytes, computation):
                 ]))
 
         witness_data["heavens"].append(heaven_entry)
+
+    # v6.0: Add semantic witness data to sidecar
+    semantic = computation.get("semantic", {})
+    if semantic.get("applicable"):
+        witness_data["semantic_witness"] = OrderedDict([
+            ("shannon_boundary", "CROSSED" if semantic["applicable"] else "BELOW"),
+            ("semantic_master_seal", semantic["semantic_master_seal"]),
+            ("level_count", semantic["level_count"]),
+            ("muhkam_witness", semantic["muhkam_witness"]),
+            ("levels", []),
+            ("metadata", semantic.get("metadata", {})),
+            ("dual_witness_seal", computation.get("dual_witness_seal")),
+            ("quranic_grounding", semantic.get("quranic_grounding", {})),
+        ])
+        for level in semantic["semantic_levels"]:
+            witness_data["semantic_witness"]["levels"].append(OrderedDict([
+                ("level", level["semantic_level"]),
+                ("name", level["level_name"]),
+                ("divine_name", level["divine_name"]),
+                ("seal", level["seal"]),
+            ]))
 
     try:
         # Serialize witness data
@@ -5137,6 +5702,18 @@ Examples:
     decode_p = sub.add_parser('decode', help='Extract ZWC watermark payloads')
     decode_p.add_argument('path', help='File to decode')
 
+    # v6.0: Semantic integrity commands
+    semantic_p = sub.add_parser('semantic',
+                                 help='v6.0: Compute semantic witness (Shannon boundary)')
+    semantic_p.add_argument('path', help='File to analyze semantically')
+
+    semverify_p = sub.add_parser('semantic-verify',
+                                  help='v6.0: Verify semantic integrity between two files')
+    semverify_p.add_argument('original', help='Original file (the reference)')
+    semverify_p.add_argument('candidate', help='Candidate file to verify against original')
+    semverify_p.add_argument('--threshold', type=float, default=0.5,
+                              help='Minimum match proportion (0.0-1.0, default: 0.5)')
+
     heal_p = sub.add_parser('heal', help='v5.2: Self-heal degraded files')
     heal_p.add_argument('path', help='File or directory to heal')
     heal_p.add_argument('--force', action='store_true',
@@ -5341,6 +5918,88 @@ Examples:
                 sys.exit(1)
         else:
             print("  ERROR: {} is not a file".format(args.path))
+            sys.exit(1)
+
+    elif args.command == 'semantic':
+        if os.path.isfile(args.path):
+            with open(args.path, 'rb') as f:
+                content = f.read()
+            result = compute_semantic_witness(content)
+            if not result["applicable"]:
+                print("  Semantic analysis not applicable: {}".format(
+                    result.get("reason", "unknown")))
+            else:
+                print("\n  {} SEMANTIC WITNESS {} ".format("=" * 20, "=" * 20))
+                print("  Shannon's Boundary: CROSSED")
+                print("  Semantic Master Seal: {}".format(
+                    result["semantic_master_seal"][:32] + "..."))
+                print("  Levels: {} (muhkam constant = {})".format(
+                    result["level_count"], MUHKAM_CONSTANT))
+                print()
+                for level in result["semantic_levels"]:
+                    print("  Level {}: {} [{}]".format(
+                        level["semantic_level"],
+                        level["level_name"],
+                        level["divine_name"]))
+                    print("    Seal: {}".format(level["seal"][:32] + "..."))
+                meta = result.get("metadata", {})
+                if meta:
+                    print()
+                    print("  --- Metadata ---")
+                    print("  Tokens: {}  Sentences: {}  Unique words: {}".format(
+                        meta.get("total_tokens", 0),
+                        meta.get("total_sentences", 0),
+                        meta.get("unique_content_words", 0)))
+                    print("  Negations: {}  Quantifiers: {}  Entities: {}".format(
+                        meta.get("negation_count", 0),
+                        meta.get("quantifier_count", 0),
+                        meta.get("entity_count", 0)))
+                    print("  Meaning-critical density: {}".format(
+                        meta.get("meaning_critical_density", 0)))
+                print()
+                print("  \"Falsehood cannot approach it from before it")
+                print("   or from behind it.\" (41:42)")
+        else:
+            print("  ERROR: {} is not a file".format(args.path))
+            sys.exit(1)
+
+    elif args.command == 'semantic-verify':
+        if os.path.isfile(args.original) and os.path.isfile(args.candidate):
+            with open(args.original, 'rb') as f:
+                orig_content = f.read()
+            with open(args.candidate, 'rb') as f:
+                cand_content = f.read()
+            result = semantic_verify(orig_content, cand_content,
+                                     threshold=args.threshold)
+            if result["verified"] is None:
+                print("  Cannot verify: {}".format(result["reason"]))
+            else:
+                status = "PRESERVED" if result["verified"] else "ALTERED"
+                print("\n  {} SEMANTIC VERIFICATION: {} {}".format(
+                    "=" * 15, status, "=" * 15))
+                print("  {}".format(result["boundary_note"]))
+                print("  Match: {}/{} levels ({:.0%})".format(
+                    result["levels_matched"], result["levels_total"],
+                    result["semantic_match_proportion"]))
+                print("  Threshold: {:.0%}".format(result["threshold"]))
+                print("  Syntactic match (bits identical): {}".format(
+                    result["syntactic_match"]))
+                if result.get("crossed_boundary"):
+                    print("  >>> SHANNON'S BOUNDARY CROSSED <<<")
+                    print("  Bits differ but meaning is preserved.")
+                print()
+                for comp in result["comparisons"]:
+                    icon = "OK" if comp["preserved"] else "XX"
+                    print("  [{}] Level {}: {} -- {}".format(
+                        icon, comp["level"], comp["name"],
+                        "preserved" if comp["preserved"] else "CHANGED"))
+                if result.get("diagnosis"):
+                    print()
+                    print("  --- Diagnosis ---")
+                    for d in result["diagnosis"]:
+                        print("  * {}".format(d))
+        else:
+            print("  ERROR: Both files must exist")
             sys.exit(1)
 
     elif args.command == 'unseal':

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "created": "2026-10-20T05:37:55.701985+00:00",
-  "encoder_version": "5.4.0",
-  "total_operations": 2,
+  "encoder_version": "6.0.0",
+  "total_operations": 5,
   "adaptive_config": {
     "zwc_density_target": 0.15,
     "zwc_placement": "distributed",
@@ -39,6 +39,63 @@
         "transition": "REPRODUCED->CORRECTED",
         "finding": "args.command namespace collision breaks EVG CLI",
         "has_execution_proof": true
+      }
+    },
+    {
+      "timestamp": "2026-10-20T06:08:22.996367+00:00",
+      "operation": "seal",
+      "filepath": "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex",
+      "outcome": "success",
+      "encoder_version": "5.4.0",
+      "file_ext": ".tex",
+      "file_size": 38702,
+      "details": {
+        "layers": [
+          "SURFACE_VISIBLE",
+          "SURFACE_99_NAMES"
+        ],
+        "layers_computed": 154,
+        "file_size": 36782,
+        "muraqabah": false,
+        "placement_strategy": "distributed"
+      }
+    },
+    {
+      "timestamp": "2026-10-20T06:14:45.568032+00:00",
+      "operation": "seal",
+      "filepath": "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex",
+      "outcome": "success",
+      "encoder_version": "5.4.0",
+      "file_ext": ".tex",
+      "file_size": 43191,
+      "details": {
+        "layers": [
+          "SURFACE_VISIBLE",
+          "SURFACE_99_NAMES"
+        ],
+        "layers_computed": 154,
+        "file_size": 41271,
+        "muraqabah": false,
+        "placement_strategy": "distributed"
+      }
+    },
+    {
+      "timestamp": "2026-10-20T06:34:11.960308+00:00",
+      "operation": "seal",
+      "filepath": "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex",
+      "outcome": "success",
+      "encoder_version": "6.0.0",
+      "file_ext": ".tex",
+      "file_size": 43203,
+      "details": {
+        "layers": [
+          "SURFACE_VISIBLE",
+          "SURFACE_99_NAMES"
+        ],
+        "layers_computed": 154,
+        "file_size": 41283,
+        "muraqabah": false,
+        "placement_strategy": "distributed"
       }
     }
   ]
