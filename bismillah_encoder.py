@@ -542,6 +542,15 @@ TEXT_EXTENSIONS = {
     '.eml', '.psv',
 }
 
+CODE_EXTENSIONS = {
+    '.py', '.js', '.ts', '.jsx', '.tsx', '.java', '.c', '.cpp', '.h',
+    '.hpp', '.cs', '.go', '.rs', '.rb', '.php', '.sh', '.bash', '.zsh',
+    '.pl', '.r', '.sql', '.html', '.htm', '.css', '.scss', '.sass',
+    '.xml', '.yaml', '.yml', '.toml', '.ini', '.tex', '.lua', '.swift',
+    '.kt', '.scala', '.clj', '.hs', '.el', '.vim', '.awk', '.sed',
+    '.makefile', '.mk', '.cmake', '.dockerfile',
+}
+
 SIDECAR_ONLY_EXTENSIONS = {
     '.json', '.jsonl', '.csv', '.tsv', '.lock', '.sum', '.mod',
     '.furqan_history',
