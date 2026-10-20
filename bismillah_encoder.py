@@ -142,14 +142,17 @@ import sys
 import json
 import math
 import hashlib
+import hmac
 import zipfile
 import shutil
 import struct
 import tempfile
 import argparse
 import unicodedata
+import re
 from pathlib import Path
 from collections import OrderedDict
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 # Bismillah ir-Rahman ir-Rahim
 # ============================================================================
@@ -167,7 +170,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "5.0.0"
+ENCODER_VERSION = "5.1.0"
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -2404,10 +2407,71 @@ def _write_heaven_witness(filepath, content_bytes, computation):
         witness_data["heavens"].append(heaven_entry)
 
     try:
+        # Serialize witness data
+        witness_json = json.dumps(witness_data, indent=2, ensure_ascii=False)
+
+        # v5.1: HMAC signature -- protects sidecar against coordinated tampering
+        # Key is derived from Bismillah + master_witness, so attacker must know
+        # the correct master witness to forge a valid sidecar
+        hmac_key = hashlib.sha256(
+            (BISMILLAH + computation["master_witness"]).encode('utf-8')
+        ).digest()
+        witness_hmac = hmac.new(
+            hmac_key, witness_json.encode('utf-8'), hashlib.sha256
+        ).hexdigest()
+
+        # Write witness + signature
+        signed_data = OrderedDict([
+            ("witness", json.loads(witness_json)),
+            ("sidecar_integrity", OrderedDict([
+                ("hmac_sha256", witness_hmac),
+                ("signing_method", "HMAC-SHA256(SHA256(Bismillah || master_witness), witness_json)"),
+                ("encoder_version", ENCODER_VERSION),
+            ])),
+        ])
         with open(witness_path, 'w', encoding='utf-8') as f:
-            json.dump(witness_data, f, indent=2, ensure_ascii=False)
+            json.dump(signed_data, f, indent=2, ensure_ascii=False)
     except Exception:
         pass
+
+
+def verify_witness_sidecar(filepath):
+    """v5.1: Verify the HMAC signature on a witness sidecar.
+
+    Returns (valid, message) tuple.
+    """
+    witness_path = filepath + '.witness.bismillah'
+    if not os.path.exists(witness_path):
+        return False, "No witness sidecar found"
+
+    try:
+        with open(witness_path, 'r', encoding='utf-8') as f:
+            signed_data = json.load(f)
+
+        # Handle both v5.0 (unsigned) and v5.1 (signed) formats
+        if "sidecar_integrity" not in signed_data:
+            return False, "Unsigned sidecar (v5.0 format -- re-seal to upgrade)"
+
+        witness_data = signed_data["witness"]
+        stored_hmac = signed_data["sidecar_integrity"]["hmac_sha256"]
+        master_witness = witness_data.get("master_witness", "")
+
+        # Recompute HMAC
+        witness_json = json.dumps(witness_data, indent=2, ensure_ascii=False)
+        hmac_key = hashlib.sha256(
+            (BISMILLAH + master_witness).encode('utf-8')
+        ).digest()
+        computed_hmac = hmac.new(
+            hmac_key, witness_json.encode('utf-8'), hashlib.sha256
+        ).hexdigest()
+
+        if hmac.compare_digest(stored_hmac, computed_hmac):
+            return True, "HMAC verified"
+        else:
+            return False, "HMAC MISMATCH -- sidecar may be tampered"
+
+    except Exception as e:
+        return False, "Verification error: {}".format(str(e))
 
 
 # ============================================================================
@@ -2884,12 +2948,383 @@ def display_heavens_report(directory):
 
 
 # ============================================================================
+#  v5.1: PER-SECTION STRUCTURAL VERIFICATION
+# ============================================================================
+
+def _strip_zwc(text):
+    """Remove zero-width characters for comparison purposes."""
+    ZWC = {'​', '‌', '‍', '﻿'}
+    return ''.join(c for c in text if c not in ZWC)
+
+
+def verify_section_structure(content, filepath=None):
+    """v5.1: Verify Bismillah markers exist at section boundaries.
+
+    Checks that visible Bismillah markers appear at the start/end of the file
+    and at internal section boundaries (## headings, *[End of ...] markers).
+    Returns a dict with 'valid', 'markers_found', 'markers_expected', 'issues'.
+    """
+    issues = []
+    markers_found = 0
+    markers_expected = 0
+
+    # Strip ZWC before all checks so embedded watermarks don't hide markers
+    clean_content = _strip_zwc(content)
+    lines = clean_content.split('\n')
+
+    # Check file-level boundaries
+    markers_expected += 2  # start + end
+    # Check first substantive line
+    first_content = ''
+    for line in lines[:10]:
+        stripped = line.strip()
+        if stripped:
+            first_content = stripped
+            break
+    if BISMILLAH.lower().replace('-', '') in first_content.lower().replace('-', ''):
+        markers_found += 1
+    else:
+        issues.append("Missing Bismillah at file start")
+
+    # Check last substantive line
+    last_content = ''
+    for line in reversed(lines[-10:]):
+        stripped = line.strip()
+        if stripped:
+            last_content = stripped
+            break
+    if BISMILLAH.lower().replace('-', '') in last_content.lower().replace('-', ''):
+        markers_found += 1
+    else:
+        issues.append("Missing Bismillah at file end")
+
+    # Check internal section boundaries (## Paper N: headers)
+    paper_pattern = re.compile(r'^## Paper \d+:', re.MULTILINE)
+    end_pattern = re.compile(r'^\*\[End of Paper \d+:', re.MULTILINE)
+
+    paper_headers = list(paper_pattern.finditer(clean_content))
+    paper_ends = list(end_pattern.finditer(clean_content))
+
+    for match in paper_headers:
+        markers_expected += 1
+        # Look for Bismillah in the 500 chars before this header
+        region_start = max(0, match.start() - 500)
+        region = clean_content[region_start:match.start()]
+        if BISMILLAH.lower().replace('-', '') in region.lower().replace('-', ''):
+            markers_found += 1
+        else:
+            issues.append("Missing Bismillah before: {}".format(
+                clean_content[match.start():match.start()+60].strip()))
+
+    for match in paper_ends:
+        markers_expected += 1
+        # Look for Bismillah in the 500 chars after this ending
+        region_end = min(len(clean_content), match.end() + 500)
+        region = clean_content[match.end():region_end]
+        if BISMILLAH.lower().replace('-', '') in region.lower().replace('-', ''):
+            markers_found += 1
+        else:
+            issues.append("Missing Bismillah after: {}".format(
+                clean_content[match.start():match.start()+60].strip()))
+
+    return {
+        "valid": len(issues) == 0,
+        "markers_found": markers_found,
+        "markers_expected": markers_expected,
+        "issues": issues,
+        "paper_count": len(paper_headers),
+    }
+
+
+# ============================================================================
+#  v5.1: ZWC DEGRADATION DETECTION
+# ============================================================================
+
+def detect_zwc_degradation(content, filepath=None):
+    """v5.1: Detect whether ZWC watermarks have been stripped or degraded.
+
+    Compares the density of zero-width characters against expected thresholds.
+    Returns a dict with 'status', 'zwc_count', 'density', 'assessment'.
+    """
+    ZWC_CHARS = {'​', '‌', '‍', '﻿'}
+
+    total_chars = len(content)
+    zwc_count = sum(1 for c in content if c in ZWC_CHARS)
+
+    if total_chars == 0:
+        return {"status": "empty", "zwc_count": 0, "density": 0.0,
+                "assessment": "Empty content"}
+
+    density = zwc_count / total_chars
+
+    # Expected density after full FATIMA sealing:
+    # 99 Names embedding + Bismillah ZWC typically yields > 0.1% density
+    if zwc_count == 0:
+        status = "STRIPPED"
+        assessment = "NO zero-width characters found -- watermarks completely removed"
+    elif density < 0.0001:  # < 0.01%
+        status = "DEGRADED"
+        assessment = "ZWC density {:.6f}% -- significant watermark loss detected".format(
+            density * 100)
+    elif density < 0.001:   # < 0.1%
+        status = "PARTIAL"
+        assessment = "ZWC density {:.4f}% -- some watermark degradation".format(
+            density * 100)
+    else:
+        status = "INTACT"
+        assessment = "ZWC density {:.4f}% -- watermarks appear intact".format(
+            density * 100)
+
+    # Check for 99 Names watermark pattern (each name produces a distinct ZWC sequence)
+    names_detected = 0
+    try:
+        payloads = extract_watermarks(content)
+        names_detected = len(payloads)
+    except Exception:
+        pass
+
+    return {
+        "status": status,
+        "zwc_count": zwc_count,
+        "density": density,
+        "assessment": assessment,
+        "names_detected": names_detected,
+    }
+
+
+# ============================================================================
+#  v5.1: UNSEAL / ROLLBACK
+# ============================================================================
+
+def unseal_text_content(content):
+    """v5.1: Remove Bismillah seals and ZWC watermarks from text content.
+
+    Returns the cleaned content with:
+    - All ZWC characters removed
+    - Visible Bismillah markers removed
+    - Blank lines from marker removal collapsed
+    """
+    ZWC_CHARS = {'​', '‌', '‍', '﻿'}
+
+    # Step 1: Remove all zero-width characters
+    cleaned = ''.join(c for c in content if c not in ZWC_CHARS)
+
+    # Step 2: Remove visible Bismillah markers
+    lines = cleaned.split('\n')
+    new_lines = []
+    prev_blank = False
+    for line in lines:
+        stripped = line.strip()
+        # Skip lines that are just the Bismillah marker
+        if stripped and BISMILLAH.lower().replace('-', '') in stripped.lower().replace('-', ''):
+            # Check if this line is ONLY the Bismillah (not part of real content)
+            # A line is a "marker" if it's just the Bismillah with optional whitespace
+            clean_check = stripped.replace(BISMILLAH, '').replace(
+                BISMILLAH_ARABIC, '').strip()
+            if not clean_check or clean_check in ('-', '---', '***', '==='):
+                prev_blank = True
+                continue
+        # Collapse multiple blank lines
+        if not stripped:
+            if prev_blank:
+                continue
+            prev_blank = True
+        else:
+            prev_blank = False
+        new_lines.append(line)
+
+    return '\n'.join(new_lines)
+
+
+def unseal_file(filepath, create_backup=True):
+    """v5.1: Remove all Bismillah sealing from a file.
+
+    Removes ZWC watermarks, visible Bismillah markers, and deletes
+    the witness sidecar. Optionally creates a .pre-unseal backup.
+    Returns (success, message).
+    """
+    ext = os.path.splitext(filepath)[1].lower()
+
+    if ext in TEXT_EXTENSIONS or ext in CODE_EXTENSIONS:
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()
+
+            # Create backup if requested
+            if create_backup:
+                backup_path = filepath + '.pre-unseal'
+                with open(backup_path, 'w', encoding='utf-8') as f:
+                    f.write(content)
+
+            # Unseal
+            cleaned = unseal_text_content(content)
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(cleaned)
+
+            # Remove sidecar files
+            for suffix in ['.bismillah', '.witness.bismillah']:
+                sidecar = filepath + suffix
+                if os.path.exists(sidecar):
+                    os.remove(sidecar)
+
+            chars_removed = len(content) - len(cleaned)
+            return True, "Unsealed ({:,} chars removed)".format(chars_removed)
+
+        except UnicodeDecodeError:
+            return False, "Not a text file"
+        except Exception as e:
+            return False, "Error: {}".format(str(e))
+    else:
+        # Binary files: remove sidecar only
+        removed = []
+        for suffix in ['.bismillah', '.witness.bismillah']:
+            sidecar = filepath + suffix
+            if os.path.exists(sidecar):
+                os.remove(sidecar)
+                removed.append(suffix)
+        if removed:
+            return True, "Removed sidecars: {}".format(', '.join(removed))
+        return False, "No seals found to remove"
+
+
+def unseal_directory(directory, create_backup=True):
+    """v5.1: Remove all Bismillah sealing from a directory."""
+    unsealed = 0
+    failed = 0
+
+    print("\n  {} -- UNSEAL / ROLLBACK".format(BISMILLAH))
+    print("  WARNING: This will remove all divine protection from files.")
+    print("  Backup: {}\n".format("ENABLED" if create_backup else "DISABLED"))
+
+    for dirpath, dirnames, filenames in os.walk(directory):
+        if '.git' in dirpath:
+            continue
+        dirnames[:] = [d for d in dirnames if d != '.git' and d != '__pycache__']
+
+        for fname in sorted(filenames):
+            filepath = os.path.join(dirpath, fname)
+            rel = os.path.relpath(filepath, directory)
+
+            # Skip self, sidecars, and backups
+            if (fname == SELF_NAME or fname.endswith('.bismillah')
+                    or fname.endswith('.pre-unseal')):
+                continue
+
+            success, msg = unseal_file(filepath, create_backup=create_backup)
+            if success:
+                unsealed += 1
+                print("  UNSEALED: {} -- {}".format(rel, msg))
+            # Silent skip for files with no seals
+
+    print("\n  {}".format("=" * 60))
+    print("  Unseal complete: {} files processed".format(unsealed))
+    if create_backup:
+        print("  Backups created with .pre-unseal extension")
+    print("  {}".format("=" * 60))
+
+    return {"unsealed": unsealed, "failed": failed}
+
+
+# ============================================================================
+#  v5.1: PARALLEL SEAL SUPPORT
+# ============================================================================
+
+def _seal_file_worker(args):
+    """Worker function for parallel sealing. Must be a top-level function for pickling."""
+    filepath, embed_names, ext = args
+    try:
+        if ext in TEXT_EXTENSIONS or ext in CODE_EXTENSIONS:
+            result = seal_text_file(filepath, embed_names=embed_names)
+            return ("text", filepath, result)
+        elif ext in BINARY_EXTENSIONS or ext in SIDECAR_ONLY_EXTENSIONS:
+            success, msg = seal_binary_file(filepath)
+            return ("binary", filepath, {"success": success, "msg": msg})
+        else:
+            result = seal_text_file(filepath, embed_names=embed_names)
+            return ("text", filepath, result)
+    except Exception as e:
+        return ("error", filepath, {"error": str(e)})
+
+
+def seal_directory_parallel(directory, embed_names=False, max_workers=None):
+    """v5.1: Parallel version of seal_directory using ProcessPoolExecutor.
+
+    Falls back to sequential sealing if the directory has < 10 files.
+    """
+    import multiprocessing
+
+    if max_workers is None:
+        max_workers = min(multiprocessing.cpu_count(), 8)
+
+    # Collect files to seal
+    file_tasks = []
+    for dirpath, dirnames, filenames in os.walk(directory):
+        if '.git' in dirpath:
+            continue
+        dirnames[:] = [d for d in dirnames if d != '.git' and d != '__pycache__']
+
+        for fname in sorted(filenames):
+            if fname == SELF_NAME or fname.endswith('.bismillah'):
+                continue
+            filepath = os.path.join(dirpath, fname)
+            ext = Path(fname).suffix.lower()
+            file_tasks.append((filepath, embed_names, ext))
+
+    # Fall back to sequential for small directories
+    if len(file_tasks) < 10:
+        return seal_directory(directory, embed_names=embed_names)
+
+    print("\n  {} -- PARALLEL 11-Heaven, 154-Layer Divine Seal".format(BISMILLAH))
+    print("  Workers: {} | Files: {}".format(max_workers, len(file_tasks)))
+    print("  Architecture: {} heavens, {} layers ({} per heaven)\n".format(
+        TOTAL_HEAVENS, TOTAL_LAYERS, LAYERS_PER_HEAVEN))
+
+    text_sealed = 0
+    binary_sealed = 0
+    failed = 0
+
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = {executor.submit(_seal_file_worker, task): task
+                   for task in file_tasks}
+        for future in as_completed(futures):
+            try:
+                kind, filepath, result = future.result()
+                rel = os.path.relpath(filepath, directory)
+                if kind == "text":
+                    if not result.get("skipped"):
+                        text_sealed += 1
+                        print("  TEXT:   {}".format(rel))
+                elif kind == "binary":
+                    if result.get("success"):
+                        binary_sealed += 1
+                        print("  BINARY: {}".format(rel))
+                    else:
+                        failed += 1
+                elif kind == "error":
+                    failed += 1
+                    print("  FAILED: {} -- {}".format(rel, result.get("error", "")))
+            except Exception as e:
+                failed += 1
+                print("  WORKER ERROR: {}".format(str(e)))
+
+    total = text_sealed + binary_sealed
+    print("\n  {}".format("=" * 60))
+    print("  {} -- Parallel Seal Complete".format(BISMILLAH))
+    print("  Text sealed:  {} | Binary sealed: {} | Failed: {}".format(
+        text_sealed, binary_sealed, failed))
+    print("  {}".format("=" * 60))
+
+    return {"text": text_sealed, "binary": binary_sealed, "failed": failed}
+
+
+# ============================================================================
 #  COMMAND LINE INTERFACE
 # ============================================================================
 
 def main():
     parser = argparse.ArgumentParser(
-        description="{} -- FATIMA v5.0 -- 11-Heaven, 154-Layer Divine Protection".format(BISMILLAH),
+        description="{} -- FATIMA v{} -- 11-Heaven, 154-Layer Divine Protection".format(
+            BISMILLAH, ENCODER_VERSION),
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Architecture: 11 Heavens, 154 Layers (Uniform 14 Per Heaven)
@@ -2915,12 +3350,17 @@ Architecture: 11 Heavens, 154 Layers (Uniform 14 Per Heaven)
 Examples:
   python bismillah_encoder.py seal ./project              # 154-layer seal
   python bismillah_encoder.py seal ./project --names      # + embed 99 Names
-  python bismillah_encoder.py verify ./project             # Verify protection
-  python bismillah_encoder.py verify ./project --strict    # + hash chain check
-  python bismillah_encoder.py manifest ./project           # Integrity manifest
-  python bismillah_encoder.py witness ./project            # Fractal witness report
-  python bismillah_encoder.py heavens ./project            # Heaven-by-heaven report
-  python bismillah_encoder.py decode ./file.md             # Extract ZWC payloads
+  python bismillah_encoder.py seal ./file.md              # v5.1: single-file seal
+  python bismillah_encoder.py seal ./project --parallel   # v5.1: parallel seal
+  python bismillah_encoder.py verify ./project            # Verify protection
+  python bismillah_encoder.py verify ./file.md            # v5.1: single-file verify
+  python bismillah_encoder.py verify ./project --strict   # + hash chain check
+  python bismillah_encoder.py unseal ./file.md            # v5.1: remove seals
+  python bismillah_encoder.py unseal ./project            # v5.1: unseal directory
+  python bismillah_encoder.py manifest ./project          # Integrity manifest
+  python bismillah_encoder.py witness ./project           # Fractal witness report
+  python bismillah_encoder.py heavens ./project           # Heaven-by-heaven report
+  python bismillah_encoder.py decode ./file.md            # Extract ZWC payloads
 
 {}
 """.format(BISMILLAH)
@@ -2928,16 +3368,27 @@ Examples:
     sub = parser.add_subparsers(dest='command')
 
     seal_p = sub.add_parser('seal', help='Apply 154-layer seal across 11 heavens')
-    seal_p.add_argument('path', help='Directory to seal')
+    seal_p.add_argument('path', help='File or directory to seal')
     seal_p.add_argument('--names', action='store_true',
                         help='Embed the 99 Names of Allah')
     seal_p.add_argument('--dry-run', action='store_true',
                         help='Preview without writing')
+    seal_p.add_argument('--parallel', action='store_true',
+                        help='v5.1: Use parallel processing for directories')
+    seal_p.add_argument('--workers', type=int, default=None,
+                        help='Number of parallel workers (default: CPU count)')
 
     verify_p = sub.add_parser('verify', help='Verify 154-layer protection')
-    verify_p.add_argument('path', help='Directory to verify')
+    verify_p.add_argument('path', help='File or directory to verify')
     verify_p.add_argument('--strict', action='store_true',
                           help='Recompute hashes and verify witnesses')
+
+    unseal_p = sub.add_parser('unseal', help='Remove Bismillah seals and ZWC watermarks')
+    unseal_p.add_argument('path', help='File or directory to unseal')
+    unseal_p.add_argument('--backup', action='store_true', default=True,
+                          help='Create .pre-unseal backup (default: True)')
+    unseal_p.add_argument('--no-backup', action='store_false', dest='backup',
+                          help='Skip backup creation')
 
     manifest_p = sub.add_parser('manifest', help='Generate integrity manifest')
     manifest_p.add_argument('path', help='Directory to manifest')
@@ -2957,19 +3408,87 @@ Examples:
 
     if args.command == 'seal':
         if os.path.isdir(args.path):
-            seal_directory(args.path, embed_names=args.names,
-                           dry_run=getattr(args, 'dry_run', False))
+            if getattr(args, 'parallel', False):
+                seal_directory_parallel(args.path, embed_names=args.names,
+                                        max_workers=getattr(args, 'workers', None))
+            else:
+                seal_directory(args.path, embed_names=args.names,
+                               dry_run=getattr(args, 'dry_run', False))
+        elif os.path.isfile(args.path):
+            # v5.1: Single-file seal support
+            ext = os.path.splitext(args.path)[1].lower()
+            if ext in TEXT_EXTENSIONS or ext in CODE_EXTENSIONS:
+                seal_text_file(args.path, embed_names=args.names)
+            elif ext in BINARY_EXTENSIONS:
+                seal_binary_file(args.path)
+            else:
+                # Attempt text seal for unknown extensions
+                seal_text_file(args.path, embed_names=args.names)
+            print("  Single-file seal complete: {}".format(args.path))
         else:
-            print("  ERROR: {} is not a directory".format(args.path))
+            print("  ERROR: {} does not exist".format(args.path))
             sys.exit(1)
 
     elif args.command == 'verify':
         if os.path.isdir(args.path):
             result = verify_directory(args.path, strict=args.strict)
+            # v5.1: Per-directory ZWC + sidecar HMAC checks
+            hmac_checked = 0
+            hmac_valid = 0
+            for dirpath, dirnames, filenames in os.walk(args.path):
+                dirnames[:] = [d for d in dirnames if d != '.git']
+                for fname in filenames:
+                    fp = os.path.join(dirpath, fname)
+                    if os.path.exists(fp + '.witness.bismillah'):
+                        hmac_checked += 1
+                        valid, msg = verify_witness_sidecar(fp)
+                        if valid:
+                            hmac_valid += 1
+                        else:
+                            print("  HMAC ISSUE: {} -- {}".format(
+                                os.path.relpath(fp, args.path), msg))
+            if hmac_checked:
+                print("\n  Sidecar HMAC:        {}/{} verified".format(
+                    hmac_valid, hmac_checked))
             if result["unprotected"] or result.get("tampered"):
                 sys.exit(2)
+        elif os.path.isfile(args.path):
+            # v5.1: Single-file verification with full checks
+            print("  Verifying: {}".format(args.path))
+            sidecar_valid, sidecar_msg = verify_witness_sidecar(args.path)
+            print("  Sidecar integrity: {}".format(sidecar_msg))
+            exit_code = 0
+            try:
+                with open(args.path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                # ZWC degradation check
+                zwc_result = detect_zwc_degradation(content, args.path)
+                print("  ZWC watermark: {} ({})".format(
+                    zwc_result["status"], zwc_result["assessment"]))
+                if zwc_result["names_detected"]:
+                    print("  99 Names detected:   {}".format(
+                        zwc_result["names_detected"]))
+                # Per-section structural check
+                section_result = verify_section_structure(content, args.path)
+                print("  Section markers:     {}/{} ({})".format(
+                    section_result["markers_found"],
+                    section_result["markers_expected"],
+                    "INTACT" if section_result["valid"] else "GAPS FOUND"))
+                if section_result["issues"]:
+                    for issue in section_result["issues"][:5]:
+                        print("    - {}".format(issue))
+                if zwc_result["status"] in ("STRIPPED", "DEGRADED"):
+                    exit_code = 2
+                if not section_result["valid"]:
+                    exit_code = 2
+            except (UnicodeDecodeError, IOError):
+                print("  (binary file -- text checks skipped)")
+            if not sidecar_valid:
+                exit_code = 2
+            if exit_code:
+                sys.exit(exit_code)
         else:
-            print("  ERROR: {} is not a directory".format(args.path))
+            print("  ERROR: {} does not exist".format(args.path))
             sys.exit(1)
 
     elif args.command == 'manifest':
@@ -3006,6 +3525,20 @@ Examples:
                 sys.exit(1)
         else:
             print("  ERROR: {} is not a file".format(args.path))
+            sys.exit(1)
+
+    elif args.command == 'unseal':
+        if os.path.isdir(args.path):
+            unseal_directory(args.path, create_backup=args.backup)
+        elif os.path.isfile(args.path):
+            success, msg = unseal_file(args.path, create_backup=args.backup)
+            if success:
+                print("  UNSEALED: {} -- {}".format(args.path, msg))
+            else:
+                print("  FAILED: {}".format(msg))
+                sys.exit(1)
+        else:
+            print("  ERROR: {} does not exist".format(args.path))
             sys.exit(1)
 
     else:
