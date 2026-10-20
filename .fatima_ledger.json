@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "created": "2026-10-20T05:37:55.701985+00:00",
+  "encoder_version": "5.4.0",
+  "total_operations": 2,
+  "adaptive_config": {
+    "zwc_density_target": 0.15,
+    "zwc_placement": "distributed",
+    "redundancy_level": 1,
+    "names_cycling": "sequential",
+    "retry_on_degradation": true,
+    "max_retries": 3,
+    "min_viable_density": 0.001,
+    "degradation_threshold": 0.01,
+    "sidecar_redundancy": true,
+    "parallel_threshold": 10
+  },
+  "strategy_adjustments": [],
+  "entries": [
+    {
+      "timestamp": "2026-10-20T05:37:55.702121+00:00",
+      "operation": "evg_advance",
+      "filepath": "TEST-001",
+      "outcome": "success",
+      "encoder_version": "5.4.0",
+      "details": {
+        "transition": "OPEN->REPRODUCED",
+        "finding": "args.command namespace collision breaks EVG CLI",
+        "has_execution_proof": true
+      }
+    },
+    {
+      "timestamp": "2026-10-20T05:37:56.019916+00:00",
+      "operation": "evg_advance",
+      "filepath": "TEST-001",
+      "outcome": "success",
+      "encoder_version": "5.4.0",
+      "details": {
+        "transition": "REPRODUCED->CORRECTED",
+        "finding": "args.command namespace collision breaks EVG CLI",
+        "has_execution_proof": true
+      }
+    }
+  ]
+}

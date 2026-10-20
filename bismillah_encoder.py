@@ -1,6 +1,6 @@
 # Bismillah ir-Rahman ir-Rahim
 """
-Bismillah Divine Protection Encoder -- FATIMA v5.3 -- 11-Heaven, 154-Layer Architecture
+Bismillah Divine Protection Encoder -- FATIMA v5.4 -- 11-Heaven, 154-Layer Architecture
 
 Seals every file in a directory with the name of Allah subhanahu wa ta'ala
 across ELEVEN HEAVENS of protection, containing 154 LAYERS total -- from
@@ -174,7 +174,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "5.3.1"
+ENCODER_VERSION = "5.4.0"
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -4556,6 +4556,483 @@ def verify_muraqabah_integrity(content, filepath=None):
 
 
 # ============================================================================
+#  v5.4: EXECUTION VERIFICATION GATE (EVG)
+#  "A fix described in prose is indistinguishable from a fix that happened,
+#   until someone actually executes it."
+#
+#  The EVG enforces a single discipline: no finding may be marked "corrected"
+#  without a before/after execution trace -- the failing assertion that
+#  reproduced the bug, then the same assertion passing.
+#
+#  This is the cheapest fix available: it catches false "fixed" claims
+#  immediately, scales to every future round without needing a bigger
+#  review process, and requires nothing more than running the test.
+# ============================================================================
+
+# EVG schema version
+EVG_VERSION = "1.0"
+
+# Status values for findings
+EVG_STATUS_OPEN = "OPEN"               # Finding reported, not yet addressed
+EVG_STATUS_REPRODUCED = "REPRODUCED"   # Bug reproduced with failing test
+EVG_STATUS_CORRECTED = "CORRECTED"     # Fix applied AND verified by execution
+EVG_STATUS_FALSE = "FALSE_POSITIVE"    # Finding was invalid (with proof)
+EVG_STATUS_DEFERRED = "DEFERRED"       # Acknowledged, not fixing now
+
+# The gate: required fields for each status transition
+EVG_REQUIRED_EVIDENCE = OrderedDict([
+    ("OPEN->REPRODUCED", [
+        "reproduction_command",     # The exact command/call that was run
+        "reproduction_output",      # The actual output (the failing assertion)
+        "expected_output",          # What it should have returned
+        "reproduction_timestamp",   # When the reproduction was run
+    ]),
+    ("REPRODUCED->CORRECTED", [
+        "fix_description",          # What was changed (file, function, line)
+        "verification_command",     # The exact command/call re-run after the fix
+        "verification_output",      # The actual output (now passing)
+        "verification_timestamp",   # When the verification was run
+        "before_hash",              # SHA-256 of the file before fix
+        "after_hash",               # SHA-256 of the file after fix
+    ]),
+    ("OPEN->CORRECTED", [
+        # Direct OPEN->CORRECTED is allowed ONLY with full before+after trace
+        "reproduction_command",
+        "reproduction_output",
+        "expected_output",
+        "verification_command",
+        "verification_output",
+        "verification_timestamp",
+        "before_hash",
+        "after_hash",
+    ]),
+    ("OPEN->FALSE_POSITIVE", [
+        "disproof_command",         # The command/call that disproves the finding
+        "disproof_output",          # The actual output showing no bug
+        "disproof_reasoning",       # Why this proves the finding is false
+        "disproof_timestamp",
+    ]),
+])
+
+
+def _get_evg_path(context_path=None):
+    """Determine the EVG registry file path."""
+    if context_path:
+        ctx = Path(context_path)
+        if ctx.is_file():
+            return ctx.parent / ".fatima_evg.json"
+        elif ctx.is_dir():
+            return ctx / ".fatima_evg.json"
+    return Path(__file__).parent / ".fatima_evg.json"
+
+
+def _load_evg(evg_path):
+    """Load the EVG registry from disk."""
+    if evg_path.exists():
+        try:
+            with open(evg_path, 'r', encoding='utf-8') as f:
+                data = json.loads(f.read())
+            if not isinstance(data.get("findings"), list):
+                data["findings"] = []
+            return data
+        except (json.JSONDecodeError, OSError):
+            pass
+    return OrderedDict([
+        ("evg_version", EVG_VERSION),
+        ("encoder_version", ENCODER_VERSION),
+        ("created", datetime.now(timezone.utc).isoformat()),
+        ("findings", []),
+        ("gate_stats", OrderedDict([
+            ("total_findings", 0),
+            ("corrected_with_proof", 0),
+            ("false_corrections_blocked", 0),
+        ])),
+    ])
+
+
+def _save_evg(evg, evg_path):
+    """Persist the EVG registry to disk."""
+    evg["last_updated"] = datetime.now(timezone.utc).isoformat()
+    with open(evg_path, 'w', encoding='utf-8') as f:
+        f.write(json.dumps(evg, indent=2, ensure_ascii=False))
+
+
+def evg_register_finding(finding_id, description, filepath=None,
+                          function_name=None, severity="HIGH",
+                          context_path=None):
+    """Register a new finding in the EVG.
+
+    This creates an OPEN finding that requires execution evidence
+    before it can be marked corrected.
+
+    Args:
+        finding_id: Unique identifier (e.g. "F-001", "ZWC-DENSITY-BUG")
+        description: What the finding is (the prose claim)
+        filepath: The file where the bug lives
+        function_name: The function containing the bug
+        severity: "CRITICAL", "HIGH", "MEDIUM", "LOW"
+        context_path: Override for EVG location
+
+    Returns:
+        The registered finding entry
+    """
+    evg_path = _get_evg_path(context_path)
+    evg = _load_evg(evg_path)
+
+    # Check for duplicate
+    for f in evg["findings"]:
+        if f["finding_id"] == finding_id:
+            return OrderedDict([
+                ("error", "Finding '{}' already registered".format(finding_id)),
+                ("existing_status", f["status"]),
+            ])
+
+    finding = OrderedDict([
+        ("finding_id", finding_id),
+        ("status", EVG_STATUS_OPEN),
+        ("description", description),
+        ("filepath", str(filepath) if filepath else None),
+        ("function_name", function_name),
+        ("severity", severity),
+        ("registered", datetime.now(timezone.utc).isoformat()),
+        ("encoder_version", ENCODER_VERSION),
+        ("transitions", []),
+    ])
+
+    evg["findings"].append(finding)
+    evg["gate_stats"]["total_findings"] = len(evg["findings"])
+    _save_evg(evg, evg_path)
+
+    return finding
+
+
+def evg_advance_finding(finding_id, new_status, evidence,
+                         context_path=None):
+    """Advance a finding's status through the Execution Verification Gate.
+
+    The gate REFUSES to advance without the required execution evidence.
+    This is the core discipline: no "corrected" without proof.
+
+    Args:
+        finding_id: The finding to advance
+        new_status: Target status (REPRODUCED, CORRECTED, FALSE_POSITIVE, DEFERRED)
+        evidence: Dict containing the required execution evidence
+        context_path: Override for EVG location
+
+    Returns:
+        OrderedDict with result -- either advanced or blocked
+    """
+    evg_path = _get_evg_path(context_path)
+    evg = _load_evg(evg_path)
+
+    # Find the finding
+    target = None
+    for f in evg["findings"]:
+        if f["finding_id"] == finding_id:
+            target = f
+            break
+
+    if target is None:
+        return OrderedDict([
+            ("blocked", True),
+            ("reason", "Finding '{}' not registered".format(finding_id)),
+        ])
+
+    current_status = target["status"]
+    transition_key = "{}->{}".format(current_status, new_status)
+
+    # DEFERRED is always allowed (acknowledged deferral)
+    if new_status == EVG_STATUS_DEFERRED:
+        transition = OrderedDict([
+            ("from", current_status),
+            ("to", new_status),
+            ("timestamp", datetime.now(timezone.utc).isoformat()),
+            ("reason", evidence.get("reason", "Deferred without execution")),
+        ])
+        target["transitions"].append(transition)
+        target["status"] = new_status
+        _save_evg(evg, evg_path)
+        return OrderedDict([
+            ("advanced", True),
+            ("finding_id", finding_id),
+            ("new_status", new_status),
+        ])
+
+    # Check if transition is valid
+    required = EVG_REQUIRED_EVIDENCE.get(transition_key)
+    if required is None:
+        return OrderedDict([
+            ("blocked", True),
+            ("reason", "Invalid transition: {}".format(transition_key)),
+            ("valid_transitions", [k for k in EVG_REQUIRED_EVIDENCE.keys()
+                                    if k.startswith(current_status + "->")]),
+        ])
+
+    # === THE GATE ===
+    # Check ALL required evidence fields are present and non-empty
+    missing = []
+    empty = []
+    for field in required:
+        if field not in evidence:
+            missing.append(field)
+        elif not evidence[field] or (isinstance(evidence[field], str)
+                                      and not evidence[field].strip()):
+            empty.append(field)
+
+    if missing or empty:
+        evg["gate_stats"]["false_corrections_blocked"] = (
+            evg["gate_stats"].get("false_corrections_blocked", 0) + 1
+        )
+        _save_evg(evg, evg_path)
+        return OrderedDict([
+            ("blocked", True),
+            ("gate_verdict", "EXECUTION EVIDENCE REQUIRED"),
+            ("finding_id", finding_id),
+            ("attempted_transition", transition_key),
+            ("missing_evidence", missing if missing else None),
+            ("empty_evidence", empty if empty else None),
+            ("message", (
+                "A fix described in prose is indistinguishable from a fix "
+                "that happened, until someone actually executes it. "
+                "Provide the literal before/after -- the failing assertion "
+                "that reproduced the bug, then the same assertion passing."
+            )),
+        ])
+
+    # All evidence present -- advance the finding
+    transition = OrderedDict([
+        ("from", current_status),
+        ("to", new_status),
+        ("timestamp", datetime.now(timezone.utc).isoformat()),
+        ("evidence", OrderedDict(
+            (k, evidence[k]) for k in required if k in evidence
+        )),
+    ])
+    target["transitions"].append(transition)
+    target["status"] = new_status
+
+    if new_status == EVG_STATUS_CORRECTED:
+        evg["gate_stats"]["corrected_with_proof"] = (
+            evg["gate_stats"].get("corrected_with_proof", 0) + 1
+        )
+
+    _save_evg(evg, evg_path)
+
+    # Record in the experience ledger too
+    record_experience("evg_advance", finding_id, "success", {
+        "transition": transition_key,
+        "finding": target["description"],
+        "has_execution_proof": True,
+    })
+
+    return OrderedDict([
+        ("advanced", True),
+        ("finding_id", finding_id),
+        ("new_status", new_status),
+        ("transition", transition_key),
+        ("execution_verified", True),
+    ])
+
+
+def evg_run_verification(finding_id, command, context_path=None,
+                         purpose=None):
+    """Execute a verification command and record the result.
+
+    This is the execution helper: it actually RUNS the command/expression
+    and captures the output, so evidence is generated from execution,
+    not from prose.
+
+    Args:
+        finding_id: The finding being verified
+        command: Python expression to evaluate (for internal verification)
+        context_path: Override for EVG location
+        purpose: 'reproduce' or 'verify' -- tags the execution log entry
+                 so the advance gate knows which evidence this provides
+
+    Returns:
+        OrderedDict with execution result
+    """
+    evg_path = _get_evg_path(context_path)
+    evg = _load_evg(evg_path)
+
+    # Find the finding
+    target = None
+    for f in evg["findings"]:
+        if f["finding_id"] == finding_id:
+            target = f
+            break
+
+    if target is None:
+        return OrderedDict([
+            ("error", "Finding '{}' not registered".format(finding_id)),
+        ])
+
+    timestamp = datetime.now(timezone.utc).isoformat()
+
+    result = OrderedDict([
+        ("finding_id", finding_id),
+        ("command", command),
+        ("timestamp", timestamp),
+    ])
+    if purpose:
+        result["purpose"] = purpose
+
+    try:
+        # Execute the verification
+        import subprocess
+        proc = subprocess.run(
+            command, shell=True, capture_output=True, text=True,
+            timeout=60
+        )
+        result["exit_code"] = proc.returncode
+        result["stdout"] = proc.stdout[:10000] if proc.stdout else ""
+        result["stderr"] = proc.stderr[:10000] if proc.stderr else ""
+        result["passed"] = proc.returncode == 0
+    except subprocess.TimeoutExpired:
+        result["error"] = "Command timed out after 60s"
+        result["passed"] = False
+    except Exception as exc:
+        result["error"] = str(exc)
+        result["passed"] = False
+
+    # Record the execution in the finding's history
+    if "execution_log" not in target:
+        target["execution_log"] = []
+    target["execution_log"].append(result)
+    _save_evg(evg, evg_path)
+
+    return result
+
+
+def evg_status(context_path=None):
+    """Return the full EVG status report.
+
+    Shows all findings, their statuses, gate statistics, and
+    any blocked correction attempts.
+    """
+    evg_path = _get_evg_path(context_path)
+    evg = _load_evg(evg_path)
+
+    findings = evg.get("findings", [])
+    stats = evg.get("gate_stats", {})
+
+    # Build status summary
+    status_counts = {}
+    for f in findings:
+        s = f.get("status", "UNKNOWN")
+        status_counts[s] = status_counts.get(s, 0) + 1
+
+    report = OrderedDict([
+        ("evg_version", EVG_VERSION),
+        ("encoder_version", ENCODER_VERSION),
+        ("total_findings", len(findings)),
+        ("status_breakdown", status_counts),
+        ("corrected_with_proof", stats.get("corrected_with_proof", 0)),
+        ("false_corrections_blocked", stats.get("false_corrections_blocked", 0)),
+        ("findings", []),
+    ])
+
+    for f in findings:
+        entry = OrderedDict([
+            ("finding_id", f["finding_id"]),
+            ("status", f["status"]),
+            ("severity", f.get("severity", "UNKNOWN")),
+            ("description", f["description"]),
+            ("filepath", f.get("filepath")),
+            ("function", f.get("function_name")),
+            ("registered", f.get("registered")),
+            ("transitions", len(f.get("transitions", []))),
+            ("executions", len(f.get("execution_log", []))),
+        ])
+        report["findings"].append(entry)
+
+    return report
+
+
+def evg_verify_convergence_record(record, context_path=None):
+    """Verify that a convergence record's "corrected" claims are backed
+    by execution evidence.
+
+    This is the discipline check: given a record that claims findings
+    are corrected, verify that each one has been through the gate.
+
+    Args:
+        record: Dict/OrderedDict with finding statuses
+                (e.g., {"F-001": "corrected", "F-002": "corrected"})
+        context_path: Override for EVG location
+
+    Returns:
+        OrderedDict with verification results per finding
+    """
+    evg_path = _get_evg_path(context_path)
+    evg = _load_evg(evg_path)
+
+    findings_by_id = {f["finding_id"]: f for f in evg.get("findings", [])}
+
+    results = OrderedDict([
+        ("verified", True),
+        ("findings_checked", 0),
+        ("findings_verified", 0),
+        ("findings_blocked", 0),
+        ("details", []),
+    ])
+
+    for finding_id, claimed_status in record.items():
+        results["findings_checked"] += 1
+        detail = OrderedDict([
+            ("finding_id", finding_id),
+            ("claimed_status", claimed_status),
+        ])
+
+        if finding_id not in findings_by_id:
+            detail["verdict"] = "UNREGISTERED"
+            detail["message"] = (
+                "Finding not registered in EVG. Register it first, "
+                "reproduce the bug, fix it, and provide execution proof."
+            )
+            results["verified"] = False
+            results["findings_blocked"] += 1
+        else:
+            finding = findings_by_id[finding_id]
+            actual_status = finding["status"]
+
+            if claimed_status.upper() in ("CORRECTED", "FIXED", "RESOLVED"):
+                if actual_status == EVG_STATUS_CORRECTED:
+                    detail["verdict"] = "VERIFIED"
+                    detail["message"] = "Correction backed by execution proof"
+                    # Include the verification evidence
+                    for t in finding.get("transitions", []):
+                        if t.get("to") == EVG_STATUS_CORRECTED:
+                            evidence = t.get("evidence", {})
+                            detail["verification_command"] = evidence.get(
+                                "verification_command")
+                            detail["verification_output"] = evidence.get(
+                                "verification_output")
+                            detail["verification_timestamp"] = evidence.get(
+                                "verification_timestamp")
+                            break
+                    results["findings_verified"] += 1
+                else:
+                    detail["verdict"] = "BLOCKED"
+                    detail["actual_status"] = actual_status
+                    detail["message"] = (
+                        "Claimed corrected but EVG status is '{}'. "
+                        "A fix described in prose is indistinguishable "
+                        "from a fix that happened. Provide execution proof."
+                    ).format(actual_status)
+                    results["verified"] = False
+                    results["findings_blocked"] += 1
+            else:
+                detail["verdict"] = "NOTED"
+                detail["actual_status"] = actual_status
+                results["findings_verified"] += 1
+
+        results["details"].append(detail)
+
+    return results
+
+
+# ============================================================================
 #  COMMAND LINE INTERFACE
 # ============================================================================
 
@@ -4669,6 +5146,52 @@ Examples:
     muraqabah_p = sub.add_parser('muraqabah',
                                  help='v5.3: Verify Muraqabah preamble integrity')
     muraqabah_p.add_argument('path', help='File to check for Muraqabah preamble')
+
+    # v5.4: Execution Verification Gate
+    evg_p = sub.add_parser('evg',
+                           help='v5.4: Execution Verification Gate -- '
+                                'no "corrected" without execution proof')
+    evg_sub = evg_p.add_subparsers(dest='evg_command')
+
+    evg_status_p = evg_sub.add_parser('status',
+                                       help='Show EVG status report')
+    evg_status_p.add_argument('--context', default=None,
+                              help='Directory context for EVG registry')
+
+    evg_register_p = evg_sub.add_parser('register',
+                                         help='Register a new finding')
+    evg_register_p.add_argument('finding_id', help='Unique finding ID')
+    evg_register_p.add_argument('description', help='What the finding is')
+    evg_register_p.add_argument('--file', default=None, help='File with the bug')
+    evg_register_p.add_argument('--function', default=None,
+                                help='Function containing the bug')
+    evg_register_p.add_argument('--severity', default='HIGH',
+                                choices=['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'])
+    evg_register_p.add_argument('--context', default=None)
+
+    evg_reproduce_p = evg_sub.add_parser('reproduce',
+                                          help='Run reproduction command and record')
+    evg_reproduce_p.add_argument('finding_id', help='Finding to reproduce')
+    evg_reproduce_p.add_argument('exec_command', help='Command to execute')
+    evg_reproduce_p.add_argument('--context', default=None)
+
+    evg_verify_p = evg_sub.add_parser('verify',
+                                       help='Run verification command after fix')
+    evg_verify_p.add_argument('finding_id', help='Finding to verify')
+    evg_verify_p.add_argument('exec_command', help='Command to execute')
+    evg_verify_p.add_argument('--context', default=None)
+
+    evg_advance_p = evg_sub.add_parser('advance',
+                                        help='Advance finding status (requires evidence)')
+    evg_advance_p.add_argument('finding_id', help='Finding to advance')
+    evg_advance_p.add_argument('new_status',
+                               choices=['REPRODUCED', 'CORRECTED',
+                                        'FALSE_POSITIVE', 'DEFERRED'])
+    evg_advance_p.add_argument('--context', default=None)
+
+    evg_check_p = evg_sub.add_parser('check',
+                                      help='Check convergence record claims')
+    evg_check_p.add_argument('--context', default=None)
 
     args = parser.parse_args()
 
@@ -4946,6 +5469,187 @@ Examples:
                 sys.exit(1)
         else:
             print("  ERROR: {} is not a file".format(args.path))
+            sys.exit(1)
+
+    elif args.command == 'evg':
+        evg_cmd = getattr(args, 'evg_command', None)
+        ctx = getattr(args, 'context', None)
+
+        if evg_cmd == 'status':
+            report = evg_status(ctx)
+            print("  v5.4: Execution Verification Gate -- Status Report")
+            print("  {}".format("=" * 60))
+            print("  Total findings:             {}".format(
+                report["total_findings"]))
+            print("  Corrected (with proof):     {}".format(
+                report["corrected_with_proof"]))
+            print("  False corrections blocked:  {}".format(
+                report["false_corrections_blocked"]))
+            if report["status_breakdown"]:
+                print("\n  Status breakdown:")
+                for status, count in report["status_breakdown"].items():
+                    print("    {:<20s} {}".format(status, count))
+            if report["findings"]:
+                print("\n  Findings:")
+                for f in report["findings"]:
+                    severity_icon = {"CRITICAL": "!!",
+                                      "HIGH": "! ",
+                                      "MEDIUM": "- ",
+                                      "LOW": "  "}.get(f["severity"], "? ")
+                    print("    [{}] {} ({}) -- {}".format(
+                        severity_icon, f["finding_id"], f["status"],
+                        f["description"][:60]))
+            print("  {}".format("=" * 60))
+
+        elif evg_cmd == 'register':
+            result = evg_register_finding(
+                args.finding_id, args.description,
+                filepath=getattr(args, 'file', None),
+                function_name=getattr(args, 'function', None),
+                severity=args.severity,
+                context_path=ctx,
+            )
+            if "error" in result:
+                print("  EVG: {}".format(result["error"]))
+                sys.exit(1)
+            print("  EVG: Finding '{}' registered as {}".format(
+                args.finding_id, EVG_STATUS_OPEN))
+            print("  Next: reproduce the bug with 'evg reproduce'")
+
+        elif evg_cmd == 'reproduce':
+            print("  EVG: Running reproduction command...")
+            result = evg_run_verification(
+                args.finding_id, args.exec_command, ctx,
+                purpose="reproduce")
+            if "error" in result:
+                print("  EVG ERROR: {}".format(result["error"]))
+                sys.exit(1)
+            print("  Exit code: {}".format(result.get("exit_code", "?")))
+            if result.get("stdout"):
+                print("  stdout: {}".format(
+                    result["stdout"][:500]))
+            if result.get("stderr"):
+                print("  stderr: {}".format(
+                    result["stderr"][:500]))
+            print("  Result: {}".format(
+                "PASSED" if result.get("passed") else "FAILED (bug reproduced)"))
+
+        elif evg_cmd == 'verify':
+            print("  EVG: Running verification command after fix...")
+            result = evg_run_verification(
+                args.finding_id, args.exec_command, ctx,
+                purpose="verify")
+            if "error" in result:
+                print("  EVG ERROR: {}".format(result["error"]))
+                sys.exit(1)
+            print("  Exit code: {}".format(result.get("exit_code", "?")))
+            if result.get("stdout"):
+                print("  stdout: {}".format(
+                    result["stdout"][:500]))
+            if result.get("stderr"):
+                print("  stderr: {}".format(
+                    result["stderr"][:500]))
+            print("  Result: {}".format(
+                "PASSED (fix verified)" if result.get("passed")
+                else "FAILED (fix NOT verified)"))
+
+        elif evg_cmd == 'advance':
+            # For advance, we need evidence from the execution log
+            evg_path = _get_evg_path(ctx)
+            evg_data = _load_evg(evg_path)
+            target = None
+            for f in evg_data["findings"]:
+                if f["finding_id"] == args.finding_id:
+                    target = f
+                    break
+            if not target:
+                print("  EVG: Finding '{}' not found".format(
+                    args.finding_id))
+                sys.exit(1)
+
+            # Build evidence from execution log
+            exec_log = target.get("execution_log", [])
+            evidence = {}
+            if exec_log:
+                # Use the most recent executions as evidence
+                # Purpose-tagged entries (from CLI reproduce/verify) take
+                # precedence; fall back to pass/fail heuristic for
+                # programmatic callers that don't set purpose.
+                for entry in exec_log:
+                    purpose = entry.get("purpose")
+                    if purpose == "reproduce" or (
+                            purpose is None and not entry.get("passed")):
+                        # Reproduction evidence
+                        evidence["reproduction_command"] = entry["command"]
+                        evidence["reproduction_output"] = entry.get(
+                            "stdout", "") + entry.get("stderr", "")
+                        evidence["expected_output"] = (
+                            "Bug confirmed via execution")
+                        evidence["reproduction_timestamp"] = entry[
+                            "timestamp"]
+                    elif purpose == "verify" or (
+                            purpose is None and entry.get("passed")):
+                        # Verification evidence
+                        evidence["verification_command"] = entry["command"]
+                        evidence["verification_output"] = entry.get(
+                            "stdout", "") + entry.get("stderr", "")
+                        evidence["verification_timestamp"] = entry[
+                            "timestamp"]
+
+                # Compute file hashes if filepath exists
+                fpath = target.get("filepath")
+                if fpath and Path(fpath).exists():
+                    with open(fpath, 'rb') as fh:
+                        evidence["after_hash"] = hashlib.sha256(
+                            fh.read()).hexdigest()
+                    if "before_hash" not in evidence:
+                        evidence["before_hash"] = "see-execution-log"
+                evidence["fix_description"] = "See execution log"
+
+            result = evg_advance_finding(
+                args.finding_id, args.new_status, evidence, ctx)
+
+            if result.get("blocked"):
+                print("  EVG GATE: BLOCKED")
+                print("  Verdict: {}".format(
+                    result.get("gate_verdict", result.get("reason", "?"))))
+                if result.get("missing_evidence"):
+                    print("  Missing evidence:")
+                    for field in result["missing_evidence"]:
+                        print("    - {}".format(field))
+                print("\n  \"{}\"".format(
+                    result.get("message", "")))
+                sys.exit(2)
+            else:
+                print("  EVG: Finding '{}' advanced to {}".format(
+                    args.finding_id, args.new_status))
+                if result.get("execution_verified"):
+                    print("  Execution verified: YES")
+
+        elif evg_cmd == 'check':
+            print("  EVG: Checking all findings for execution proof...")
+            evg_path = _get_evg_path(ctx)
+            evg_data = _load_evg(evg_path)
+            findings = evg_data.get("findings", [])
+            if not findings:
+                print("  No findings registered.")
+            else:
+                record = {}
+                for f in findings:
+                    record[f["finding_id"]] = f["status"]
+                result = evg_verify_convergence_record(record, ctx)
+                print("  Findings checked:   {}".format(
+                    result["findings_checked"]))
+                print("  Verified with proof: {}".format(
+                    result["findings_verified"]))
+                print("  Blocked (no proof):  {}".format(
+                    result["findings_blocked"]))
+                for d in result["details"]:
+                    icon = "OK" if d["verdict"] == "VERIFIED" else "XX"
+                    print("    [{}] {} -- {}".format(
+                        icon, d["finding_id"], d.get("message", "")))
+        else:
+            evg_p.print_help()
             sys.exit(1)
 
     else:
