@@ -577,6 +577,16 @@ SIDECAR_ONLY_EXTENSIONS = {
 
 OOXML_EXTENSIONS = {'.docx', '.xlsx', '.pptx'}
 
+BINARY_EXTENSIONS = {
+    '.pdf', '.png', '.jpg', '.jpeg', '.gif', '.bmp', '.ico', '.svg',
+    '.webp', '.tiff', '.tif', '.mp3', '.mp4', '.wav', '.ogg', '.avi',
+    '.mov', '.mkv', '.flac', '.aac', '.wma', '.wmv', '.flv', '.webm',
+    '.zip', '.tar', '.gz', '.bz2', '.xz', '.7z', '.rar',
+    '.exe', '.dll', '.so', '.dylib', '.bin', '.dat', '.db', '.sqlite',
+    '.woff', '.woff2', '.ttf', '.otf', '.eot',
+    '.pyc', '.pyo', '.class', '.o', '.obj',
+}
+
 SELF_NAME = 'bismillah_encoder.py'
 MANIFEST_FILENAME = "Bismillah_MANIFEST_Bismillah.json"
 
@@ -871,21 +881,27 @@ def _compute_semantic_level_1(sentences):
 def _compute_semantic_level_2(sentences):
     """Level 2: PROPOSITIONAL -- assertion extraction and hashing.
 
-    Extract normalized propositions: (subject, predicate, object) triples
-    approximated by (first_content_word, verb, remaining_content_words).
-    Sorts propositions to achieve order-invariance.
-    Sensitive to negation, predicate changes, and entity substitution.
+    Extract normalized propositions preserving word ORDER within each
+    sentence so that "dog ate cat" != "cat ate dog".
+    Propositions are sorted across sentences for document-order invariance,
+    but word order WITHIN each proposition is preserved -- this is the
+    critical distinction that crosses Shannon's boundary.
+    Sensitive to negation, predicate changes, entity substitution,
+    AND subject-object inversion.
     """
     propositions = []
     for sent in sentences[:256]:
         tokens = _tokenize_semantic(sent)
         content = _normalize_for_hashing(tokens)
         if len(content) >= 2:
-            # Approximation: first word = subject, rest = predicate+object
-            # Negation words are preserved in the normalization
-            prop = " ".join(sorted(content))
+            # CRITICAL: preserve word order within proposition
+            # "dog ate cat" -> "dog ate cat" (ordered)
+            # "cat ate dog" -> "cat ate dog" (different!)
+            # This is what makes Level 2 cross Shannon's boundary:
+            # meaning depends on WHO does WHAT to WHOM
+            prop = " ".join(content)  # ORDER PRESERVED -- no sorted()
             propositions.append(prop)
-    propositions.sort()
+    propositions.sort()  # Sort ACROSS propositions (document order invariance)
     return _semantic_hash(2, "PROPOSITIONAL", "||".join(propositions))
 
 
@@ -895,11 +911,28 @@ def _compute_semantic_level_3(sentences):
     Extract pairs of capitalized words (entities) that co-occur in
     the same sentence. The relation set is a fingerprint of who/what
     the document connects.
+    Filters common sentence-initial stopwords ("The", "This", "That", etc.)
+    that are capitalized only because of their position, not because they
+    are entities.
     """
+    # Sentence-initial stopwords that get capitalized but aren't entities
+    _ENTITY_STOPWORDS = {
+        'The', 'This', 'That', 'These', 'Those', 'There', 'Their',
+        'They', 'Then', 'Thus', 'Though', 'Through', 'Therefore',
+        'While', 'When', 'Where', 'Which', 'What', 'Who', 'Whom',
+        'With', 'Within', 'Without', 'Would', 'Will', 'Was', 'Were',
+        'Has', 'Have', 'Had', 'How', 'However', 'Here', 'His', 'Her',
+        'Its', 'Into', 'From', 'For', 'But', 'And', 'Are', 'Also',
+        'After', 'Before', 'Between', 'Both', 'Each', 'Every',
+        'Some', 'Such', 'Since', 'Still', 'She', 'Our', 'Not',
+        'Nor', 'Now', 'Only', 'Once', 'One', 'Other', 'Over',
+    }
     relations = set()
     for sent in sentences[:256]:
         # Find capitalized words (potential entities)
         entities = re.findall(r'\b[A-Z][a-z]{2,}\b', sent)
+        # Filter out sentence-initial stopwords
+        entities = [e for e in entities if e not in _ENTITY_STOPWORDS]
         entities = sorted(set(entities))
         # All pairs
         for i in range(len(entities)):
@@ -1142,10 +1175,17 @@ def semantic_verify(original_bytes, candidate_bytes, threshold=0.5):
         })
 
     proportion = matches / total if total > 0 else 0
-    verified = proportion >= threshold
 
-    # Diagnose what changed
+    # CRITICAL LEVELS: these are hard gates -- if ANY of these changed,
+    # meaning has been altered regardless of overall match proportion.
+    # Level 2 (PROPOSITIONAL) is the key Shannon boundary level:
+    # if WHO does WHAT to WHOM changed, meaning changed. Period.
+    CRITICAL_LEVELS = {"PROPOSITIONAL", "INTENTIONAL"}
     changed_levels = [c["name"] for c in comparisons if not c["preserved"]]
+    critical_failure = bool(CRITICAL_LEVELS & set(changed_levels))
+
+    # Verified only if proportion meets threshold AND no critical levels failed
+    verified = (proportion >= threshold) and (not critical_failure)
     diagnosis = []
     if "LEXICAL" in changed_levels:
         diagnosis.append("Vocabulary changed -- different words used")
@@ -3222,11 +3262,16 @@ KHALIFAH_FIDELITY_DIMS = [
 ]
 
 
-def _build_corpus_fingerprint(corpus_path):
+def _build_corpus_fingerprint(corpus_path, exclude_path=None):
     """Build the reference fingerprint from all sealed documents in the corpus.
 
     Returns a dict of aggregated features representing the corpus's
     semantic identity -- the 'trust' that the khalifah must preserve.
+
+    Args:
+        corpus_path: directory of reference corpus
+        exclude_path: absolute path to exclude from corpus (prevents
+                      self-inclusion when candidate lives inside corpus)
     """
     corpus_features = {
         "content_words": set(),
@@ -3240,51 +3285,63 @@ def _build_corpus_fingerprint(corpus_path):
         "document_count": 0,
     }
 
-    for fname in sorted(os.listdir(corpus_path)):
-        fpath = os.path.join(corpus_path, fname)
-        if not os.path.isfile(fpath) or fname.startswith('.'):
-            continue
-        try:
-            with open(fpath, 'rb') as f:
-                content = f.read()
-            # Skip binary files
-            try:
-                content.decode('utf-8')
-            except UnicodeDecodeError:
+    # Use os.walk for recursive traversal (not os.listdir)
+    for dirpath, dirnames, filenames in os.walk(corpus_path):
+        # Skip hidden directories
+        dirnames[:] = [d for d in dirnames if not d.startswith('.')]
+        for fname in sorted(filenames):
+            if fname.startswith('.'):
                 continue
-            features = _extract_document_features(content)
-            corpus_features["content_words"].update(features["content_words"])
-            corpus_features["struct_patterns"].update(features["struct_patterns"])
-            corpus_features["propositions"].update(features["propositions"])
-            corpus_features["entities"].update(features["entities"])
-            corpus_features["entity_pairs"].update(features["entity_pairs"])
-            # Accumulate distributions
-            conn = features["connector_counts"]
-            if isinstance(conn, dict):
-                for k, v in conn.items():
-                    corpus_features["connector_counts"][k] = \
-                        corpus_features["connector_counts"].get(k, 0) + v
-            topic = features["topic_distribution"]
-            if isinstance(topic, (list, tuple)):
-                for i, v in enumerate(topic):
-                    corpus_features["topic_distribution"][i] = \
-                        corpus_features["topic_distribution"].get(i, 0) + v
-            elif isinstance(topic, dict):
-                for k, v in topic.items():
-                    corpus_features["topic_distribution"][k] = \
-                        corpus_features["topic_distribution"].get(k, 0) + v
-            speech = features["speech_act_distribution"]
-            if isinstance(speech, dict):
-                for k, v in speech.items():
-                    corpus_features["speech_act_distribution"][k] = \
-                        corpus_features["speech_act_distribution"].get(k, 0) + v
-            elif isinstance(speech, (list, tuple)):
-                for i, v in enumerate(speech):
-                    corpus_features["speech_act_distribution"][i] = \
-                        corpus_features["speech_act_distribution"].get(i, 0) + v
-            corpus_features["document_count"] += 1
-        except Exception:
-            continue
+            # Skip sidecar/witness files
+            if fname.endswith('.bismillah') or fname.endswith('.witness.bismillah'):
+                continue
+            fpath = os.path.join(dirpath, fname)
+            if not os.path.isfile(fpath):
+                continue
+            # CRITICAL: exclude candidate from corpus to prevent self-inclusion
+            if exclude_path and os.path.abspath(fpath) == exclude_path:
+                continue
+            try:
+                with open(fpath, 'rb') as f:
+                    content = f.read()
+                # Skip binary files
+                try:
+                    content.decode('utf-8')
+                except UnicodeDecodeError:
+                    continue
+                features = _extract_document_features(content)
+                corpus_features["content_words"].update(features["content_words"])
+                corpus_features["struct_patterns"].update(features["struct_patterns"])
+                corpus_features["propositions"].update(features["propositions"])
+                corpus_features["entities"].update(features["entities"])
+                corpus_features["entity_pairs"].update(features["entity_pairs"])
+                # Accumulate distributions
+                conn = features["connector_counts"]
+                if isinstance(conn, dict):
+                    for k, v in conn.items():
+                        corpus_features["connector_counts"][k] = \
+                            corpus_features["connector_counts"].get(k, 0) + v
+                topic = features["topic_distribution"]
+                if isinstance(topic, (list, tuple)):
+                    for i, v in enumerate(topic):
+                        corpus_features["topic_distribution"][i] = \
+                            corpus_features["topic_distribution"].get(i, 0) + v
+                elif isinstance(topic, dict):
+                    for k, v in topic.items():
+                        corpus_features["topic_distribution"][k] = \
+                            corpus_features["topic_distribution"].get(k, 0) + v
+                speech = features["speech_act_distribution"]
+                if isinstance(speech, dict):
+                    for k, v in speech.items():
+                        corpus_features["speech_act_distribution"][k] = \
+                            corpus_features["speech_act_distribution"].get(k, 0) + v
+                elif isinstance(speech, (list, tuple)):
+                    for i, v in enumerate(speech):
+                        corpus_features["speech_act_distribution"][i] = \
+                            corpus_features["speech_act_distribution"].get(i, 0) + v
+                corpus_features["document_count"] += 1
+            except Exception:
+                continue
 
     return corpus_features
 
@@ -3454,7 +3511,8 @@ def khalifah_gate(corpus_path, candidate_path):
         return OrderedDict([("error", "Candidate not found: {}".format(candidate_path))])
 
     # Build corpus fingerprint (the 'trust')
-    corpus_fp = _build_corpus_fingerprint(corpus_path)
+    # Exclude candidate from corpus to prevent self-inclusion flaw
+    corpus_fp = _build_corpus_fingerprint(corpus_path, exclude_path=candidate_path)
     if corpus_fp["document_count"] == 0:
         return OrderedDict([("error", "No readable documents in corpus")])
 
@@ -5911,7 +5969,16 @@ def verify_directory(directory, strict=False):
                                 w_data = json.load(wf)
                             with open(source_path, 'rb') as sf:
                                 source_bytes = sf.read()
-                            stored = w_data.get("muhkam_seal", "")
+                            # muhkam_seal lives under w_data["witness"]
+                            # but check multiple locations for robustness
+                            witness_inner = w_data.get("witness", {})
+                            if isinstance(witness_inner, dict):
+                                stored = witness_inner.get("muhkam_seal", "")
+                            else:
+                                stored = ""
+                            if not stored:
+                                # Fallback: check top level (legacy format)
+                                stored = w_data.get("muhkam_seal", "")
                             computed = compute_seal(source_bytes)
                             if stored == computed:
                                 witness_check += 1
@@ -8487,6 +8554,45 @@ Examples:
                 })
             except (UnicodeDecodeError, IOError):
                 print("  (binary file -- text checks skipped)")
+            # v6.0+: Semantic witness verification -- recompute and compare
+            # This is the check that crosses Shannon's boundary:
+            # it verifies MEANING has not drifted, not just bits
+            witness_path = args.path + '.witness.bismillah'
+            if os.path.exists(witness_path):
+                try:
+                    with open(witness_path, 'r', encoding='utf-8') as wf:
+                        w_data = json.load(wf)
+                    # semantic_witness lives under w_data["witness"]
+                    witness_inner = w_data.get("witness", w_data)
+                    stored_sw = witness_inner.get("semantic_witness", {})
+                    if stored_sw and isinstance(stored_sw, dict):
+                        stored_master = stored_sw.get("semantic_master_seal", "")
+                        if stored_master:
+                            with open(args.path, 'rb') as sf:
+                                current_bytes = sf.read()
+                            current_sw = compute_semantic_witness(current_bytes)
+                            current_master = current_sw.get("semantic_master_seal", "")
+                            if current_master == stored_master:
+                                print("  Semantic witness:    INTACT (meaning preserved)")
+                            else:
+                                print("  Semantic witness:    DRIFT DETECTED (meaning has changed!)")
+                                # Detailed per-level comparison
+                                if current_sw.get("applicable") and stored_sw.get("levels"):
+                                    stored_levels = stored_sw.get("levels", [])
+                                    current_levels = current_sw.get("semantic_levels", [])
+                                    for i, (sl, cl) in enumerate(zip(stored_levels, current_levels)):
+                                        sl_seal = sl.get("seal", "") if isinstance(sl, dict) else ""
+                                        cl_seal = cl.get("seal", "") if isinstance(cl, dict) else ""
+                                        status = "OK" if sl_seal == cl_seal else "CHANGED"
+                                        name = cl.get("name", "Level {}".format(i)) if isinstance(cl, dict) else "Level {}".format(i)
+                                        print("    Level {}: {} [{}]".format(i, name, status))
+                                exit_code = 2
+                        else:
+                            print("  Semantic witness:    (no master seal stored)")
+                    else:
+                        print("  Semantic witness:    (not present in sidecar)")
+                except Exception as e:
+                    print("  Semantic witness:    ERROR ({})".format(str(e)))
             if not sidecar_valid:
                 exit_code = 2
             if exit_code:
