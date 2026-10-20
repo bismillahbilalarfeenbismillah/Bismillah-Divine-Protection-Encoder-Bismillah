@@ -78,7 +78,7 @@ Divine Protection Architecture}
 \end{center}
 
 \begin{abstract}
-\noindent This paper documents the evolution of FATIMA (Faithful Algorithmic Testimony of Integrity via Multilayer Authentication) from its initial eleven-layer flat architecture through its current form: an eleven-heaven, 154-layer volumetric system with HMAC witness sidecars, adaptive self-healing, divine accountability preambles, and an execution verification gate. The trajectory spans eight major versions (v1.0 through v5.4.0) and twelve commits, each responding to a specific architectural limitation exposed by the preceding version's deployment. We present the email purge case study---the permanent deletion of 45,710 emails through a Gmail API script sealed by the cycling of Al-Asma ul-Husna---as the first operational deployment of the encoder outside file protection, demonstrating that the Divine Name cycling pattern generalizes beyond steganographic embedding to any batch computational process requiring witnessed integrity. We conclude with the Execution Verification Gate (v5.4.0), which enforces the principle that no finding may be marked ``corrected'' without literal before-and-after execution proof, closing the gap between described fixes and verified fixes that plagued the encoder's own audit history.
+\noindent The companion paper \cite{arfeen2026fatima} introduced FATIMA---Fitrah-Aligned Tawhidic Integrity for Meaning and Authenticity---as a theoretical specification for a holographic data format that crosses Shannon's boundary: from the preservation of \textit{bits} to the preservation of \textit{meaning}, grounded in the architecture of the ninety-nine Names of Allah. That paper identified five properties any FATIMA-compliant encoding must satisfy: holographic redundancy, fitrah-alignment, tawhidic unity, meaning-integrity, and authenticity verification via structural coherence. This paper documents the evolution of the FATIMA Divine Protection Encoder---the working implementation that pursues those five properties computationally---from its initial eleven-layer flat architecture through its current form: an eleven-heaven, 154-layer volumetric system with HMAC witness sidecars, adaptive self-healing, divine accountability preambles, and an execution verification gate. The trajectory spans eight major versions (v1.0 through v5.4.0) and twelve commits, each responding to a specific architectural limitation exposed by the preceding version's deployment. We present the email purge case study---the permanent deletion of 45,710 emails through a Gmail API script sealed by the cycling of Al-Asma ul-Husna---as the first operational deployment of the encoder outside file protection, demonstrating that the Divine Name cycling pattern generalizes beyond steganographic embedding to any batch computational process requiring witnessed integrity. We conclude with the Execution Verification Gate (v5.4.0), which enforces the principle that no finding may be marked ``corrected'' without literal before-and-after execution proof, closing the gap between described fixes and verified fixes that plagued the encoder's own audit history.
 
 \vspace{0.5em}
 \noindent\textbf{Keywords:} FATIMA, file integrity, encoder evolution, Al-Asma ul-Husna, email purge, execution verification, Muraqabah, adaptive learning, divine protection, Bismillah
@@ -89,9 +89,11 @@ Divine Protection Architecture}
 % ════════════════════════════════════════════════════════════════
 \section{Introduction}
 
-The companion paper \cite{arfeen2026heavens} established the theoretical and mathematical foundations of FATIMA v4.0: an eleven-heaven, 151-layer volumetric architecture for divine file protection, grounded in the Hurst exponent's identification of eleven as the dimensional constant of creation ($H(11) = 1.0157$). That paper treated the architecture as a completed structure. This paper treats it as a living system.
+FATIMA---Fitrah-Aligned Tawhidic Integrity for Meaning and Authenticity---was introduced in \cite{arfeen2026fatima} as a holographic data format specification grounded in the architecture of the Most Beautiful Names. That paper identified the central problem as Shannon's boundary: every existing data-integrity system protects \textit{bits}, but none protects \textit{meaning}. FATIMA specifies five properties that any compliant encoding must satisfy---holographic redundancy, fitrah-alignment, tawhidic unity, meaning-integrity, and authenticity verification via structural coherence---each derived from the architectural properties of the ninety-nine Names.
 
-Software that encodes theological principles into computational operations is not static. It encounters the world---real files, real adversaries, real deployment conditions---and the encounter exposes limitations that the original design, however principled, could not have anticipated. Each limitation, once identified, demands a response that must satisfy two constraints simultaneously: it must solve the engineering problem, and it must preserve the theological coherence that makes the solution FATIMA rather than merely another integrity tool.
+The companion paper \cite{arfeen2026heavens} established the mathematical foundations of the encoder's v4.0 architecture: an eleven-heaven, 151-layer volumetric system grounded in the Hurst exponent's identification of eleven as the dimensional constant of creation ($H(11) = 1.0157$). That paper treated the architecture as a completed structure. This paper treats it as a living system.
+
+Software that pursues FATIMA compliance through computational operations is not static. It encounters the world---real files, real adversaries, real deployment conditions---and the encounter exposes limitations that the original design, however principled, could not have anticipated. Each limitation, once identified, demands a response that must satisfy two constraints simultaneously: it must solve the engineering problem, and it must preserve the theological coherence that distinguishes the encoder from merely another integrity tool. The encoder does not yet satisfy all five FATIMA properties---no human production does, as \cite{arfeen2026fatima} acknowledges---but each version moves the implementation closer to the specification.
 
 This paper traces twelve commits across eight versions, from the initial flat encoder to the current v5.4.0. Each version is presented as a response to a specific failure mode:
 
@@ -459,6 +461,20 @@ The pipeline ordering is fixed by v5.3.1's discovery: Muraqabah (semantic) befor
 
 Each version of FATIMA represents an act of \textit{ijtihad}---independent reasoning applied to a new problem within a fixed theological framework. The framework (Bismillah-anchored hashing, 99 Names, eleven heavens, forward-dependent chains) does not change; the application of the framework expands to cover new failure modes. This mirrors the Islamic jurisprudential tradition: the \textit{usul} (foundations) are fixed, but the \textit{furu'} (branches) grow as new situations arise.
 
+\subsection{The Encoder and the Five FATIMA Properties}
+
+The FATIMA specification \cite{arfeen2026fatima} identifies five properties that any compliant encoding must satisfy. The encoder's evolution can be mapped against these properties to assess its current position:
+
+\begin{itemize}[nosep]
+    \item \textbf{Holographic redundancy}: The 154-layer hash chain distributes integrity witnesses across multiple scales, so that corruption at any layer is detectable from the surviving layers and the HMAC sidecar. This is syntactic holographic redundancy---the redundancy of \textit{hashes}, not yet of \textit{meaning}.
+    \item \textbf{Fitrah-alignment}: The Muraqabah Preamble (v5.3) embeds divine accountability context in a form recognizable to any agent---human or artificial---that processes the document. The preamble addresses the fitrah directly.
+    \item \textbf{Tawhidic unity}: The forward-dependent hash chain ensures that fragmentation is detectable---altering or removing any layer breaks the chain. The 99 Names cycling grounds this unity in the Names of the One.
+    \item \textbf{Meaning-integrity}: The encoder currently operates below Shannon's boundary: it detects alteration of \textit{bits}, not corruption of \textit{meaning}. This is the property the encoder has not yet achieved, and it is the property that FATIMA was designed to address.
+    \item \textbf{Authenticity verification via structural coherence}: The HMAC sidecar and the self-referential witness of Sidrat al-Muntaha provide structural self-authentication, but the authentication is syntactic---the coherence of hashes, not of meaning-relationships.
+\end{itemize}
+
+The encoder is, in the language of \cite{arfeen2026fatima}, an approximate FATIMA implementation operating at the syntactic level. Each version extends the approximation, but crossing Shannon's boundary---from the preservation of bits to the preservation of meaning---remains the open problem.
+
 \subsection{The Encoder as a Compiler for Theological Claims}
 
 The observation from the email purge case study---that the 99 Names cycling pattern generalizes to any batch computational process---suggests a broader role for the encoder. It functions as what might be called a \textit{compiler for theological claims}: a system that takes a theological assertion (``every scale of creation is witnessed,'' ``every unit of work is accountable'') and either produces a working implementation or exposes the assertion as underspecified. If the encoder compiles, the claim has an existence proof. If it does not, the claim needs refinement.
@@ -481,9 +497,9 @@ The EVG is the test. A finding that says ``corrected'' will be tested---literall
 % ════════════════════════════════════════════════════════════════
 \section{Conclusion}
 
-FATIMA has evolved from eleven flat layers to an eleven-heaven, 154-layer architecture with HMAC sidecars, adaptive self-healing, divine accountability preambles, and an execution verification gate. Each version was a response to a limitation exposed by the preceding version's encounter with the world. The email purge demonstrated that the Divine Name cycling pattern generalizes beyond file protection to any witnessed batch process. The Execution Verification Gate closed the gap between described and verified fixes, enforcing the principle that testimony requires execution, not prose.
+The FATIMA Divine Protection Encoder has evolved from eleven flat layers to an eleven-heaven, 154-layer architecture with HMAC sidecars, adaptive self-healing, divine accountability preambles, and an execution verification gate. Each version was a response to a limitation exposed by the preceding version's encounter with the world. The email purge demonstrated that the Divine Name cycling pattern generalizes beyond file protection to any witnessed batch process. The Execution Verification Gate closed the gap between described and verified fixes, enforcing the principle that testimony requires execution, not prose.
 
-The encoder's evolution is not complete. Future work includes the three master meta-papers---a theological omnibus, an AI compilation, and an intersection paper---each of which will be sealed by the encoder they describe. The act of the encoder sealing its own documentation, and the EVG verifying its own claims, is the self-referential witness that Sidrat al-Muntaha was designed to express: a system that testifies to its own integrity, and whose testimony can be verified by anyone who runs it.
+The encoder currently approximates the FATIMA specification \cite{arfeen2026fatima} at the syntactic level---it protects \textit{bits} with holographic redundancy, but does not yet cross Shannon's boundary to protect \textit{meaning}. The five properties identified in that specification---holographic redundancy, fitrah-alignment, tawhidic unity, meaning-integrity, and authenticity verification via structural coherence---remain the target toward which each version moves. Future work includes the three master meta-papers---a theological omnibus, an AI compilation, and an intersection paper---each of which will be sealed by the encoder they describe. The act of the encoder sealing its own documentation, and the EVG verifying its own claims, is the self-referential witness that Sidrat al-Muntaha was designed to express: a system that testifies to its own integrity, and whose testimony can be verified by anyone who runs it.
 
 \begin{center}
 \textit{``And Allah is witness over all things.''} (58:6)
@@ -498,6 +514,7 @@ The encoder's evolution is not complete. Future work includes the three master m
     \item The email purge case study demonstrates pattern generalization, not theological necessity. The emails could have been deleted without Divine Name cycling. The cycling pattern adds witnessed accountability; it does not add computational capability.
     \item The EVG enforces execution-based verification within the encoder's own finding management. It does not and cannot guarantee that all claims in the companion papers have been execution-verified. The EVG is a tool, not an oracle.
     \item FATIMA's protection is integrity-based (detecting corruption), not encryption-based (preventing access). A sealed file's content remains readable; only its integrity is witnessed.
+    \item The encoder is an implementation pursuing the FATIMA specification \cite{arfeen2026fatima}, not the specification itself. The specification defines five properties for holographic data integrity crossing Shannon's boundary. The encoder currently operates below that boundary---it protects bits, not meaning. The gap between the specification and its implementation is acknowledged, not elided.
 \end{enumerate}
 
 
@@ -533,6 +550,11 @@ Zenodo.
 Arfeen, B.\,S. (2026).
 ``Computational Tawhid: A Theology-Grounded Ontology for Artificial Intelligence.''
 Zenodo.
+
+\bibitem{arfeen2026fatima}
+Arfeen, B.\,S. (2026).
+``FATIMA: Fitrah-Aligned Tawhidic Integrity for Meaning and Authenticity---A Holographic Data Format Grounded in the Architecture of the Most Beautiful Names.''
+October 2026.
 
 \end{thebibliography}
 
