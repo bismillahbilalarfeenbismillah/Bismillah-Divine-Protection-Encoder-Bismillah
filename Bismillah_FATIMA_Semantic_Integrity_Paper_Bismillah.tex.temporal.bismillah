@@ -3,8 +3,8 @@
     "Bismillah ir-Rahman ir-Rahim": true,
     "format_version": "7.0.0",
     "file": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
-    "total_events": 1,
-    "current_epoch": 1,
+    "total_events": 2,
+    "current_epoch": 2,
     "current_checkpoint": 0,
     "leaves": [
       {
@@ -125,17 +125,136 @@
         "content_hash": "bb25b5c5117e343babd1d5f470931031f843fc9ee67c0037d818792fef343c9c",
         "encoder_version": "7.0.0",
         "leaf_hash": "3eaa31391dfa94f36f78bfb5e6422c0ad6a2daef7acbaea8b82886a621e4826d"
+      },
+      {
+        "epoch": 1,
+        "epoch_name": "AL-AWWAL (First Witness)",
+        "checkpoint": 0,
+        "checkpoint_name": "LEXICAL_WITNESS",
+        "temporal_index": 7,
+        "divine_name": "Al-Muhaymin",
+        "divine_meaning": "The Protector",
+        "timestamp": "2026-10-20T07:51:46.696328+00:00",
+        "dual_witness_seal": "f110f83f2b2df2c00db7b90bcaec60ed87fe76048c9006db2c91b234f6f155a1",
+        "syntactic_master": "c88cbb4d9c155dae65ed8d52cb095ab640097cf0fd56126b12cc9b917b3de716",
+        "semantic_master": "4095f6fcde7fbe3581b039bd470c66aa824e080b39be7b32c96cd51845e1f16c",
+        "semantic_level_seal": "e00b610aa981b60da853c5b653c26555b7a08093e2eaca5ab536de4acbe4730e",
+        "content_hash": "bb25b5c5117e343babd1d5f470931031f843fc9ee67c0037d818792fef343c9c",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "fd8275f75be560c367ebf955e0ba0b6421b15c34c01a72e942e476e18e49dfe2"
+      },
+      {
+        "epoch": 1,
+        "epoch_name": "AL-AWWAL (First Witness)",
+        "checkpoint": 1,
+        "checkpoint_name": "SYNTACTIC_WITNESS",
+        "temporal_index": 8,
+        "divine_name": "Al-Aziz",
+        "divine_meaning": "The Almighty",
+        "timestamp": "2026-10-20T07:51:46.696328+00:00",
+        "dual_witness_seal": "f110f83f2b2df2c00db7b90bcaec60ed87fe76048c9006db2c91b234f6f155a1",
+        "syntactic_master": "c88cbb4d9c155dae65ed8d52cb095ab640097cf0fd56126b12cc9b917b3de716",
+        "semantic_master": "4095f6fcde7fbe3581b039bd470c66aa824e080b39be7b32c96cd51845e1f16c",
+        "semantic_level_seal": "06f3b9fc07b401ed42d0f5686bcc6283f29db17b4f0f0090803ec55f6684a5a4",
+        "content_hash": "bb25b5c5117e343babd1d5f470931031f843fc9ee67c0037d818792fef343c9c",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "aa404187e53726c4dbacfca32932db3c7d8481d113fbfb91d1de6c9b25fe9729"
+      },
+      {
+        "epoch": 1,
+        "epoch_name": "AL-AWWAL (First Witness)",
+        "checkpoint": 2,
+        "checkpoint_name": "PROPOSITIONAL_WITNESS",
+        "temporal_index": 9,
+        "divine_name": "Al-Jabbar",
+        "divine_meaning": "The Compeller",
+        "timestamp": "2026-10-20T07:51:46.696328+00:00",
+        "dual_witness_seal": "f110f83f2b2df2c00db7b90bcaec60ed87fe76048c9006db2c91b234f6f155a1",
+        "syntactic_master": "c88cbb4d9c155dae65ed8d52cb095ab640097cf0fd56126b12cc9b917b3de716",
+        "semantic_master": "4095f6fcde7fbe3581b039bd470c66aa824e080b39be7b32c96cd51845e1f16c",
+        "semantic_level_seal": "d0460b5bcdc78a6378541fbd29eff567ccc591b8a7db63d81c346dca803d0770",
+        "content_hash": "bb25b5c5117e343babd1d5f470931031f843fc9ee67c0037d818792fef343c9c",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "d8bd3e6189e7e9048c6f8c5d72e9f175e1c8d243b7e99c28a268474a7da62231"
+      },
+      {
+        "epoch": 1,
+        "epoch_name": "AL-AWWAL (First Witness)",
+        "checkpoint": 3,
+        "checkpoint_name": "RELATIONAL_WITNESS",
+        "temporal_index": 10,
+        "divine_name": "Al-Mutakabbir",
+        "divine_meaning": "The Supreme",
+        "timestamp": "2026-10-20T07:51:46.696328+00:00",
+        "dual_witness_seal": "f110f83f2b2df2c00db7b90bcaec60ed87fe76048c9006db2c91b234f6f155a1",
+        "syntactic_master": "c88cbb4d9c155dae65ed8d52cb095ab640097cf0fd56126b12cc9b917b3de716",
+        "semantic_master": "4095f6fcde7fbe3581b039bd470c66aa824e080b39be7b32c96cd51845e1f16c",
+        "semantic_level_seal": "92d06b1fde5794e201362a01b4129c6d498e70e39c6dc2128a4fe649503e354b",
+        "content_hash": "bb25b5c5117e343babd1d5f470931031f843fc9ee67c0037d818792fef343c9c",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "82a2d7f93c1f521176d7724301ac7a73e0ea8e3be5b7eeb9b448a10fdc23edfe"
+      },
+      {
+        "epoch": 1,
+        "epoch_name": "AL-AWWAL (First Witness)",
+        "checkpoint": 4,
+        "checkpoint_name": "RHETORICAL_WITNESS",
+        "temporal_index": 11,
+        "divine_name": "Al-Khaliq",
+        "divine_meaning": "The Creator",
+        "timestamp": "2026-10-20T07:51:46.696328+00:00",
+        "dual_witness_seal": "f110f83f2b2df2c00db7b90bcaec60ed87fe76048c9006db2c91b234f6f155a1",
+        "syntactic_master": "c88cbb4d9c155dae65ed8d52cb095ab640097cf0fd56126b12cc9b917b3de716",
+        "semantic_master": "4095f6fcde7fbe3581b039bd470c66aa824e080b39be7b32c96cd51845e1f16c",
+        "semantic_level_seal": "6eb0581650e04936bcf65a5b3d431dec2e10aa653edd801e6600866218a79ed5",
+        "content_hash": "bb25b5c5117e343babd1d5f470931031f843fc9ee67c0037d818792fef343c9c",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "28da782173960f9b324171cd513f67918eb15d612d55c4288bf472413e2b38a5"
+      },
+      {
+        "epoch": 1,
+        "epoch_name": "AL-AWWAL (First Witness)",
+        "checkpoint": 5,
+        "checkpoint_name": "THEMATIC_WITNESS",
+        "temporal_index": 12,
+        "divine_name": "Al-Bari",
+        "divine_meaning": "The Evolver",
+        "timestamp": "2026-10-20T07:51:46.696328+00:00",
+        "dual_witness_seal": "f110f83f2b2df2c00db7b90bcaec60ed87fe76048c9006db2c91b234f6f155a1",
+        "syntactic_master": "c88cbb4d9c155dae65ed8d52cb095ab640097cf0fd56126b12cc9b917b3de716",
+        "semantic_master": "4095f6fcde7fbe3581b039bd470c66aa824e080b39be7b32c96cd51845e1f16c",
+        "semantic_level_seal": "b76c044060ccb002b20580c69f0cddadd3f444e47aea07055ce3eeb83bfabda5",
+        "content_hash": "bb25b5c5117e343babd1d5f470931031f843fc9ee67c0037d818792fef343c9c",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "6683f88fef0a46c0a54a5c8dd9eeaee65bf202d58e48202e91f16a2d4889682d"
+      },
+      {
+        "epoch": 1,
+        "epoch_name": "AL-AWWAL (First Witness)",
+        "checkpoint": 6,
+        "checkpoint_name": "INTENTIONAL_WITNESS",
+        "temporal_index": 13,
+        "divine_name": "Al-Musawwir",
+        "divine_meaning": "The Fashioner",
+        "timestamp": "2026-10-20T07:51:46.696328+00:00",
+        "dual_witness_seal": "f110f83f2b2df2c00db7b90bcaec60ed87fe76048c9006db2c91b234f6f155a1",
+        "syntactic_master": "c88cbb4d9c155dae65ed8d52cb095ab640097cf0fd56126b12cc9b917b3de716",
+        "semantic_master": "4095f6fcde7fbe3581b039bd470c66aa824e080b39be7b32c96cd51845e1f16c",
+        "semantic_level_seal": "ed7cd60c48b5bdc46f81563a2f2b1e18a0955d2f0b9581c3cf1587c1e14e1f27",
+        "content_hash": "bb25b5c5117e343babd1d5f470931031f843fc9ee67c0037d818792fef343c9c",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "fffe89a06822d9e4aa44b7d7bc3356b2106ac478feb8fb100736fdd6e0de1e3d"
       }
     ],
-    "merkle_root": "dd952089ac657d2d1758e3fb8e172afc9fa5e35d28da3aac59cfbc0f01475ae8",
+    "merkle_root": "404a13be9521c601a1328f5a0c4a02d2c567f5c901e58abbd59d2dd4b7bd3c55",
     "chain_sealed": false,
     "ascension_count": 0,
     "prior_merkle_roots": []
   },
   "merkle_tree": {
-    "root": "dd952089ac657d2d1758e3fb8e172afc9fa5e35d28da3aac59cfbc0f01475ae8",
-    "leaf_count": 7,
-    "tree_depth": 3,
+    "root": "404a13be9521c601a1328f5a0c4a02d2c567f5c901e58abbd59d2dd4b7bd3c55",
+    "leaf_count": 14,
+    "tree_depth": 4,
     "internal_nodes_sample": [
       {
         "left": "4d206c3a1afee2ec...",
@@ -157,9 +276,27 @@
       },
       {
         "left": "3eaa31391dfa94f3...",
-        "right": "3eaa31391dfa94f3...",
-        "parent": "b2163fffeab4d4ee...",
-        "parent_full": "b2163fffeab4d4ee411374c7bece0704f4c8ba76e2a8a7150484a6d6a7f15158"
+        "right": "fd8275f75be560c3...",
+        "parent": "00e31db259f7d58b...",
+        "parent_full": "00e31db259f7d58ba77c4eb51e53b5b399d5c1c40bbbd4e3cc8582a92cc2f803"
+      },
+      {
+        "left": "aa404187e53726c4...",
+        "right": "d8bd3e6189e7e904...",
+        "parent": "f28c7cc967e4541e...",
+        "parent_full": "f28c7cc967e4541e201766e9b54d135cdd0959c624f2561b4f23f08d283d3bd1"
+      },
+      {
+        "left": "82a2d7f93c1f5211...",
+        "right": "28da782173960f9b...",
+        "parent": "6cebc4c12e8f3fc0...",
+        "parent_full": "6cebc4c12e8f3fc02a7ab02b86659faa7814afaa0dffd6ce7f0ff6c213afa52c"
+      },
+      {
+        "left": "6683f88fef0a46c0...",
+        "right": "fffe89a06822d9e4...",
+        "parent": "c5002bed033b4449...",
+        "parent_full": "c5002bed033b44491dcb5dd3dac2b2f2dfe07bfcef5953626fc864f8b0c191bf"
       },
       {
         "left": "8a285006cba21b31...",
@@ -169,21 +306,27 @@
       },
       {
         "left": "cd6cabcfcdf4782a...",
-        "right": "b2163fffeab4d4ee...",
-        "parent": "7ae80a6d1031d215...",
-        "parent_full": "7ae80a6d1031d21526df68f0252821babbe9b3ced0303fd40b59793c65cdab5e"
+        "right": "00e31db259f7d58b...",
+        "parent": "56286ba99bb648c8...",
+        "parent_full": "56286ba99bb648c8b6a1c103a691de943b940c80a45b86e7f060a38d60045a72"
       },
       {
-        "left": "7d22912ef05b6478...",
-        "right": "7ae80a6d1031d215...",
-        "parent": "dd952089ac657d2d...",
-        "parent_full": "dd952089ac657d2d1758e3fb8e172afc9fa5e35d28da3aac59cfbc0f01475ae8"
+        "left": "f28c7cc967e4541e...",
+        "right": "6cebc4c12e8f3fc0...",
+        "parent": "a7713bf0a4064a97...",
+        "parent_full": "a7713bf0a4064a971c298cd82dbc5397cb21b39b05656bb64a3e45b88707fa49"
+      },
+      {
+        "left": "c5002bed033b4449...",
+        "right": "c5002bed033b4449...",
+        "parent": "0e58834c58246c27...",
+        "parent_full": "0e58834c58246c27a336f83abcacfdb01642921fb7e92f26fa9d53575de653bc"
       }
     ]
   },
   "chain_integrity": {
-    "hmac_sha256": "a6aeb4873bdfbbce75abc2c418b344b413834ce7eacf52e991e4876dc5027920",
+    "hmac_sha256": "8e8b9111fbe1c755876a6314058fb59c3b45ef045392efc6424bebacac61c90d",
     "signing_method": "HMAC-SHA256(SHA256(Bismillah || merkle_root), chain_json)",
-    "encoder_version": "7.0.0"
+    "encoder_version": "10.0.0"
   }
 }

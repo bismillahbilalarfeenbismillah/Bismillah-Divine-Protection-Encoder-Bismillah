@@ -1,8 +1,8 @@
 {
   "Bismillah ir-Rahman ir-Rahim": true,
-  "encoder_version": "9.0.0",
+  "encoder_version": "10.0.0",
   "file": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
-  "analyzed_at": "2026-10-20T07:37:46.898827+00:00",
+  "analyzed_at": "2026-10-20T07:51:56.252425+00:00",
   "protection_layers": {
     "hmac_sidecar": false,
     "witness_154_layer": true,

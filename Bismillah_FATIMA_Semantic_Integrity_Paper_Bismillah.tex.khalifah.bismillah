@@ -1,0 +1,42 @@
+{
+  "Bismillah ir-Rahman ir-Rahim": true,
+  "encoder_version": "10.0.0",
+  "candidate": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
+  "corpus": "divine-encoder",
+  "corpus_documents": 40,
+  "verified_at": "2026-10-20T07:52:02.661729+00:00",
+  "verification_space": "1078 = 154 x 7 = 2 x 7^2 x 11",
+  "overall_fidelity": 0.7371,
+  "verdict": {
+    "name": "KHALIFAH_ADIL",
+    "arabic": "خليفة عادل",
+    "meaning": "Just steward"
+  },
+  "fidelity_vector": {
+    "LEXICAL_FIDELITY": 1.0,
+    "SYNTACTIC_FIDELITY": 1.0,
+    "PROPOSITIONAL_FIDELITY": 1.0,
+    "RELATIONAL_FIDELITY": 1.0,
+    "RHETORICAL_FIDELITY": 0.3315,
+    "THEMATIC_FIDELITY": 0.9524,
+    "INTENTIONAL_FIDELITY": 0.6147
+  },
+  "heaven_fidelities": {
+    "heaven_1": 0.6548,
+    "heaven_2": 0.6827,
+    "heaven_3": 0.7058,
+    "heaven_4": 0.7193,
+    "heaven_5": 0.7234,
+    "heaven_6": 0.7227,
+    "heaven_7": 0.7076,
+    "heaven_8": 0.6911,
+    "heaven_9": 0.6713,
+    "heaven_10": 0.6425,
+    "heaven_11": 0.6091
+  },
+  "khalifah_seal": "1494f37a91b46d636596be5254cfe259e5011e83167b0b567f5518d7fe33238a",
+  "hmac_signature": "a35518de45dfa8c38a30f288538e43bee1a085522adc877d29666736bc4b3d58",
+  "quranic_grounding": {
+    "al_baqarah_2_30": "Indeed, I will make upon the earth a khalifah."
+  }
+}

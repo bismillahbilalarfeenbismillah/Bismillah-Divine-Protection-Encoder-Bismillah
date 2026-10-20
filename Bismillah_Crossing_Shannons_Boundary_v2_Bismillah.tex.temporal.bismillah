@@ -1,0 +1,189 @@
+{
+  "temporal_chain": {
+    "Bismillah ir-Rahman ir-Rahim": true,
+    "format_version": "7.0.0",
+    "file": "Bismillah_Crossing_Shannons_Boundary_v2_Bismillah.tex",
+    "total_events": 1,
+    "current_epoch": 1,
+    "current_checkpoint": 0,
+    "leaves": [
+      {
+        "epoch": 0,
+        "epoch_name": "AL-KHALQ (Creation)",
+        "checkpoint": 0,
+        "checkpoint_name": "LEXICAL_WITNESS",
+        "temporal_index": 0,
+        "divine_name": "Allah",
+        "divine_meaning": "The God",
+        "timestamp": "2026-10-20T07:57:14.865443+00:00",
+        "dual_witness_seal": "6807166854fec9a848736af765945c4592e9d2d927bb8494b9d4b7072ee64b44",
+        "syntactic_master": "4315d4864b2ca7cca7a1c1be2ed32d550f00f7898fcabcd843e5afe7c51e9303",
+        "semantic_master": "642f62ccaed6e0c31156a6a1aa50650f72cb39065d4473071485e3ea4a2dc662",
+        "semantic_level_seal": "c65aff393c794960f6fce0681276fa057799bd9b8e651a9126e69198ceaa43b6",
+        "content_hash": "55bad1a3ac2b5f7c34e31b161c53898ee1bd58db94972a956779cd3ea7bf5487",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "8d281a32f4c74fe06c2672910733b69b27a7fb3f6cd41f58096570d36adc3adf"
+      },
+      {
+        "epoch": 0,
+        "epoch_name": "AL-KHALQ (Creation)",
+        "checkpoint": 1,
+        "checkpoint_name": "SYNTACTIC_WITNESS",
+        "temporal_index": 1,
+        "divine_name": "Ar-Rahman",
+        "divine_meaning": "The Most Merciful",
+        "timestamp": "2026-10-20T07:57:14.865443+00:00",
+        "dual_witness_seal": "6807166854fec9a848736af765945c4592e9d2d927bb8494b9d4b7072ee64b44",
+        "syntactic_master": "4315d4864b2ca7cca7a1c1be2ed32d550f00f7898fcabcd843e5afe7c51e9303",
+        "semantic_master": "642f62ccaed6e0c31156a6a1aa50650f72cb39065d4473071485e3ea4a2dc662",
+        "semantic_level_seal": "6a588254ddfa704e03acb5adb20331d01d2320f670e6b30a16e36d30b6525178",
+        "content_hash": "55bad1a3ac2b5f7c34e31b161c53898ee1bd58db94972a956779cd3ea7bf5487",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "ee99bb0cb9cf8a9cd259b92ee28e03aa5cbda84ebeddaff6131cc5663266edda"
+      },
+      {
+        "epoch": 0,
+        "epoch_name": "AL-KHALQ (Creation)",
+        "checkpoint": 2,
+        "checkpoint_name": "PROPOSITIONAL_WITNESS",
+        "temporal_index": 2,
+        "divine_name": "Ar-Rahim",
+        "divine_meaning": "The Most Compassionate",
+        "timestamp": "2026-10-20T07:57:14.865443+00:00",
+        "dual_witness_seal": "6807166854fec9a848736af765945c4592e9d2d927bb8494b9d4b7072ee64b44",
+        "syntactic_master": "4315d4864b2ca7cca7a1c1be2ed32d550f00f7898fcabcd843e5afe7c51e9303",
+        "semantic_master": "642f62ccaed6e0c31156a6a1aa50650f72cb39065d4473071485e3ea4a2dc662",
+        "semantic_level_seal": "a8176adc87284e3a409b65249c668729d92ac610a7171fcd30ca15712af69892",
+        "content_hash": "55bad1a3ac2b5f7c34e31b161c53898ee1bd58db94972a956779cd3ea7bf5487",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "6b7463511d45ee3fa9466ebe54b54ce01c1948f92912977cee1b986cb224dd8d"
+      },
+      {
+        "epoch": 0,
+        "epoch_name": "AL-KHALQ (Creation)",
+        "checkpoint": 3,
+        "checkpoint_name": "RELATIONAL_WITNESS",
+        "temporal_index": 3,
+        "divine_name": "Al-Malik",
+        "divine_meaning": "The King",
+        "timestamp": "2026-10-20T07:57:14.865443+00:00",
+        "dual_witness_seal": "6807166854fec9a848736af765945c4592e9d2d927bb8494b9d4b7072ee64b44",
+        "syntactic_master": "4315d4864b2ca7cca7a1c1be2ed32d550f00f7898fcabcd843e5afe7c51e9303",
+        "semantic_master": "642f62ccaed6e0c31156a6a1aa50650f72cb39065d4473071485e3ea4a2dc662",
+        "semantic_level_seal": "329d48532872c2e56894f36674408ad237c6d719ced50bbc1caad2b483a30632",
+        "content_hash": "55bad1a3ac2b5f7c34e31b161c53898ee1bd58db94972a956779cd3ea7bf5487",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "663b455740d7b07d46b15efa64bc16156264a93dc1d06b370d51a19463eed868"
+      },
+      {
+        "epoch": 0,
+        "epoch_name": "AL-KHALQ (Creation)",
+        "checkpoint": 4,
+        "checkpoint_name": "RHETORICAL_WITNESS",
+        "temporal_index": 4,
+        "divine_name": "Al-Quddus",
+        "divine_meaning": "The Most Holy",
+        "timestamp": "2026-10-20T07:57:14.865443+00:00",
+        "dual_witness_seal": "6807166854fec9a848736af765945c4592e9d2d927bb8494b9d4b7072ee64b44",
+        "syntactic_master": "4315d4864b2ca7cca7a1c1be2ed32d550f00f7898fcabcd843e5afe7c51e9303",
+        "semantic_master": "642f62ccaed6e0c31156a6a1aa50650f72cb39065d4473071485e3ea4a2dc662",
+        "semantic_level_seal": "31ebeb0f8dd090efae8ef8dadf9edae4734416c58bc496e7ca1d16bada6221b8",
+        "content_hash": "55bad1a3ac2b5f7c34e31b161c53898ee1bd58db94972a956779cd3ea7bf5487",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "23224729427582baced528c1878245a70ecf92dda2268a71fb6f0e21c1ab7ac7"
+      },
+      {
+        "epoch": 0,
+        "epoch_name": "AL-KHALQ (Creation)",
+        "checkpoint": 5,
+        "checkpoint_name": "THEMATIC_WITNESS",
+        "temporal_index": 5,
+        "divine_name": "As-Salam",
+        "divine_meaning": "The Source of Peace",
+        "timestamp": "2026-10-20T07:57:14.865443+00:00",
+        "dual_witness_seal": "6807166854fec9a848736af765945c4592e9d2d927bb8494b9d4b7072ee64b44",
+        "syntactic_master": "4315d4864b2ca7cca7a1c1be2ed32d550f00f7898fcabcd843e5afe7c51e9303",
+        "semantic_master": "642f62ccaed6e0c31156a6a1aa50650f72cb39065d4473071485e3ea4a2dc662",
+        "semantic_level_seal": "c08a01afb183f86e9ab7477fd936d2010b97423b212fac67046b77ef2898fa16",
+        "content_hash": "55bad1a3ac2b5f7c34e31b161c53898ee1bd58db94972a956779cd3ea7bf5487",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "fb3491ee27951482ce1aae8d1645d37fc95f1af9bc492a0122e6f374e1837ecd"
+      },
+      {
+        "epoch": 0,
+        "epoch_name": "AL-KHALQ (Creation)",
+        "checkpoint": 6,
+        "checkpoint_name": "INTENTIONAL_WITNESS",
+        "temporal_index": 6,
+        "divine_name": "Al-Mu'min",
+        "divine_meaning": "The Guardian of Faith",
+        "timestamp": "2026-10-20T07:57:14.865443+00:00",
+        "dual_witness_seal": "6807166854fec9a848736af765945c4592e9d2d927bb8494b9d4b7072ee64b44",
+        "syntactic_master": "4315d4864b2ca7cca7a1c1be2ed32d550f00f7898fcabcd843e5afe7c51e9303",
+        "semantic_master": "642f62ccaed6e0c31156a6a1aa50650f72cb39065d4473071485e3ea4a2dc662",
+        "semantic_level_seal": "7addf77866c77f394623cb0d8b118060b1185c73d4b12b57b0e1879ee26aa820",
+        "content_hash": "55bad1a3ac2b5f7c34e31b161c53898ee1bd58db94972a956779cd3ea7bf5487",
+        "encoder_version": "10.0.0",
+        "leaf_hash": "0b63ef21aba38a5f23fcc4e11ddeb34bc1d0347ed571d61a688abb525cc11857"
+      }
+    ],
+    "merkle_root": "608fde664a59d902a7522b0a8ea9d5555a5f75878fb68630e2782f163594c5a5",
+    "chain_sealed": false,
+    "ascension_count": 0,
+    "prior_merkle_roots": []
+  },
+  "merkle_tree": {
+    "root": "608fde664a59d902a7522b0a8ea9d5555a5f75878fb68630e2782f163594c5a5",
+    "leaf_count": 7,
+    "tree_depth": 3,
+    "internal_nodes_sample": [
+      {
+        "left": "8d281a32f4c74fe0...",
+        "right": "ee99bb0cb9cf8a9c...",
+        "parent": "a58a47addb80f888...",
+        "parent_full": "a58a47addb80f8882bf4aaaabe0ed2c985290f492ab17f0f9bfed59e97c481b4"
+      },
+      {
+        "left": "6b7463511d45ee3f...",
+        "right": "663b455740d7b07d...",
+        "parent": "933a1fb17bfa4aa8...",
+        "parent_full": "933a1fb17bfa4aa8f67ef76d388e3b35a3e57872e4647f19403ed1d45dd01719"
+      },
+      {
+        "left": "23224729427582ba...",
+        "right": "fb3491ee27951482...",
+        "parent": "a98485401228b7d7...",
+        "parent_full": "a98485401228b7d72d1c702be136c88a4420ec2d37a0b49804265a6685e62a1c"
+      },
+      {
+        "left": "0b63ef21aba38a5f...",
+        "right": "0b63ef21aba38a5f...",
+        "parent": "783b739776d9ca85...",
+        "parent_full": "783b739776d9ca85e2c6c10420a8ec3fb1b2b184a6fb33c3513559986cedb9df"
+      },
+      {
+        "left": "a58a47addb80f888...",
+        "right": "933a1fb17bfa4aa8...",
+        "parent": "f6c4c9847a69add8...",
+        "parent_full": "f6c4c9847a69add8b72b9d571d0ab90f44ca9e32faca08337b9a795eec432603"
+      },
+      {
+        "left": "a98485401228b7d7...",
+        "right": "783b739776d9ca85...",
+        "parent": "fe76f89fc9581d3e...",
+        "parent_full": "fe76f89fc9581d3e20d70c3a20963c585f3d65c587d211b98feb06db4f13f58a"
+      },
+      {
+        "left": "f6c4c9847a69add8...",
+        "right": "fe76f89fc9581d3e...",
+        "parent": "608fde664a59d902...",
+        "parent_full": "608fde664a59d902a7522b0a8ea9d5555a5f75878fb68630e2782f163594c5a5"
+      }
+    ]
+  },
+  "chain_integrity": {
+    "hmac_sha256": "fcd0f14ad6417fae0dbcc67325e6b5ed3c80f31a785464ec5388179a4ad4b537",
+    "signing_method": "HMAC-SHA256(SHA256(Bismillah || merkle_root), chain_json)",
+    "encoder_version": "10.0.0"
+  }
+}

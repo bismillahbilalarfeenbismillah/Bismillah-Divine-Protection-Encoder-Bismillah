@@ -1,0 +1,42 @@
+{
+  "Bismillah ir-Rahman ir-Rahim": true,
+  "encoder_version": "10.0.0",
+  "candidate": "Bismillah_Crossing_Shannons_Boundary_v2_Bismillah.tex",
+  "corpus": "divine-encoder",
+  "corpus_documents": 48,
+  "verified_at": "2026-10-20T07:57:35.538051+00:00",
+  "verification_space": "1078 = 154 x 7 = 2 x 7^2 x 11",
+  "overall_fidelity": 0.3688,
+  "verdict": {
+    "name": "KHALIFAH_GHAFIL",
+    "arabic": "خليفة غافل",
+    "meaning": "Heedless steward"
+  },
+  "fidelity_vector": {
+    "LEXICAL_FIDELITY": 1.0,
+    "SYNTACTIC_FIDELITY": 1.0,
+    "PROPOSITIONAL_FIDELITY": 1.0,
+    "RELATIONAL_FIDELITY": 1.0,
+    "RHETORICAL_FIDELITY": 0.099,
+    "THEMATIC_FIDELITY": 0.9534,
+    "INTENTIONAL_FIDELITY": 0.2112
+  },
+  "heaven_fidelities": {
+    "heaven_1": 0.604,
+    "heaven_2": 0.6273,
+    "heaven_3": 0.6458,
+    "heaven_4": 0.6549,
+    "heaven_5": 0.6544,
+    "heaven_6": 0.6491,
+    "heaven_7": 0.6295,
+    "heaven_8": 0.6095,
+    "heaven_9": 0.5886,
+    "heaven_10": 0.5585,
+    "heaven_11": 0.524
+  },
+  "khalifah_seal": "68558f0f7751fc0f29601661da02dbe6d757ba21757202313370e655646fa91b",
+  "hmac_signature": "305cef5e3cc88f1a892cf137bec6dd2b7d3a9c81c94e71fb9e71f7eff1e55fb0",
+  "quranic_grounding": {
+    "al_baqarah_2_30": "Indeed, I will make upon the earth a khalifah."
+  }
+}

@@ -1,8 +1,8 @@
 {
   "witness": {
     "Bismillah ir-Rahman ir-Rahim": true,
-    "encoder_version": "7.0.0",
-    "architecture": "11-Heaven, 154-Layer FATIMA v7.0 -- Dual-Constant Witness with Temporal Integrity",
+    "encoder_version": "10.0.0",
+    "architecture": "11-Heaven, 154-Layer FATIMA v10.0 -- Dual-Constant Witness with Generative Integrity",
     "total_heavens": 11,
     "total_layers": 154,
     "layers_per_heaven": 14,
@@ -1007,8 +1007,8 @@
     }
   },
   "sidecar_integrity": {
-    "hmac_sha256": "ed43d8516c33e4f6c963f47706c55efbb76dd3096fbfca05606b6d6696df90f1",
+    "hmac_sha256": "eaa9024fa3e6814541dce37d1ebf1e6188a054af46861374a18ebcda877d1cb0",
     "signing_method": "HMAC-SHA256(SHA256(Bismillah || master_witness), witness_json)",
-    "encoder_version": "7.0.0"
+    "encoder_version": "10.0.0"
   }
 }
