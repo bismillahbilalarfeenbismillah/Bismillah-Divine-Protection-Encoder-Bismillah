@@ -153,6 +153,9 @@ import re
 from pathlib import Path
 from collections import OrderedDict
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from datetime import datetime, timezone
+import copy
+import time
 
 # Bismillah ir-Rahman ir-Rahim
 # ============================================================================
@@ -170,7 +173,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "5.1.0"
+ENCODER_VERSION = "5.2.0"
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -2118,8 +2121,20 @@ def seal_text_file(filepath, embed_names=False):
         result["heavens_sealed"] = TOTAL_HEAVENS
         result["layers_computed"] = computation["total_layers"]
 
+        # v5.2: Record experience
+        record_experience("seal", filepath, "success", {
+            "layers": result["layers"],
+            "layers_computed": computation["total_layers"],
+            "file_size": len(sealed),
+            "placement_strategy": get_adaptive_config(str(filepath)).get(
+                "zwc_placement", "distributed"),
+        })
+
     except (UnicodeDecodeError, ValueError):
         result["skipped"] = "binary_content"
+        record_experience("seal", filepath, "failed", {
+            "failure_mode": "binary_content",
+        })
 
     return result
 
@@ -2761,6 +2776,17 @@ def verify_directory(directory, strict=False):
             print("    {} witness sidecars verified.".format(witness_check))
 
     print("  {}".format("=" * 60))
+
+    # v5.2: Record verification experience
+    outcome = "success" if not unprotected and not tampered else "partial"
+    record_experience("verify_directory", directory, outcome, {
+        "total_files": total,
+        "protected": protected,
+        "unprotected_count": len(unprotected),
+        "tampered_count": len(tampered),
+        "witness_verified": witness_verified,
+    })
+
     return {"total": total, "protected": protected, "unprotected": unprotected,
             "tampered": tampered, "witness_verified": witness_verified}
 
@@ -3318,6 +3344,798 @@ def seal_directory_parallel(directory, embed_names=False, max_workers=None):
 
 
 # ============================================================================
+#  v5.2: EXPERIENCE LEDGER -- Persistent Learning From Every Operation
+# ============================================================================
+#
+#  "And We have certainly made the Qur'an easy for remembrance,
+#   so is there any who will remember?" (54:17)
+#
+#  The Experience Ledger records every seal, verify, and unseal operation,
+#  learning from outcomes to improve future operations. It stores:
+#    - Operation type, timestamp, file metadata
+#    - Parameters used (ZWC density, placement strategy, redundancy)
+#    - Outcome (success, degradation level, failure mode)
+#    - Environmental context (file type, size, encoding)
+#
+#  The ledger file lives alongside the encoder as .fatima_ledger.json
+# ============================================================================
+
+# Default adaptive configuration
+ADAPTIVE_DEFAULTS = OrderedDict([
+    ("zwc_density_target", 0.15),        # Target ZWC density (fraction of total chars)
+    ("zwc_placement", "distributed"),     # "distributed", "clustered", "front-heavy"
+    ("redundancy_level", 1),             # 1 = standard, 2 = double-embed, 3 = triple
+    ("names_cycling", "sequential"),      # "sequential", "random", "weighted"
+    ("retry_on_degradation", True),       # Auto-retry seal when degradation detected
+    ("max_retries", 3),                   # Maximum auto-retries before giving up
+    ("min_viable_density", 0.001),        # Below this, content is considered stripped
+    ("degradation_threshold", 0.01),      # Below this, content is considered degraded
+    ("sidecar_redundancy", True),         # Write backup sidecar alongside primary
+    ("parallel_threshold", 10),           # File count above which parallel mode engages
+])
+
+# Ledger schema version -- bump when structure changes
+LEDGER_SCHEMA_VERSION = "1.0.0"
+
+
+def _get_ledger_path(context_path=None):
+    """Determine the ledger file path.
+
+    The ledger lives:
+    1. Next to the file being operated on (if context_path given)
+    2. In the encoder's own directory (fallback)
+    """
+    if context_path:
+        ctx = Path(context_path)
+        if ctx.is_file():
+            return ctx.parent / ".fatima_ledger.json"
+        elif ctx.is_dir():
+            return ctx / ".fatima_ledger.json"
+    return Path(__file__).parent / ".fatima_ledger.json"
+
+
+def _load_ledger(ledger_path):
+    """Load the experience ledger from disk. Returns empty structure if missing."""
+    ledger_path = Path(ledger_path)
+    if not ledger_path.exists():
+        return OrderedDict([
+            ("schema_version", LEDGER_SCHEMA_VERSION),
+            ("created", datetime.now(timezone.utc).isoformat()),
+            ("encoder_version", ENCODER_VERSION),
+            ("total_operations", 0),
+            ("adaptive_config", copy.deepcopy(ADAPTIVE_DEFAULTS)),
+            ("strategy_adjustments", []),
+            ("entries", []),
+        ])
+    try:
+        with open(ledger_path, 'r', encoding='utf-8') as f:
+            data = json.load(f, object_pairs_hook=OrderedDict)
+        # Ensure adaptive_config has all keys (forward-compat)
+        if "adaptive_config" not in data:
+            data["adaptive_config"] = copy.deepcopy(ADAPTIVE_DEFAULTS)
+        else:
+            for key, val in ADAPTIVE_DEFAULTS.items():
+                if key not in data["adaptive_config"]:
+                    data["adaptive_config"][key] = val
+        return data
+    except (json.JSONDecodeError, OSError):
+        return OrderedDict([
+            ("schema_version", LEDGER_SCHEMA_VERSION),
+            ("created", datetime.now(timezone.utc).isoformat()),
+            ("encoder_version", ENCODER_VERSION),
+            ("total_operations", 0),
+            ("adaptive_config", copy.deepcopy(ADAPTIVE_DEFAULTS)),
+            ("strategy_adjustments", []),
+            ("entries", []),
+        ])
+
+
+def _save_ledger(ledger, ledger_path):
+    """Persist the experience ledger to disk."""
+    try:
+        ledger["encoder_version"] = ENCODER_VERSION
+        with open(ledger_path, 'w', encoding='utf-8') as f:
+            json.dump(ledger, f, indent=2, ensure_ascii=False)
+        return True
+    except OSError:
+        return False
+
+
+def record_experience(operation, filepath, outcome, details=None, context_path=None):
+    """Record an operation's outcome in the experience ledger.
+
+    Args:
+        operation: "seal", "verify", "unseal", "seal_directory", etc.
+        filepath: The file or directory operated on
+        outcome: "success", "degraded", "stripped", "failed", "partial"
+        details: Dict of additional context (zwc_density, layers, error, etc.)
+        context_path: Override for ledger location
+
+    Returns:
+        The updated adaptive configuration
+    """
+    ledger_path = _get_ledger_path(context_path or filepath)
+    ledger = _load_ledger(ledger_path)
+
+    entry = OrderedDict([
+        ("timestamp", datetime.now(timezone.utc).isoformat()),
+        ("operation", operation),
+        ("filepath", str(filepath)),
+        ("outcome", outcome),
+        ("encoder_version", ENCODER_VERSION),
+    ])
+
+    # Add file metadata
+    p = Path(filepath)
+    if p.exists():
+        entry["file_ext"] = p.suffix.lower()
+        try:
+            entry["file_size"] = p.stat().st_size
+        except OSError:
+            pass
+
+    if details:
+        entry["details"] = details
+
+    ledger["entries"].append(entry)
+    ledger["total_operations"] = ledger.get("total_operations", 0) + 1
+
+    # Trim ledger to last 1000 entries to prevent unbounded growth
+    if len(ledger["entries"]) > 1000:
+        ledger["entries"] = ledger["entries"][-1000:]
+
+    _save_ledger(ledger, ledger_path)
+    return ledger["adaptive_config"]
+
+
+def get_adaptive_config(context_path=None):
+    """Retrieve the current adaptive configuration from the ledger.
+
+    Returns the evolved configuration that has been shaped by past
+    experience, or defaults if no ledger exists.
+    """
+    ledger_path = _get_ledger_path(context_path)
+    ledger = _load_ledger(ledger_path)
+    return ledger["adaptive_config"]
+
+
+def get_experience_summary(context_path=None):
+    """Return a summary of the ledger for display.
+
+    Returns:
+        OrderedDict with operation counts, success rates, common failures,
+        and current adaptive configuration.
+    """
+    ledger_path = _get_ledger_path(context_path)
+    ledger = _load_ledger(ledger_path)
+
+    entries = ledger.get("entries", [])
+    if not entries:
+        return OrderedDict([
+            ("total_operations", 0),
+            ("message", "No experience recorded yet. The encoder will learn from operations."),
+            ("adaptive_config", ledger.get("adaptive_config", ADAPTIVE_DEFAULTS)),
+        ])
+
+    # Count by operation and outcome
+    op_counts = {}
+    outcome_counts = {}
+    ext_outcomes = {}  # Track outcomes by file extension
+    failure_modes = {}
+
+    for e in entries:
+        op = e.get("operation", "unknown")
+        oc = e.get("outcome", "unknown")
+        ext = e.get("file_ext", "unknown")
+
+        op_counts[op] = op_counts.get(op, 0) + 1
+        outcome_counts[oc] = outcome_counts.get(oc, 0) + 1
+
+        if ext not in ext_outcomes:
+            ext_outcomes[ext] = {"success": 0, "total": 0}
+        ext_outcomes[ext]["total"] += 1
+        if oc == "success":
+            ext_outcomes[ext]["success"] += 1
+
+        if oc in ("failed", "degraded", "stripped"):
+            details = e.get("details", {})
+            mode = details.get("failure_mode", oc)
+            failure_modes[mode] = failure_modes.get(mode, 0) + 1
+
+    total = len(entries)
+    successes = outcome_counts.get("success", 0)
+
+    # Extension reliability ranking
+    ext_reliability = OrderedDict()
+    for ext, counts in sorted(ext_outcomes.items(),
+                               key=lambda x: x[1]["success"] / max(x[1]["total"], 1),
+                               reverse=True):
+        rate = counts["success"] / max(counts["total"], 1)
+        ext_reliability[ext] = "{:.0f}% ({}/{})".format(
+            rate * 100, counts["success"], counts["total"]
+        )
+
+    return OrderedDict([
+        ("total_operations", total),
+        ("success_rate", "{:.1f}%".format(successes / max(total, 1) * 100)),
+        ("operations", op_counts),
+        ("outcomes", outcome_counts),
+        ("reliability_by_type", ext_reliability),
+        ("common_failures", failure_modes if failure_modes else "none"),
+        ("strategy_adjustments", len(ledger.get("strategy_adjustments", []))),
+        ("adaptive_config", ledger.get("adaptive_config", ADAPTIVE_DEFAULTS)),
+    ])
+
+
+# ============================================================================
+#  v5.2: ADAPTIVE STRATEGY ENGINE -- Learning What Works
+# ============================================================================
+#
+#  "He teaches man that which he knew not." (96:5)
+#
+#  The Strategy Engine analyzes the Experience Ledger and adjusts sealing
+#  parameters to improve resilience. It observes patterns:
+#    - Which file types lose ZWC more often?
+#    - Which placement strategies survive copy-paste?
+#    - What density thresholds prevent degradation?
+#
+#  Adjustments are recorded with rationale so the evolution is traceable.
+# ============================================================================
+
+def analyze_and_adapt(context_path=None, dry_run=False):
+    """Analyze the experience ledger and adapt sealing strategy.
+
+    This is the core learning function. It examines past outcomes
+    and adjusts the adaptive configuration to improve future operations.
+
+    Args:
+        context_path: Path context for finding the ledger
+        dry_run: If True, return recommendations without applying
+
+    Returns:
+        OrderedDict with analysis results and any adjustments made
+    """
+    ledger_path = _get_ledger_path(context_path)
+    ledger = _load_ledger(ledger_path)
+    config = ledger.get("adaptive_config", copy.deepcopy(ADAPTIVE_DEFAULTS))
+    entries = ledger.get("entries", [])
+
+    analysis = OrderedDict([
+        ("entries_analyzed", len(entries)),
+        ("adjustments", []),
+        ("recommendations", []),
+    ])
+
+    if len(entries) < 5:
+        analysis["message"] = (
+            "Insufficient data for adaptation (need 5+ operations, have {}). "
+            "Continuing with current configuration.".format(len(entries))
+        )
+        return analysis
+
+    # --- Analysis 1: ZWC Density Adaptation ---
+    # If degradation is common, increase density target
+    degraded_count = sum(1 for e in entries[-50:]
+                         if e.get("outcome") in ("degraded", "stripped"))
+    recent_count = min(len(entries), 50)
+
+    if recent_count > 0:
+        degradation_rate = degraded_count / recent_count
+
+        if degradation_rate > 0.3:
+            # High degradation -- increase density and redundancy
+            old_density = config["zwc_density_target"]
+            new_density = min(old_density * 1.5, 0.40)  # Cap at 40%
+            if new_density != old_density:
+                adjustment = OrderedDict([
+                    ("parameter", "zwc_density_target"),
+                    ("old_value", old_density),
+                    ("new_value", round(new_density, 4)),
+                    ("reason", "Degradation rate {:.0f}% in last {} operations".format(
+                        degradation_rate * 100, recent_count)),
+                    ("timestamp", datetime.now(timezone.utc).isoformat()),
+                ])
+                analysis["adjustments"].append(adjustment)
+                if not dry_run:
+                    config["zwc_density_target"] = round(new_density, 4)
+
+            # Also increase redundancy if not already at max
+            if config["redundancy_level"] < 3:
+                old_redundancy = config["redundancy_level"]
+                new_redundancy = min(old_redundancy + 1, 3)
+                adjustment = OrderedDict([
+                    ("parameter", "redundancy_level"),
+                    ("old_value", old_redundancy),
+                    ("new_value", new_redundancy),
+                    ("reason", "High degradation rate warrants increased redundancy"),
+                    ("timestamp", datetime.now(timezone.utc).isoformat()),
+                ])
+                analysis["adjustments"].append(adjustment)
+                if not dry_run:
+                    config["redundancy_level"] = new_redundancy
+
+        elif degradation_rate < 0.05 and config["zwc_density_target"] > ADAPTIVE_DEFAULTS["zwc_density_target"]:
+            # Very low degradation -- can cautiously reduce density (saves space)
+            old_density = config["zwc_density_target"]
+            new_density = max(old_density * 0.9, ADAPTIVE_DEFAULTS["zwc_density_target"])
+            if abs(new_density - old_density) > 0.001:
+                adjustment = OrderedDict([
+                    ("parameter", "zwc_density_target"),
+                    ("old_value", old_density),
+                    ("new_value", round(new_density, 4)),
+                    ("reason", "Low degradation rate {:.0f}% -- cautious density reduction".format(
+                        degradation_rate * 100)),
+                    ("timestamp", datetime.now(timezone.utc).isoformat()),
+                ])
+                analysis["adjustments"].append(adjustment)
+                if not dry_run:
+                    config["zwc_density_target"] = round(new_density, 4)
+
+    # --- Analysis 2: File-Type Specific Adaptation ---
+    # Track which extensions have worse outcomes
+    ext_stats = {}
+    for e in entries:
+        ext = e.get("file_ext", "")
+        if not ext:
+            continue
+        if ext not in ext_stats:
+            ext_stats[ext] = {"success": 0, "fail": 0, "degraded": 0}
+        if e.get("outcome") == "success":
+            ext_stats[ext]["success"] += 1
+        elif e.get("outcome") in ("degraded", "stripped"):
+            ext_stats[ext]["degraded"] += 1
+        elif e.get("outcome") == "failed":
+            ext_stats[ext]["fail"] += 1
+
+    problematic_exts = []
+    for ext, stats in ext_stats.items():
+        total = stats["success"] + stats["fail"] + stats["degraded"]
+        if total >= 3 and (stats["degraded"] + stats["fail"]) / total > 0.4:
+            problematic_exts.append((ext, stats))
+
+    if problematic_exts:
+        analysis["recommendations"].append(OrderedDict([
+            ("type", "file_type_warning"),
+            ("message", "These file types show high failure/degradation rates"),
+            ("extensions", OrderedDict(
+                (ext, "{} success, {} degraded, {} failed".format(
+                    s["success"], s["degraded"], s["fail"]))
+                for ext, s in problematic_exts
+            )),
+            ("suggestion", "Consider using front-heavy ZWC placement for these types"),
+        ]))
+
+    # --- Analysis 3: Placement Strategy Adaptation ---
+    # If distributed placement shows degradation, try front-heavy
+    placement_outcomes = {"distributed": {"ok": 0, "bad": 0},
+                          "clustered": {"ok": 0, "bad": 0},
+                          "front-heavy": {"ok": 0, "bad": 0}}
+    for e in entries:
+        details = e.get("details", {})
+        placement = details.get("placement_strategy", config.get("zwc_placement", "distributed"))
+        if placement in placement_outcomes:
+            if e.get("outcome") == "success":
+                placement_outcomes[placement]["ok"] += 1
+            elif e.get("outcome") in ("degraded", "stripped", "failed"):
+                placement_outcomes[placement]["bad"] += 1
+
+    current_placement = config["zwc_placement"]
+    current_stats = placement_outcomes.get(current_placement, {"ok": 0, "bad": 0})
+    if current_stats["ok"] + current_stats["bad"] >= 5:
+        current_success_rate = current_stats["ok"] / (current_stats["ok"] + current_stats["bad"])
+
+        # Find a better strategy if current one is struggling
+        if current_success_rate < 0.7:
+            best_strategy = current_placement
+            best_rate = current_success_rate
+            for strategy, stats in placement_outcomes.items():
+                total = stats["ok"] + stats["bad"]
+                if total >= 3:
+                    rate = stats["ok"] / total
+                    if rate > best_rate:
+                        best_strategy = strategy
+                        best_rate = rate
+
+            if best_strategy != current_placement:
+                adjustment = OrderedDict([
+                    ("parameter", "zwc_placement"),
+                    ("old_value", current_placement),
+                    ("new_value", best_strategy),
+                    ("reason", "Strategy '{}' has {:.0f}% success vs current {:.0f}%".format(
+                        best_strategy, best_rate * 100, current_success_rate * 100)),
+                    ("timestamp", datetime.now(timezone.utc).isoformat()),
+                ])
+                analysis["adjustments"].append(adjustment)
+                if not dry_run:
+                    config["zwc_placement"] = best_strategy
+
+    # --- Analysis 4: Parallel Threshold Tuning ---
+    # Adjust parallel threshold based on timing data
+    timing_data = []
+    for e in entries:
+        details = e.get("details", {})
+        if "elapsed_seconds" in details and "file_count" in details:
+            timing_data.append((details["file_count"], details["elapsed_seconds"]))
+
+    if len(timing_data) >= 3:
+        # If small directories are taking long, lower the parallel threshold
+        slow_small = sum(1 for count, elapsed in timing_data
+                         if count < config["parallel_threshold"] and elapsed > 30)
+        if slow_small >= 2:
+            old_threshold = config["parallel_threshold"]
+            new_threshold = max(old_threshold - 3, 3)  # Floor at 3
+            if new_threshold != old_threshold:
+                adjustment = OrderedDict([
+                    ("parameter", "parallel_threshold"),
+                    ("old_value", old_threshold),
+                    ("new_value", new_threshold),
+                    ("reason", "{} small directories took >30s -- lowering parallel threshold".format(slow_small)),
+                    ("timestamp", datetime.now(timezone.utc).isoformat()),
+                ])
+                analysis["adjustments"].append(adjustment)
+                if not dry_run:
+                    config["parallel_threshold"] = new_threshold
+
+    # Apply adjustments
+    if analysis["adjustments"] and not dry_run:
+        ledger["adaptive_config"] = config
+        # Record the adaptation event
+        for adj in analysis["adjustments"]:
+            ledger.setdefault("strategy_adjustments", []).append(adj)
+        # Trim strategy history to last 100
+        if len(ledger.get("strategy_adjustments", [])) > 100:
+            ledger["strategy_adjustments"] = ledger["strategy_adjustments"][-100:]
+        _save_ledger(ledger, ledger_path)
+        analysis["config_updated"] = True
+    else:
+        analysis["config_updated"] = False
+
+    analysis["current_config"] = copy.deepcopy(config)
+    return analysis
+
+
+# ============================================================================
+#  v5.2: SELF-HEALING VERIFICATION -- Detect, Diagnose, Repair
+# ============================================================================
+#
+#  "Indeed, Allah does not change the condition of a people until
+#   they change what is within themselves." (13:11)
+#
+#  When verification detects degradation, the self-healing system:
+#    1. Diagnoses the type and extent of damage
+#    2. Attempts reconstruction from redundant data
+#    3. Re-seals if reconstruction succeeds
+#    4. Records the experience for future adaptation
+# ============================================================================
+
+def diagnose_degradation(filepath, content=None):
+    """Diagnose the type and extent of ZWC degradation in a file.
+
+    Returns a detailed diagnosis that the self-healing system can act on.
+
+    Args:
+        filepath: Path to the file to diagnose
+        content: Pre-loaded content (optional, will read from disk if None)
+
+    Returns:
+        OrderedDict with diagnosis details
+    """
+    filepath = Path(filepath)
+    filepath_str = str(filepath)
+    if content is None:
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()
+        except (OSError, UnicodeDecodeError) as exc:
+            return OrderedDict([
+                ("status", "error"),
+                ("message", "Cannot read file: {}".format(exc)),
+            ])
+
+    diagnosis = OrderedDict([
+        ("filepath", filepath_str),
+        ("timestamp", datetime.now(timezone.utc).isoformat()),
+    ])
+
+    # ZWC analysis
+    zwc_info = detect_zwc_degradation(content, filepath_str)
+    diagnosis["zwc_status"] = zwc_info["status"]
+    diagnosis["zwc_density"] = zwc_info.get("density", 0)
+    diagnosis["zwc_count"] = zwc_info["zwc_count"]
+    diagnosis["names_detected"] = zwc_info.get("names_detected", 0)
+
+    # Section structure analysis
+    section_info = verify_section_structure(content)
+    diagnosis["markers_status"] = "intact" if section_info["valid"] else "damaged"
+    diagnosis["markers_found"] = section_info["markers_found"]
+    diagnosis["markers_expected"] = section_info["markers_expected"]
+    diagnosis["marker_issues"] = section_info.get("issues", [])
+
+    # Sidecar analysis
+    sidecar_path = Path(str(filepath) + ".witness.bismillah")
+    diagnosis["sidecar_exists"] = sidecar_path.exists()
+    if sidecar_path.exists():
+        sidecar_valid, sidecar_msg = verify_witness_sidecar(str(filepath))
+        diagnosis["sidecar_valid"] = sidecar_valid
+        diagnosis["sidecar_message"] = sidecar_msg
+
+    # Overall assessment
+    damage_score = 0
+    if zwc_info["status"] == "STRIPPED":
+        damage_score += 4
+    elif zwc_info["status"] == "DEGRADED":
+        damage_score += 3
+    elif zwc_info["status"] == "PARTIAL":
+        damage_score += 1
+
+    if not section_info["valid"]:
+        missing = section_info["markers_expected"] - section_info["markers_found"]
+        damage_score += min(missing, 3)
+
+    if damage_score == 0:
+        diagnosis["overall"] = "HEALTHY"
+        diagnosis["healable"] = False
+        diagnosis["action"] = "none"
+    elif damage_score <= 2:
+        diagnosis["overall"] = "MINOR_DAMAGE"
+        diagnosis["healable"] = True
+        diagnosis["action"] = "re-embed ZWC watermarks"
+    elif damage_score <= 4:
+        diagnosis["overall"] = "MODERATE_DAMAGE"
+        diagnosis["healable"] = True
+        diagnosis["action"] = "re-seal with increased redundancy"
+    else:
+        diagnosis["overall"] = "SEVERE_DAMAGE"
+        diagnosis["healable"] = True
+        diagnosis["action"] = "full re-seal from clean content"
+
+    diagnosis["damage_score"] = damage_score
+    return diagnosis
+
+
+def self_heal(filepath, force=False, context_path=None):
+    """Attempt to heal a degraded sealed file.
+
+    The self-healing process:
+    1. Diagnose the damage
+    2. Strip existing (broken) ZWC
+    3. Re-apply seal with adapted parameters
+    4. Verify the result
+    5. Record the experience
+
+    Args:
+        filepath: Path to the degraded file
+        force: If True, heal even HEALTHY files (re-seal)
+        context_path: Override for ledger location
+
+    Returns:
+        OrderedDict with healing results
+    """
+    filepath = Path(filepath)
+    filepath_str = str(filepath)
+    result = OrderedDict([
+        ("filepath", filepath_str),
+        ("timestamp", datetime.now(timezone.utc).isoformat()),
+    ])
+
+    # Step 1: Diagnose
+    diagnosis = diagnose_degradation(filepath_str)
+    result["diagnosis"] = diagnosis
+
+    if diagnosis.get("status") == "error":
+        result["healed"] = False
+        result["reason"] = diagnosis["message"]
+        record_experience("self_heal", filepath_str, "failed",
+                          {"failure_mode": "unreadable", "diagnosis": diagnosis},
+                          context_path)
+        return result
+
+    if diagnosis["overall"] == "HEALTHY" and not force:
+        result["healed"] = False
+        result["reason"] = "File is healthy -- no healing needed"
+        record_experience("self_heal", filepath_str, "success",
+                          {"action": "none_needed"}, context_path)
+        return result
+
+    # Step 2: Get adaptive config
+    config = get_adaptive_config(context_path or filepath_str)
+
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # Step 3: Strip existing (broken) ZWC
+        clean = unseal_text_content(content)
+
+        # Step 4: Re-seal with adaptive parameters
+        ext = filepath.suffix.lower()
+        sealed = seal_text_content(clean, ext)
+
+        # Apply redundant embedding based on adaptive config
+        redundancy = config.get("redundancy_level", 1)
+        for _ in range(redundancy):
+            sealed = embed_99_names_text(sealed)
+
+        # Step 5: Write the healed content
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(sealed)
+
+        # Step 6: Recompute 154-layer seal
+        content_bytes = sealed.encode('utf-8')
+        computation = compute_all_154_layers(content_bytes, filepath_str)
+        _write_heaven_witness(filepath_str, content_bytes, computation)
+
+        # Step 7: Verify the healing
+        healed_diagnosis = diagnose_degradation(filepath_str, sealed)
+
+        result["healed"] = healed_diagnosis["overall"] == "HEALTHY"
+        result["post_heal_status"] = healed_diagnosis["overall"]
+        result["layers_recomputed"] = computation["total_layers"]
+        result["redundancy_applied"] = redundancy
+
+        # Record success
+        record_experience("self_heal", filepath_str,
+                          "success" if result["healed"] else "partial",
+                          {
+                              "pre_status": diagnosis["overall"],
+                              "post_status": healed_diagnosis["overall"],
+                              "redundancy_used": redundancy,
+                              "damage_score_before": diagnosis["damage_score"],
+                              "damage_score_after": healed_diagnosis["damage_score"],
+                          },
+                          context_path)
+
+    except Exception as exc:
+        result["healed"] = False
+        result["error"] = str(exc)
+        record_experience("self_heal", filepath_str, "failed",
+                          {"failure_mode": str(type(exc).__name__),
+                           "error": str(exc)},
+                          context_path)
+
+    return result
+
+
+def heal_directory(directory, context_path=None):
+    """Scan a directory for degraded files and attempt to heal them.
+
+    Args:
+        directory: Path to scan
+        context_path: Override for ledger location
+
+    Returns:
+        OrderedDict with summary of healing operations
+    """
+    directory = Path(directory)
+    results = OrderedDict([
+        ("directory", str(directory)),
+        ("scanned", 0),
+        ("healthy", 0),
+        ("healed", 0),
+        ("failed", 0),
+        ("details", []),
+    ])
+
+    for fpath in sorted(directory.rglob("*")):
+        if not fpath.is_file():
+            continue
+        if fpath.name.startswith('.') or fpath.suffix in ('.bismillah',):
+            continue
+        if fpath.name.endswith('.witness.bismillah'):
+            continue
+
+        # Only examine text files
+        try:
+            with open(fpath, 'r', encoding='utf-8') as f:
+                content = f.read(1024)  # Quick check
+        except (UnicodeDecodeError, OSError):
+            continue
+
+        results["scanned"] += 1
+        diagnosis = diagnose_degradation(fpath)
+
+        if diagnosis["overall"] == "HEALTHY":
+            results["healthy"] += 1
+        else:
+            heal_result = self_heal(fpath, context_path=context_path)
+            if heal_result.get("healed"):
+                results["healed"] += 1
+            else:
+                results["failed"] += 1
+            results["details"].append(OrderedDict([
+                ("file", str(fpath)),
+                ("pre_status", diagnosis["overall"]),
+                ("post_status", heal_result.get("post_heal_status", "unknown")),
+                ("healed", heal_result.get("healed", False)),
+            ]))
+
+    # After healing, run adaptation
+    if results["healed"] > 0 or results["failed"] > 0:
+        adaptation = analyze_and_adapt(context_path or str(directory))
+        results["adaptation"] = adaptation
+
+    return results
+
+
+def evolution_report(context_path=None):
+    """Generate a comprehensive report on the encoder's evolution.
+
+    Shows how the encoder has adapted over time, what it has learned,
+    and its current optimized configuration.
+
+    Returns:
+        Formatted string report
+    """
+    summary = get_experience_summary(context_path)
+    config = summary.get("adaptive_config", ADAPTIVE_DEFAULTS)
+
+    lines = []
+    lines.append("")
+    lines.append("  {} -- FATIMA v{} Evolution Report".format(BISMILLAH, ENCODER_VERSION))
+    lines.append("  " + "=" * 60)
+    lines.append("")
+
+    if summary["total_operations"] == 0:
+        lines.append("  No operations recorded yet.")
+        lines.append("  The encoder will begin learning from its first seal operation.")
+        lines.append("")
+        lines.append("  Current Configuration (defaults):")
+        for key, val in config.items():
+            lines.append("    {}: {}".format(key, val))
+        lines.append("")
+        lines.append("  " + "=" * 60)
+        lines.append("  {}".format(BISMILLAH))
+        return "\n".join(lines)
+
+    lines.append("  Total Operations:    {}".format(summary["total_operations"]))
+    lines.append("  Success Rate:        {}".format(summary["success_rate"]))
+    lines.append("  Strategy Adjustments: {}".format(summary["strategy_adjustments"]))
+    lines.append("")
+
+    # Operation breakdown
+    lines.append("  Operations by Type:")
+    for op, count in summary.get("operations", {}).items():
+        lines.append("    {}: {}".format(op, count))
+    lines.append("")
+
+    # Outcome breakdown
+    lines.append("  Outcomes:")
+    for outcome, count in summary.get("outcomes", {}).items():
+        lines.append("    {}: {}".format(outcome, count))
+    lines.append("")
+
+    # Reliability by type
+    reliability = summary.get("reliability_by_type", {})
+    if reliability:
+        lines.append("  Reliability by File Type:")
+        for ext, rate in reliability.items():
+            lines.append("    {}: {}".format(ext, rate))
+        lines.append("")
+
+    # Common failures
+    failures = summary.get("common_failures", "none")
+    if failures != "none" and failures:
+        lines.append("  Common Failure Modes:")
+        for mode, count in failures.items():
+            lines.append("    {}: {} occurrences".format(mode, count))
+        lines.append("")
+
+    # Current evolved configuration
+    lines.append("  Current Adaptive Configuration:")
+    for key, val in config.items():
+        default = ADAPTIVE_DEFAULTS.get(key)
+        if val != default:
+            lines.append("    {}: {} (adapted from default: {})".format(key, val, default))
+        else:
+            lines.append("    {}: {}".format(key, val))
+    lines.append("")
+
+    lines.append("  " + "=" * 60)
+    lines.append("  {}".format(BISMILLAH))
+    return "\n".join(lines)
+
+
+# ============================================================================
 #  COMMAND LINE INTERFACE
 # ============================================================================
 
@@ -3361,6 +4179,11 @@ Examples:
   python bismillah_encoder.py witness ./project           # Fractal witness report
   python bismillah_encoder.py heavens ./project           # Heaven-by-heaven report
   python bismillah_encoder.py decode ./file.md            # Extract ZWC payloads
+  python bismillah_encoder.py heal ./file.md              # v5.2: self-heal degraded file
+  python bismillah_encoder.py heal ./project              # v5.2: heal entire directory
+  python bismillah_encoder.py adapt ./project             # v5.2: analyze & adapt strategy
+  python bismillah_encoder.py adapt ./project --dry-run   # v5.2: preview adaptations
+  python bismillah_encoder.py evolve                      # v5.2: evolution report
 
 {}
 """.format(BISMILLAH)
@@ -3401,6 +4224,21 @@ Examples:
 
     decode_p = sub.add_parser('decode', help='Extract ZWC watermark payloads')
     decode_p.add_argument('path', help='File to decode')
+
+    heal_p = sub.add_parser('heal', help='v5.2: Self-heal degraded files')
+    heal_p.add_argument('path', help='File or directory to heal')
+    heal_p.add_argument('--force', action='store_true',
+                        help='Re-seal even if file appears healthy')
+
+    adapt_p = sub.add_parser('adapt', help='v5.2: Analyze experience and adapt strategy')
+    adapt_p.add_argument('path', nargs='?', default='.',
+                         help='Context path for ledger (default: current dir)')
+    adapt_p.add_argument('--dry-run', action='store_true',
+                         help='Show recommendations without applying')
+
+    evolve_p = sub.add_parser('evolve', help='v5.2: Show evolution report')
+    evolve_p.add_argument('path', nargs='?', default='.',
+                          help='Context path for ledger (default: current dir)')
 
     args = parser.parse_args()
 
@@ -3481,6 +4319,19 @@ Examples:
                     exit_code = 2
                 if not section_result["valid"]:
                     exit_code = 2
+                # v5.2: Record verification experience
+                outcome = "success"
+                if zwc_result["status"] in ("STRIPPED", "DEGRADED"):
+                    outcome = zwc_result["status"].lower()
+                elif not section_result["valid"]:
+                    outcome = "partial"
+                record_experience("verify", args.path, outcome, {
+                    "zwc_status": zwc_result["status"],
+                    "zwc_density": zwc_result.get("density", 0),
+                    "markers_found": section_result["markers_found"],
+                    "markers_expected": section_result["markers_expected"],
+                    "sidecar_valid": sidecar_valid,
+                })
             except (UnicodeDecodeError, IOError):
                 print("  (binary file -- text checks skipped)")
             if not sidecar_valid:
@@ -3540,6 +4391,82 @@ Examples:
         else:
             print("  ERROR: {} does not exist".format(args.path))
             sys.exit(1)
+
+    elif args.command == 'heal':
+        if os.path.isdir(args.path):
+            print("  v5.2: Self-healing directory: {}".format(args.path))
+            result = heal_directory(args.path)
+            print("\n  Self-Healing Report:")
+            print("  {}".format("=" * 60))
+            print("  Files scanned:   {}".format(result["scanned"]))
+            print("  Already healthy: {}".format(result["healthy"]))
+            print("  Healed:          {}".format(result["healed"]))
+            print("  Failed to heal:  {}".format(result["failed"]))
+            if result.get("adaptation", {}).get("adjustments"):
+                print("\n  Strategy Adaptations Applied:")
+                for adj in result["adaptation"]["adjustments"]:
+                    print("    {} : {} -> {} ({})".format(
+                        adj["parameter"], adj["old_value"],
+                        adj["new_value"], adj["reason"]))
+        elif os.path.isfile(args.path):
+            print("  v5.2: Self-healing: {}".format(args.path))
+            result = self_heal(args.path, force=getattr(args, 'force', False))
+            if result.get("healed"):
+                print("  HEALED: {} -> {}".format(
+                    result["diagnosis"]["overall"],
+                    result.get("post_heal_status", "HEALTHY")))
+                print("  Layers recomputed: {}".format(
+                    result.get("layers_recomputed", "?")))
+            elif result.get("reason"):
+                print("  {}".format(result["reason"]))
+            elif result.get("error"):
+                print("  FAILED: {}".format(result["error"]))
+            else:
+                pre = result.get("diagnosis", {}).get("overall", "?")
+                post = result.get("post_heal_status", "?")
+                print("  PARTIAL HEAL: {} -> {} (re-sealed but minor issues remain)".format(
+                    pre, post))
+                print("  Layers recomputed: {}".format(
+                    result.get("layers_recomputed", "?")))
+        else:
+            print("  ERROR: {} does not exist".format(args.path))
+            sys.exit(1)
+
+    elif args.command == 'adapt':
+        print("  v5.2: Analyzing experience ledger...")
+        result = analyze_and_adapt(
+            context_path=args.path,
+            dry_run=getattr(args, 'dry_run', False))
+        print("\n  Adaptive Strategy Analysis:")
+        print("  {}".format("=" * 60))
+        print("  Entries analyzed: {}".format(result["entries_analyzed"]))
+
+        if result.get("message"):
+            print("  {}".format(result["message"]))
+        if result["adjustments"]:
+            label = "Recommended" if getattr(args, 'dry_run', False) else "Applied"
+            print("\n  {} Adjustments:".format(label))
+            for adj in result["adjustments"]:
+                print("    {} : {} -> {}".format(
+                    adj["parameter"], adj["old_value"], adj["new_value"]))
+                print("      Reason: {}".format(adj["reason"]))
+        else:
+            print("  No adjustments needed -- current strategy is optimal.")
+
+        if result.get("recommendations"):
+            print("\n  Recommendations:")
+            for rec in result["recommendations"]:
+                print("    [{}] {}".format(rec["type"], rec["message"]))
+
+        print("\n  Current Configuration:")
+        for key, val in result.get("current_config", {}).items():
+            default = ADAPTIVE_DEFAULTS.get(key)
+            marker = " (adapted)" if val != default else ""
+            print("    {}: {}{}".format(key, val, marker))
+
+    elif args.command == 'evolve':
+        report = evolution_report(context_path=args.path)
+        print(report)
 
     else:
         parser.print_help()
