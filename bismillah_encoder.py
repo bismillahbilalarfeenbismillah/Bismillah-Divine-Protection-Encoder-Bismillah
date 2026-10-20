@@ -174,7 +174,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "5.3.0"
+ENCODER_VERSION = "5.3.1"
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -2107,6 +2107,12 @@ def seal_text_file(filepath, embed_names=False, muraqabah=True):
         sealed = seal_text_content(content, ext)
         result["layers"].append("SURFACE_VISIBLE")
 
+        # v5.3: Embed Muraqabah Preamble BEFORE 99 Names ZWC encoding
+        # (ZWC chars inserted between letters would break Bismillah detection)
+        if muraqabah and not is_code_file(ext):
+            sealed = embed_muraqabah_preamble(sealed, filepath, ext=ext)
+            result["layers"].append("MURAQABAH_PREAMBLE")
+
         if is_code_file(ext):
             if embed_names:
                 sealed = embed_99_names_code(sealed, ext)
@@ -2116,11 +2122,6 @@ def seal_text_file(filepath, embed_names=False, muraqabah=True):
             if embed_names:
                 sealed = embed_99_names_text(sealed)
                 result["layers"].append("SURFACE_99_NAMES_ZWC")
-
-        # v5.3: Embed Muraqabah Preamble for non-code text files
-        if muraqabah and not is_code_file(ext):
-            sealed = embed_muraqabah_preamble(sealed, filepath, ext=ext)
-            result["layers"].append("MURAQABAH_PREAMBLE")
 
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(sealed)
@@ -4452,8 +4453,12 @@ def embed_muraqabah_preamble(content, filepath, ext=None,
         result_lines.append(line)
 
         # Insert preamble right after the opening Bismillah
+        # Strip ZWC chars for detection (defensive: handles pre-encoded text)
+        clean_line = line.lower().replace('-', '')
+        for zc in ('​', '‌', '‍', '﻿'):
+            clean_line = clean_line.replace(zc, '')
         if (not preamble_inserted
-                and 'bismillah' in line.lower().replace('-', '')
+                and 'bismillah' in clean_line
                 and i < 5):
             if include_visible:
                 result_lines.append(preamble["visible"])
@@ -4475,7 +4480,10 @@ def embed_muraqabah_preamble(content, filepath, ext=None,
         result_lines = []
         last_bismillah_idx = -1
         for i in range(len(final_lines) - 1, -1, -1):
-            if 'bismillah' in final_lines[i].lower().replace('-', ''):
+            check_line = final_lines[i].lower().replace('-', '')
+            for zc in ('​', '‌', '‍', '﻿'):
+                check_line = check_line.replace(zc, '')
+            if 'bismillah' in check_line:
                 last_bismillah_idx = i
                 break
 
