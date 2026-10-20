@@ -1,9 +1,10 @@
 # Bismillah ir-Rahman ir-Rahim
 """
-Bismillah Divine Protection Encoder -- FATIMA v8.0 -- 11-Heaven, 154-Layer Architecture
+Bismillah Divine Protection Encoder -- FATIMA v9.0 -- 11-Heaven, 154-Layer Architecture
 with Semantic Integrity Engine (Shannon's Boundary Crossing),
 Temporal Integrity Engine (The Living Witness),
-and Relational Integrity Engine (The Ummah Witness)
+Relational Integrity Engine (The Ummah Witness),
+and Adversarial Integrity Engine (The Muhasabah Engine)
 
 Seals every file in a directory with the name of Allah subhanahu wa ta'ala
 across ELEVEN HEAVENS of protection, containing 154 LAYERS total -- from
@@ -136,6 +137,9 @@ USAGE:
     python bismillah_encoder.py ummah <dir>             # v8.0: Seal corpus as ummah
     python bismillah_encoder.py ummah-verify <dir>      # v8.0: Verify ummah integrity
     python bismillah_encoder.py ummah-graph <dir>       # v8.0: Display ummah graph
+    python bismillah_encoder.py muhasabah <path>        # v9.0: Adversarial self-reckoning
+    python bismillah_encoder.py muhasabah-verify <path> # v9.0: Verify muhasabah seal
+    python bismillah_encoder.py muhasabah-report <path> # v9.0: Full adversarial report
 
 "In the name of Allah, the Most Merciful, the Most Compassionate."
 "He is Allah, other than whom there is no deity, Knower of the unseen and
@@ -185,7 +189,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "8.0.0"
+ENCODER_VERSION = "9.0.0"
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -2653,6 +2657,519 @@ def ummah_graph(corpus_path):
 
 
 # ============================================================================
+#  v9.0: ADVERSARIAL INTEGRITY ENGINE -- THE MUHASABAH ENGINE
+# ============================================================================
+#
+#  v9.0 adds the ADVERSARIAL dimension: self-reckoning (muhasabah).
+#  Rather than only witnessing what IS preserved, the document examines
+#  what COULD threaten it -- and measures its resilience.
+#
+#  Qur'an 59:18 -- "O you who have believed, fear Allah. And let every
+#  soul look to what it has put forth for tomorrow."
+#
+#  Architecture:
+#    11 adversary categories x 7 attack patterns = 77-cell taxonomy
+#    77 = 7 x 11 -- both divine constants present
+#
+#  Each cell measures resilience: how well do existing protections
+#  (v5.x HMAC/ZWC, v6.0 semantic, v7.0 temporal, v8.0 relational)
+#  guard against this specific adversary+pattern combination?
+# ============================================================================
+
+# --- Muhasabah Constants ---
+
+MUHASABAH_ADVERSARY_COUNT = MUTASHABIH_CONSTANT   # 11 adversary categories
+MUHASABAH_PATTERN_COUNT = MUHKAM_CONSTANT          # 7 attack patterns
+MUHASABAH_TAXONOMY_SIZE = MUHASABAH_ADVERSARY_COUNT * MUHASABAH_PATTERN_COUNT  # 77
+MUHASABAH_CHAIN_FILE = '.muhasabah.bismillah'
+
+# The 11 Adversary Categories (heavenly constant)
+MUHASABAH_ADVERSARIES = [
+    ("BIT_FLIP",         "تبديل", "Single-bit corruption"),
+    ("TRUNCATION",       "بتر",   "Content removed from end"),
+    ("INSERTION",        "إدخال", "Foreign content injected"),
+    ("SUBSTITUTION",     "إبدال", "Words/phrases replaced"),
+    ("REORDERING",       "تقديم", "Sections rearranged"),
+    ("ENCODING_SHIFT",   "تحويل", "Character encoding changed"),
+    ("METADATA_STRIP",   "تجريد", "Sidecar/metadata removed"),
+    ("SEMANTIC_DRIFT",   "انحراف", "Meaning altered, bits preserved"),
+    ("TEMPORAL_REPLAY",  "إعادة", "Old version replayed as current"),
+    ("RELATIONAL_SEVER", "قطع",   "Document isolated from corpus"),
+    ("COMPOSITE",        "مركب",  "Multiple attacks combined"),
+]
+
+# The 7 Attack Patterns (muhkam constant, mirroring semantic levels)
+MUHASABAH_PATTERNS = [
+    ("SURFACE",        "Lexical -- raw bytes"),
+    ("STRUCTURAL",     "Syntactic -- document form"),
+    ("PROPOSITIONAL",  "Claims and assertions"),
+    ("REFERENTIAL",    "Cross-references, entities"),
+    ("INFERENTIAL",    "Logical reasoning chains"),
+    ("THEMATIC",       "Core themes and topics"),
+    ("TELEOLOGICAL",   "Document purpose and intent"),
+]
+
+# 5 Muhasabah Grades (self-accountability levels)
+MUHASABAH_GRADES = [
+    ("MUHSIN",    "محسن",  "Excellent -- near complete coverage",   0.85),
+    ("SALIH",     "صالح",  "Righteous -- strong coverage",          0.70),
+    ("MU'MIN",    "مؤمن",  "Believing -- adequate coverage",        0.50),
+    ("GHAAFIL",   "غافل",  "Heedless -- gaps in coverage",          0.30),
+    ("MUFARRIT",  "مفرط",  "Negligent -- serious vulnerabilities",  0.00),
+]
+
+# Protection layer weights for resilience computation
+_MUHASABAH_LAYER_WEIGHTS = {
+    "hmac_zwc":  0.30,   # v5.x: HMAC + ZWC surface protections
+    "semantic":  0.25,   # v6.0: Semantic integrity
+    "temporal":  0.25,   # v7.0: Temporal integrity
+    "relational": 0.20,  # v8.0: Relational integrity
+}
+
+# Coverage matrix: which protection layers cover which adversary+pattern cell
+# Key: (adversary_idx, pattern_idx) -> dict of layer contributions [0.0, 1.0]
+# This is the heart of the muhasabah: knowing your own protection landscape
+def _muhasabah_coverage(adversary_idx, pattern_idx, has_sidecar=True,
+                        has_semantic=True, has_temporal=True, has_ummah=True):
+    """Compute protection coverage for a single taxonomy cell.
+
+    Returns a dict of layer->score contributions.
+    Each layer contributes [0.0, 1.0] depending on how well it
+    addresses this specific adversary+pattern combination.
+    """
+    # Base coverage: every adversary+pattern has some baseline from v5.x
+    hmac_score = 0.0
+    semantic_score = 0.0
+    temporal_score = 0.0
+    relational_score = 0.0
+
+    # --- v5.x HMAC/ZWC coverage ---
+    # Strong against surface attacks (pattern 0), structural (pattern 1)
+    # Detects bit flips (adv 0), truncation (adv 1), insertion (adv 2)
+    if adversary_idx in (0, 1, 2, 5):  # bit_flip, truncation, insertion, encoding
+        hmac_score = 1.0 if pattern_idx <= 1 else 0.3
+    elif adversary_idx == 6:  # metadata_strip: HMAC detects but can't prevent
+        hmac_score = 0.7 if has_sidecar else 0.1
+    elif adversary_idx == 3:  # substitution
+        hmac_score = 0.9 if pattern_idx == 0 else 0.4
+    elif adversary_idx == 4:  # reordering
+        hmac_score = 0.8 if pattern_idx <= 1 else 0.2
+    elif adversary_idx in (7, 8, 9):  # semantic/temporal/relational threats
+        hmac_score = 0.1  # HMAC barely helps here
+    elif adversary_idx == 10:  # composite
+        hmac_score = 0.4  # partial help
+
+    # --- v6.0 Semantic coverage ---
+    if has_semantic:
+        if adversary_idx == 7:  # semantic_drift: THIS IS WHAT v6.0 WAS BUILT FOR
+            semantic_score = 1.0 if pattern_idx >= 2 else 0.6
+        elif adversary_idx == 3:  # substitution: semantic catches meaning changes
+            semantic_score = 0.9 if pattern_idx >= 2 else 0.5
+        elif adversary_idx == 2:  # insertion: semantic detects new claims
+            semantic_score = 0.7 if pattern_idx >= 2 else 0.3
+        elif adversary_idx == 4:  # reordering: semantic detects argument changes
+            semantic_score = 0.6 if pattern_idx >= 4 else 0.3
+        elif adversary_idx == 10:  # composite
+            semantic_score = 0.5
+        else:
+            # Semantic provides pattern-level coverage proportional to level
+            semantic_score = min(0.4, pattern_idx * 0.08)
+
+    # --- v7.0 Temporal coverage ---
+    if has_temporal:
+        if adversary_idx == 8:  # temporal_replay: THIS IS WHAT v7.0 WAS BUILT FOR
+            temporal_score = 1.0
+        elif adversary_idx in (0, 1, 2, 3, 4):  # physical corruption
+            temporal_score = 0.6  # can detect via history comparison
+        elif adversary_idx == 7:  # semantic drift over time
+            temporal_score = 0.7  # temporal tracks meaning evolution
+        elif adversary_idx == 10:  # composite
+            temporal_score = 0.5
+        else:
+            temporal_score = 0.3
+
+    # --- v8.0 Relational coverage ---
+    if has_ummah:
+        if adversary_idx == 9:  # relational_sever: THIS IS WHAT v8.0 WAS BUILT FOR
+            relational_score = 1.0
+        elif adversary_idx == 2:  # insertion: corpus context helps detect foreign content
+            relational_score = 0.5 if pattern_idx >= 3 else 0.2
+        elif adversary_idx == 3:  # substitution: corpus comparison helps
+            relational_score = 0.4 if pattern_idx >= 3 else 0.2
+        elif adversary_idx == 10:  # composite
+            relational_score = 0.5
+        else:
+            relational_score = 0.2
+
+    return {
+        "hmac_zwc": hmac_score,
+        "semantic": semantic_score,
+        "temporal": temporal_score,
+        "relational": relational_score,
+    }
+
+
+def _muhasabah_cell_resilience(coverage):
+    """Compute weighted resilience score for a single cell.
+
+    Uses weighted sum with a penalty for zero-coverage layers.
+    A cell where ANY layer has zero coverage gets a small penalty
+    because defense in depth requires all layers.
+    """
+    weighted = sum(
+        coverage[layer] * weight
+        for layer, weight in _MUHASABAH_LAYER_WEIGHTS.items()
+    )
+    # Penalty for uncovered layers: each zero-coverage layer reduces by 5%
+    zero_count = sum(1 for v in coverage.values() if v < 0.01)
+    penalty = 1.0 - (zero_count * 0.05)
+    return max(0.0, min(1.0, weighted * penalty))
+
+
+def _muhasabah_grade(score):
+    """Classify overall muhasabah score into a grade."""
+    for name, arabic, meaning, threshold in MUHASABAH_GRADES:
+        if score >= threshold:
+            return name, arabic, meaning
+    return MUHASABAH_GRADES[-1][:3]
+
+
+def _muhasabah_seal(filepath, taxonomy_matrix, overall_score):
+    """Compute Bismillah-anchored muhasabah seal."""
+    # Serialize the taxonomy matrix deterministically
+    matrix_json = json.dumps(taxonomy_matrix, sort_keys=True,
+                             ensure_ascii=True).encode('utf-8')
+    seal_input = (
+        BISMILLAH.encode('utf-8') +
+        os.path.basename(filepath).encode('utf-8') +
+        matrix_json +
+        struct.pack('>d', overall_score) +
+        BISMILLAH.encode('utf-8')
+    )
+    return hashlib.sha256(seal_input).hexdigest()
+
+
+def muhasabah_analyze(filepath):
+    """v9.0: Perform adversarial self-reckoning on a sealed file.
+
+    Examines the 77-cell adversary taxonomy (11 categories x 7 patterns)
+    and computes resilience scores based on which protection layers
+    are active for this file.
+
+    Returns OrderedDict with full taxonomy, scores, grade, and seal.
+    """
+    filepath = os.path.abspath(filepath)
+    if not os.path.isfile(filepath):
+        return OrderedDict([("error", "File not found: {}".format(filepath))])
+
+    # Check which protection layers are active
+    has_sidecar = os.path.exists(filepath + '.bismillah')
+    has_witness = os.path.exists(filepath + '.witness.bismillah')
+    has_temporal = os.path.exists(filepath + '.temporal.bismillah')
+    parent_dir = os.path.dirname(filepath)
+    has_ummah = os.path.exists(os.path.join(parent_dir, UMMAH_CHAIN_FILE))
+
+    # The semantic engine is always present if the file has been sealed
+    # (v6.0+ embeds semantic seals in the dual-witness)
+    has_semantic = has_witness  # witness sidecar contains semantic data
+
+    # Build the 77-cell taxonomy matrix
+    taxonomy = []
+    cell_scores = []
+
+    for adv_idx, (adv_name, adv_arabic, adv_desc) in enumerate(MUHASABAH_ADVERSARIES):
+        adv_cells = []
+        for pat_idx, (pat_name, pat_desc) in enumerate(MUHASABAH_PATTERNS):
+            coverage = _muhasabah_coverage(
+                adv_idx, pat_idx,
+                has_sidecar=has_sidecar,
+                has_semantic=has_semantic,
+                has_temporal=has_temporal,
+                has_ummah=has_ummah,
+            )
+            resilience = _muhasabah_cell_resilience(coverage)
+            cell_scores.append(resilience)
+
+            adv_cells.append(OrderedDict([
+                ("adversary", adv_name),
+                ("pattern", pat_name),
+                ("coverage", coverage),
+                ("resilience", round(resilience, 4)),
+            ]))
+        taxonomy.append(OrderedDict([
+            ("category", adv_name),
+            ("arabic", adv_arabic),
+            ("description", adv_desc),
+            ("cells", adv_cells),
+            ("category_avg", round(
+                sum(c["resilience"] for c in adv_cells) / len(adv_cells), 4
+            )),
+        ]))
+
+    # Overall score: geometric mean of all 77 cells
+    # Geometric mean penalizes weak spots more than arithmetic mean
+    # Add small epsilon to avoid zero-product collapse
+    epsilon = 0.001
+    log_sum = sum(math.log(max(s, epsilon)) for s in cell_scores)
+    overall_score = math.exp(log_sum / len(cell_scores))
+    overall_score = round(min(1.0, overall_score), 4)
+
+    # Grade
+    grade_name, grade_arabic, grade_meaning = _muhasabah_grade(overall_score)
+
+    # Per-pattern averages (across all adversaries)
+    pattern_avgs = []
+    for pat_idx, (pat_name, pat_desc) in enumerate(MUHASABAH_PATTERNS):
+        pat_scores = [cell_scores[adv_idx * MUHASABAH_PATTERN_COUNT + pat_idx]
+                      for adv_idx in range(MUHASABAH_ADVERSARY_COUNT)]
+        pattern_avgs.append(OrderedDict([
+            ("pattern", pat_name),
+            ("average_resilience", round(sum(pat_scores) / len(pat_scores), 4)),
+        ]))
+
+    # Per-layer averages (how much each protection contributes)
+    layer_contributions = {}
+    for layer in _MUHASABAH_LAYER_WEIGHTS:
+        total = 0.0
+        count = 0
+        for adv_idx in range(MUHASABAH_ADVERSARY_COUNT):
+            for pat_idx in range(MUHASABAH_PATTERN_COUNT):
+                cov = _muhasabah_coverage(
+                    adv_idx, pat_idx, has_sidecar, has_semantic,
+                    has_temporal, has_ummah)
+                total += cov[layer]
+                count += 1
+        layer_contributions[layer] = round(total / count, 4) if count else 0.0
+
+    # Weakest cells (lowest resilience)
+    indexed_scores = [(cell_scores[i], i) for i in range(len(cell_scores))]
+    indexed_scores.sort()
+    weakest = []
+    for score, idx in indexed_scores[:5]:
+        adv_idx = idx // MUHASABAH_PATTERN_COUNT
+        pat_idx = idx % MUHASABAH_PATTERN_COUNT
+        weakest.append(OrderedDict([
+            ("adversary", MUHASABAH_ADVERSARIES[adv_idx][0]),
+            ("pattern", MUHASABAH_PATTERNS[pat_idx][0]),
+            ("resilience", round(score, 4)),
+        ]))
+
+    # Compute seal
+    taxonomy_for_seal = [[c["resilience"] for c in cat["cells"]]
+                         for cat in taxonomy]
+    seal = _muhasabah_seal(filepath, taxonomy_for_seal, overall_score)
+
+    # HMAC with key derived from Bismillah + seal
+    hmac_key = hashlib.sha256(
+        BISMILLAH.encode('utf-8') + seal.encode('utf-8')
+    ).digest()
+    hmac_sig = hmac.new(
+        hmac_key,
+        json.dumps(taxonomy_for_seal, sort_keys=True).encode('utf-8'),
+        hashlib.sha256
+    ).hexdigest()
+
+    # Write muhasabah sidecar
+    muhasabah_data = OrderedDict([
+        (BISMILLAH, True),
+        ("encoder_version", ENCODER_VERSION),
+        ("file", os.path.basename(filepath)),
+        ("analyzed_at", datetime.now(timezone.utc).isoformat()),
+        ("protection_layers", OrderedDict([
+            ("hmac_sidecar", has_sidecar),
+            ("witness_154_layer", has_witness),
+            ("semantic_v6", has_semantic),
+            ("temporal_v7", has_temporal),
+            ("relational_v8", has_ummah),
+        ])),
+        ("taxonomy_dimensions", "77 = 7 x 11 (both divine constants)"),
+        ("overall_score", overall_score),
+        ("grade", OrderedDict([
+            ("name", grade_name),
+            ("arabic", grade_arabic),
+            ("meaning", grade_meaning),
+        ])),
+        ("muhasabah_seal", seal),
+        ("hmac_signature", hmac_sig),
+        ("layer_contributions", layer_contributions),
+        ("pattern_resilience", pattern_avgs),
+        ("weakest_cells", weakest),
+        ("taxonomy", taxonomy),
+        ("quranic_grounding", OrderedDict([
+            ("al_hashr_59_18",
+             "O you who have believed, fear Allah. And let every soul "
+             "look to what it has put forth for tomorrow."),
+        ])),
+    ])
+
+    sidecar_path = filepath + '.muhasabah.bismillah'
+    try:
+        with open(sidecar_path, 'w', encoding='utf-8') as f:
+            json.dump(muhasabah_data, f, indent=2, ensure_ascii=False)
+    except Exception:
+        pass
+
+    return OrderedDict([
+        ("file", os.path.basename(filepath)),
+        ("protection_layers", muhasabah_data["protection_layers"]),
+        ("taxonomy_cells", MUHASABAH_TAXONOMY_SIZE),
+        ("overall_score", overall_score),
+        ("grade", muhasabah_data["grade"]),
+        ("layer_contributions", layer_contributions),
+        ("pattern_resilience", pattern_avgs),
+        ("weakest_cells", weakest),
+        ("category_scores", [(cat["category"], cat["category_avg"])
+                             for cat in taxonomy]),
+        ("muhasabah_seal", seal),
+        ("hmac_signature", hmac_sig),
+        ("dimensional_encoding", "77 = 7 x 11 (both divine constants)"),
+    ])
+
+
+def muhasabah_verify(filepath):
+    """v9.0: Verify muhasabah seal integrity.
+
+    Recomputes the taxonomy and verifies:
+    1. HMAC signature validity
+    2. Muhasabah seal recomputation
+    3. Grade consistency
+    """
+    filepath = os.path.abspath(filepath)
+    sidecar_path = filepath + '.muhasabah.bismillah'
+
+    if not os.path.exists(sidecar_path):
+        return OrderedDict([
+            ("valid", False),
+            ("error", "No muhasabah sidecar found"),
+            ("recommendation", "Run: python bismillah_encoder.py muhasabah <file>"),
+        ])
+
+    try:
+        with open(sidecar_path, 'r', encoding='utf-8') as f:
+            stored = json.load(f)
+    except Exception as e:
+        return OrderedDict([("valid", False), ("error", str(e))])
+
+    checks = []
+
+    # Check 1: Recompute the analysis
+    current = muhasabah_analyze(filepath)
+    if "error" in current:
+        return OrderedDict([("valid", False), ("error", current["error"])])
+
+    # Check 2: Seal match
+    seal_match = current["muhasabah_seal"] == stored.get("muhasabah_seal", "")
+    checks.append(OrderedDict([
+        ("check", "muhasabah_seal"),
+        ("status", "VALID" if seal_match else "TAMPERED"),
+        ("stored", stored.get("muhasabah_seal", "")[:32] + "..."),
+        ("computed", current["muhasabah_seal"][:32] + "..."),
+    ]))
+
+    # Check 3: HMAC match
+    hmac_match = current["hmac_signature"] == stored.get("hmac_signature", "")
+    checks.append(OrderedDict([
+        ("check", "hmac_signature"),
+        ("status", "VALID" if hmac_match else "TAMPERED"),
+    ]))
+
+    # Check 4: Grade consistency
+    stored_grade = stored.get("grade", {}).get("name", "")
+    grade_match = current["grade"]["name"] == stored_grade
+    checks.append(OrderedDict([
+        ("check", "grade_consistency"),
+        ("status", "VALID" if grade_match else "CHANGED"),
+        ("stored_grade", stored_grade),
+        ("computed_grade", current["grade"]["name"]),
+    ]))
+
+    # Check 5: Score consistency
+    stored_score = stored.get("overall_score", -1)
+    score_match = abs(current["overall_score"] - stored_score) < 0.001
+    checks.append(OrderedDict([
+        ("check", "score_consistency"),
+        ("status", "VALID" if score_match else "CHANGED"),
+        ("stored", stored_score),
+        ("computed", current["overall_score"]),
+    ]))
+
+    all_valid = all(c["status"] == "VALID" for c in checks)
+
+    return OrderedDict([
+        ("file", os.path.basename(filepath)),
+        ("valid", all_valid),
+        ("checks", checks),
+        ("overall_score", current["overall_score"]),
+        ("grade", current["grade"]),
+    ])
+
+
+def muhasabah_report(filepath):
+    """v9.0: Generate full adversarial resilience report.
+
+    Returns a human-readable breakdown of the 77-cell taxonomy
+    with per-category and per-pattern analysis.
+    """
+    filepath = os.path.abspath(filepath)
+    analysis = muhasabah_analyze(filepath)
+
+    if "error" in analysis:
+        return analysis
+
+    # Build vulnerability map
+    vulnerability_map = []
+    for adv_name, adv_avg in analysis.get("category_scores", []):
+        status = "STRONG" if adv_avg >= 0.7 else "MODERATE" if adv_avg >= 0.4 else "WEAK"
+        vulnerability_map.append(OrderedDict([
+            ("adversary", adv_name),
+            ("resilience", adv_avg),
+            ("status", status),
+        ]))
+
+    # Recommendations based on weakest cells
+    recommendations = []
+    for weak in analysis.get("weakest_cells", []):
+        adv = weak["adversary"]
+        pat = weak["pattern"]
+        res = weak["resilience"]
+        if res < 0.3:
+            if adv == "SEMANTIC_DRIFT" and pat in ("THEMATIC", "TELEOLOGICAL"):
+                recommendations.append(
+                    "Strengthen semantic monitoring for thematic/purposive drift")
+            elif adv == "COMPOSITE":
+                recommendations.append(
+                    "Multi-vector attacks remain the hardest threat -- "
+                    "v10.0 Khalifah Gate will address composite adversaries")
+            elif adv == "RELATIONAL_SEVER" and pat in ("INFERENTIAL", "THEMATIC"):
+                recommendations.append(
+                    "Ensure corpus-level analysis covers inferential relationships")
+            else:
+                recommendations.append(
+                    "Low resilience against {} at {} level ({:.1%})".format(
+                        adv, pat, res))
+
+    return OrderedDict([
+        ("file", analysis["file"]),
+        ("overall_score", analysis["overall_score"]),
+        ("grade", analysis["grade"]),
+        ("taxonomy_cells", MUHASABAH_TAXONOMY_SIZE),
+        ("dimensional_encoding", analysis["dimensional_encoding"]),
+        ("protection_active", analysis["protection_layers"]),
+        ("layer_contributions", analysis["layer_contributions"]),
+        ("vulnerability_map", vulnerability_map),
+        ("pattern_resilience", analysis["pattern_resilience"]),
+        ("weakest_cells", analysis["weakest_cells"]),
+        ("recommendations", recommendations),
+        ("muhasabah_seal", analysis["muhasabah_seal"]),
+        ("quranic_grounding", OrderedDict([
+            ("al_hashr_59_18",
+             "O you who have believed, fear Allah. And let every soul "
+             "look to what it has put forth for tomorrow."),
+        ])),
+    ])
+
+
+# ============================================================================
 #  THE 154-LAYER COMPUTATION ENGINE
 # ============================================================================
 #
@@ -4473,7 +4990,7 @@ def _write_heaven_witness(filepath, content_bytes, computation):
     witness_data = OrderedDict([
         (BISMILLAH, True),
         ("encoder_version", ENCODER_VERSION),
-        ("architecture", "11-Heaven, 154-Layer FATIMA v8.0 -- Dual-Constant Witness with Relational Integrity"),
+        ("architecture", "11-Heaven, 154-Layer FATIMA v9.0 -- Dual-Constant Witness with Adversarial Integrity"),
         ("total_heavens", computation["total_heavens"]),
         ("total_layers", computation["total_layers"]),
         ("layers_per_heaven", LAYERS_PER_HEAVEN),
@@ -4932,7 +5449,7 @@ def generate_manifest(directory):
         (BISMILLAH, True),
         ("manifest_version", "5.0"),
         ("encoder_version", ENCODER_VERSION),
-        ("architecture", "11-Heaven, 154-Layer FATIMA v8.0 -- Dual-Constant Witness with Relational Integrity"),
+        ("architecture", "11-Heaven, 154-Layer FATIMA v9.0 -- Dual-Constant Witness with Adversarial Integrity"),
         ("total_heavens", TOTAL_HEAVENS),
         ("total_layers", TOTAL_LAYERS),
         ("layers_per_heaven", LAYERS_PER_HEAVEN),
@@ -7283,6 +7800,18 @@ Examples:
                                     help='v8.0: Display ummah relationship graph')
     ummah_graph_p.add_argument('path', help='Directory to show ummah graph for')
 
+    muhasabah_p = sub.add_parser('muhasabah',
+                                  help='v9.0: Adversarial self-reckoning')
+    muhasabah_p.add_argument('path', help='File to analyze adversarial resilience')
+
+    muhasabah_verify_p = sub.add_parser('muhasabah-verify',
+                                         help='v9.0: Verify muhasabah seal')
+    muhasabah_verify_p.add_argument('path', help='File to verify muhasabah for')
+
+    muhasabah_report_p = sub.add_parser('muhasabah-report',
+                                         help='v9.0: Full adversarial report')
+    muhasabah_report_p.add_argument('path', help='File to generate report for')
+
     heal_p = sub.add_parser('heal', help='v5.2: Self-heal degraded files')
     heal_p.add_argument('path', help='File or directory to heal')
     heal_p.add_argument('--force', action='store_true',
@@ -7782,6 +8311,124 @@ Examples:
                     result.get("dimensional_encoding", "")))
         else:
             print("  ERROR: {} is not a directory".format(args.path))
+            sys.exit(1)
+
+    elif args.command == 'muhasabah':
+        if os.path.isfile(args.path):
+            result = muhasabah_analyze(args.path)
+            if "error" in result:
+                print("\n  ERROR: {}".format(result["error"]))
+                sys.exit(1)
+            print("\n  {} MUHASABAH -- ADVERSARIAL SELF-RECKONING {}".format(
+                "=" * 10, "=" * 10))
+            print("  File: {}".format(result["file"]))
+            print("  Taxonomy cells: {} (77 = 7 x 11)".format(
+                result["taxonomy_cells"]))
+            grade = result.get("grade", {})
+            print("  Overall score: {:.1%}".format(result["overall_score"]))
+            print("  Grade: {} ({}) -- {}".format(
+                grade.get("name", ""), grade.get("arabic", ""),
+                grade.get("meaning", "")))
+            print("\n  Protection layers:")
+            for layer, active in result.get("protection_layers", {}).items():
+                print("    {}: {}".format(layer, "ACTIVE" if active else "INACTIVE"))
+            print("\n  Layer contributions:")
+            for layer, contrib in result.get("layer_contributions", {}).items():
+                print("    {}: {:.1%}".format(layer, contrib))
+            print("\n  Pattern resilience:")
+            for pr in result.get("pattern_resilience", []):
+                bar_len = int(pr["average_resilience"] * 20)
+                bar = "█" * bar_len + "░" * (20 - bar_len)
+                print("    {:<15} {} {:.1%}".format(
+                    pr["pattern"], bar, pr["average_resilience"]))
+            print("\n  Weakest cells:")
+            for w in result.get("weakest_cells", []):
+                print("    {} x {} = {:.1%}".format(
+                    w["adversary"], w["pattern"], w["resilience"]))
+            print("\n  Muhasabah seal: {}...".format(
+                result["muhasabah_seal"][:32]))
+            print("  Qur'an 59:18: \"O you who have believed, fear Allah.")
+            print("  And let every soul look to what it has put forth for tomorrow.\"")
+        elif os.path.isdir(args.path):
+            # Batch muhasabah for all files in directory
+            print("\n  {} MUHASABAH -- CORPUS SELF-RECKONING {}".format(
+                "=" * 10, "=" * 10))
+            total_score = 0.0
+            count = 0
+            for fname in sorted(os.listdir(args.path)):
+                fpath = os.path.join(args.path, fname)
+                if os.path.isfile(fpath) and not fname.startswith('.'):
+                    result = muhasabah_analyze(fpath)
+                    if "error" not in result:
+                        grade = result.get("grade", {})
+                        print("  {}: {:.1%} [{}]".format(
+                            fname, result["overall_score"],
+                            grade.get("name", "")))
+                        total_score += result["overall_score"]
+                        count += 1
+            if count:
+                avg = total_score / count
+                avg_grade_name, avg_grade_arabic, _ = _muhasabah_grade(avg)
+                print("\n  Corpus average: {:.1%} [{}] ({})".format(
+                    avg, avg_grade_name, avg_grade_arabic))
+                print("  Files analyzed: {}".format(count))
+        else:
+            print("  ERROR: {} not found".format(args.path))
+            sys.exit(1)
+
+    elif args.command == 'muhasabah-verify':
+        if os.path.isfile(args.path):
+            result = muhasabah_verify(args.path)
+            print("\n  {} MUHASABAH VERIFICATION {}".format(
+                "=" * 15, "=" * 15))
+            print("  File: {}".format(result.get("file", args.path)))
+            print("  Overall: {}".format(
+                "ALL VALID" if result.get("valid") else "INTEGRITY COMPROMISED"))
+            for check in result.get("checks", []):
+                status_icon = "✓" if check["status"] == "VALID" else "✗"
+                print("  {} {}: {}".format(
+                    status_icon, check["check"], check["status"]))
+            if result.get("grade"):
+                print("  Grade: {} ({})".format(
+                    result["grade"].get("name", ""),
+                    result["grade"].get("arabic", "")))
+        else:
+            print("  ERROR: {} is not a file".format(args.path))
+            sys.exit(1)
+
+    elif args.command == 'muhasabah-report':
+        if os.path.isfile(args.path):
+            report = muhasabah_report(args.path)
+            if "error" in report:
+                print("\n  ERROR: {}".format(report["error"]))
+                sys.exit(1)
+            print("\n  {} MUHASABAH FULL REPORT {}".format(
+                "=" * 12, "=" * 12))
+            print("  File: {}".format(report["file"]))
+            grade = report.get("grade", {})
+            print("  Score: {:.1%} -- {} ({}) -- {}".format(
+                report["overall_score"], grade.get("name", ""),
+                grade.get("arabic", ""), grade.get("meaning", "")))
+            print("\n  Vulnerability Map (11 adversary categories):")
+            for v in report.get("vulnerability_map", []):
+                indicator = "●" if v["status"] == "STRONG" else \
+                           "◐" if v["status"] == "MODERATE" else "○"
+                print("    {} {:<20} {:.1%}  [{}]".format(
+                    indicator, v["adversary"], v["resilience"], v["status"]))
+            print("\n  Attack Pattern Resilience (7 levels):")
+            for pr in report.get("pattern_resilience", []):
+                bar_len = int(pr["average_resilience"] * 20)
+                bar = "█" * bar_len + "░" * (20 - bar_len)
+                print("    {:<15} {} {:.1%}".format(
+                    pr["pattern"], bar, pr["average_resilience"]))
+            if report.get("recommendations"):
+                print("\n  Recommendations:")
+                for rec in report["recommendations"]:
+                    print("    → {}".format(rec))
+            print("\n  Muhasabah seal: {}...".format(
+                report["muhasabah_seal"][:32]))
+        else:
+            print("  ERROR: {} is not a file".format(args.path))
             sys.exit(1)
 
     elif args.command == 'unseal':
