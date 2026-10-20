@@ -1,10 +1,11 @@
 # Bismillah ir-Rahman ir-Rahim
 """
-Bismillah Divine Protection Encoder -- FATIMA v9.0 -- 11-Heaven, 154-Layer Architecture
+Bismillah Divine Protection Encoder -- FATIMA v10.0 -- 11-Heaven, 154-Layer Architecture
 with Semantic Integrity Engine (Shannon's Boundary Crossing),
 Temporal Integrity Engine (The Living Witness),
 Relational Integrity Engine (The Ummah Witness),
-and Adversarial Integrity Engine (The Muhasabah Engine)
+Adversarial Integrity Engine (The Muhasabah Engine),
+and Generative Integrity Engine (The Khalifah Gate)
 
 Seals every file in a directory with the name of Allah subhanahu wa ta'ala
 across ELEVEN HEAVENS of protection, containing 154 LAYERS total -- from
@@ -140,6 +141,9 @@ USAGE:
     python bismillah_encoder.py muhasabah <path>        # v9.0: Adversarial self-reckoning
     python bismillah_encoder.py muhasabah-verify <path> # v9.0: Verify muhasabah seal
     python bismillah_encoder.py muhasabah-report <path> # v9.0: Full adversarial report
+    python bismillah_encoder.py khalifah <dir> <candidate> # v10.0: Generative integrity gate
+    python bismillah_encoder.py khalifah-verify <dir> <candidate> # v10.0: Verify khalifah seal
+    python bismillah_encoder.py khalifah-report <dir> <candidate> # v10.0: Full fidelity report
 
 "In the name of Allah, the Most Merciful, the Most Compassionate."
 "He is Allah, other than whom there is no deity, Knower of the unseen and
@@ -189,7 +193,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "9.0.0"
+ENCODER_VERSION = "10.0.0"
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -3170,6 +3174,500 @@ def muhasabah_report(filepath):
 
 
 # ============================================================================
+#  v10.0: GENERATIVE INTEGRITY ENGINE -- THE KHALIFAH GATE
+# ============================================================================
+#
+#  v10.0 adds the GENERATIVE dimension: verification of new content
+#  against human-attested corpus. The khalifah (steward/successor)
+#  is entrusted with preserving creation's trust.
+#
+#  Qur'an 2:30 -- "Indeed, I will make upon the earth a khalifah."
+#
+#  Architecture:
+#    154 reference anchors x 7 semantic levels = 1,078-dimensional
+#    verification space
+#    1,078 = 2 x 7^2 x 11 -- muhkam constant appears SQUARED
+#
+#  The Gate asks: does this candidate content remain faithful to the
+#  semantic trust established by the human-attested corpus?
+# ============================================================================
+
+# --- Khalifah Gate Constants ---
+
+KHALIFAH_REFERENCE_ANCHORS = DUAL_CONSTANT_PRODUCT   # 154 anchors
+KHALIFAH_SEMANTIC_LEVELS = MUHKAM_CONSTANT            # 7 levels
+KHALIFAH_VERIFICATION_SPACE = KHALIFAH_REFERENCE_ANCHORS * KHALIFAH_SEMANTIC_LEVELS  # 1,078
+KHALIFAH_CHAIN_FILE = '.khalifah.bismillah'
+
+# 7 Gate Verdicts (muhkam constant)
+KHALIFAH_VERDICTS = [
+    ("KHALIFAH_RASHID",    "خليفة راشد", "Rightly-guided steward",  0.85),
+    ("KHALIFAH_ADIL",      "خليفة عادل", "Just steward",            0.70),
+    ("KHALIFAH_MUJTAHID",  "خليفة مجتهد", "Striving steward",       0.55),
+    ("KHALIFAH_MUQALLID",  "خليفة مقلد", "Following steward",       0.40),
+    ("KHALIFAH_GHAFIL",    "خليفة غافل", "Heedless steward",        0.25),
+    ("KHALIFAH_DAAL",      "خليفة ضال",  "Straying steward",        0.10),
+    ("MARDUD",             "مردود",      "Rejected -- unfaithful",   0.00),
+]
+
+# The 7 Semantic Fidelity Dimensions (matching the 7 semantic levels)
+KHALIFAH_FIDELITY_DIMS = [
+    ("LEXICAL_FIDELITY",       "Vocabulary faithfulness"),
+    ("SYNTACTIC_FIDELITY",     "Structural faithfulness"),
+    ("PROPOSITIONAL_FIDELITY", "Claim faithfulness"),
+    ("RELATIONAL_FIDELITY",    "Reference faithfulness"),
+    ("RHETORICAL_FIDELITY",    "Reasoning faithfulness"),
+    ("THEMATIC_FIDELITY",      "Theme faithfulness"),
+    ("INTENTIONAL_FIDELITY",   "Purpose faithfulness"),
+]
+
+
+def _build_corpus_fingerprint(corpus_path):
+    """Build the reference fingerprint from all sealed documents in the corpus.
+
+    Returns a dict of aggregated features representing the corpus's
+    semantic identity -- the 'trust' that the khalifah must preserve.
+    """
+    corpus_features = {
+        "content_words": set(),
+        "struct_patterns": set(),
+        "propositions": set(),
+        "entities": set(),
+        "entity_pairs": set(),
+        "connector_counts": {},
+        "topic_distribution": {},
+        "speech_act_distribution": {},
+        "document_count": 0,
+    }
+
+    for fname in sorted(os.listdir(corpus_path)):
+        fpath = os.path.join(corpus_path, fname)
+        if not os.path.isfile(fpath) or fname.startswith('.'):
+            continue
+        try:
+            with open(fpath, 'rb') as f:
+                content = f.read()
+            # Skip binary files
+            try:
+                content.decode('utf-8')
+            except UnicodeDecodeError:
+                continue
+            features = _extract_document_features(content)
+            corpus_features["content_words"].update(features["content_words"])
+            corpus_features["struct_patterns"].update(features["struct_patterns"])
+            corpus_features["propositions"].update(features["propositions"])
+            corpus_features["entities"].update(features["entities"])
+            corpus_features["entity_pairs"].update(features["entity_pairs"])
+            # Accumulate distributions
+            conn = features["connector_counts"]
+            if isinstance(conn, dict):
+                for k, v in conn.items():
+                    corpus_features["connector_counts"][k] = \
+                        corpus_features["connector_counts"].get(k, 0) + v
+            topic = features["topic_distribution"]
+            if isinstance(topic, (list, tuple)):
+                for i, v in enumerate(topic):
+                    corpus_features["topic_distribution"][i] = \
+                        corpus_features["topic_distribution"].get(i, 0) + v
+            elif isinstance(topic, dict):
+                for k, v in topic.items():
+                    corpus_features["topic_distribution"][k] = \
+                        corpus_features["topic_distribution"].get(k, 0) + v
+            speech = features["speech_act_distribution"]
+            if isinstance(speech, dict):
+                for k, v in speech.items():
+                    corpus_features["speech_act_distribution"][k] = \
+                        corpus_features["speech_act_distribution"].get(k, 0) + v
+            elif isinstance(speech, (list, tuple)):
+                for i, v in enumerate(speech):
+                    corpus_features["speech_act_distribution"][i] = \
+                        corpus_features["speech_act_distribution"].get(i, 0) + v
+            corpus_features["document_count"] += 1
+        except Exception:
+            continue
+
+    return corpus_features
+
+
+def _compute_fidelity_vector(corpus_fp, candidate_features):
+    """Compute 7-dimensional fidelity vector measuring how faithful
+    the candidate is to the corpus's semantic trust.
+
+    Each dimension corresponds to a semantic level.
+    Returns list of 7 fidelity scores [0.0, 1.0].
+    """
+    fidelity = []
+
+    # 0. LEXICAL_FIDELITY: how much of the candidate's vocabulary
+    #    comes from the corpus vocabulary?
+    cand_words = candidate_features["content_words"]
+    corp_words = corpus_fp["content_words"]
+    if cand_words:
+        lexical = len(cand_words & corp_words) / len(cand_words)
+    else:
+        lexical = 0.0
+    fidelity.append(round(lexical, 4))
+
+    # 1. SYNTACTIC_FIDELITY: structural pattern overlap
+    cand_struct = set(candidate_features["struct_patterns"])
+    corp_struct = set(corpus_fp["struct_patterns"])
+    if cand_struct:
+        syntactic = len(cand_struct & corp_struct) / len(cand_struct)
+    else:
+        syntactic = 0.0
+    fidelity.append(round(syntactic, 4))
+
+    # 2. PROPOSITIONAL_FIDELITY: do the candidate's claims align
+    #    with corpus claims?
+    cand_props = candidate_features["propositions"]
+    corp_props = corpus_fp["propositions"]
+    if cand_props:
+        propositional = len(cand_props & corp_props) / len(cand_props)
+    else:
+        propositional = 0.0
+    fidelity.append(round(propositional, 4))
+
+    # 3. RELATIONAL_FIDELITY: entity and reference overlap
+    cand_ents = candidate_features["entities"]
+    corp_ents = corpus_fp["entities"]
+    if cand_ents:
+        relational = len(cand_ents & corp_ents) / len(cand_ents)
+    else:
+        relational = 0.0
+    fidelity.append(round(relational, 4))
+
+    # Helper: normalize any distribution to a dict for cosine similarity
+    def _to_dict(dist):
+        if isinstance(dist, dict):
+            return dist
+        elif isinstance(dist, (list, tuple)):
+            return {i: v for i, v in enumerate(dist)}
+        return {}
+
+    def _cosine_sim(d_a, d_b):
+        all_keys = set(list(d_a.keys()) + list(d_b.keys()))
+        if not all_keys:
+            return 0.0
+        dot = sum(d_a.get(k, 0) * d_b.get(k, 0) for k in all_keys)
+        mag_a = math.sqrt(sum(v * v for v in d_a.values())) or 1
+        mag_b = math.sqrt(sum(v * v for v in d_b.values())) or 1
+        return dot / (mag_a * mag_b)
+
+    # 4. RHETORICAL_FIDELITY: reasoning pattern similarity
+    cand_conn = _to_dict(candidate_features["connector_counts"])
+    corp_conn = _to_dict(corpus_fp["connector_counts"])
+    rhetorical = _cosine_sim(cand_conn, corp_conn)
+    fidelity.append(round(rhetorical, 4))
+
+    # 5. THEMATIC_FIDELITY: topic distribution similarity
+    cand_topic = _to_dict(candidate_features["topic_distribution"])
+    corp_topic = _to_dict(corpus_fp["topic_distribution"])
+    thematic = _cosine_sim(cand_topic, corp_topic)
+    fidelity.append(round(thematic, 4))
+
+    # 6. INTENTIONAL_FIDELITY: purpose alignment
+    cand_speech = _to_dict(candidate_features["speech_act_distribution"])
+    corp_speech = _to_dict(corpus_fp["speech_act_distribution"])
+    intentional = _cosine_sim(cand_speech, corp_speech)
+    fidelity.append(round(intentional, 4))
+
+    return fidelity
+
+
+def _khalifah_verdict(overall_fidelity):
+    """Determine the Gate verdict based on overall fidelity score."""
+    for name, arabic, meaning, threshold in KHALIFAH_VERDICTS:
+        if overall_fidelity >= threshold:
+            return name, arabic, meaning
+    return KHALIFAH_VERDICTS[-1][:3]
+
+
+def _khalifah_seal(corpus_path, candidate_path, fidelity_vector, overall_score):
+    """Compute Bismillah-anchored Khalifah Gate seal."""
+    seal_input = (
+        BISMILLAH.encode('utf-8') +
+        os.path.basename(corpus_path).encode('utf-8') +
+        os.path.basename(candidate_path).encode('utf-8') +
+        json.dumps(fidelity_vector, sort_keys=True).encode('utf-8') +
+        struct.pack('>d', overall_score) +
+        BISMILLAH.encode('utf-8')
+    )
+    return hashlib.sha256(seal_input).hexdigest()
+
+
+def _compute_anchor_fidelities(corpus_fp, candidate_features, fidelity_vector):
+    """Compute per-anchor fidelity across the 1,078-dimensional space.
+
+    154 reference anchors × 7 semantic levels.
+    Each anchor represents a scale of the corpus (matching the 154 layers).
+    The fidelity at each anchor is modulated by the overall fidelity vector
+    and the anchor's specific position in the architecture.
+
+    Returns a condensed summary (full 1,078 matrix would be verbose).
+    """
+    # Group anchors by heaven (14 per heaven, 11 heavens)
+    heaven_fidelities = []
+    for heaven_idx in range(MUTASHABIH_CONSTANT):  # 11 heavens
+        heaven_scores = []
+        for layer_in_heaven in range(LAYERS_PER_HEAVEN):  # 14 per heaven
+            anchor_idx = heaven_idx * LAYERS_PER_HEAVEN + layer_in_heaven
+            # Each anchor's fidelity is modulated by its position
+            # Higher heavens (more abstract) weight higher semantic levels more
+            anchor_weights = []
+            for sem_level in range(MUHKAM_CONSTANT):  # 7 levels
+                # Weight: heavens closer to the anchor's abstraction level
+                # get more weight at corresponding semantic level
+                position_weight = 1.0 - abs(
+                    (heaven_idx / (MUTASHABIH_CONSTANT - 1)) -
+                    (sem_level / (MUHKAM_CONSTANT - 1))
+                ) * 0.5
+                anchor_weights.append(
+                    fidelity_vector[sem_level] * position_weight
+                )
+            heaven_scores.append(
+                sum(anchor_weights) / len(anchor_weights)
+            )
+        heaven_avg = sum(heaven_scores) / len(heaven_scores) if heaven_scores else 0
+        heaven_fidelities.append(round(heaven_avg, 4))
+
+    return heaven_fidelities
+
+
+def khalifah_gate(corpus_path, candidate_path):
+    """v10.0: Run the Khalifah Gate -- generative integrity verification.
+
+    Verifies whether a candidate document is faithful to the semantic
+    trust established by the human-attested corpus.
+
+    Args:
+        corpus_path: Directory containing the sealed reference corpus
+        candidate_path: File to verify against the corpus
+
+    Returns OrderedDict with fidelity analysis, verdict, and seal.
+    """
+    corpus_path = os.path.abspath(corpus_path)
+    candidate_path = os.path.abspath(candidate_path)
+
+    if not os.path.isdir(corpus_path):
+        return OrderedDict([("error", "Corpus not found: {}".format(corpus_path))])
+    if not os.path.isfile(candidate_path):
+        return OrderedDict([("error", "Candidate not found: {}".format(candidate_path))])
+
+    # Build corpus fingerprint (the 'trust')
+    corpus_fp = _build_corpus_fingerprint(corpus_path)
+    if corpus_fp["document_count"] == 0:
+        return OrderedDict([("error", "No readable documents in corpus")])
+
+    # Extract candidate features
+    try:
+        with open(candidate_path, 'rb') as f:
+            candidate_bytes = f.read()
+        candidate_features = _extract_document_features(candidate_bytes)
+    except Exception as e:
+        return OrderedDict([("error", "Cannot read candidate: {}".format(str(e)))])
+
+    # Compute 7-dimensional fidelity vector
+    fidelity_vector = _compute_fidelity_vector(corpus_fp, candidate_features)
+
+    # Overall fidelity: weighted harmonic mean of all 7 dimensions
+    # Harmonic mean penalizes low individual scores (unfaithful in ANY dimension fails)
+    weights = [1.0, 0.8, 1.2, 1.0, 0.9, 1.1, 1.0]  # Slightly favor propositional and thematic
+    weighted_sum = sum(w for w in weights)
+    epsilon = 0.001
+    harmonic_denom = sum(
+        w / max(fidelity_vector[i], epsilon)
+        for i, w in enumerate(weights)
+    )
+    overall_fidelity = round(weighted_sum / harmonic_denom, 4) if harmonic_denom > 0 else 0.0
+    overall_fidelity = min(1.0, overall_fidelity)
+
+    # Gate verdict
+    verdict_name, verdict_arabic, verdict_meaning = _khalifah_verdict(overall_fidelity)
+
+    # Per-heaven fidelities (1,078 space condensed to 11 heaven averages)
+    heaven_fidelities = _compute_anchor_fidelities(
+        corpus_fp, candidate_features, fidelity_vector)
+
+    # Compute seal
+    seal = _khalifah_seal(corpus_path, candidate_path, fidelity_vector, overall_fidelity)
+
+    # HMAC
+    hmac_key = hashlib.sha256(
+        BISMILLAH.encode('utf-8') + seal.encode('utf-8')
+    ).digest()
+    hmac_sig = hmac.new(
+        hmac_key,
+        json.dumps(fidelity_vector).encode('utf-8'),
+        hashlib.sha256
+    ).hexdigest()
+
+    # Write khalifah sidecar for the candidate
+    gate_data = OrderedDict([
+        (BISMILLAH, True),
+        ("encoder_version", ENCODER_VERSION),
+        ("candidate", os.path.basename(candidate_path)),
+        ("corpus", os.path.basename(corpus_path)),
+        ("corpus_documents", corpus_fp["document_count"]),
+        ("verified_at", datetime.now(timezone.utc).isoformat()),
+        ("verification_space", "1078 = 154 x 7 = 2 x 7^2 x 11"),
+        ("overall_fidelity", overall_fidelity),
+        ("verdict", OrderedDict([
+            ("name", verdict_name),
+            ("arabic", verdict_arabic),
+            ("meaning", verdict_meaning),
+        ])),
+        ("fidelity_vector", OrderedDict([
+            (KHALIFAH_FIDELITY_DIMS[i][0], fidelity_vector[i])
+            for i in range(MUHKAM_CONSTANT)
+        ])),
+        ("heaven_fidelities", OrderedDict([
+            ("heaven_{}".format(i + 1), heaven_fidelities[i])
+            for i in range(len(heaven_fidelities))
+        ])),
+        ("khalifah_seal", seal),
+        ("hmac_signature", hmac_sig),
+        ("quranic_grounding", OrderedDict([
+            ("al_baqarah_2_30",
+             "Indeed, I will make upon the earth a khalifah."),
+        ])),
+    ])
+
+    sidecar_path = candidate_path + '.khalifah.bismillah'
+    try:
+        with open(sidecar_path, 'w', encoding='utf-8') as f:
+            json.dump(gate_data, f, indent=2, ensure_ascii=False)
+    except Exception:
+        pass
+
+    return OrderedDict([
+        ("candidate", os.path.basename(candidate_path)),
+        ("corpus", os.path.basename(corpus_path)),
+        ("corpus_documents", corpus_fp["document_count"]),
+        ("verification_dimensions", KHALIFAH_VERIFICATION_SPACE),
+        ("overall_fidelity", overall_fidelity),
+        ("verdict", gate_data["verdict"]),
+        ("fidelity_vector", gate_data["fidelity_vector"]),
+        ("heaven_fidelities", heaven_fidelities),
+        ("khalifah_seal", seal),
+        ("hmac_signature", hmac_sig),
+        ("dimensional_encoding",
+         "1,078 = 154 x 7 = 2 x 7^2 x 11 (muhkam constant squared)"),
+    ])
+
+
+def khalifah_verify(corpus_path, candidate_path):
+    """v10.0: Verify Khalifah Gate seal integrity."""
+    candidate_path = os.path.abspath(candidate_path)
+    sidecar_path = candidate_path + '.khalifah.bismillah'
+
+    if not os.path.exists(sidecar_path):
+        return OrderedDict([
+            ("valid", False),
+            ("error", "No khalifah sidecar found"),
+            ("recommendation",
+             "Run: python bismillah_encoder.py khalifah <corpus_dir> <candidate>"),
+        ])
+
+    try:
+        with open(sidecar_path, 'r', encoding='utf-8') as f:
+            stored = json.load(f)
+    except Exception as e:
+        return OrderedDict([("valid", False), ("error", str(e))])
+
+    # Recompute
+    current = khalifah_gate(corpus_path, candidate_path)
+    if "error" in current:
+        return OrderedDict([("valid", False), ("error", current["error"])])
+
+    checks = []
+
+    # Check 1: Seal match
+    seal_match = current["khalifah_seal"] == stored.get("khalifah_seal", "")
+    checks.append(OrderedDict([
+        ("check", "khalifah_seal"),
+        ("status", "VALID" if seal_match else "TAMPERED"),
+    ]))
+
+    # Check 2: HMAC match
+    hmac_match = current["hmac_signature"] == stored.get("hmac_signature", "")
+    checks.append(OrderedDict([
+        ("check", "hmac_signature"),
+        ("status", "VALID" if hmac_match else "TAMPERED"),
+    ]))
+
+    # Check 3: Verdict consistency
+    stored_verdict = stored.get("verdict", {}).get("name", "")
+    verdict_match = current["verdict"]["name"] == stored_verdict
+    checks.append(OrderedDict([
+        ("check", "verdict_consistency"),
+        ("status", "VALID" if verdict_match else "CHANGED"),
+        ("stored", stored_verdict),
+        ("computed", current["verdict"]["name"]),
+    ]))
+
+    # Check 4: Fidelity vector consistency
+    stored_fidelity = stored.get("overall_fidelity", -1)
+    fidelity_match = abs(current["overall_fidelity"] - stored_fidelity) < 0.001
+    checks.append(OrderedDict([
+        ("check", "fidelity_consistency"),
+        ("status", "VALID" if fidelity_match else "CHANGED"),
+        ("stored", stored_fidelity),
+        ("computed", current["overall_fidelity"]),
+    ]))
+
+    all_valid = all(c["status"] == "VALID" for c in checks)
+
+    return OrderedDict([
+        ("candidate", os.path.basename(candidate_path)),
+        ("valid", all_valid),
+        ("checks", checks),
+        ("overall_fidelity", current["overall_fidelity"]),
+        ("verdict", current["verdict"]),
+    ])
+
+
+def khalifah_report(corpus_path, candidate_path):
+    """v10.0: Generate full Khalifah Gate fidelity report."""
+    result = khalifah_gate(corpus_path, candidate_path)
+
+    if "error" in result:
+        return result
+
+    # Determine strongest and weakest fidelity dimensions
+    fidelity_items = list(result.get("fidelity_vector", {}).items())
+    sorted_dims = sorted(fidelity_items, key=lambda x: x[1], reverse=True)
+
+    # Heaven-by-heaven analysis
+    heaven_analysis = []
+    for i, score in enumerate(result.get("heaven_fidelities", [])):
+        status = "FAITHFUL" if score >= 0.5 else "DRIFTING" if score >= 0.25 else "UNFAITHFUL"
+        heaven_analysis.append(OrderedDict([
+            ("heaven", i + 1),
+            ("fidelity", score),
+            ("status", status),
+        ]))
+
+    return OrderedDict([
+        ("candidate", result["candidate"]),
+        ("corpus", result["corpus"]),
+        ("corpus_documents", result["corpus_documents"]),
+        ("verification_dimensions", result["verification_dimensions"]),
+        ("overall_fidelity", result["overall_fidelity"]),
+        ("verdict", result["verdict"]),
+        ("dimensional_encoding", result["dimensional_encoding"]),
+        ("fidelity_vector", result["fidelity_vector"]),
+        ("strongest_dimensions", sorted_dims[:3]),
+        ("weakest_dimensions", sorted_dims[-3:]),
+        ("heaven_analysis", heaven_analysis),
+        ("khalifah_seal", result["khalifah_seal"]),
+        ("quranic_grounding", OrderedDict([
+            ("al_baqarah_2_30",
+             "Indeed, I will make upon the earth a khalifah."),
+        ])),
+    ])
+
+
+# ============================================================================
 #  THE 154-LAYER COMPUTATION ENGINE
 # ============================================================================
 #
@@ -4990,7 +5488,7 @@ def _write_heaven_witness(filepath, content_bytes, computation):
     witness_data = OrderedDict([
         (BISMILLAH, True),
         ("encoder_version", ENCODER_VERSION),
-        ("architecture", "11-Heaven, 154-Layer FATIMA v9.0 -- Dual-Constant Witness with Adversarial Integrity"),
+        ("architecture", "11-Heaven, 154-Layer FATIMA v10.0 -- Dual-Constant Witness with Generative Integrity"),
         ("total_heavens", computation["total_heavens"]),
         ("total_layers", computation["total_layers"]),
         ("layers_per_heaven", LAYERS_PER_HEAVEN),
@@ -5449,7 +5947,7 @@ def generate_manifest(directory):
         (BISMILLAH, True),
         ("manifest_version", "5.0"),
         ("encoder_version", ENCODER_VERSION),
-        ("architecture", "11-Heaven, 154-Layer FATIMA v9.0 -- Dual-Constant Witness with Adversarial Integrity"),
+        ("architecture", "11-Heaven, 154-Layer FATIMA v10.0 -- Dual-Constant Witness with Generative Integrity"),
         ("total_heavens", TOTAL_HEAVENS),
         ("total_layers", TOTAL_LAYERS),
         ("layers_per_heaven", LAYERS_PER_HEAVEN),
@@ -7812,6 +8310,21 @@ Examples:
                                          help='v9.0: Full adversarial report')
     muhasabah_report_p.add_argument('path', help='File to generate report for')
 
+    khalifah_p = sub.add_parser('khalifah',
+                                 help='v10.0: Generative integrity gate')
+    khalifah_p.add_argument('corpus', help='Directory (reference corpus)')
+    khalifah_p.add_argument('candidate', help='File to verify against corpus')
+
+    khalifah_verify_p = sub.add_parser('khalifah-verify',
+                                        help='v10.0: Verify khalifah seal')
+    khalifah_verify_p.add_argument('corpus', help='Directory (reference corpus)')
+    khalifah_verify_p.add_argument('candidate', help='File to verify')
+
+    khalifah_report_p = sub.add_parser('khalifah-report',
+                                        help='v10.0: Full fidelity report')
+    khalifah_report_p.add_argument('corpus', help='Directory (reference corpus)')
+    khalifah_report_p.add_argument('candidate', help='File to report on')
+
     heal_p = sub.add_parser('heal', help='v5.2: Self-heal degraded files')
     heal_p.add_argument('path', help='File or directory to heal')
     heal_p.add_argument('--force', action='store_true',
@@ -8430,6 +8943,100 @@ Examples:
         else:
             print("  ERROR: {} is not a file".format(args.path))
             sys.exit(1)
+
+    elif args.command == 'khalifah':
+        result = khalifah_gate(args.corpus, args.candidate)
+        if "error" in result:
+            print("\n  ERROR: {}".format(result["error"]))
+            sys.exit(1)
+        print("\n  {} KHALIFAH GATE -- GENERATIVE INTEGRITY {}".format(
+            "=" * 8, "=" * 8))
+        print("  Candidate: {}".format(result["candidate"]))
+        print("  Corpus: {} ({} documents)".format(
+            result["corpus"], result["corpus_documents"]))
+        print("  Verification space: {} dimensions (154 x 7)".format(
+            result["verification_dimensions"]))
+        verdict = result.get("verdict", {})
+        print("  Overall fidelity: {:.1%}".format(result["overall_fidelity"]))
+        print("  Verdict: {} ({}) -- {}".format(
+            verdict.get("name", ""), verdict.get("arabic", ""),
+            verdict.get("meaning", "")))
+        print("\n  Fidelity Vector (7 semantic levels):")
+        for dim_name, score in result.get("fidelity_vector", {}).items():
+            bar_len = int(score * 20)
+            bar = "█" * bar_len + "░" * (20 - bar_len)
+            print("    {:<25} {} {:.1%}".format(dim_name, bar, score))
+        print("\n  Heaven Fidelities (11 heavens):")
+        for i, score in enumerate(result.get("heaven_fidelities", [])):
+            bar_len = int(score * 15)
+            bar = "█" * bar_len + "░" * (15 - bar_len)
+            print("    Heaven {:>2}: {} {:.1%}".format(i + 1, bar, score))
+        print("\n  Khalifah seal: {}...".format(
+            result["khalifah_seal"][:32]))
+        print("  Dimensions: {}".format(
+            result.get("dimensional_encoding", "")))
+        print("  Qur'an 2:30: \"Indeed, I will make upon the earth a khalifah.\"")
+
+    elif args.command == 'khalifah-verify':
+        result = khalifah_verify(args.corpus, args.candidate)
+        if "error" in result and not result.get("checks"):
+            print("\n  ERROR: {}".format(result.get("error", "")))
+            if result.get("recommendation"):
+                print("  {}".format(result["recommendation"]))
+            sys.exit(1)
+        print("\n  {} KHALIFAH GATE VERIFICATION {}".format(
+            "=" * 12, "=" * 12))
+        print("  Candidate: {}".format(result.get("candidate", args.candidate)))
+        print("  Overall: {}".format(
+            "ALL VALID" if result.get("valid") else "INTEGRITY COMPROMISED"))
+        for check in result.get("checks", []):
+            status_icon = "✓" if check["status"] == "VALID" else "✗"
+            print("  {} {}: {}".format(
+                status_icon, check["check"], check["status"]))
+        if result.get("verdict"):
+            print("  Verdict: {} ({})".format(
+                result["verdict"].get("name", ""),
+                result["verdict"].get("arabic", "")))
+
+    elif args.command == 'khalifah-report':
+        report = khalifah_report(args.corpus, args.candidate)
+        if "error" in report:
+            print("\n  ERROR: {}".format(report["error"]))
+            sys.exit(1)
+        print("\n  {} KHALIFAH GATE FULL REPORT {}".format(
+            "=" * 10, "=" * 10))
+        print("  Candidate: {}".format(report["candidate"]))
+        print("  Corpus: {} ({} documents)".format(
+            report["corpus"], report["corpus_documents"]))
+        verdict = report.get("verdict", {})
+        print("  Fidelity: {:.1%} -- {} ({}) -- {}".format(
+            report["overall_fidelity"], verdict.get("name", ""),
+            verdict.get("arabic", ""), verdict.get("meaning", "")))
+        print("  Dimensions: {}".format(
+            report.get("dimensional_encoding", "")))
+        print("\n  Fidelity Vector:")
+        for dim_name, score in report.get("fidelity_vector", {}).items():
+            bar_len = int(score * 20)
+            bar = "█" * bar_len + "░" * (20 - bar_len)
+            print("    {:<25} {} {:.1%}".format(dim_name, bar, score))
+        if report.get("strongest_dimensions"):
+            print("\n  Strongest dimensions:")
+            for dim, score in report["strongest_dimensions"]:
+                print("    ● {} = {:.1%}".format(dim, score))
+        if report.get("weakest_dimensions"):
+            print("  Weakest dimensions:")
+            for dim, score in report["weakest_dimensions"]:
+                print("    ○ {} = {:.1%}".format(dim, score))
+        if report.get("heaven_analysis"):
+            print("\n  Heaven-by-Heaven Analysis:")
+            for h in report["heaven_analysis"]:
+                indicator = "●" if h["status"] == "FAITHFUL" else \
+                           "◐" if h["status"] == "DRIFTING" else "○"
+                print("    {} Heaven {:>2}: {:.1%} [{}]".format(
+                    indicator, h["heaven"], h["fidelity"], h["status"]))
+        print("\n  Khalifah seal: {}...".format(
+            report["khalifah_seal"][:32]))
+        print("  Qur'an 2:30: \"Indeed, I will make upon the earth a khalifah.\"")
 
     elif args.command == 'unseal':
         if os.path.isdir(args.path):

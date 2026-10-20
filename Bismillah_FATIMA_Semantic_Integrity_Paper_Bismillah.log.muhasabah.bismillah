@@ -1,0 +1,1025 @@
+{
+  "Bismillah ir-Rahman ir-Rahim": true,
+  "encoder_version": "9.0.0",
+  "file": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.log",
+  "analyzed_at": "2026-10-20T07:37:46.892424+00:00",
+  "protection_layers": {
+    "hmac_sidecar": false,
+    "witness_154_layer": false,
+    "semantic_v6": false,
+    "temporal_v7": false,
+    "relational_v8": true
+  },
+  "taxonomy_dimensions": "77 = 7 x 11 (both divine constants)",
+  "overall_score": 0.1283,
+  "grade": {
+    "name": "MUFARRIT",
+    "arabic": "مفرط",
+    "meaning": "Negligent -- serious vulnerabilities"
+  },
+  "muhasabah_seal": "2601a5929ec23a595cb896362909e57eec6150fa7fa70e3cda7a350f9fbf36c3",
+  "hmac_signature": "a1242770c7071ae105626bcd69a204982f236bd25c4157b4bf9f1e03465634bc",
+  "layer_contributions": {
+    "hmac_zwc": 0.3312,
+    "semantic": 0.0,
+    "temporal": 0.0,
+    "relational": 0.326
+  },
+  "pattern_resilience": [
+    {
+      "pattern": "SURFACE",
+      "average_resilience": 0.2135
+    },
+    {
+      "pattern": "STRUCTURAL",
+      "average_resilience": 0.2013
+    },
+    {
+      "pattern": "PROPOSITIONAL",
+      "average_resilience": 0.1178
+    },
+    {
+      "pattern": "REFERENTIAL",
+      "average_resilience": 0.126
+    },
+    {
+      "pattern": "INFERENTIAL",
+      "average_resilience": 0.126
+    },
+    {
+      "pattern": "THEMATIC",
+      "average_resilience": 0.126
+    },
+    {
+      "pattern": "TELEOLOGICAL",
+      "average_resilience": 0.126
+    }
+  ],
+  "weakest_cells": [
+    {
+      "adversary": "METADATA_STRIP",
+      "pattern": "SURFACE",
+      "resilience": 0.063
+    },
+    {
+      "adversary": "METADATA_STRIP",
+      "pattern": "STRUCTURAL",
+      "resilience": 0.063
+    },
+    {
+      "adversary": "METADATA_STRIP",
+      "pattern": "PROPOSITIONAL",
+      "resilience": 0.063
+    },
+    {
+      "adversary": "METADATA_STRIP",
+      "pattern": "REFERENTIAL",
+      "resilience": 0.063
+    },
+    {
+      "adversary": "METADATA_STRIP",
+      "pattern": "INFERENTIAL",
+      "resilience": 0.063
+    }
+  ],
+  "taxonomy": [
+    {
+      "category": "BIT_FLIP",
+      "arabic": "تبديل",
+      "description": "Single-bit corruption",
+      "cells": [
+        {
+          "adversary": "BIT_FLIP",
+          "pattern": "SURFACE",
+          "coverage": {
+            "hmac_zwc": 1.0,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.306
+        },
+        {
+          "adversary": "BIT_FLIP",
+          "pattern": "STRUCTURAL",
+          "coverage": {
+            "hmac_zwc": 1.0,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.306
+        },
+        {
+          "adversary": "BIT_FLIP",
+          "pattern": "PROPOSITIONAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "BIT_FLIP",
+          "pattern": "REFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "BIT_FLIP",
+          "pattern": "INFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "BIT_FLIP",
+          "pattern": "THEMATIC",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "BIT_FLIP",
+          "pattern": "TELEOLOGICAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        }
+      ],
+      "category_avg": 0.171
+    },
+    {
+      "category": "TRUNCATION",
+      "arabic": "بتر",
+      "description": "Content removed from end",
+      "cells": [
+        {
+          "adversary": "TRUNCATION",
+          "pattern": "SURFACE",
+          "coverage": {
+            "hmac_zwc": 1.0,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.306
+        },
+        {
+          "adversary": "TRUNCATION",
+          "pattern": "STRUCTURAL",
+          "coverage": {
+            "hmac_zwc": 1.0,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.306
+        },
+        {
+          "adversary": "TRUNCATION",
+          "pattern": "PROPOSITIONAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "TRUNCATION",
+          "pattern": "REFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "TRUNCATION",
+          "pattern": "INFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "TRUNCATION",
+          "pattern": "THEMATIC",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "TRUNCATION",
+          "pattern": "TELEOLOGICAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        }
+      ],
+      "category_avg": 0.171
+    },
+    {
+      "category": "INSERTION",
+      "arabic": "إدخال",
+      "description": "Foreign content injected",
+      "cells": [
+        {
+          "adversary": "INSERTION",
+          "pattern": "SURFACE",
+          "coverage": {
+            "hmac_zwc": 1.0,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.306
+        },
+        {
+          "adversary": "INSERTION",
+          "pattern": "STRUCTURAL",
+          "coverage": {
+            "hmac_zwc": 1.0,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.306
+        },
+        {
+          "adversary": "INSERTION",
+          "pattern": "PROPOSITIONAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "INSERTION",
+          "pattern": "REFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.5
+          },
+          "resilience": 0.171
+        },
+        {
+          "adversary": "INSERTION",
+          "pattern": "INFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.5
+          },
+          "resilience": 0.171
+        },
+        {
+          "adversary": "INSERTION",
+          "pattern": "THEMATIC",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.5
+          },
+          "resilience": 0.171
+        },
+        {
+          "adversary": "INSERTION",
+          "pattern": "TELEOLOGICAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.5
+          },
+          "resilience": 0.171
+        }
+      ],
+      "category_avg": 0.2019
+    },
+    {
+      "category": "SUBSTITUTION",
+      "arabic": "إبدال",
+      "description": "Words/phrases replaced",
+      "cells": [
+        {
+          "adversary": "SUBSTITUTION",
+          "pattern": "SURFACE",
+          "coverage": {
+            "hmac_zwc": 0.9,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.279
+        },
+        {
+          "adversary": "SUBSTITUTION",
+          "pattern": "STRUCTURAL",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.144
+        },
+        {
+          "adversary": "SUBSTITUTION",
+          "pattern": "PROPOSITIONAL",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.144
+        },
+        {
+          "adversary": "SUBSTITUTION",
+          "pattern": "REFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.4
+          },
+          "resilience": 0.18
+        },
+        {
+          "adversary": "SUBSTITUTION",
+          "pattern": "INFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.4
+          },
+          "resilience": 0.18
+        },
+        {
+          "adversary": "SUBSTITUTION",
+          "pattern": "THEMATIC",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.4
+          },
+          "resilience": 0.18
+        },
+        {
+          "adversary": "SUBSTITUTION",
+          "pattern": "TELEOLOGICAL",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.4
+          },
+          "resilience": 0.18
+        }
+      ],
+      "category_avg": 0.1839
+    },
+    {
+      "category": "REORDERING",
+      "arabic": "تقديم",
+      "description": "Sections rearranged",
+      "cells": [
+        {
+          "adversary": "REORDERING",
+          "pattern": "SURFACE",
+          "coverage": {
+            "hmac_zwc": 0.8,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.252
+        },
+        {
+          "adversary": "REORDERING",
+          "pattern": "STRUCTURAL",
+          "coverage": {
+            "hmac_zwc": 0.8,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.252
+        },
+        {
+          "adversary": "REORDERING",
+          "pattern": "PROPOSITIONAL",
+          "coverage": {
+            "hmac_zwc": 0.2,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.09
+        },
+        {
+          "adversary": "REORDERING",
+          "pattern": "REFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.2,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.09
+        },
+        {
+          "adversary": "REORDERING",
+          "pattern": "INFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.2,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.09
+        },
+        {
+          "adversary": "REORDERING",
+          "pattern": "THEMATIC",
+          "coverage": {
+            "hmac_zwc": 0.2,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.09
+        },
+        {
+          "adversary": "REORDERING",
+          "pattern": "TELEOLOGICAL",
+          "coverage": {
+            "hmac_zwc": 0.2,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.09
+        }
+      ],
+      "category_avg": 0.1363
+    },
+    {
+      "category": "ENCODING_SHIFT",
+      "arabic": "تحويل",
+      "description": "Character encoding changed",
+      "cells": [
+        {
+          "adversary": "ENCODING_SHIFT",
+          "pattern": "SURFACE",
+          "coverage": {
+            "hmac_zwc": 1.0,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.306
+        },
+        {
+          "adversary": "ENCODING_SHIFT",
+          "pattern": "STRUCTURAL",
+          "coverage": {
+            "hmac_zwc": 1.0,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.306
+        },
+        {
+          "adversary": "ENCODING_SHIFT",
+          "pattern": "PROPOSITIONAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "ENCODING_SHIFT",
+          "pattern": "REFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "ENCODING_SHIFT",
+          "pattern": "INFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "ENCODING_SHIFT",
+          "pattern": "THEMATIC",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        },
+        {
+          "adversary": "ENCODING_SHIFT",
+          "pattern": "TELEOLOGICAL",
+          "coverage": {
+            "hmac_zwc": 0.3,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.117
+        }
+      ],
+      "category_avg": 0.171
+    },
+    {
+      "category": "METADATA_STRIP",
+      "arabic": "تجريد",
+      "description": "Sidecar/metadata removed",
+      "cells": [
+        {
+          "adversary": "METADATA_STRIP",
+          "pattern": "SURFACE",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "METADATA_STRIP",
+          "pattern": "STRUCTURAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "METADATA_STRIP",
+          "pattern": "PROPOSITIONAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "METADATA_STRIP",
+          "pattern": "REFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "METADATA_STRIP",
+          "pattern": "INFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "METADATA_STRIP",
+          "pattern": "THEMATIC",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "METADATA_STRIP",
+          "pattern": "TELEOLOGICAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        }
+      ],
+      "category_avg": 0.063
+    },
+    {
+      "category": "SEMANTIC_DRIFT",
+      "arabic": "انحراف",
+      "description": "Meaning altered, bits preserved",
+      "cells": [
+        {
+          "adversary": "SEMANTIC_DRIFT",
+          "pattern": "SURFACE",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "SEMANTIC_DRIFT",
+          "pattern": "STRUCTURAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "SEMANTIC_DRIFT",
+          "pattern": "PROPOSITIONAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "SEMANTIC_DRIFT",
+          "pattern": "REFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "SEMANTIC_DRIFT",
+          "pattern": "INFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "SEMANTIC_DRIFT",
+          "pattern": "THEMATIC",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "SEMANTIC_DRIFT",
+          "pattern": "TELEOLOGICAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        }
+      ],
+      "category_avg": 0.063
+    },
+    {
+      "category": "TEMPORAL_REPLAY",
+      "arabic": "إعادة",
+      "description": "Old version replayed as current",
+      "cells": [
+        {
+          "adversary": "TEMPORAL_REPLAY",
+          "pattern": "SURFACE",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "TEMPORAL_REPLAY",
+          "pattern": "STRUCTURAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "TEMPORAL_REPLAY",
+          "pattern": "PROPOSITIONAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "TEMPORAL_REPLAY",
+          "pattern": "REFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "TEMPORAL_REPLAY",
+          "pattern": "INFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "TEMPORAL_REPLAY",
+          "pattern": "THEMATIC",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        },
+        {
+          "adversary": "TEMPORAL_REPLAY",
+          "pattern": "TELEOLOGICAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.2
+          },
+          "resilience": 0.063
+        }
+      ],
+      "category_avg": 0.063
+    },
+    {
+      "category": "RELATIONAL_SEVER",
+      "arabic": "قطع",
+      "description": "Document isolated from corpus",
+      "cells": [
+        {
+          "adversary": "RELATIONAL_SEVER",
+          "pattern": "SURFACE",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 1.0
+          },
+          "resilience": 0.207
+        },
+        {
+          "adversary": "RELATIONAL_SEVER",
+          "pattern": "STRUCTURAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 1.0
+          },
+          "resilience": 0.207
+        },
+        {
+          "adversary": "RELATIONAL_SEVER",
+          "pattern": "PROPOSITIONAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 1.0
+          },
+          "resilience": 0.207
+        },
+        {
+          "adversary": "RELATIONAL_SEVER",
+          "pattern": "REFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 1.0
+          },
+          "resilience": 0.207
+        },
+        {
+          "adversary": "RELATIONAL_SEVER",
+          "pattern": "INFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 1.0
+          },
+          "resilience": 0.207
+        },
+        {
+          "adversary": "RELATIONAL_SEVER",
+          "pattern": "THEMATIC",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 1.0
+          },
+          "resilience": 0.207
+        },
+        {
+          "adversary": "RELATIONAL_SEVER",
+          "pattern": "TELEOLOGICAL",
+          "coverage": {
+            "hmac_zwc": 0.1,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 1.0
+          },
+          "resilience": 0.207
+        }
+      ],
+      "category_avg": 0.207
+    },
+    {
+      "category": "COMPOSITE",
+      "arabic": "مركب",
+      "description": "Multiple attacks combined",
+      "cells": [
+        {
+          "adversary": "COMPOSITE",
+          "pattern": "SURFACE",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.5
+          },
+          "resilience": 0.198
+        },
+        {
+          "adversary": "COMPOSITE",
+          "pattern": "STRUCTURAL",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.5
+          },
+          "resilience": 0.198
+        },
+        {
+          "adversary": "COMPOSITE",
+          "pattern": "PROPOSITIONAL",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.5
+          },
+          "resilience": 0.198
+        },
+        {
+          "adversary": "COMPOSITE",
+          "pattern": "REFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.5
+          },
+          "resilience": 0.198
+        },
+        {
+          "adversary": "COMPOSITE",
+          "pattern": "INFERENTIAL",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.5
+          },
+          "resilience": 0.198
+        },
+        {
+          "adversary": "COMPOSITE",
+          "pattern": "THEMATIC",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.5
+          },
+          "resilience": 0.198
+        },
+        {
+          "adversary": "COMPOSITE",
+          "pattern": "TELEOLOGICAL",
+          "coverage": {
+            "hmac_zwc": 0.4,
+            "semantic": 0.0,
+            "temporal": 0.0,
+            "relational": 0.5
+          },
+          "resilience": 0.198
+        }
+      ],
+      "category_avg": 0.198
+    }
+  ],
+  "quranic_grounding": {
+    "al_hashr_59_18": "O you who have believed, fear Allah. And let every soul look to what it has put forth for tomorrow."
+  }
+}

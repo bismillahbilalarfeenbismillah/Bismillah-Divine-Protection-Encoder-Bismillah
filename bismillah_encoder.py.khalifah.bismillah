@@ -1,0 +1,42 @@
+{
+  "Bismillah ir-Rahman ir-Rahim": true,
+  "encoder_version": "10.0.0",
+  "candidate": "bismillah_encoder.py",
+  "corpus": "divine-encoder",
+  "corpus_documents": 40,
+  "verified_at": "2026-10-20T07:46:32.695123+00:00",
+  "verification_space": "1078 = 154 x 7 = 2 x 7^2 x 11",
+  "overall_fidelity": 0.9665,
+  "verdict": {
+    "name": "KHALIFAH_RASHID",
+    "arabic": "خليفة راشد",
+    "meaning": "Rightly-guided steward"
+  },
+  "fidelity_vector": {
+    "LEXICAL_FIDELITY": 1.0,
+    "SYNTACTIC_FIDELITY": 1.0,
+    "PROPOSITIONAL_FIDELITY": 1.0,
+    "RELATIONAL_FIDELITY": 1.0,
+    "RHETORICAL_FIDELITY": 0.999,
+    "THEMATIC_FIDELITY": 0.9639,
+    "INTENTIONAL_FIDELITY": 0.8328
+  },
+  "heaven_fidelities": {
+    "heaven_1": 0.735,
+    "heaven_2": 0.7692,
+    "heaven_3": 0.7987,
+    "heaven_4": 0.8187,
+    "heaven_5": 0.8291,
+    "heaven_6": 0.8348,
+    "heaven_7": 0.8262,
+    "heaven_8": 0.8128,
+    "heaven_9": 0.79,
+    "heaven_10": 0.7579,
+    "heaven_11": 0.7213
+  },
+  "khalifah_seal": "186c7ed9e6301ede38bb327932fff5766c9f4c2997cbaa03068064e4de17f71f",
+  "hmac_signature": "39ce8d774bbeeb037a3487a1f2f5e4a3be1359e1e6130b6d4eee59aeb602c744",
+  "quranic_grounding": {
+    "al_baqarah_2_30": "Indeed, I will make upon the earth a khalifah."
+  }
+}
