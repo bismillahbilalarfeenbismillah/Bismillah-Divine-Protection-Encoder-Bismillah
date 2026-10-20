@@ -1,8 +1,9 @@
 # Bismillah ir-Rahman ir-Rahim
 """
-Bismillah Divine Protection Encoder -- FATIMA v7.0 -- 11-Heaven, 154-Layer Architecture
-with Semantic Integrity Engine (Shannon's Boundary Crossing)
-and Temporal Integrity Engine (The Living Witness)
+Bismillah Divine Protection Encoder -- FATIMA v8.0 -- 11-Heaven, 154-Layer Architecture
+with Semantic Integrity Engine (Shannon's Boundary Crossing),
+Temporal Integrity Engine (The Living Witness),
+and Relational Integrity Engine (The Ummah Witness)
 
 Seals every file in a directory with the name of Allah subhanahu wa ta'ala
 across ELEVEN HEAVENS of protection, containing 154 LAYERS total -- from
@@ -132,6 +133,9 @@ USAGE:
     python bismillah_encoder.py semantic-verify a b    # v6.0: Verify meaning preservation
     python bismillah_encoder.py temporal <path>        # v7.0: Verify temporal chain
     python bismillah_encoder.py temporal-history <path> # v7.0: Show temporal evolution
+    python bismillah_encoder.py ummah <dir>             # v8.0: Seal corpus as ummah
+    python bismillah_encoder.py ummah-verify <dir>      # v8.0: Verify ummah integrity
+    python bismillah_encoder.py ummah-graph <dir>       # v8.0: Display ummah graph
 
 "In the name of Allah, the Most Merciful, the Most Compassionate."
 "He is Allah, other than whom there is no deity, Knower of the unseen and
@@ -181,7 +185,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "7.0.0"
+ENCODER_VERSION = "8.0.0"
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -1879,6 +1883,776 @@ def temporal_history(filepath):
 
 
 # ============================================================================
+#  v8.0: RELATIONAL INTEGRITY ENGINE -- THE UMMAH WITNESS
+# ============================================================================
+#
+#  v8.0 adds the RELATIONAL dimension: documents don't exist in isolation.
+#  Just as believers form an ummah (community), documents in a corpus form
+#  relationships -- they reference each other, share themes, build on each
+#  other's meaning. The Ummah Witness seals these relationships.
+#
+#  THE RELATIONAL ARCHITECTURE:
+#
+#    "The believers are but brothers, so make settlement between
+#     your brothers." (49:10)
+#
+#  Each document is a member of the ummah. Each relationship between
+#  documents is a bond of brotherhood. The corpus-level seal witnesses
+#  ALL relationships -- the community's integrity, not just each member's.
+#
+#  Mathematical grounding:
+#    - 7 kinship types (muhkam constant) -- mirrors the 7 semantic levels
+#    - 99 Names at corpus scale -- each document assigned a Name
+#    - 693 = 7 x 99 = 7 x 9 x 11 -- edge dimensions encoding both constants
+#    - Corpus Merkle tree witnesses all document seals as a community
+#
+#  The 7 kinship types:
+#    0. LEXICAL_KINSHIP    -- shared vocabulary (do they speak the same words?)
+#    1. SYNTACTIC_KINSHIP  -- structural similarity (do they write alike?)
+#    2. PROPOSITIONAL_KINSHIP -- shared claims (do they assert the same?)
+#    3. RELATIONAL_KINSHIP -- cross-references (do they name each other?)
+#    4. RHETORICAL_KINSHIP -- shared reasoning (do they argue alike?)
+#    5. THEMATIC_KINSHIP   -- shared themes (do they discuss the same?)
+#    6. INTENTIONAL_KINSHIP -- shared purpose (do they intend the same?)
+#
+#  The sidecar: .ummah.bismillah at the corpus root
+#  Contains the community graph, the corpus Merkle root, and the ummah seal.
+#
+# ============================================================================
+
+UMMAH_KINSHIP_TYPES = 7       # Muhkam constant -- types of relationship
+UMMAH_NAMES_SCALE = 99        # 99 Names at corpus scale
+UMMAH_EDGE_DIMENSIONS = UMMAH_KINSHIP_TYPES * UMMAH_NAMES_SCALE  # 693
+UMMAH_CHAIN_FILE = '.ummah.bismillah'
+
+UMMAH_KINSHIP_NAMES = [
+    "LEXICAL_KINSHIP",       # Shared vocabulary
+    "SYNTACTIC_KINSHIP",     # Structural similarity
+    "PROPOSITIONAL_KINSHIP", # Shared claims
+    "RELATIONAL_KINSHIP",    # Cross-references
+    "RHETORICAL_KINSHIP",    # Shared reasoning patterns
+    "THEMATIC_KINSHIP",      # Shared themes
+    "INTENTIONAL_KINSHIP",   # Shared purpose
+]
+
+# Kinship strength thresholds
+_KINSHIP_STRONG = 0.5    # Strong kinship bond
+_KINSHIP_PRESENT = 0.2   # Kinship exists but weak
+
+
+def _extract_document_features(content_bytes):
+    """Extract semantic features from a document for relationship detection.
+
+    Returns a dict of feature sets used to compare documents across
+    the 7 kinship dimensions.
+    """
+    try:
+        text = content_bytes.decode('utf-8', errors='replace')
+    except Exception:
+        return None
+
+    # Strip ZWC
+    zwc_chars = {'​', '‌', '‍', '﻿'}
+    text_clean = ''.join(c for c in text if c not in zwc_chars)
+
+    if len(text_clean.strip()) < 50:
+        return None
+
+    tokens = _tokenize_semantic(text_clean)
+    sentences = _extract_sentences(text_clean)
+
+    if not tokens or not sentences:
+        return None
+
+    # Feature extraction for each kinship type
+    # 0: LEXICAL -- unique content words
+    content_words = set(_normalize_for_hashing(tokens, keep_negation=True,
+                                                keep_quantifiers=True))
+
+    # 1: SYNTACTIC -- sentence structure patterns (word length sequences)
+    struct_patterns = []
+    for sent in sentences[:256]:
+        stokens = _tokenize_semantic(sent)
+        pattern = tuple(len(t) for t in stokens)
+        struct_patterns.append(pattern)
+
+    # 2: PROPOSITIONAL -- normalized propositions
+    propositions = set()
+    for sent in sentences[:256]:
+        stokens = _tokenize_semantic(sent)
+        content = _normalize_for_hashing(stokens)
+        if len(content) >= 2:
+            prop = " ".join(sorted(content))
+            propositions.add(prop)
+
+    # 3: RELATIONAL -- entity pairs
+    entities = set()
+    entity_pairs = set()
+    for sent in sentences[:256]:
+        sent_entities = re.findall(r'\b[A-Z][a-z]{2,}\b', sent)
+        sent_entities = sorted(set(sent_entities))
+        for e in sent_entities:
+            entities.add(e.lower())
+        for i in range(len(sent_entities)):
+            for j in range(i + 1, len(sent_entities)):
+                entity_pairs.add((sent_entities[i].lower(),
+                                  sent_entities[j].lower()))
+
+    # 4: RHETORICAL -- logical connector profile
+    connector_counts = {}
+    for t in tokens:
+        if t in _LOGICAL_CONNECTORS:
+            connector_counts[t] = connector_counts.get(t, 0) + 1
+
+    # 5: THEMATIC -- topic bin distribution (7 bins)
+    freq = {}
+    plain_content = _normalize_for_hashing(tokens, keep_negation=False,
+                                            keep_quantifiers=False)
+    for w in plain_content:
+        freq[w] = freq.get(w, 0) + 1
+    topic_bins = [0] * 7
+    for word, count in freq.items():
+        bucket = int(hashlib.md5(word.encode('utf-8')).hexdigest(), 16) % 7
+        topic_bins[bucket] += count
+    total = sum(topic_bins) or 1
+    topic_dist = tuple(round(b / total, 4) for b in topic_bins)
+
+    # 6: INTENTIONAL -- speech act profile
+    act_counts = {}
+    for category in _SPEECH_ACT_VERBS:
+        act_counts[category] = 0
+    for sent in sentences[:256]:
+        stokens = set(_tokenize_semantic(sent))
+        for category, verbs in _SPEECH_ACT_VERBS.items():
+            if stokens & verbs:
+                act_counts[category] += 1
+    total_sents = max(len(sentences), 1)
+    act_dist = {k: round(v / total_sents, 4) for k, v in act_counts.items()}
+
+    return {
+        "content_words": content_words,
+        "struct_patterns": struct_patterns,
+        "propositions": propositions,
+        "entities": entities,
+        "entity_pairs": entity_pairs,
+        "connector_counts": connector_counts,
+        "topic_distribution": topic_dist,
+        "speech_act_distribution": act_dist,
+        "total_tokens": len(tokens),
+        "total_sentences": len(sentences),
+    }
+
+
+def _compute_kinship(features_a, features_b):
+    """Compute the 7-dimensional kinship vector between two documents.
+
+    Returns a list of 7 kinship scores, one per kinship type.
+    Each score is between 0.0 (no kinship) and 1.0 (identical).
+    """
+    if features_a is None or features_b is None:
+        return [0.0] * UMMAH_KINSHIP_TYPES
+
+    kinship = []
+
+    # 0: LEXICAL_KINSHIP -- Jaccard similarity of content words
+    words_a = features_a["content_words"]
+    words_b = features_b["content_words"]
+    if words_a or words_b:
+        intersection = len(words_a & words_b)
+        union = len(words_a | words_b)
+        kinship.append(round(intersection / union, 6) if union else 0.0)
+    else:
+        kinship.append(0.0)
+
+    # 1: SYNTACTIC_KINSHIP -- proportion of shared structural patterns
+    pats_a = set(features_a["struct_patterns"])
+    pats_b = set(features_b["struct_patterns"])
+    if pats_a or pats_b:
+        shared = len(pats_a & pats_b)
+        total = len(pats_a | pats_b)
+        kinship.append(round(shared / total, 6) if total else 0.0)
+    else:
+        kinship.append(0.0)
+
+    # 2: PROPOSITIONAL_KINSHIP -- Jaccard of propositions
+    props_a = features_a["propositions"]
+    props_b = features_b["propositions"]
+    if props_a or props_b:
+        shared = len(props_a & props_b)
+        total = len(props_a | props_b)
+        kinship.append(round(shared / total, 6) if total else 0.0)
+    else:
+        kinship.append(0.0)
+
+    # 3: RELATIONAL_KINSHIP -- shared entities and entity pairs
+    ents_a = features_a["entities"]
+    ents_b = features_b["entities"]
+    pairs_a = features_a["entity_pairs"]
+    pairs_b = features_b["entity_pairs"]
+    ent_score = 0.0
+    if ents_a or ents_b:
+        ent_shared = len(ents_a & ents_b)
+        ent_total = len(ents_a | ents_b)
+        ent_score = ent_shared / ent_total if ent_total else 0.0
+    pair_score = 0.0
+    if pairs_a or pairs_b:
+        pair_shared = len(pairs_a & pairs_b)
+        pair_total = len(pairs_a | pairs_b)
+        pair_score = pair_shared / pair_total if pair_total else 0.0
+    kinship.append(round((ent_score + pair_score) / 2, 6))
+
+    # 4: RHETORICAL_KINSHIP -- cosine similarity of connector profiles
+    conns_a = features_a["connector_counts"]
+    conns_b = features_b["connector_counts"]
+    all_conns = set(list(conns_a.keys()) + list(conns_b.keys()))
+    if all_conns:
+        dot = sum(conns_a.get(c, 0) * conns_b.get(c, 0) for c in all_conns)
+        mag_a = math.sqrt(sum(v ** 2 for v in conns_a.values())) or 1.0
+        mag_b = math.sqrt(sum(v ** 2 for v in conns_b.values())) or 1.0
+        kinship.append(round(dot / (mag_a * mag_b), 6))
+    else:
+        kinship.append(0.0)
+
+    # 5: THEMATIC_KINSHIP -- cosine similarity of topic distributions
+    topic_a = features_a["topic_distribution"]
+    topic_b = features_b["topic_distribution"]
+    dot = sum(a * b for a, b in zip(topic_a, topic_b))
+    mag_a = math.sqrt(sum(a ** 2 for a in topic_a)) or 1.0
+    mag_b = math.sqrt(sum(b ** 2 for b in topic_b)) or 1.0
+    kinship.append(round(dot / (mag_a * mag_b), 6))
+
+    # 6: INTENTIONAL_KINSHIP -- cosine similarity of speech act distributions
+    acts_a = features_a["speech_act_distribution"]
+    acts_b = features_b["speech_act_distribution"]
+    all_acts = set(list(acts_a.keys()) + list(acts_b.keys()))
+    if all_acts:
+        dot = sum(acts_a.get(a, 0) * acts_b.get(a, 0) for a in all_acts)
+        mag_a = math.sqrt(sum(v ** 2 for v in acts_a.values())) or 1.0
+        mag_b = math.sqrt(sum(v ** 2 for v in acts_b.values())) or 1.0
+        kinship.append(round(dot / (mag_a * mag_b), 6))
+    else:
+        kinship.append(0.0)
+
+    return kinship
+
+
+def _kinship_seal(doc_a_id, doc_b_id, kinship_vector):
+    """Compute a Bismillah-anchored seal for a kinship bond between two documents.
+
+    The edge seal witnesses the relationship itself -- not just the documents.
+    """
+    h = hashlib.sha256()
+    h.update(BISMILLAH.encode('utf-8'))
+    h.update(b"UMMAH_KINSHIP_BOND")
+    h.update(doc_a_id.encode('utf-8'))
+    h.update(b"<->")
+    h.update(doc_b_id.encode('utf-8'))
+    for i, score in enumerate(kinship_vector):
+        h.update("K{:01d}:{:.6f}".format(i, score).encode('utf-8'))
+    h.update(BISMILLAH.encode('utf-8'))
+    return h.hexdigest()
+
+
+def _kinship_strength(kinship_vector):
+    """Classify the overall kinship strength."""
+    avg = sum(kinship_vector) / len(kinship_vector) if kinship_vector else 0
+    strong_count = sum(1 for k in kinship_vector if k >= _KINSHIP_STRONG)
+    present_count = sum(1 for k in kinship_vector if k >= _KINSHIP_PRESENT)
+
+    if strong_count >= 4:
+        return "UKHUWWA_QAWIYYA"   # Strong brotherhood
+    elif strong_count >= 2 or present_count >= 5:
+        return "UKHUWWA_MUTAWASSITA"  # Moderate brotherhood
+    elif present_count >= 2:
+        return "UKHUWWA_DA'IFA"    # Weak brotherhood
+    elif avg > 0.05:
+        return "MA'RIFA"           # Acquaintance
+    else:
+        return "AJNABI"            # Stranger (no relationship)
+
+
+def _load_ummah_chain(corpus_path):
+    """Load the ummah chain from .ummah.bismillah sidecar."""
+    chain_path = os.path.join(str(corpus_path), UMMAH_CHAIN_FILE)
+    if os.path.exists(chain_path):
+        try:
+            with open(chain_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, IOError):
+            pass
+    return {
+        BISMILLAH: True,
+        "encoder_version": ENCODER_VERSION,
+        "architecture": "FATIMA v8.0 -- Ummah Witness (Relational Integrity)",
+        "quranic_grounding": "49:10 -- The believers are but brothers",
+        "documents": {},
+        "edges": [],
+        "corpus_merkle_root": None,
+        "ummah_seal": None,
+        "total_kinship_bonds": 0,
+        "edge_dimensions": UMMAH_EDGE_DIMENSIONS,
+        "hmac_signature": None,
+    }
+
+
+def _save_ummah_chain(corpus_path, chain):
+    """Save the ummah chain with HMAC signature."""
+    # Recompute corpus Merkle root from all document seals
+    doc_seals = []
+    for doc_id in sorted(chain.get("documents", {}).keys()):
+        doc = chain["documents"][doc_id]
+        if doc.get("content_hash"):
+            doc_seals.append(doc["content_hash"])
+
+    if doc_seals:
+        root, _ = _compute_merkle_root(doc_seals)
+        chain["corpus_merkle_root"] = root
+    else:
+        chain["corpus_merkle_root"] = None
+
+    # Compute ummah seal -- chain of corpus Merkle root + all edge seals
+    ummah_h = hashlib.sha256()
+    ummah_h.update(BISMILLAH.encode('utf-8'))
+    ummah_h.update(b"UMMAH_SEAL")
+    if chain["corpus_merkle_root"]:
+        ummah_h.update(chain["corpus_merkle_root"].encode('utf-8'))
+    for edge in chain.get("edges", []):
+        if edge.get("seal"):
+            ummah_h.update(edge["seal"].encode('utf-8'))
+    ummah_h.update(BISMILLAH.encode('utf-8'))
+    chain["ummah_seal"] = ummah_h.hexdigest()
+
+    chain["encoder_version"] = ENCODER_VERSION
+    chain["total_kinship_bonds"] = len(chain.get("edges", []))
+
+    # HMAC with key derived from Bismillah + ummah seal
+    key_material = BISMILLAH + "|UMMAH|" + (chain["ummah_seal"] or "")
+    hmac_key = hashlib.sha256(key_material.encode('utf-8')).digest()
+    chain_for_hmac = json.dumps(
+        {k: v for k, v in chain.items() if k != "hmac_signature"},
+        ensure_ascii=False, sort_keys=True
+    )
+    chain["hmac_signature"] = hmac.new(
+        hmac_key, chain_for_hmac.encode('utf-8'), hashlib.sha256
+    ).hexdigest()
+
+    chain_path = os.path.join(str(corpus_path), UMMAH_CHAIN_FILE)
+    with open(chain_path, 'w', encoding='utf-8') as f:
+        json.dump(chain, f, ensure_ascii=False, indent=2)
+
+
+def ummah_seal_corpus(corpus_path):
+    """Seal a corpus of documents as an ummah -- computing all kinship bonds.
+
+    Scans the corpus directory for text files, extracts semantic features
+    from each, computes pairwise kinship vectors, and produces the
+    corpus-level ummah seal.
+
+    Returns:
+        dict with ummah status, document count, edge count, and seal.
+    """
+    corpus_path = str(corpus_path)
+    if not os.path.isdir(corpus_path):
+        return {"error": "Not a directory", "sealed": False}
+
+    # Collect sealable text files
+    text_files = []
+    for root, dirs, files in os.walk(corpus_path):
+        dirs[:] = [d for d in dirs if d != '.git' and not d.startswith('.')]
+        for fname in sorted(files):
+            ext = os.path.splitext(fname)[1].lower()
+            if ext in TEXT_EXTENSIONS or ext in CODE_EXTENSIONS:
+                fpath = os.path.join(root, fname)
+                # Skip self, sidecars, and hidden files
+                if os.path.basename(fpath) == SELF_NAME:
+                    continue
+                if fname.endswith('.bismillah') or fname.startswith('.'):
+                    continue
+                text_files.append(fpath)
+
+    if not text_files:
+        return {"error": "No text files found in corpus", "sealed": False}
+
+    # Load or create ummah chain
+    chain = _load_ummah_chain(corpus_path)
+
+    # Extract features from each document
+    doc_features = {}
+    for fpath in text_files:
+        try:
+            with open(fpath, 'rb') as f:
+                content = f.read()
+            features = _extract_document_features(content)
+            if features is not None:
+                rel_path = os.path.relpath(fpath, corpus_path)
+                doc_id = rel_path
+                content_hash = hashlib.sha256(
+                    BISMILLAH.encode('utf-8') + content +
+                    BISMILLAH.encode('utf-8')
+                ).hexdigest()
+
+                # Assign Divine Name based on document index
+                doc_idx = len(doc_features)
+                name_idx = doc_idx % AL_ASMA_COUNT
+                divine_name, divine_meaning = AL_ASMA_UL_HUSNA[name_idx]
+
+                chain["documents"][doc_id] = {
+                    "path": rel_path,
+                    "content_hash": content_hash,
+                    "divine_name": divine_name,
+                    "divine_meaning": divine_meaning,
+                    "name_index": name_idx,
+                    "total_tokens": features["total_tokens"],
+                    "total_sentences": features["total_sentences"],
+                    "sealed_at": datetime.now(timezone.utc).isoformat(),
+                }
+                doc_features[doc_id] = features
+        except Exception:
+            continue
+
+    if len(doc_features) < 2:
+        # Need at least 2 documents for relational integrity
+        if len(doc_features) == 1:
+            # Single document -- save its entry but no edges
+            _save_ummah_chain(corpus_path, chain)
+            return {
+                "sealed": True,
+                "documents": 1,
+                "edges": 0,
+                "note": "Single document -- ummah requires at least 2 members",
+                "corpus_path": corpus_path,
+            }
+        return {"error": "No analyzable text files found", "sealed": False}
+
+    # Compute pairwise kinship bonds
+    doc_ids = sorted(doc_features.keys())
+    edges = []
+    for i in range(len(doc_ids)):
+        for j in range(i + 1, len(doc_ids)):
+            doc_a = doc_ids[i]
+            doc_b = doc_ids[j]
+            kinship = _compute_kinship(doc_features[doc_a], doc_features[doc_b])
+            strength = _kinship_strength(kinship)
+
+            # Only record non-stranger relationships
+            if strength != "AJNABI":
+                seal = _kinship_seal(doc_a, doc_b, kinship)
+                edge = {
+                    "doc_a": doc_a,
+                    "doc_b": doc_b,
+                    "kinship_vector": kinship,
+                    "kinship_names": [
+                        "{}: {:.4f}".format(UMMAH_KINSHIP_NAMES[k], kinship[k])
+                        for k in range(UMMAH_KINSHIP_TYPES)
+                    ],
+                    "strength": strength,
+                    "seal": seal,
+                    "sealed_at": datetime.now(timezone.utc).isoformat(),
+                }
+                edges.append(edge)
+
+    chain["edges"] = edges
+    _save_ummah_chain(corpus_path, chain)
+
+    # Compute community statistics
+    strength_counts = {}
+    for edge in edges:
+        s = edge["strength"]
+        strength_counts[s] = strength_counts.get(s, 0) + 1
+
+    return OrderedDict([
+        ("sealed", True),
+        ("documents", len(doc_features)),
+        ("total_possible_edges", len(doc_ids) * (len(doc_ids) - 1) // 2),
+        ("kinship_bonds", len(edges)),
+        ("stranger_pairs",
+         len(doc_ids) * (len(doc_ids) - 1) // 2 - len(edges)),
+        ("strength_distribution", strength_counts),
+        ("corpus_merkle_root",
+         chain.get("corpus_merkle_root", "")[:32] + "..."
+         if chain.get("corpus_merkle_root") else None),
+        ("ummah_seal",
+         chain.get("ummah_seal", "")[:32] + "..."
+         if chain.get("ummah_seal") else None),
+        ("edge_dimensions", UMMAH_EDGE_DIMENSIONS),
+        ("dimensional_encoding", "7 kinship types x 99 Names = 693 = 7 x 9 x 11"),
+        ("corpus_path", corpus_path),
+        ("quranic_grounding",
+         "49:10 -- The believers are but brothers"),
+    ])
+
+
+def ummah_verify_corpus(corpus_path):
+    """Verify the relational integrity of a sealed corpus.
+
+    Checks:
+      1. HMAC signature of the ummah chain
+      2. Corpus Merkle root recomputation
+      3. Individual document content hashes
+      4. Edge seal recomputation
+      5. Kinship vector consistency
+    """
+    corpus_path = str(corpus_path)
+    chain_path = os.path.join(corpus_path, UMMAH_CHAIN_FILE)
+
+    if not os.path.exists(chain_path):
+        return {
+            "verified": None,
+            "reason": "No ummah chain found -- seal corpus first",
+            "recommendation": "Run: python bismillah_encoder.py ummah <dir>",
+        }
+
+    chain = _load_ummah_chain(corpus_path)
+    diagnostics = []
+
+    # 1. HMAC verification
+    stored_hmac = chain.get("hmac_signature")
+    if stored_hmac:
+        key_material = BISMILLAH + "|UMMAH|" + (chain.get("ummah_seal") or "")
+        hmac_key = hashlib.sha256(key_material.encode('utf-8')).digest()
+        chain_for_hmac = json.dumps(
+            {k: v for k, v in chain.items() if k != "hmac_signature"},
+            ensure_ascii=False, sort_keys=True
+        )
+        recomputed_hmac = hmac.new(
+            hmac_key, chain_for_hmac.encode('utf-8'), hashlib.sha256
+        ).hexdigest()
+        if recomputed_hmac == stored_hmac:
+            diagnostics.append({
+                "check": "HMAC_SIGNATURE",
+                "status": "VALID",
+                "detail": "Chain HMAC verified",
+            })
+        else:
+            diagnostics.append({
+                "check": "HMAC_SIGNATURE",
+                "status": "INVALID",
+                "detail": "HMAC mismatch -- chain may be tampered",
+            })
+    else:
+        diagnostics.append({
+            "check": "HMAC_SIGNATURE",
+            "status": "MISSING",
+            "detail": "No HMAC signature found",
+        })
+
+    # 2. Corpus Merkle root recomputation
+    doc_seals = []
+    for doc_id in sorted(chain.get("documents", {}).keys()):
+        doc = chain["documents"][doc_id]
+        if doc.get("content_hash"):
+            doc_seals.append(doc["content_hash"])
+    if doc_seals:
+        recomputed_root, _ = _compute_merkle_root(doc_seals)
+        stored_root = chain.get("corpus_merkle_root")
+        if recomputed_root == stored_root:
+            diagnostics.append({
+                "check": "CORPUS_MERKLE_ROOT",
+                "status": "VALID",
+                "detail": "Merkle root matches ({} documents)".format(len(doc_seals)),
+            })
+        else:
+            diagnostics.append({
+                "check": "CORPUS_MERKLE_ROOT",
+                "status": "INVALID",
+                "detail": "Merkle root mismatch -- document set changed",
+            })
+
+    # 3. Document content hash verification
+    docs_valid = 0
+    docs_changed = 0
+    docs_missing = 0
+    for doc_id, doc in chain.get("documents", {}).items():
+        doc_path = os.path.join(corpus_path, doc.get("path", doc_id))
+        if os.path.exists(doc_path):
+            try:
+                with open(doc_path, 'rb') as f:
+                    content = f.read()
+                current_hash = hashlib.sha256(
+                    BISMILLAH.encode('utf-8') + content +
+                    BISMILLAH.encode('utf-8')
+                ).hexdigest()
+                if current_hash == doc.get("content_hash"):
+                    docs_valid += 1
+                else:
+                    docs_changed += 1
+            except Exception:
+                docs_missing += 1
+        else:
+            docs_missing += 1
+
+    diagnostics.append({
+        "check": "DOCUMENT_HASHES",
+        "status": "VALID" if docs_changed == 0 and docs_missing == 0 else "ALTERED",
+        "detail": "{} valid, {} changed, {} missing".format(
+            docs_valid, docs_changed, docs_missing),
+    })
+
+    # 4. Edge seal verification
+    edges_valid = 0
+    edges_invalid = 0
+    for edge in chain.get("edges", []):
+        recomputed = _kinship_seal(
+            edge["doc_a"], edge["doc_b"], edge["kinship_vector"]
+        )
+        if recomputed == edge.get("seal"):
+            edges_valid += 1
+        else:
+            edges_invalid += 1
+
+    if chain.get("edges"):
+        diagnostics.append({
+            "check": "EDGE_SEALS",
+            "status": "VALID" if edges_invalid == 0 else "INVALID",
+            "detail": "{} valid, {} invalid".format(edges_valid, edges_invalid),
+        })
+
+    # 5. Ummah seal recomputation
+    ummah_h = hashlib.sha256()
+    ummah_h.update(BISMILLAH.encode('utf-8'))
+    ummah_h.update(b"UMMAH_SEAL")
+    if chain.get("corpus_merkle_root"):
+        ummah_h.update(chain["corpus_merkle_root"].encode('utf-8'))
+    for edge in chain.get("edges", []):
+        if edge.get("seal"):
+            ummah_h.update(edge["seal"].encode('utf-8'))
+    ummah_h.update(BISMILLAH.encode('utf-8'))
+    recomputed_ummah = ummah_h.hexdigest()
+
+    if recomputed_ummah == chain.get("ummah_seal"):
+        diagnostics.append({
+            "check": "UMMAH_SEAL",
+            "status": "VALID",
+            "detail": "Corpus-level ummah seal verified",
+        })
+    else:
+        diagnostics.append({
+            "check": "UMMAH_SEAL",
+            "status": "INVALID",
+            "detail": "Ummah seal mismatch",
+        })
+
+    all_valid = all(d["status"] == "VALID" for d in diagnostics)
+
+    return OrderedDict([
+        ("verified", all_valid),
+        ("documents", len(chain.get("documents", {}))),
+        ("kinship_bonds", len(chain.get("edges", []))),
+        ("corpus_merkle_root",
+         chain.get("corpus_merkle_root", "")[:32] + "..."
+         if chain.get("corpus_merkle_root") else None),
+        ("ummah_seal",
+         chain.get("ummah_seal", "")[:32] + "..."
+         if chain.get("ummah_seal") else None),
+        ("diagnostics", diagnostics),
+        ("edge_dimensions", UMMAH_EDGE_DIMENSIONS),
+    ])
+
+
+def ummah_graph(corpus_path):
+    """Generate a human-readable ummah graph showing all document relationships.
+
+    Returns a structured representation of the community graph.
+    """
+    corpus_path = str(corpus_path)
+    chain = _load_ummah_chain(corpus_path)
+
+    documents = chain.get("documents", {})
+    edges = chain.get("edges", [])
+
+    if not documents:
+        return {"has_graph": False, "reason": "No documents in ummah"}
+
+    # Build adjacency info per document
+    doc_connections = {doc_id: [] for doc_id in documents}
+    for edge in edges:
+        doc_a = edge["doc_a"]
+        doc_b = edge["doc_b"]
+        strength = edge.get("strength", "UNKNOWN")
+        if doc_a in doc_connections:
+            doc_connections[doc_a].append({
+                "sibling": doc_b,
+                "strength": strength,
+                "kinship_vector": edge.get("kinship_vector", []),
+            })
+        if doc_b in doc_connections:
+            doc_connections[doc_b].append({
+                "sibling": doc_a,
+                "strength": strength,
+                "kinship_vector": edge.get("kinship_vector", []),
+            })
+
+    # Build graph representation
+    nodes = []
+    for doc_id in sorted(documents.keys()):
+        doc = documents[doc_id]
+        connections = doc_connections.get(doc_id, [])
+        nodes.append(OrderedDict([
+            ("document", doc_id),
+            ("divine_name", doc.get("divine_name", "")),
+            ("divine_meaning", doc.get("divine_meaning", "")),
+            ("connections", len(connections)),
+            ("strongest_bond",
+             max((c["strength"] for c in connections),
+                 key=lambda s: ["AJNABI", "MA'RIFA", "UKHUWWA_DA'IFA",
+                                "UKHUWWA_MUTAWASSITA", "UKHUWWA_QAWIYYA"].index(s)
+                 if s in ["AJNABI", "MA'RIFA", "UKHUWWA_DA'IFA",
+                          "UKHUWWA_MUTAWASSITA", "UKHUWWA_QAWIYYA"] else -1,
+                 default="NONE")
+             if connections else "NONE"),
+            ("siblings", [
+                OrderedDict([
+                    ("document", c["sibling"]),
+                    ("strength", c["strength"]),
+                    ("kinship_summary", {
+                        UMMAH_KINSHIP_NAMES[i]: round(c["kinship_vector"][i], 3)
+                        for i in range(min(len(c["kinship_vector"]),
+                                           UMMAH_KINSHIP_TYPES))
+                        if c["kinship_vector"][i] >= _KINSHIP_PRESENT
+                    }),
+                ])
+                for c in connections
+            ]),
+        ]))
+
+    # Compute community health metrics
+    total_docs = len(documents)
+    total_possible = total_docs * (total_docs - 1) // 2
+    total_bonds = len(edges)
+    density = round(total_bonds / total_possible, 4) if total_possible else 0
+    avg_connections = round(
+        sum(len(doc_connections[d]) for d in doc_connections) / total_docs, 2
+    ) if total_docs else 0
+
+    strength_dist = {}
+    for edge in edges:
+        s = edge.get("strength", "UNKNOWN")
+        strength_dist[s] = strength_dist.get(s, 0) + 1
+
+    return OrderedDict([
+        ("has_graph", True),
+        ("corpus_path", corpus_path),
+        ("community_health", OrderedDict([
+            ("total_documents", total_docs),
+            ("total_kinship_bonds", total_bonds),
+            ("total_possible_bonds", total_possible),
+            ("graph_density", density),
+            ("average_connections", avg_connections),
+            ("strength_distribution", strength_dist),
+        ])),
+        ("nodes", nodes),
+        ("corpus_merkle_root",
+         chain.get("corpus_merkle_root", "")[:32] + "..."
+         if chain.get("corpus_merkle_root") else None),
+        ("ummah_seal",
+         chain.get("ummah_seal", "")[:32] + "..."
+         if chain.get("ummah_seal") else None),
+        ("dimensional_encoding",
+         "693 = 7 x 99 = 7 x 9 x 11 (both divine constants)"),
+    ])
+
+
+# ============================================================================
 #  THE 154-LAYER COMPUTATION ENGINE
 # ============================================================================
 #
@@ -3403,6 +4177,33 @@ def seal_text_file(filepath, embed_names=False, muraqabah=True):
         temporal_event = temporal_record_event(filepath, computation)
         result["temporal"] = temporal_event
 
+        # v8.0: Update ummah membership (The Ummah Witness)
+        parent_dir = os.path.dirname(os.path.abspath(filepath))
+        ummah_chain_path = os.path.join(parent_dir, UMMAH_CHAIN_FILE)
+        if os.path.exists(ummah_chain_path):
+            try:
+                chain = _load_ummah_chain(parent_dir)
+                rel_path = os.path.relpath(filepath, parent_dir)
+                doc_hash = hashlib.sha256(
+                    BISMILLAH.encode('utf-8') + content_bytes +
+                    BISMILLAH.encode('utf-8')
+                ).hexdigest()
+                doc_idx = len(chain.get("documents", {}))
+                name_idx = doc_idx % AL_ASMA_COUNT
+                divine_name, divine_meaning = AL_ASMA_UL_HUSNA[name_idx]
+                chain["documents"][rel_path] = {
+                    "path": rel_path,
+                    "content_hash": doc_hash,
+                    "divine_name": divine_name,
+                    "divine_meaning": divine_meaning,
+                    "name_index": name_idx,
+                    "sealed_at": datetime.now(timezone.utc).isoformat(),
+                }
+                _save_ummah_chain(parent_dir, chain)
+                result["ummah_member"] = True
+            except Exception:
+                pass
+
         # v5.2: Record experience
         record_experience("seal", filepath, "success", {
             "layers": result["layers"],
@@ -3630,6 +4431,31 @@ def seal_binary_file(filepath):
             # v7.0: Record temporal event
             computation["_content_bytes"] = content_bytes
             temporal_record_event(filepath, computation)
+            # v8.0: Update ummah membership
+            parent_dir = os.path.dirname(os.path.abspath(filepath))
+            ummah_chain_path = os.path.join(parent_dir, UMMAH_CHAIN_FILE)
+            if os.path.exists(ummah_chain_path):
+                try:
+                    chain = _load_ummah_chain(parent_dir)
+                    rel_path = os.path.relpath(filepath, parent_dir)
+                    doc_hash = hashlib.sha256(
+                        BISMILLAH.encode('utf-8') + content_bytes +
+                        BISMILLAH.encode('utf-8')
+                    ).hexdigest()
+                    doc_idx = len(chain.get("documents", {}))
+                    name_idx = doc_idx % AL_ASMA_COUNT
+                    divine_name, divine_meaning = AL_ASMA_UL_HUSNA[name_idx]
+                    chain["documents"][rel_path] = {
+                        "path": rel_path,
+                        "content_hash": doc_hash,
+                        "divine_name": divine_name,
+                        "divine_meaning": divine_meaning,
+                        "name_index": name_idx,
+                        "sealed_at": datetime.now(timezone.utc).isoformat(),
+                    }
+                    _save_ummah_chain(parent_dir, chain)
+                except Exception:
+                    pass
         except Exception:
             pass
 
@@ -3647,7 +4473,7 @@ def _write_heaven_witness(filepath, content_bytes, computation):
     witness_data = OrderedDict([
         (BISMILLAH, True),
         ("encoder_version", ENCODER_VERSION),
-        ("architecture", "11-Heaven, 154-Layer FATIMA v7.0 -- Dual-Constant Witness with Temporal Integrity"),
+        ("architecture", "11-Heaven, 154-Layer FATIMA v8.0 -- Dual-Constant Witness with Relational Integrity"),
         ("total_heavens", computation["total_heavens"]),
         ("total_layers", computation["total_layers"]),
         ("layers_per_heaven", LAYERS_PER_HEAVEN),
@@ -4106,7 +4932,7 @@ def generate_manifest(directory):
         (BISMILLAH, True),
         ("manifest_version", "5.0"),
         ("encoder_version", ENCODER_VERSION),
-        ("architecture", "11-Heaven, 154-Layer FATIMA v7.0 -- Dual-Constant Witness with Temporal Integrity"),
+        ("architecture", "11-Heaven, 154-Layer FATIMA v8.0 -- Dual-Constant Witness with Relational Integrity"),
         ("total_heavens", TOTAL_HEAVENS),
         ("total_layers", TOTAL_LAYERS),
         ("layers_per_heaven", LAYERS_PER_HEAVEN),
@@ -6444,6 +7270,19 @@ Examples:
                                       help='v7.0: Show temporal evolution history')
     temporal_hist_p.add_argument('path', help='File to show temporal history for')
 
+    # v8.0: Ummah (relational integrity) commands
+    ummah_p = sub.add_parser('ummah',
+                              help='v8.0: Seal corpus as ummah (relational integrity)')
+    ummah_p.add_argument('path', help='Directory (corpus) to seal as ummah')
+
+    ummah_verify_p = sub.add_parser('ummah-verify',
+                                     help='v8.0: Verify ummah relational integrity')
+    ummah_verify_p.add_argument('path', help='Directory to verify ummah for')
+
+    ummah_graph_p = sub.add_parser('ummah-graph',
+                                    help='v8.0: Display ummah relationship graph')
+    ummah_graph_p.add_argument('path', help='Directory to show ummah graph for')
+
     heal_p = sub.add_parser('heal', help='v5.2: Self-heal degraded files')
     heal_p.add_argument('path', help='File or directory to heal')
     heal_p.add_argument('--force', action='store_true',
@@ -6827,6 +7666,122 @@ Examples:
                             "({})".format(cp["level_seal"]) if cp.get("level_seal") else ""))
         else:
             print("  ERROR: {} does not exist or is not a file".format(args.path))
+            sys.exit(1)
+
+    elif args.command == 'ummah':
+        if os.path.isdir(args.path):
+            print("\n  v8.0: Sealing corpus as ummah (The Ummah Witness)...")
+            print("  \"The believers are but brothers.\" (49:10)\n")
+            result = ummah_seal_corpus(args.path)
+            if result.get("error"):
+                print("  ERROR: {}".format(result["error"]))
+                sys.exit(1)
+            else:
+                print("  {} UMMAH SEALED {} ".format("=" * 20, "=" * 20))
+                print("  Documents: {}".format(result.get("documents", 0)))
+                print("  Kinship bonds: {}".format(
+                    result.get("kinship_bonds", 0)))
+                print("  Total possible edges: {}".format(
+                    result.get("total_possible_edges", 0)))
+                print("  Stranger pairs: {}".format(
+                    result.get("stranger_pairs", 0)))
+                strength = result.get("strength_distribution", {})
+                if strength:
+                    print("\n  Strength Distribution:")
+                    for s, count in sorted(strength.items()):
+                        print("    {}: {}".format(s, count))
+                print("\n  Corpus Merkle root: {}".format(
+                    result.get("corpus_merkle_root", "None")))
+                print("  Ummah seal: {}".format(
+                    result.get("ummah_seal", "None")))
+                print("  Edge dimensions: {} ({})".format(
+                    result.get("edge_dimensions", UMMAH_EDGE_DIMENSIONS),
+                    result.get("dimensional_encoding", "")))
+                print()
+                print("  \"Indeed the believers are but brothers,")
+                print("   so make settlement between your brothers.\" (49:10)")
+        else:
+            print("  ERROR: {} is not a directory".format(args.path))
+            sys.exit(1)
+
+    elif args.command == 'ummah-verify':
+        if os.path.isdir(args.path):
+            result = ummah_verify_corpus(args.path)
+            if result.get("verified") is None:
+                print("\n  {}".format(result.get("reason", "No ummah chain")))
+                if result.get("recommendation"):
+                    print("  Recommendation: {}".format(
+                        result["recommendation"]))
+            else:
+                status = "VALID" if result["verified"] else "CORRUPTED"
+                print("\n  {} UMMAH VERIFICATION: {} {}".format(
+                    "=" * 15, status, "=" * 15))
+                print("  Documents: {}".format(result.get("documents", 0)))
+                print("  Kinship bonds: {}".format(
+                    result.get("kinship_bonds", 0)))
+                print("  Corpus Merkle root: {}".format(
+                    result.get("corpus_merkle_root", "None")))
+                print("  Ummah seal: {}".format(
+                    result.get("ummah_seal", "None")))
+                print("\n  Diagnostics:")
+                for diag in result.get("diagnostics", []):
+                    icon = "OK" if diag["status"] == "VALID" else "XX"
+                    print("    [{}] {}: {}".format(
+                        icon, diag["check"], diag["detail"]))
+        else:
+            print("  ERROR: {} is not a directory".format(args.path))
+            sys.exit(1)
+
+    elif args.command == 'ummah-graph':
+        if os.path.isdir(args.path):
+            result = ummah_graph(args.path)
+            if not result.get("has_graph"):
+                print("\n  {}".format(
+                    result.get("reason", "No ummah graph")))
+            else:
+                print("\n  {} UMMAH GRAPH {} ".format(
+                    "=" * 20, "=" * 20))
+                health = result.get("community_health", {})
+                print("  Community Health:")
+                print("    Documents: {}".format(
+                    health.get("total_documents", 0)))
+                print("    Kinship bonds: {} / {} possible".format(
+                    health.get("total_kinship_bonds", 0),
+                    health.get("total_possible_bonds", 0)))
+                print("    Graph density: {:.1%}".format(
+                    health.get("graph_density", 0)))
+                print("    Avg connections: {}".format(
+                    health.get("average_connections", 0)))
+                strength = health.get("strength_distribution", {})
+                if strength:
+                    print("    Strength distribution: {}".format(
+                        ", ".join("{}: {}".format(k, v)
+                                 for k, v in sorted(strength.items()))))
+                print("\n  Document Relationships:")
+                for node in result.get("nodes", []):
+                    print("\n    {} [{}] -- {} connections".format(
+                        node["document"],
+                        node.get("divine_name", ""),
+                        node.get("connections", 0)))
+                    if node.get("strongest_bond") != "NONE":
+                        print("      Strongest bond: {}".format(
+                            node["strongest_bond"]))
+                    for sib in node.get("siblings", []):
+                        kinship_str = ", ".join(
+                            "{}: {:.3f}".format(k, v)
+                            for k, v in sib.get("kinship_summary", {}).items()
+                        )
+                        print("      -> {} [{}] {}".format(
+                            sib["document"], sib["strength"],
+                            "({})".format(kinship_str) if kinship_str else ""))
+                print("\n  Corpus Merkle root: {}".format(
+                    result.get("corpus_merkle_root", "None")))
+                print("  Ummah seal: {}".format(
+                    result.get("ummah_seal", "None")))
+                print("  Dimensions: {}".format(
+                    result.get("dimensional_encoding", "")))
+        else:
+            print("  ERROR: {} is not a directory".format(args.path))
             sys.exit(1)
 
     elif args.command == 'unseal':

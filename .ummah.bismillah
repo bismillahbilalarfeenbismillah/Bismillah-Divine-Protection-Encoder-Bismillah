@@ -1,0 +1,1005 @@
+{
+  "Bismillah ir-Rahman ir-Rahim": true,
+  "encoder_version": "8.0.0",
+  "architecture": "FATIMA v8.0 -- Ummah Witness (Relational Integrity)",
+  "quranic_grounding": "49:10 -- The believers are but brothers",
+  "documents": {
+    "Bismillah_FATIMA_Evolution_Paper_Bismillah.log": {
+      "path": "Bismillah_FATIMA_Evolution_Paper_Bismillah.log",
+      "content_hash": "17cb5b915009f006182b467adc61a6956b95603f4581ccb10a059513c5793761",
+      "divine_name": "Allah",
+      "divine_meaning": "The God",
+      "name_index": 0,
+      "total_tokens": 1788,
+      "total_sentences": 23,
+      "sealed_at": "2026-10-20T07:29:48.019397+00:00"
+    },
+    "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex": {
+      "path": "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex",
+      "content_hash": "6941bc80007b01c3d499db41dccee40cdd3f06f25f46f001cd87fdb7b0805614",
+      "divine_name": "Ar-Rahman",
+      "divine_meaning": "The Most Merciful",
+      "name_index": 1,
+      "total_tokens": 5560,
+      "total_sentences": 122,
+      "sealed_at": "2026-10-20T07:29:48.063382+00:00"
+    },
+    "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.log": {
+      "path": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.log",
+      "content_hash": "0df2597cc45d4d4e0c70a94f52720461765a817bf9395210d5cc3b786701bc68",
+      "divine_name": "Ar-Rahim",
+      "divine_meaning": "The Most Compassionate",
+      "name_index": 2,
+      "total_tokens": 3821,
+      "total_sentences": 98,
+      "sealed_at": "2026-10-20T07:29:48.086343+00:00"
+    },
+    "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex": {
+      "path": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
+      "content_hash": "d63656fd0687c4f14f0eea726fb98a8b4b72e7c1ce1eec6547c120a6c86202aa",
+      "divine_name": "Al-Malik",
+      "divine_meaning": "The King",
+      "name_index": 3,
+      "total_tokens": 4951,
+      "total_sentences": 171,
+      "sealed_at": "2026-10-20T07:29:48.119596+00:00"
+    },
+    "Bismillah_FATIMA_Semantic_Integrity_Paper_Zenodo_Metadata.md": {
+      "path": "Bismillah_FATIMA_Semantic_Integrity_Paper_Zenodo_Metadata.md",
+      "content_hash": "6d4bc4a7a9dcd20036ba9479cfe45be010277eb1dd787cba6dee74c6044b5df4",
+      "divine_name": "Al-Quddus",
+      "divine_meaning": "The Most Holy",
+      "name_index": 4,
+      "total_tokens": 230,
+      "total_sentences": 5,
+      "sealed_at": "2026-10-20T07:29:48.122395+00:00"
+    },
+    "README.md": {
+      "path": "README.md",
+      "content_hash": "e38788503d62498071b2fe0283de17ac0c26c361eaccb30e38fba40147d82d77",
+      "divine_name": "As-Salam",
+      "divine_meaning": "The Source of Peace",
+      "name_index": 5,
+      "total_tokens": 1176,
+      "total_sentences": 6,
+      "sealed_at": "2026-10-20T07:29:48.158588+00:00"
+    },
+    "test_encoder.py": {
+      "path": "test_encoder.py",
+      "content_hash": "d0f8f172669d1ce9df2c6df09a7ea12e02de7e94a60200b7e201a90b526e711f",
+      "divine_name": "Al-Mu'min",
+      "divine_meaning": "The Guardian of Faith",
+      "name_index": 6,
+      "total_tokens": 1362,
+      "total_sentences": 3,
+      "sealed_at": "2026-10-20T07:29:48.178088+00:00"
+    },
+    "examples/hello.py": {
+      "path": "examples/hello.py",
+      "content_hash": "dd879bb7056444d608a474d920e12488802313a867f18ad2bb28512cec560943",
+      "divine_name": "Al-Muhaymin",
+      "divine_meaning": "The Protector",
+      "name_index": 7,
+      "total_tokens": 371,
+      "total_sentences": 1,
+      "sealed_at": "2026-10-20T07:29:48.193268+00:00"
+    },
+    "examples/notes.md": {
+      "path": "examples/notes.md",
+      "content_hash": "1d81f8cfcc1cbc71ce35cdc29a9bc70fd14ac1bacfc046dd18d8bee6ea14aeba",
+      "divine_name": "Al-Aziz",
+      "divine_meaning": "The Almighty",
+      "name_index": 8,
+      "total_tokens": 58,
+      "total_sentences": 3,
+      "sealed_at": "2026-10-20T07:29:48.194462+00:00"
+    }
+  },
+  "edges": [
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.log",
+      "doc_b": "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex",
+      "kinship_vector": [
+        0.047594,
+        0.0,
+        0.0,
+        0.014225,
+        0.0,
+        0.923048,
+        0.505108
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0476",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0142",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9230",
+        "INTENTIONAL_KINSHIP: 0.5051"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "e0fe5afbef6d83edfb66fc816f1b6bc29e5b81164e15452ebb334a25f47ba3ce",
+      "sealed_at": "2026-10-20T07:29:48.195456+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.log",
+      "doc_b": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.log",
+      "kinship_vector": [
+        0.583022,
+        0.25,
+        0.228261,
+        0.67487,
+        0.0,
+        0.970406,
+        0.948683
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.5830",
+        "SYNTACTIC_KINSHIP: 0.2500",
+        "PROPOSITIONAL_KINSHIP: 0.2283",
+        "RELATIONAL_KINSHIP: 0.6749",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9704",
+        "INTENTIONAL_KINSHIP: 0.9487"
+      ],
+      "strength": "UKHUWWA_QAWIYYA",
+      "seal": "7df79ca316bace29eaa3f8463f240a0d0ca625d5a0101814bec1c40ba8a34209",
+      "sealed_at": "2026-10-20T07:29:48.196180+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.log",
+      "doc_b": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
+      "kinship_vector": [
+        0.047933,
+        0.0,
+        0.0,
+        0.0125,
+        0.0,
+        0.883101,
+        0.493444
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0479",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0125",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.8831",
+        "INTENTIONAL_KINSHIP: 0.4934"
+      ],
+      "strength": "UKHUWWA_DA'IFA",
+      "seal": "007f993fefd25ebceff7d1cc53f3f76190ab61b2f0ced27eac5003ce88a4a48c",
+      "sealed_at": "2026-10-20T07:29:48.196763+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.log",
+      "doc_b": "Bismillah_FATIMA_Semantic_Integrity_Paper_Zenodo_Metadata.md",
+      "kinship_vector": [
+        0.02969,
+        0.0,
+        0.0,
+        0.004202,
+        0.0,
+        0.871794,
+        0.632456
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0297",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0042",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.8718",
+        "INTENTIONAL_KINSHIP: 0.6325"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "c6f9d76b4653ddd1eab6c77319acc80b5a837c7aa003b022486e553c9c03b253",
+      "sealed_at": "2026-10-20T07:29:48.196962+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.log",
+      "doc_b": "README.md",
+      "kinship_vector": [
+        0.034234,
+        0.0,
+        0.0,
+        0.006901,
+        0.0,
+        0.897812,
+        0.507179
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0342",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0069",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.8978",
+        "INTENTIONAL_KINSHIP: 0.5072"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "155abb73f9fe0496fab543327eb83c779295cb20ecf46cad7f2a33d262291f91",
+      "sealed_at": "2026-10-20T07:29:48.203844+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.log",
+      "doc_b": "examples/hello.py",
+      "kinship_vector": [
+        0.008255,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.949604,
+        0.894427
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0083",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0000",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9496",
+        "INTENTIONAL_KINSHIP: 0.8944"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "08cf7d8eb565872d0130debd51676c23dcefecdd05716ea3b309b7b670b78e1b",
+      "sealed_at": "2026-10-20T07:29:48.206800+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.log",
+      "doc_b": "examples/notes.md",
+      "kinship_vector": [
+        0.007657,
+        0.0,
+        0.0,
+        0.012987,
+        0.0,
+        0.83775,
+        0.0
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0077",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0130",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.8377",
+        "INTENTIONAL_KINSHIP: 0.0000"
+      ],
+      "strength": "MA'RIFA",
+      "seal": "7e6a1ce57ac9eca2dae58210300c977da760be9ca00288813973688f7db97e5f",
+      "sealed_at": "2026-10-20T07:29:48.206938+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.log",
+      "doc_b": "test_encoder.py",
+      "kinship_vector": [
+        0.036993,
+        0.0,
+        0.0,
+        0.005435,
+        0.0,
+        0.922847,
+        0.632456
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0370",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0054",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9228",
+        "INTENTIONAL_KINSHIP: 0.6325"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "a68b854e07cc6d22d1e39ddf0df1a9e8d5e4ef7dc2eabf7cff0efdd2740b2c11",
+      "sealed_at": "2026-10-20T07:29:48.207154+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex",
+      "doc_b": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.log",
+      "kinship_vector": [
+        0.066548,
+        0.0,
+        0.0,
+        0.01742,
+        0.0,
+        0.954792,
+        0.559052
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0665",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0174",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9548",
+        "INTENTIONAL_KINSHIP: 0.5591"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "bda8f953c0f6fbcf2dc61638f5813fc8607c67f8f820c7031713fb7f757cd8cf",
+      "sealed_at": "2026-10-20T07:29:48.208167+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex",
+      "doc_b": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
+      "kinship_vector": [
+        0.27188,
+        0.003436,
+        0.003436,
+        0.216027,
+        0.889169,
+        0.986134,
+        0.967406
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.2719",
+        "SYNTACTIC_KINSHIP: 0.0034",
+        "PROPOSITIONAL_KINSHIP: 0.0034",
+        "RELATIONAL_KINSHIP: 0.2160",
+        "RHETORICAL_KINSHIP: 0.8892",
+        "THEMATIC_KINSHIP: 0.9861",
+        "INTENTIONAL_KINSHIP: 0.9674"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "d94ac10f9789aa300af2300296235b4edbdb0a5feee078f6dbed67f24964437c",
+      "sealed_at": "2026-10-20T07:29:48.209580+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex",
+      "doc_b": "Bismillah_FATIMA_Semantic_Integrity_Paper_Zenodo_Metadata.md",
+      "kinship_vector": [
+        0.058315,
+        0.0,
+        0.0,
+        0.037338,
+        0.0,
+        0.957628,
+        0.771699
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0583",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0373",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9576",
+        "INTENTIONAL_KINSHIP: 0.7717"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "f19fd830092a97c1004f2bd981c9103da50f6034467bba78b46eeea748c614d3",
+      "sealed_at": "2026-10-20T07:29:48.210176+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex",
+      "doc_b": "README.md",
+      "kinship_vector": [
+        0.084795,
+        0.0,
+        0.0,
+        0.050199,
+        0.673402,
+        0.985445,
+        0.995739
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0848",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0502",
+        "RHETORICAL_KINSHIP: 0.6734",
+        "THEMATIC_KINSHIP: 0.9854",
+        "INTENTIONAL_KINSHIP: 0.9957"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "2e6a986883ebb02518adb726c39e5c23a02b7c79b5fc19fd3b1c74737787ca22",
+      "sealed_at": "2026-10-20T07:29:48.216450+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex",
+      "doc_b": "examples/hello.py",
+      "kinship_vector": [
+        0.018917,
+        0.0,
+        0.0,
+        0.025798,
+        0.50702,
+        0.966756,
+        0.338837
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0189",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0258",
+        "RHETORICAL_KINSHIP: 0.5070",
+        "THEMATIC_KINSHIP: 0.9668",
+        "INTENTIONAL_KINSHIP: 0.3388"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "a896132cfb773ad7d99ce54f11d4ff70b4c9882342e49f30766129612677a06e",
+      "sealed_at": "2026-10-20T07:29:48.219680+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex",
+      "doc_b": "examples/notes.md",
+      "kinship_vector": [
+        0.01487,
+        0.0,
+        0.0,
+        0.018003,
+        0.0,
+        0.942067,
+        0.63009
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0149",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0180",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9421",
+        "INTENTIONAL_KINSHIP: 0.6301"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "de122f73e39dfb0ecb0f7bf9fa82041950efa72ce48b2b8984ca0fc7e07c254c",
+      "sealed_at": "2026-10-20T07:29:48.220226+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Evolution_Paper_Bismillah.tex",
+      "doc_b": "test_encoder.py",
+      "kinship_vector": [
+        0.060565,
+        0.0,
+        0.0,
+        0.021893,
+        0.50702,
+        0.944021,
+        0.771699
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0606",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0219",
+        "RHETORICAL_KINSHIP: 0.5070",
+        "THEMATIC_KINSHIP: 0.9440",
+        "INTENTIONAL_KINSHIP: 0.7717"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "36398dd4e6b9fd6dd3c316c4c2f6ffbbf6dbb24e2b93f8cd40b93d8952b79e73",
+      "sealed_at": "2026-10-20T07:29:48.220653+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.log",
+      "doc_b": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
+      "kinship_vector": [
+        0.065049,
+        0.0,
+        0.0,
+        0.016471,
+        0.0,
+        0.933104,
+        0.503343
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0650",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0165",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9331",
+        "INTENTIONAL_KINSHIP: 0.5033"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "59ec3b1d019743703b783362cd921d3559b6485fa187ea83bd447b83fd4b05cd",
+      "sealed_at": "2026-10-20T07:29:48.221370+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.log",
+      "doc_b": "Bismillah_FATIMA_Semantic_Integrity_Paper_Zenodo_Metadata.md",
+      "kinship_vector": [
+        0.022862,
+        0.0,
+        0.0,
+        0.003226,
+        0.0,
+        0.909694,
+        0.5
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0229",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0032",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9097",
+        "INTENTIONAL_KINSHIP: 0.5000"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "30f6a3dab17de4ef97a0ffacb6fc2ca369c952633d146931c4c76e70419a4748",
+      "sealed_at": "2026-10-20T07:29:48.221627+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.log",
+      "doc_b": "README.md",
+      "kinship_vector": [
+        0.033074,
+        0.0,
+        0.0,
+        0.006279,
+        0.0,
+        0.952831,
+        0.534614
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0331",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0063",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9528",
+        "INTENTIONAL_KINSHIP: 0.5346"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "5f216dd7c6e0c5d3743385277177c918028a4a6a409de470bee0c00ea17dc4e1",
+      "sealed_at": "2026-10-20T07:29:48.226516+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.log",
+      "doc_b": "examples/hello.py",
+      "kinship_vector": [
+        0.006192,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.962892,
+        0.707107
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0062",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0000",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9629",
+        "INTENTIONAL_KINSHIP: 0.7071"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "7bbf337d1ca7ed13eb2b3eb6d7fe7901576d1a2075d2b5709c5990f94f459c3d",
+      "sealed_at": "2026-10-20T07:29:48.229730+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.log",
+      "doc_b": "examples/notes.md",
+      "kinship_vector": [
+        0.007306,
+        0.0,
+        0.0,
+        0.00885,
+        0.0,
+        0.878166,
+        0.0
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0073",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0089",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.8782",
+        "INTENTIONAL_KINSHIP: 0.0000"
+      ],
+      "strength": "MA'RIFA",
+      "seal": "08074ec0439a85d92ed7f0010af866eec9293f97f4b80947926a3c551dfe7145",
+      "sealed_at": "2026-10-20T07:29:48.229937+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.log",
+      "doc_b": "test_encoder.py",
+      "kinship_vector": [
+        0.038735,
+        0.0,
+        0.0,
+        0.003906,
+        0.0,
+        0.906343,
+        0.5
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0387",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0039",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9063",
+        "INTENTIONAL_KINSHIP: 0.5000"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "5c5576890ee2468a4f73d5d26a85b1c8931e3373c212343605f83f8a1093c495",
+      "sealed_at": "2026-10-20T07:29:48.230231+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
+      "doc_b": "Bismillah_FATIMA_Semantic_Integrity_Paper_Zenodo_Metadata.md",
+      "kinship_vector": [
+        0.092801,
+        0.0,
+        0.0,
+        0.085557,
+        0.031944,
+        0.974704,
+        0.75523
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0928",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0856",
+        "RHETORICAL_KINSHIP: 0.0319",
+        "THEMATIC_KINSHIP: 0.9747",
+        "INTENTIONAL_KINSHIP: 0.7552"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "5d51968ea1ee2848228a5055c1cd5e961dcbbb9337a9ad484d618349b2d73e01",
+      "sealed_at": "2026-10-20T07:29:48.230860+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
+      "doc_b": "README.md",
+      "kinship_vector": [
+        0.083663,
+        0.0,
+        0.0,
+        0.041311,
+        0.676802,
+        0.991184,
+        0.982305
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0837",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0413",
+        "RHETORICAL_KINSHIP: 0.6768",
+        "THEMATIC_KINSHIP: 0.9912",
+        "INTENTIONAL_KINSHIP: 0.9823"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "324e6201f02a58ca5b7def430fc67d95720d9d58da54467927075f90d70bcf6e",
+      "sealed_at": "2026-10-20T07:29:48.236719+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
+      "doc_b": "examples/hello.py",
+      "kinship_vector": [
+        0.021148,
+        0.0,
+        0.0,
+        0.022184,
+        0.255551,
+        0.954574,
+        0.391539
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0211",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0222",
+        "RHETORICAL_KINSHIP: 0.2556",
+        "THEMATIC_KINSHIP: 0.9546",
+        "INTENTIONAL_KINSHIP: 0.3915"
+      ],
+      "strength": "UKHUWWA_DA'IFA",
+      "seal": "6d9af9a6ed2a4435a64d9d6eb1286fdd43dc612dcc0a561d026eeee0c9c63346",
+      "sealed_at": "2026-10-20T07:29:48.240410+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
+      "doc_b": "examples/notes.md",
+      "kinship_vector": [
+        0.015831,
+        0.0,
+        0.0,
+        0.018675,
+        0.0,
+        0.951108,
+        0.719299
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0158",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0187",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9511",
+        "INTENTIONAL_KINSHIP: 0.7193"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "399602d9050b3d091c15cfd48677cde42a331e921afe19c4eab111c55338e8e6",
+      "sealed_at": "2026-10-20T07:29:48.240698+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
+      "doc_b": "test_encoder.py",
+      "kinship_vector": [
+        0.067187,
+        0.0,
+        0.0,
+        0.019545,
+        0.255551,
+        0.909979,
+        0.75523
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0672",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0195",
+        "RHETORICAL_KINSHIP: 0.2556",
+        "THEMATIC_KINSHIP: 0.9100",
+        "INTENTIONAL_KINSHIP: 0.7552"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "520724ceb9d64ae2ed7049aee2c51ebddd98950fee435932650d2759c4bf9445",
+      "sealed_at": "2026-10-20T07:29:48.241016+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Zenodo_Metadata.md",
+      "doc_b": "README.md",
+      "kinship_vector": [
+        0.0544,
+        0.0,
+        0.0,
+        0.020665,
+        0.0,
+        0.958491,
+        0.801761
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0544",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0207",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9585",
+        "INTENTIONAL_KINSHIP: 0.8018"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "c244c3c45a546bffc28270821637941211145586edcd668c63ae6fc088f570f9",
+      "sealed_at": "2026-10-20T07:29:48.246433+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Zenodo_Metadata.md",
+      "doc_b": "examples/hello.py",
+      "kinship_vector": [
+        0.022346,
+        0.0,
+        0.0,
+        0.013704,
+        0.0,
+        0.963512,
+        0.707107
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0223",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0137",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9635",
+        "INTENTIONAL_KINSHIP: 0.7071"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "ea8de9829b79ca1cdaec70d3a8aa50450925eab5a8c5e51911acf87dfc9a319c",
+      "sealed_at": "2026-10-20T07:29:48.250494+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Zenodo_Metadata.md",
+      "doc_b": "examples/notes.md",
+      "kinship_vector": [
+        0.06962,
+        0.0,
+        0.0,
+        0.031514,
+        0.0,
+        0.978406,
+        0.408248
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0696",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0315",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9784",
+        "INTENTIONAL_KINSHIP: 0.4082"
+      ],
+      "strength": "UKHUWWA_DA'IFA",
+      "seal": "825b789d9dbf03275541175920c95851192b6f78fa7e9c0ddcc23789d8dfde4d",
+      "sealed_at": "2026-10-20T07:29:48.250625+00:00"
+    },
+    {
+      "doc_a": "Bismillah_FATIMA_Semantic_Integrity_Paper_Zenodo_Metadata.md",
+      "doc_b": "test_encoder.py",
+      "kinship_vector": [
+        0.061453,
+        0.0,
+        0.0,
+        0.033675,
+        0.0,
+        0.84478,
+        1.0
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0615",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0337",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.8448",
+        "INTENTIONAL_KINSHIP: 1.0000"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "99512d6ff0598c9226cdd4cfa292a7021a2caca442a0a09dd2c012a09a5b9c25",
+      "sealed_at": "2026-10-20T07:29:48.250783+00:00"
+    },
+    {
+      "doc_a": "README.md",
+      "doc_b": "examples/hello.py",
+      "kinship_vector": [
+        0.416981,
+        0.0,
+        0.0,
+        0.662663,
+        0.0,
+        0.960071,
+        0.378029
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.4170",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.6627",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9601",
+        "INTENTIONAL_KINSHIP: 0.3780"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "dcdb88f7568fea080487239acdb2234085a6d967f217e20f246d372911cc1f96",
+      "sealed_at": "2026-10-20T07:29:48.279693+00:00"
+    },
+    {
+      "doc_a": "README.md",
+      "doc_b": "examples/notes.md",
+      "kinship_vector": [
+        0.043315,
+        0.0,
+        0.0,
+        0.021496,
+        0.0,
+        0.940136,
+        0.654635
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0433",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0215",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9401",
+        "INTENTIONAL_KINSHIP: 0.6546"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "5bf152c79fe6c08818b290ab5c1bbef915b9b970a3bb43d484c78a5b51586194",
+      "sealed_at": "2026-10-20T07:29:48.282497+00:00"
+    },
+    {
+      "doc_a": "README.md",
+      "doc_b": "test_encoder.py",
+      "kinship_vector": [
+        0.085106,
+        0.0,
+        0.0,
+        0.019285,
+        0.0,
+        0.907762,
+        0.801761
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0851",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0193",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9078",
+        "INTENTIONAL_KINSHIP: 0.8018"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "220251264025940e1ae64a0147883042c05bc9c02e5d6172fbf3c92f4a209e42",
+      "sealed_at": "2026-10-20T07:29:48.284713+00:00"
+    },
+    {
+      "doc_a": "examples/hello.py",
+      "doc_b": "examples/notes.md",
+      "kinship_vector": [
+        0.027559,
+        0.0,
+        0.0,
+        0.01359,
+        0.0,
+        0.919674,
+        0.0
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0276",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0136",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.9197",
+        "INTENTIONAL_KINSHIP: 0.0000"
+      ],
+      "strength": "MA'RIFA",
+      "seal": "a41d04b3d0c8ac9fb26cab19723213b7a9040ab001a1c1d99350d6bc0b3ca6ce",
+      "sealed_at": "2026-10-20T07:29:48.286756+00:00"
+    },
+    {
+      "doc_a": "examples/hello.py",
+      "doc_b": "test_encoder.py",
+      "kinship_vector": [
+        0.030568,
+        0.0,
+        0.0,
+        0.010676,
+        1.0,
+        0.912569,
+        0.707107
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0306",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.0107",
+        "RHETORICAL_KINSHIP: 1.0000",
+        "THEMATIC_KINSHIP: 0.9126",
+        "INTENTIONAL_KINSHIP: 0.7071"
+      ],
+      "strength": "UKHUWWA_MUTAWASSITA",
+      "seal": "af30c6cc0e1396bea2d3809cc61fa4d8998a6c56a90b72b1ecfe84151ac1add4",
+      "sealed_at": "2026-10-20T07:29:48.288239+00:00"
+    },
+    {
+      "doc_a": "examples/notes.md",
+      "doc_b": "test_encoder.py",
+      "kinship_vector": [
+        0.061776,
+        0.0,
+        0.0,
+        0.103391,
+        0.0,
+        0.79518,
+        0.408248
+      ],
+      "kinship_names": [
+        "LEXICAL_KINSHIP: 0.0618",
+        "SYNTACTIC_KINSHIP: 0.0000",
+        "PROPOSITIONAL_KINSHIP: 0.0000",
+        "RELATIONAL_KINSHIP: 0.1034",
+        "RHETORICAL_KINSHIP: 0.0000",
+        "THEMATIC_KINSHIP: 0.7952",
+        "INTENTIONAL_KINSHIP: 0.4082"
+      ],
+      "strength": "UKHUWWA_DA'IFA",
+      "seal": "ab26f69c2456e16e831c3504cdc271d37653e5d3ddd9d6690dd68fdbfe22f32d",
+      "sealed_at": "2026-10-20T07:29:48.288394+00:00"
+    }
+  ],
+  "corpus_merkle_root": "719748990f7dc01761df30ebe59cb95ca0f50baa3f2ecd06377d3c8e72beb5c5",
+  "ummah_seal": "6a8b9a969dc2837b0e8cd0e430fe91dc45833913501a41554d308f52286820cf",
+  "total_kinship_bonds": 36,
+  "edge_dimensions": 693,
+  "hmac_signature": "df604ca6909bf282128fff6d684cb8ef6fc82d62796221d86bc15c0c5372d243"
+}
