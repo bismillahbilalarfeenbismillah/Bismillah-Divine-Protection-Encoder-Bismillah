@@ -1,0 +1,1014 @@
+{
+  "witness": {
+    "Bismillah ir-Rahman ir-Rahim": true,
+    "encoder_version": "6.0.0",
+    "architecture": "11-Heaven, 154-Layer FATIMA v5.0 -- Dual-Constant Witness",
+    "total_heavens": 11,
+    "total_layers": 154,
+    "layers_per_heaven": 14,
+    "dimensional_constant": 11,
+    "muhkam_constant": 7,
+    "mutashabih_constant": 11,
+    "dual_constant_product": 154,
+    "name_cycling": "99 + 55 = 154 (T(10) = F(10) = 55)",
+    "file": "Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah.tex",
+    "file_size": 37120,
+    "muhkam_seal": "d63656fd0687c4f14f0eea726fb98a8b4b72e7c1ce1eec6547c120a6c86202aa",
+    "hurst_11": 0.4103334258361153,
+    "master_witness": "c88cbb4d9c155dae65ed8d52cb095ab640097cf0fd56126b12cc9b917b3de716",
+    "heavens": [
+      {
+        "heaven": 0,
+        "name_ar": "As-Samawat ad-Dunya",
+        "name_en": "The Nearest Heaven",
+        "scale": "SUBATOMIC",
+        "guardian": "Az-Zahir",
+        "guardian_meaning": "The Manifest",
+        "layer_range": "0-13",
+        "layer_count": 14,
+        "heaven_seal": "a99b389c494c94551804590109a906afdc95320f06d259938e1a2de1c212e6bc",
+        "layer_seals": [
+          {
+            "layer": 0,
+            "name": "Allah",
+            "seal": "92e2bebbdb439fd0630b730445a5178e02f4e4a3fc2e2b0bcaf4e8826a6ad997"
+          },
+          {
+            "layer": 1,
+            "name": "Ar-Rahman",
+            "seal": "349e51de6dca77c2edd848f0dc37d2621d208274cbfc3d509a8366f56a0e8523"
+          },
+          {
+            "layer": 2,
+            "name": "Ar-Rahim",
+            "seal": "d7202c986795f9fe3b1c9c5c092c00793bdf93d3c0f878e9852bc158e12ecb5e"
+          },
+          {
+            "layer": 3,
+            "name": "Al-Malik",
+            "seal": "e92f5a21420261ddbd6641a5c64e3e17139178702077ebe156944b8e1a6183ba"
+          },
+          {
+            "layer": 4,
+            "name": "Al-Quddus",
+            "seal": "756f4158155807264ac53e5b33485ed097fbd8e785536c6f97c0f6d3d8f1d600"
+          },
+          {
+            "layer": 5,
+            "name": "As-Salam",
+            "seal": "d8e7fe0c8484e1ba37d0e697ce00e32705af979c1b0c3ee5d1db953536700203"
+          },
+          {
+            "layer": 6,
+            "name": "Al-Mu'min",
+            "seal": "6ac2e3ff45439d4982ea2478ed9b9845675eee1752f2b51c3ed3033074aecf61"
+          },
+          {
+            "layer": 7,
+            "name": "Al-Muhaymin",
+            "seal": "246fa521ae5d85a4fa6ab81340d6b8748352359790bad846aeafaa0b768d040a"
+          },
+          {
+            "layer": 8,
+            "name": "Al-Aziz",
+            "seal": "e8054f17474ded57e44afb82f663907785c2b20dadf8ad8cf5cb7103da939419"
+          },
+          {
+            "layer": 9,
+            "name": "Al-Jabbar",
+            "seal": "e697bb6ff05351a897624297ded36d8f10cb7c5ddafccf8bb5003d086996ff2e"
+          },
+          {
+            "layer": 10,
+            "name": "Al-Mutakabbir",
+            "seal": "1714f74b9374b64d1b7c660e9ea476c7bea72adeb05bfdc44a81b1fe9312c5ba"
+          },
+          {
+            "layer": 11,
+            "name": "Al-Khaliq",
+            "seal": "77a488dfc7fdc7a4adbfbe44a2fbf403ce693ca16df44d2a733da393e40b69c8"
+          },
+          {
+            "layer": 12,
+            "name": "Al-Bari",
+            "seal": "975d971123cc1d82461ea2d9b434f2313c1b7bb0e495d9be23ffe46339b002df"
+          },
+          {
+            "layer": 13,
+            "name": "Al-Musawwir",
+            "seal": "190fedb33c56bc8df3510660a88938490608209c8c647f238e2c58c55a94575f"
+          }
+        ]
+      },
+      {
+        "heaven": 1,
+        "name_ar": "As-Samawat ath-Thaniya",
+        "name_en": "The Second Heaven",
+        "scale": "ATOMIC",
+        "guardian": "Al-Musawwir",
+        "guardian_meaning": "The Fashioner",
+        "layer_range": "14-27",
+        "layer_count": 14,
+        "heaven_seal": "985f2e54d8f5dc258953386c68748c37d708d01295fb02946c1c16064f6fbe15",
+        "layer_seals": [
+          {
+            "layer": 14,
+            "name": "Al-Ghaffar",
+            "seal": "a6919cd2e8a760a58974fcee4acd42760b05577c7707b700fed8b5a9810982e3"
+          },
+          {
+            "layer": 15,
+            "name": "Al-Qahhar",
+            "seal": "eb154210cb098b47a0e650c09eaa71bbd94887c945e59c130b82327b35279315"
+          },
+          {
+            "layer": 16,
+            "name": "Al-Wahhab",
+            "seal": "6406468214345438f6910d82ed009b8585952ffdf0329bbcddc714a65f126500"
+          },
+          {
+            "layer": 17,
+            "name": "Ar-Razzaq",
+            "seal": "00e3ab153dc7fbddef1ab02dc6366c52740e4e9666122f29fdf23dd5419b7b6b"
+          },
+          {
+            "layer": 18,
+            "name": "Al-Fattah",
+            "seal": "c9c3be034c7e8a177b292de724b8a145bf725efeedf98182110192b9c5223fb4"
+          },
+          {
+            "layer": 19,
+            "name": "Al-Alim",
+            "seal": "10d240b392767baeadac9432753557749ea70facf429bf90964803f3bb5345d8"
+          },
+          {
+            "layer": 20,
+            "name": "Al-Qabid",
+            "seal": "4730754cb5c849749c21e59d0f8636637806795608b6199a64eb67f9d0eccc58"
+          },
+          {
+            "layer": 21,
+            "name": "Al-Basit",
+            "seal": "bedc463081595399be14fbecc6222f6be88c4bf6ce4d7b5cdfd43ea2e0fea5f7"
+          },
+          {
+            "layer": 22,
+            "name": "Al-Khafid",
+            "seal": "8d04d7f84772f3fe50a6bd7bb43a4b2146e75a86f01b8976e4cfeead823b764d"
+          },
+          {
+            "layer": 23,
+            "name": "Ar-Rafi",
+            "seal": "d8cf6365ab6dd1f838a1dce9e2be9577f264acab8c9f848b709131f09f9ffcd0"
+          },
+          {
+            "layer": 24,
+            "name": "Al-Mu'izz",
+            "seal": "3a203a97eb2ea1771d679982da2ab5e931afd3cae5bf9c8db47dde6193afce0a"
+          },
+          {
+            "layer": 25,
+            "name": "Al-Mudhill",
+            "seal": "9219a6a3f65c36452e44acafa95b791cacfba068772ea20779e8843187e8d57e"
+          },
+          {
+            "layer": 26,
+            "name": "As-Sami",
+            "seal": "ef04dde1a2df42f3f17235992f703fe468ddbf0f60fc4e66ef5fde6a6421908d"
+          },
+          {
+            "layer": 27,
+            "name": "Al-Basir",
+            "seal": "e6d0c513a88984cadc500921e2929a6f82ac127562975fa254b5f7db3e6b2621"
+          }
+        ]
+      },
+      {
+        "heaven": 2,
+        "name_ar": "As-Samawat ath-Thalitha",
+        "name_en": "The Third Heaven",
+        "scale": "MOLECULAR",
+        "guardian": "Al-Batin",
+        "guardian_meaning": "The Hidden",
+        "layer_range": "28-41",
+        "layer_count": 14,
+        "heaven_seal": "98fdb6e8b39710959c7542595ed9f114d1feced4f5fbbb3f19e2bd0498f9cc57",
+        "layer_seals": [
+          {
+            "layer": 28,
+            "name": "Al-Hakam",
+            "seal": "3e0488cee67f43ef45752a8519b0e5b75aa14d1357f879e339c9956855af9a31"
+          },
+          {
+            "layer": 29,
+            "name": "Al-Adl",
+            "seal": "07b7eea3ce5e0557405f0560a490e5aa1210167b06565db6b0d3616cd0201f41"
+          },
+          {
+            "layer": 30,
+            "name": "Al-Latif",
+            "seal": "2e2ae68607c341bfca827cc0caa38b2b1f7bb09f06688e1517fc31df34131c20"
+          },
+          {
+            "layer": 31,
+            "name": "Al-Khabir",
+            "seal": "0a80a655eb38b407503b19012c6c44702ff5982b5fc7176fad5b6f941d990be6"
+          },
+          {
+            "layer": 32,
+            "name": "Al-Halim",
+            "seal": "af1d61c84a5d611d89c6a0b1e0ee4fdeeeb586d1787cd2eeba90854a1c77a758"
+          },
+          {
+            "layer": 33,
+            "name": "Al-Azim",
+            "seal": "6932fa519c8d1e4cb9e071839bf4e9537405e5969949cee00c8ad032ce0db77b"
+          },
+          {
+            "layer": 34,
+            "name": "Al-Ghafur",
+            "seal": "a2fa5647b6e21ea9e8d591318a648c22c93f2f4dc886ddd51a0cfcf1d03ad8ac"
+          },
+          {
+            "layer": 35,
+            "name": "Ash-Shakur",
+            "seal": "2362d0637591e72ec96d04213a7a53d7c295e7b5713e963f2e3074caaca2990d"
+          },
+          {
+            "layer": 36,
+            "name": "Al-Ali",
+            "seal": "0a577d1e89a0602bbacc1445fa19d23f510e5646539f0d0d6b6fa02ec645ba19"
+          },
+          {
+            "layer": 37,
+            "name": "Al-Kabir",
+            "seal": "62fc2708da5b1dc7374b92992168bc3df68b4ddc7b32da2a48e447dfb1119c33"
+          },
+          {
+            "layer": 38,
+            "name": "Al-Hafiz",
+            "seal": "6e1d061715b75adc7f7e0d5331f2036264002b17cef9d11e1431e417c42eef7b"
+          },
+          {
+            "layer": 39,
+            "name": "Al-Muqit",
+            "seal": "b1674cd0c69b071956ac62563b1a58dc0282920f9ff6c12218207eeb3b3c67d3"
+          },
+          {
+            "layer": 40,
+            "name": "Al-Hasib",
+            "seal": "7305c1536e42672587dacfa2b02496522a2ad328ffa2f4323ba018a6234d10ea"
+          },
+          {
+            "layer": 41,
+            "name": "Al-Jalil",
+            "seal": "37dfb7b98e539b5528e498a11982554ea7318be462d2b10a19137c6909142911"
+          }
+        ]
+      },
+      {
+        "heaven": 3,
+        "name_ar": "As-Samawat ar-Rabi'a",
+        "name_en": "The Fourth Heaven",
+        "scale": "CELLULAR",
+        "guardian": "Al-Alim",
+        "guardian_meaning": "The All-Knowing",
+        "layer_range": "42-55",
+        "layer_count": 14,
+        "heaven_seal": "fac573e6ee23c97d89e5175c6bb4dee1f87a4f78798034af355436cc621a322f",
+        "layer_seals": [
+          {
+            "layer": 42,
+            "name": "Al-Karim",
+            "seal": "2ac929d774b2adb12828216ec3639a28afab9339449b07cbbb58b32d1938cbfa"
+          },
+          {
+            "layer": 43,
+            "name": "Ar-Raqib",
+            "seal": "14262b6285ee8272ea77232b184e23efd9cd2353ab38de5bab7f55561d8d9812"
+          },
+          {
+            "layer": 44,
+            "name": "Al-Mujib",
+            "seal": "d6db7cbcfc8585eb779e975cad538d3000dd4aecd2fa73c16c81990aa876fd32"
+          },
+          {
+            "layer": 45,
+            "name": "Al-Wasi",
+            "seal": "59c94fe843cdfb72c00e14106e835f701dc3cbb6c40a27adb8c139bd909dc4bb"
+          },
+          {
+            "layer": 46,
+            "name": "Al-Hakim",
+            "seal": "53840110cc065c0a6333bfab7dde13905f5a56c227c376d91aeca22a5106b7d3"
+          },
+          {
+            "layer": 47,
+            "name": "Al-Wadud",
+            "seal": "ff5232b6f787b8bdecd4ee7283a4f4e722c750ee2e0af271494e88af5f70d9b9"
+          },
+          {
+            "layer": 48,
+            "name": "Al-Ba'ith",
+            "seal": "81629e54d7e93a243e126d0e5efc96ec203507b87cd9688656f05f4c6ce4a29d"
+          },
+          {
+            "layer": 49,
+            "name": "Ash-Shahid",
+            "seal": "417335156c00233deef677875bba49efc35d52ade873c54ccc4b736db59fabdb"
+          },
+          {
+            "layer": 50,
+            "name": "Al-Haqq",
+            "seal": "8987d9227c993919d89edda78697fc357525ec074d8de4b65357e1202f9bd65a"
+          },
+          {
+            "layer": 51,
+            "name": "Al-Wakil",
+            "seal": "d6e7e89c9e427fd2f0fb0120e064981a2ec9ee45ce70b453cea99f51915bf96a"
+          },
+          {
+            "layer": 52,
+            "name": "Al-Qawiyy",
+            "seal": "444ab995bcea834e392356e7cc6158f6704a64253a498713397a12378da9bdff"
+          },
+          {
+            "layer": 53,
+            "name": "Al-Matin",
+            "seal": "3ce50bd1b640db188b10abba686bab6eecfc1b4bc38d25e22dbac485ce5a19ef"
+          },
+          {
+            "layer": 54,
+            "name": "Al-Waliyy",
+            "seal": "d58f83c3734e73c481e72625975b3f50a20bd04637463e4d2d3617feb9965903"
+          },
+          {
+            "layer": 55,
+            "name": "Al-Hamid",
+            "seal": "34c68901ae4fbece800e7070640a941f141be40dee0eb380244f830454df1b94"
+          }
+        ]
+      },
+      {
+        "heaven": 4,
+        "name_ar": "As-Samawat al-Khamisa",
+        "name_en": "The Fifth Heaven",
+        "scale": "ORGANIC",
+        "guardian": "Al-Hafiz",
+        "guardian_meaning": "The Preserver",
+        "layer_range": "56-69",
+        "layer_count": 14,
+        "heaven_seal": "75b31acffc444f50c3804aa99e1634c7c92cc48905d5f6da1c5542ee70c88061",
+        "layer_seals": [
+          {
+            "layer": 56,
+            "name": "Al-Muhsi",
+            "seal": "e91f356c2bb6f575746aabf5784b2736187cbeb1f307d1d1bd8c0a787f4d9925"
+          },
+          {
+            "layer": 57,
+            "name": "Al-Mubdi",
+            "seal": "5a15458c41366a8b78da24a9eeb61fb83b1619649a7574bed2be9b959a735402"
+          },
+          {
+            "layer": 58,
+            "name": "Al-Mu'id",
+            "seal": "23609180b0e924e37c4638c54b35488ea586d8e442087eb5001fc99a37edeecb"
+          },
+          {
+            "layer": 59,
+            "name": "Al-Muhyi",
+            "seal": "e30059c2161093873f1a0315952fdd3f3235c73d3c24bae3649975f2d39be165"
+          },
+          {
+            "layer": 60,
+            "name": "Al-Mumit",
+            "seal": "f7bf3b019d1d53a993e6e052cc0efabf6414e220906cb3b82772241a2fb89b0d"
+          },
+          {
+            "layer": 61,
+            "name": "Al-Hayy",
+            "seal": "b8a744180ba5996404834071684ccbffc6214c69e17ef9178bfe16a2c06de975"
+          },
+          {
+            "layer": 62,
+            "name": "Al-Qayyum",
+            "seal": "c2f0a1ecabc344542df4880c624daccb02be2310f56fa43c6536c1520a170ebe"
+          },
+          {
+            "layer": 63,
+            "name": "Al-Wajid",
+            "seal": "914a7fdb988c7c227918073d485deefccb0f0b83094e6f3df35234e45fd57feb"
+          },
+          {
+            "layer": 64,
+            "name": "Al-Majid",
+            "seal": "c8d1fbbd5a5ba2cfd51cad21d0ceb47c40f0e1005e5ff8e56b109e65531bf318"
+          },
+          {
+            "layer": 65,
+            "name": "Al-Wahid",
+            "seal": "0efd79742c262965670fc92605be4c14ad3bc293358a6bc63ef0d5005b956825"
+          },
+          {
+            "layer": 66,
+            "name": "Al-Ahad",
+            "seal": "23e2bfddf8ce68fe0532e96c4c0788e98741619be55eb63159501b61702479ad"
+          },
+          {
+            "layer": 67,
+            "name": "As-Samad",
+            "seal": "429a1a6800bae10649285118f1297350a40b5d592c91ee14233418cb254df11d"
+          },
+          {
+            "layer": 68,
+            "name": "Al-Qadir",
+            "seal": "951972bc0488e5a6ff964f164bab01a0c34dbb80327f74b5bf896486f862e114"
+          },
+          {
+            "layer": 69,
+            "name": "Al-Muqtadir",
+            "seal": "9aa0b0a90d0c8737217e817fba4cefd25a16bacac3bac92426d9016b428ebc1b"
+          }
+        ]
+      },
+      {
+        "heaven": 5,
+        "name_ar": "As-Samawat as-Sadisa",
+        "name_en": "The Sixth Heaven",
+        "scale": "TERRESTRIAL",
+        "guardian": "Al-Muhaymin",
+        "guardian_meaning": "The Protector",
+        "layer_range": "70-83",
+        "layer_count": 14,
+        "heaven_seal": "a643036a84d207dbce8089bbde9fb42ff5693349328c5ca82c2a58e77d58d080",
+        "layer_seals": [
+          {
+            "layer": 70,
+            "name": "Al-Muqaddim",
+            "seal": "2d0092e20cab2ec7c0597c4b94650b585fb366a50dc33c3b333c14f6a78f36f7"
+          },
+          {
+            "layer": 71,
+            "name": "Al-Mu'akhkhir",
+            "seal": "ce00de57ff7ac80cd04c1b239daa1d71b0c9224a8753e24b56e0aaad429bc4e1"
+          },
+          {
+            "layer": 72,
+            "name": "Al-Awwal",
+            "seal": "0f4d5a0e6076176ed3466a23baabfe28a0b1fec43beea264c09b7494d87769a5"
+          },
+          {
+            "layer": 73,
+            "name": "Al-Akhir",
+            "seal": "88ce6c3ea5c2eb6dab9fbe3e16fe8b011438f6d28a2a108134b0813333f6ad26"
+          },
+          {
+            "layer": 74,
+            "name": "Az-Zahir",
+            "seal": "8ee52bad222159aa01b07b6d9f01aa0c6c20bf63ffa6c39afbf68fdfb8ed85c1"
+          },
+          {
+            "layer": 75,
+            "name": "Al-Batin",
+            "seal": "7a5328ce98accf926243d7a09b525728bdb1920f7765b57b66ba650d92d8a605"
+          },
+          {
+            "layer": 76,
+            "name": "Al-Wali",
+            "seal": "90b2476817f1726e55d2e716811cb1570ff2629a50db186fc2857054499754d4"
+          },
+          {
+            "layer": 77,
+            "name": "Al-Muta'ali",
+            "seal": "ecdb603e5a52ea80e75831203c89550962879aad8041bd2639efda102e0ae7a0"
+          },
+          {
+            "layer": 78,
+            "name": "Al-Barr",
+            "seal": "0dc0b1db208cb1b26cface9d67aeedcd8cb008fdb01375cb5efed36ec2d91d96"
+          },
+          {
+            "layer": 79,
+            "name": "At-Tawwab",
+            "seal": "1e7bf5969e2707ca761ac79624b413d5cb74d324a7f74b5318461f593e011f2f"
+          },
+          {
+            "layer": 80,
+            "name": "Al-Muntaqim",
+            "seal": "30be3dc71f9f4eea2781d2f68bfbe4ae91d33c26fc1fb61755232fe2467167fa"
+          },
+          {
+            "layer": 81,
+            "name": "Al-Afuww",
+            "seal": "f92556bfb0d9b32cb980fdf46226d3e801b5e205c6c14159797674b8c2ee4e53"
+          },
+          {
+            "layer": 82,
+            "name": "Ar-Ra'uf",
+            "seal": "37fe9067e45b17de569b5e637b94914f1ce9410da465a0e9cae4df1c92391597"
+          },
+          {
+            "layer": 83,
+            "name": "Malik-ul-Mulk",
+            "seal": "a121e176194d7f9a127c02331c1eb07202be393535e9494102950a2d4b3c2b5e"
+          }
+        ]
+      },
+      {
+        "heaven": 6,
+        "name_ar": "As-Samawat as-Sabi'a",
+        "name_en": "The Seventh Heaven",
+        "scale": "PLANETARY",
+        "guardian": "Al-Waliyy",
+        "guardian_meaning": "The Protector/Friend",
+        "layer_range": "84-97",
+        "layer_count": 14,
+        "heaven_seal": "f8a32619af2a1ae33bc73cc4dce531e1a8a596ffd32ef1e923de441303d5bff6",
+        "layer_seals": [
+          {
+            "layer": 84,
+            "name": "Dhul-Jalali wal-Ikram",
+            "seal": "54391e01c12a0010c1aceba55f1da3230ba2e15384ba5c34fa879fd5895fabbf"
+          },
+          {
+            "layer": 85,
+            "name": "Al-Muqsit",
+            "seal": "da7ec4826f70e9a1b783080c7ee070e67517749325294d0e1a669cc4d5fe700f"
+          },
+          {
+            "layer": 86,
+            "name": "Al-Jami",
+            "seal": "f09b0c5d8dbbfd8421ec97e05a1f1e56fd7a6698658ab05c9cce736cfd9ad582"
+          },
+          {
+            "layer": 87,
+            "name": "Al-Ghaniyy",
+            "seal": "97b89d6b6b5050486179d45636b8d18f6c5cf2238a21a434b6d46b47a83a8978"
+          },
+          {
+            "layer": 88,
+            "name": "Al-Mughni",
+            "seal": "415f0786ebcdebccd0569195b6e54b8ecfaaf7a8f73663ad6b26685c3593c844"
+          },
+          {
+            "layer": 89,
+            "name": "Al-Mani",
+            "seal": "a833c077d69d85d6d32b9e2f79f0b1e314061194d83eac8583b62af6f852257b"
+          },
+          {
+            "layer": 90,
+            "name": "Ad-Darr",
+            "seal": "953e104db86077556e93b1d6b465a0b3e5bad46b98a3355fc6e68359b898eb53"
+          },
+          {
+            "layer": 91,
+            "name": "An-Nafi",
+            "seal": "3c430b7575d4499ce4d2b71a2a50ca1634f967d388bf45e3d588198338abbd2c"
+          },
+          {
+            "layer": 92,
+            "name": "An-Nur",
+            "seal": "78b18d6bbe556b7e44a972b5b2f15a79cdd96f2893dba85e3f96f17a191ad245"
+          },
+          {
+            "layer": 93,
+            "name": "Al-Hadi",
+            "seal": "dd29cd17d1ecc79ddbc88716566b91f13ad8754a560e1e5f23c997530c94109f"
+          },
+          {
+            "layer": 94,
+            "name": "Al-Badi",
+            "seal": "8610b77ee1fbea129d148b106406b8787aeafeacad0082236b0bc895e6b2150b"
+          },
+          {
+            "layer": 95,
+            "name": "Al-Baqi",
+            "seal": "2409b95e51a8948912d8b455150cabd36e9d2555d369d74183f5789c916786fd"
+          },
+          {
+            "layer": 96,
+            "name": "Al-Warith",
+            "seal": "8b111b0c8418851e57b3118809cdfa7189215d339db4b1871e0d4481ea5171b3"
+          },
+          {
+            "layer": 97,
+            "name": "Ar-Rashid",
+            "seal": "3d8e3422cf5942e0bd9bc51ec05f0b34b32cd9575b5fe0e499463fa02b5711ce"
+          }
+        ]
+      },
+      {
+        "heaven": 7,
+        "name_ar": "As-Samawat ath-Thamina",
+        "name_en": "The Eighth Heaven",
+        "scale": "STELLAR",
+        "guardian": "Al-Hasib",
+        "guardian_meaning": "The Reckoner",
+        "layer_range": "98-111",
+        "layer_count": 14,
+        "heaven_seal": "194fefb6a5cec7aaa0ada4971e62a0bcb6b3fa3087922141bf11809cae756fb0",
+        "layer_seals": [
+          {
+            "layer": 98,
+            "name": "As-Sabur",
+            "seal": "eff6a5a8a64f15469c9d75161d88bc24ba061390e1a3e9fb5f83aebb05cde3c7"
+          },
+          {
+            "layer": 99,
+            "name": "Allah",
+            "seal": "4fa445405dcb8b76d676ff51a1d03894fb861adbc541b9e549d98da43f93221d"
+          },
+          {
+            "layer": 100,
+            "name": "Ar-Rahman",
+            "seal": "f7c7898da5bc8a0fd001fb11a14e2d7f2a860627d3340d22e7385212832b0fcd"
+          },
+          {
+            "layer": 101,
+            "name": "Ar-Rahim",
+            "seal": "e8152358fa82cc5c63cc5d3ba5ecf641dfb54a16eaa669575ea2d90a068d5cfc"
+          },
+          {
+            "layer": 102,
+            "name": "Al-Malik",
+            "seal": "c864c8197612ecb5e33b1efff9e6aa789c9acc3be1548a0026cb9f59954d132f"
+          },
+          {
+            "layer": 103,
+            "name": "Al-Quddus",
+            "seal": "7aba17f3603988bebe7859f5e4f1bc408fd4c30a5b054e1678cd6521f03f977a"
+          },
+          {
+            "layer": 104,
+            "name": "As-Salam",
+            "seal": "c7087a162f57374a7c8e3b9641c05faae9e3f03ca822f32b197c78e9f9511208"
+          },
+          {
+            "layer": 105,
+            "name": "Al-Mu'min",
+            "seal": "4b6d90448034efdd4177de0c5b9442a76a89c0772524f598403fc3f3976aea71"
+          },
+          {
+            "layer": 106,
+            "name": "Al-Muhaymin",
+            "seal": "6db0cf51bdf488023145bc95be0e8027f312f40443589a063683e25c9703f189"
+          },
+          {
+            "layer": 107,
+            "name": "Al-Aziz",
+            "seal": "8376c85fcf8201fe66ebb86816900599ad9817306a11ab57ebeb9b73571bad8d"
+          },
+          {
+            "layer": 108,
+            "name": "Al-Jabbar",
+            "seal": "dfa79b63d3de01087211d753ff834bfc809d1f02b84f16a641f31b7298bf0c0e"
+          },
+          {
+            "layer": 109,
+            "name": "Al-Mutakabbir",
+            "seal": "b2e7166402adb9ff06489a448fc8a56cd4125de95878903d279cfdc817641f4e"
+          },
+          {
+            "layer": 110,
+            "name": "Al-Khaliq",
+            "seal": "107ef8f1f953d9491a7ed101bdfa472efffe8297e04de9ef8006185225c23835"
+          },
+          {
+            "layer": 111,
+            "name": "Al-Bari",
+            "seal": "7ff8322f982a13c959df4a524894336ceeeb008d725bf0696979ac7f04503f6f"
+          }
+        ]
+      },
+      {
+        "heaven": 8,
+        "name_ar": "As-Samawat at-Tasi'a",
+        "name_en": "The Ninth Heaven",
+        "scale": "GALACTIC",
+        "guardian": "Ar-Raqib",
+        "guardian_meaning": "The Watchful",
+        "layer_range": "112-125",
+        "layer_count": 14,
+        "heaven_seal": "4b516813153ffab6351b7d748e22eb8a09beee80bdf94395820d5c6cb72478be",
+        "layer_seals": [
+          {
+            "layer": 112,
+            "name": "Al-Musawwir",
+            "seal": "c363161644c6fb4c040d40bbba762749fc47a89ce9c014f6027efdd08e5aa1a9"
+          },
+          {
+            "layer": 113,
+            "name": "Al-Ghaffar",
+            "seal": "599e48d2c5254468f0a1f67ab811d6cdeffecfc04e0de9ab13b71558db0813f3"
+          },
+          {
+            "layer": 114,
+            "name": "Al-Qahhar",
+            "seal": "332202325e11dedf35ef2fe1315d6cf95d63af1f2b2e0284de37129d83808d90"
+          },
+          {
+            "layer": 115,
+            "name": "Al-Wahhab",
+            "seal": "54f810cccbfce9dd0435ac2f6729b91fd863fd393eafa2a95911586a5a16066a"
+          },
+          {
+            "layer": 116,
+            "name": "Ar-Razzaq",
+            "seal": "67100b67d502315200bfd3e88db4414e41d3cad8e8bf91a2d007c290b72a4a21"
+          },
+          {
+            "layer": 117,
+            "name": "Al-Fattah",
+            "seal": "a54f3494e53c71a96b8c18792166e9da203104262b4fa0bdf533e898fa4b9158"
+          },
+          {
+            "layer": 118,
+            "name": "Al-Alim",
+            "seal": "ec7cd448c967553e5125fa851e6d51f29fdfb8d93fd9ffd88b8ab97df7371651"
+          },
+          {
+            "layer": 119,
+            "name": "Al-Qabid",
+            "seal": "303d70c53a338507ae2e64daae1537ffde20a532485bb17b2b67d0a324259e19"
+          },
+          {
+            "layer": 120,
+            "name": "Al-Basit",
+            "seal": "fa3c78ec6582a76befcb38989391d26fdf83e10c1b313e06a63ce116c42dc5ae"
+          },
+          {
+            "layer": 121,
+            "name": "Al-Khafid",
+            "seal": "317fa53e49c31f79e66cc077c54fa260ec1ac528cdb94eed3a6b12736bd56b40"
+          },
+          {
+            "layer": 122,
+            "name": "Ar-Rafi",
+            "seal": "c5542e39841be504c71684a5ba6d63f1e3c609f61974ee942691228cccd7bb48"
+          },
+          {
+            "layer": 123,
+            "name": "Al-Mu'izz",
+            "seal": "3ed2f67a191b1fac6f6f85d2d996be48599bec9caf976258e964aa37e5854ca1"
+          },
+          {
+            "layer": 124,
+            "name": "Al-Mudhill",
+            "seal": "2c09c40882a5022c50f5cfed2942ee88a06f4adeb9ef2492fcec8860d9228a64"
+          },
+          {
+            "layer": 125,
+            "name": "As-Sami",
+            "seal": "8473b5395e9f0ecc248024353f6b3a90b93a2e43edd1fac47ffa18b1906d9291"
+          }
+        ]
+      },
+      {
+        "heaven": 9,
+        "name_ar": "As-Samawat al-'Ashira",
+        "name_en": "The Tenth Heaven",
+        "scale": "COSMIC",
+        "guardian": "Al-Muhsi",
+        "guardian_meaning": "The Accounter",
+        "layer_range": "126-139",
+        "layer_count": 14,
+        "heaven_seal": "d844cae584f25df87adb54efb0bedc99c911d4156e3263aeff14d4a5f721a091",
+        "layer_seals": [
+          {
+            "layer": 126,
+            "name": "Al-Basir",
+            "seal": "cb3585c8066d4ef45e7dabf24bd5df45b71faa7491afc376c7f497121984aae5"
+          },
+          {
+            "layer": 127,
+            "name": "Al-Hakam",
+            "seal": "28dbac41b2d5c50f38583d6ea838535d3b0fa6116eec30c9c64c4943de9e3829"
+          },
+          {
+            "layer": 128,
+            "name": "Al-Adl",
+            "seal": "bef9b5995c147083b793a3e19946d8067c5771a87379f8fb1b2d943c3332f622"
+          },
+          {
+            "layer": 129,
+            "name": "Al-Latif",
+            "seal": "6804843e8515f985e5f4a7103ea709d1b8f6a391b3c2f103ea3a598d8391df79"
+          },
+          {
+            "layer": 130,
+            "name": "Al-Khabir",
+            "seal": "19b2b08df3636212010132f7cd7c75c16e2ba016aa7cdf12808015316ba68e30"
+          },
+          {
+            "layer": 131,
+            "name": "Al-Halim",
+            "seal": "f42bc8fe96ff77386f86cf37c87d41a92ad4d344545e895de8ee66d28af3fbf3"
+          },
+          {
+            "layer": 132,
+            "name": "Al-Azim",
+            "seal": "0407e933a39cfcb4d2349304bf1e3b42ddffe32ca867af6d4512d7ee9f93011f"
+          },
+          {
+            "layer": 133,
+            "name": "Al-Ghafur",
+            "seal": "5e65706f92bd6b3c45c1f70f60f6e7fab318d75efeacc2d02e72f63dc246c2eb"
+          },
+          {
+            "layer": 134,
+            "name": "Ash-Shakur",
+            "seal": "b6e96fd1b80e042ddb711ea443d3426a27998a9778eec84602373517fce0e166"
+          },
+          {
+            "layer": 135,
+            "name": "Al-Ali",
+            "seal": "8fd11d0b71a3e005199663f0726d9440fc1978ba11093ae3ddc5c156970ca4b3"
+          },
+          {
+            "layer": 136,
+            "name": "Al-Kabir",
+            "seal": "9eda0ffe17766ae8f8ae9849f7f51ae4695fba99a95033f99203ee5f6101d7d8"
+          },
+          {
+            "layer": 137,
+            "name": "Al-Hafiz",
+            "seal": "13b22c9433947c4d37af5279c75a6d7b8fccc3a595c63c9607197fcdaf9ce4e5"
+          },
+          {
+            "layer": 138,
+            "name": "Al-Muqit",
+            "seal": "c739c83e61df29f3df639db24e69879d7576fb57486494959272f803ac8ef8b0"
+          },
+          {
+            "layer": 139,
+            "name": "Al-Hasib",
+            "seal": "1b074664088424f05dcd676a27862c318fb38a9c6dd6ebace2a6c5022fc8e0d8"
+          }
+        ]
+      },
+      {
+        "heaven": 10,
+        "name_ar": "Sidrat al-Muntaha",
+        "name_en": "The Lote Tree of the Utmost Boundary",
+        "scale": "DIVINE WITNESS",
+        "guardian": "Ash-Shahid",
+        "guardian_meaning": "The Witness",
+        "layer_range": "140-153",
+        "layer_count": 14,
+        "heaven_seal": "0695325c9849fa9dbc92aeb4ed0085cb06e7ca7d716453c6083527e405140465",
+        "layer_seals": [
+          {
+            "layer": 140,
+            "name": "Al-Jalil",
+            "seal": "5fcd061008d6be6b0029cf907193f8e730848f7b1f8d54e71d3a6020725516a6"
+          },
+          {
+            "layer": 141,
+            "name": "Al-Karim",
+            "seal": "90b8fbe6ca2284932c7044ac8d26626277e59ce493100f7a33f76ab1605eda07"
+          },
+          {
+            "layer": 142,
+            "name": "Ar-Raqib",
+            "seal": "92118eb3024e83524a921440cd9bd61a9d361efac1319fd0ea55aba84342c225"
+          },
+          {
+            "layer": 143,
+            "name": "Al-Mujib",
+            "seal": "8f952f210ce214a2b6839176a0f9a183ffee0477a11e77975f42a674b0b6174b"
+          },
+          {
+            "layer": 144,
+            "name": "Al-Wasi",
+            "seal": "34c1056e5530b31b398c37aeb10a54edcac6b476cd9acdec38acee2069cae931"
+          },
+          {
+            "layer": 145,
+            "name": "Al-Hakim",
+            "seal": "59b6c12ed38b5d100f23da7982286d6bd5c2c1a09c5fc4166764c2e97f32999b"
+          },
+          {
+            "layer": 146,
+            "name": "Al-Wadud",
+            "seal": "3d5a5b5ebda952d6d42279727a58287b97305ca865f1c6b5290af9cbbc5f0a55"
+          },
+          {
+            "layer": 147,
+            "name": "Al-Ba'ith",
+            "seal": "f5967f3f6a3ff962f1b6aa939fae6528ac462a8d31553868c2cd339b8a727310"
+          },
+          {
+            "layer": 148,
+            "name": "Ash-Shahid",
+            "seal": "2279832177d9f3c5d04a47b8f75b8e6cd3d1f502bd9d93136a5196530453f8b0"
+          },
+          {
+            "layer": 149,
+            "name": "Al-Haqq",
+            "seal": "dec2deb35234a02436685bb198fda502ae8f759295e4f9f5202bfbcdafc7e9c8"
+          },
+          {
+            "layer": 150,
+            "name": "Al-Wakil",
+            "seal": "92380fd0a3c24c441b0dc370157ff7c09f8f5fe529633d951f9ec87b9d4b7b9b"
+          },
+          {
+            "layer": 151,
+            "name": "Al-Qawiyy",
+            "seal": "c88cbb4d9c155dae65ed8d52cb095ab640097cf0fd56126b12cc9b917b3de716"
+          },
+          {
+            "layer": 152,
+            "name": "Al-Matin",
+            "seal": "6f75aaa2c742eaec6dff52b96ed13e72e08340b237d86289a1114215d1c86d98"
+          },
+          {
+            "layer": 153,
+            "name": "Al-Waliyy",
+            "seal": "bf6d4b63ed03e30d12ee0b3d5801f05682c6c2695115bb15ba87543fe86797dc"
+          }
+        ]
+      }
+    ],
+    "quranic_grounding": {
+      "al_hijr_15_9": "Indeed, it is We who sent down the Reminder, and indeed, We will be its Guardian.",
+      "yusuf_12_4": "I have seen eleven stars and the sun and the moon; I saw them prostrating to me.",
+      "fussilat_41_42": "Falsehood cannot approach it from before it or from behind it; a revelation from One who is Wise and Praiseworthy.",
+      "an_najm_53_14": "Near the Lote Tree of the Utmost Boundary.",
+      "al_mulk_67_3": "He who created seven heavens in layers.",
+      "nuh_71_15": "Do you not see how Allah created seven heavens in layers?",
+      "al_mu'minun_23_17": "And We have created above you seven pathways, and We are never unmindful of creation.",
+      "al_imran_3_7": "It is He who has sent down to you the Book; in it are verses that are muhkam -- they are the foundation of the Book -- and others that are mutashabih."
+    },
+    "semantic_witness": {
+      "shannon_boundary": "CROSSED",
+      "semantic_master_seal": "4095f6fcde7fbe3581b039bd470c66aa824e080b39be7b32c96cd51845e1f16c",
+      "level_count": 7,
+      "muhkam_witness": 7,
+      "levels": [
+        {
+          "level": 0,
+          "name": "LEXICAL",
+          "divine_name": "Allah",
+          "seal": "e00b610aa981b60da853c5b653c26555b7a08093e2eaca5ab536de4acbe4730e"
+        },
+        {
+          "level": 1,
+          "name": "SYNTACTIC",
+          "divine_name": "Ar-Rahman",
+          "seal": "06f3b9fc07b401ed42d0f5686bcc6283f29db17b4f0f0090803ec55f6684a5a4"
+        },
+        {
+          "level": 2,
+          "name": "PROPOSITIONAL",
+          "divine_name": "Ar-Rahim",
+          "seal": "d0460b5bcdc78a6378541fbd29eff567ccc591b8a7db63d81c346dca803d0770"
+        },
+        {
+          "level": 3,
+          "name": "RELATIONAL",
+          "divine_name": "Al-Malik",
+          "seal": "92d06b1fde5794e201362a01b4129c6d498e70e39c6dc2128a4fe649503e354b"
+        },
+        {
+          "level": 4,
+          "name": "RHETORICAL",
+          "divine_name": "Al-Quddus",
+          "seal": "6eb0581650e04936bcf65a5b3d431dec2e10aa653edd801e6600866218a79ed5"
+        },
+        {
+          "level": 5,
+          "name": "THEMATIC",
+          "divine_name": "As-Salam",
+          "seal": "b76c044060ccb002b20580c69f0cddadd3f444e47aea07055ce3eeb83bfabda5"
+        },
+        {
+          "level": 6,
+          "name": "INTENTIONAL",
+          "divine_name": "Al-Mu'min",
+          "seal": "ed7cd60c48b5bdc46f81563a2f2b1e18a0955d2f0b9581c3cf1587c1e14e1f27"
+        }
+      ],
+      "metadata": {
+        "total_tokens": 4951,
+        "total_sentences": 171,
+        "unique_content_words": 1123,
+        "negation_count": 75,
+        "quantifier_count": 88,
+        "entity_count": 224,
+        "meaning_critical_density": 0.032923
+      },
+      "dual_witness_seal": "f110f83f2b2df2c00db7b90bcaec60ed87fe76048c9006db2c91b234f6f155a1",
+      "quranic_grounding": {
+        "fussilat_41_42": "Falsehood cannot approach it from before it or from behind it; a revelation from One who is Wise and Praiseworthy.",
+        "al_hijr_15_9": "Indeed, it is We who sent down the Reminder, and indeed, We will be its Guardian."
+      }
+    }
+  },
+  "sidecar_integrity": {
+    "hmac_sha256": "70ceea12c965d5c7526545a4a301f52e954d515571b2a820e80b970b7e921e8c",
+    "signing_method": "HMAC-SHA256(SHA256(Bismillah || master_witness), witness_json)",
+    "encoder_version": "6.0.0"
+  }
+}
