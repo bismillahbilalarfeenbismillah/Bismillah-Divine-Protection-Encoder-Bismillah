@@ -193,7 +193,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "10.1.0"
+ENCODER_VERSION = "10.2.0"  # v10.2.0: Council fixes — CROSSED bug, ontology versioning
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -771,6 +771,38 @@ _SPEECH_ACT_VERBS = {
     'declarative': {'declare', 'pronounce', 'announce', 'proclaim', 'define',
                     'name', 'appoint', 'resign', 'sentence', 'decree'},
 }
+
+# --- Ontology version (Action Item 2, Council v2.1) ---
+# The semantic parameters above (stopwords, negation, quantifiers, connectors,
+# speech-act verbs) constitute the ontology. An adversary who can silently
+# redefine these breaks every soundness claim. The ontology must be frozen,
+# hash-pinned, versioned, and included in every witness sidecar.
+ONTOLOGY_VERSION = "1.0.0"
+
+def _compute_ontology_hash():
+    """Compute a deterministic hash of all semantic ontology parameters.
+
+    This hash pins the ontology as a channel parameter (Council Action Item 2).
+    Any change to stopwords, negation words, quantifiers, connectors, or
+    speech-act verb sets will change this hash, making the change visible
+    in the witness sidecar.
+    """
+    # Canonical serialization: sorted members of each frozen set / dict
+    components = [
+        ("stopwords", sorted(_STOPWORDS)),
+        ("negation", sorted(_NEGATION_WORDS)),
+        ("quantifiers", sorted(_QUANTIFIER_WORDS)),
+        ("logical_connectors", sorted(_LOGICAL_CONNECTORS)),
+        ("speech_act_verbs", {
+            k: sorted(v) for k, v in sorted(_SPEECH_ACT_VERBS.items())
+        }),
+        ("ontology_version", ONTOLOGY_VERSION),
+    ]
+    canonical = json.dumps(components, sort_keys=True, ensure_ascii=True)
+    return hashlib.sha256(canonical.encode('utf-8')).hexdigest()
+
+# Pre-compute at import time — immutable for this encoder version
+ONTOLOGY_HASH = _compute_ontology_hash()
 
 
 def _tokenize_semantic(text):
@@ -5927,10 +5959,22 @@ def _write_heaven_witness(filepath, content_bytes, computation):
         witness_data["heavens"].append(heaven_entry)
 
     # v6.0: Add semantic witness data to sidecar
+    # FIX (Action Item 1, Council v2.1): The previous code hardcoded
+    # "CROSSED" inside an `if semantic.get("applicable"):` block, making
+    # the else "BELOW" branch dead code. Every document unconditionally
+    # received "CROSSED" — a conclusion that belongs to a formal proof,
+    # not a witness seal. Root cause: two unrelated notions of "crossed"
+    # (dual-document verification vs single-document sealing) were
+    # conflated. Fixed by unanimous council vote to PENDING_FORMAL_DEFINITION.
+    # Postmortem: the hardcoded value was never gated on an actual
+    # boundary-crossing computation for single-document seals.
     semantic = computation.get("semantic", {})
     if semantic.get("applicable"):
         witness_data["semantic_witness"] = OrderedDict([
-            ("shannon_boundary", "CROSSED" if semantic["applicable"] else "BELOW"),
+            ("shannon_boundary", "PENDING_FORMAL_DEFINITION"),
+            ("dual_witness_status", "implemented_not_proven"),
+            ("ontology_version", ONTOLOGY_VERSION),
+            ("ontology_hash", ONTOLOGY_HASH),
             ("semantic_master_seal", semantic["semantic_master_seal"]),
             ("level_count", semantic["level_count"]),
             ("muhkam_witness", semantic["muhkam_witness"]),
@@ -5961,8 +6005,14 @@ def _write_heaven_witness(filepath, content_bytes, computation):
             hmac_key, witness_json.encode('utf-8'), hashlib.sha256
         ).hexdigest()
 
-        # Write witness + signature
+        # Write witness + signature (nested format, Action Item 3c)
+        # Sidecar format version history:
+        #   1.0 = flat format (heavens module v5.3, muhkam_seal at top level)
+        #   2.0 = nested format (witness key + sidecar_integrity HMAC)
+        # v2.0 is the standardized format per Council decision.
+        # Flat format (1.0) is deprecated — readers should accept both.
         signed_data = OrderedDict([
+            ("sidecar_format_version", "2.0"),
             ("witness", json.loads(witness_json)),
             ("sidecar_integrity", OrderedDict([
                 ("hmac_sha256", witness_hmac),
@@ -5989,11 +6039,18 @@ def verify_witness_sidecar(filepath):
         with open(witness_path, 'r', encoding='utf-8') as f:
             signed_data = json.load(f)
 
-        # Handle both v5.0 (unsigned) and v5.1 (signed) formats
+        # Handle all sidecar format versions (Action Item 3c):
+        #   - No sidecar_integrity key = v5.0 unsigned (deprecated)
+        #   - Has "witness" key = v2.0 nested format (standard)
+        #   - Has "muhkam_seal" at top level = v1.0 flat format (deprecated)
         if "sidecar_integrity" not in signed_data:
+            # Check for flat format (v1.0) — top-level muhkam_seal
+            if "muhkam_seal" in signed_data:
+                return False, ("Flat sidecar format v1.0 (deprecated) -- "
+                               "re-seal with v10.2.0+ to upgrade to nested format v2.0")
             return False, "Unsigned sidecar (v5.0 format -- re-seal to upgrade)"
 
-        witness_data = signed_data["witness"]
+        witness_data = signed_data.get("witness", signed_data)
         stored_hmac = signed_data["sidecar_integrity"]["hmac_sha256"]
         master_witness = witness_data.get("master_witness", "")
 
