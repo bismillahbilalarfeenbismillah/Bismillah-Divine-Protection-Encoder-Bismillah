@@ -109,6 +109,22 @@
       "divine_meaning": "The Supreme",
       "name_index": 10,
       "sealed_at": "2026-10-20T23:38:08.229477+00:00"
+    },
+    "Bismillah_Shannon_Boundary_Council_Document_Bismillah.md": {
+      "path": "Bismillah_Shannon_Boundary_Council_Document_Bismillah.md",
+      "content_hash": "9f984f6996e157a6769526317699efba748ec3b9fc1a6d993f830d52294bd726",
+      "divine_name": "Al-Khaliq",
+      "divine_meaning": "The Creator",
+      "name_index": 11,
+      "sealed_at": "2026-10-21T00:29:42.043553+00:00"
+    },
+    "Bismillah_Shannon_Boundary_Council_Document_v2_Bismillah.md": {
+      "path": "Bismillah_Shannon_Boundary_Council_Document_v2_Bismillah.md",
+      "content_hash": "29ca2e6fb7aa9cf9c8b38a8452259826f8541cf11fe7d70fd24195c17f69c546",
+      "divine_name": "Al-Bari",
+      "divine_meaning": "The Evolver",
+      "name_index": 12,
+      "sealed_at": "2026-10-21T00:55:34.657865+00:00"
     }
   },
   "edges": [
@@ -1013,9 +1029,9 @@
       "sealed_at": "2026-10-20T07:52:01.289968+00:00"
     }
   ],
-  "corpus_merkle_root": "8d55704d517fe3db034f91a67efd095e70056985548a6e8153026caf196792c7",
-  "ummah_seal": "b62a742a4a3db2221a71c551caa99469e3e7961b3826dcf0e9cbbbe11ffbe814",
+  "corpus_merkle_root": "d0cff318dff2415d7c7fb5b4f4d77f91328893f160ce82d6bc5f32179d174d7e",
+  "ummah_seal": "24279473a28b3d7821ecea4e82dc44525d1934674be3a292095b020194ffb84e",
   "total_kinship_bonds": 36,
   "edge_dimensions": 693,
-  "hmac_signature": "8ac1bff5ba1e7f52e1b294376e1176c72692fc9ca8025439c1f0ca1b93667e87"
+  "hmac_signature": "8c088a8de320544a7611540f79c0f08d4dd92051bf1fdf4e5fd4efa7c7b29a6c"
 }
