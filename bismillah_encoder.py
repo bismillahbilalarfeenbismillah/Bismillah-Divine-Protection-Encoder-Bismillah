@@ -724,6 +724,134 @@ def is_code_file(ext):
 #  are present in the architecture's cardinality. This is computational tawhid.
 
 
+# Bismillah ir-Rahman ir-Rahim
+#
+# PROTECTIVE INVOCATION BOOKENDING
+#
+# Every structural boundary in the encoder -- each heaven, each phase,
+# each layer batch -- opens and closes with the protective invocation.
+# This mirrors the Qur'anic practice: every surah (except At-Tawbah)
+# opens with Bismillah ir-Rahman ir-Rahim. We extend this to CLOSING
+# as well, so that no structural unit stands without divine protection
+# at both its entry and exit points.
+#
+# "And if you asked them, 'Who created the heavens and the earth?'
+#  they would surely say, 'Allah.'" (39:38)
+
+def _bookend_invocation(unit_name, unit_type="heaven"):
+    """Create protective invocation markers for a structural unit.
+
+    Returns a dict with opening and closing invocation hashes,
+    binding the Bismillah to the specific structural boundary.
+
+    Every heaven, every phase, every layer batch is thus bookended --
+    nothing enters or exits without the Name of Allah.
+    """
+    # Bismillah ir-Rahman ir-Rahim
+    open_h = hashlib.sha256()
+    open_h.update(BISMILLAH.encode('utf-8'))
+    open_h.update("INVOCATION_OPEN|{}|{}".format(unit_type, unit_name).encode('utf-8'))
+    open_h.update(BISMILLAH_ARABIC.encode('utf-8'))
+    open_h.update(BISMILLAH.encode('utf-8'))
+
+    close_h = hashlib.sha256()
+    close_h.update(BISMILLAH.encode('utf-8'))
+    close_h.update("INVOCATION_CLOSE|{}|{}".format(unit_type, unit_name).encode('utf-8'))
+    close_h.update(BISMILLAH_ARABIC.encode('utf-8'))
+    close_h.update(BISMILLAH.encode('utf-8'))
+
+    return {
+        "invocation_open": open_h.hexdigest(),
+        "invocation_close": close_h.hexdigest(),
+        "unit_name": unit_name,
+        "unit_type": unit_type,
+        "bookended": True,
+    }
+    # Bismillah ir-Rahman ir-Rahim
+
+
+def _bookend_layers(layers, heaven_name):
+    """Wrap a heaven's layer batch with protective invocation markers.
+
+    Inserts invocation hashes as metadata on the first and last layers
+    of each heaven, binding every structural boundary to Bismillah.
+    """
+    # Bismillah ir-Rahman ir-Rahim
+    if not layers:
+        return layers
+
+    bookend = _bookend_invocation(heaven_name, "heaven")
+
+    # Mark the first layer with the opening invocation
+    layers[0]["invocation_open"] = bookend["invocation_open"]
+    layers[0]["bookend_unit"] = heaven_name
+
+    # Mark the last layer with the closing invocation
+    layers[-1]["invocation_close"] = bookend["invocation_close"]
+    layers[-1]["bookend_unit"] = heaven_name
+
+    return layers
+    # Bismillah ir-Rahman ir-Rahim
+
+
+def _bookend_phase(phase_dict, phase_name):
+    """Add protective invocation bookending to a phase output dict.
+
+    Every phase in the Five-Phase Protocol opens and closes with
+    Bismillah ir-Rahman ir-Rahim -- no phase stands unprotected.
+    """
+    # Bismillah ir-Rahman ir-Rahim
+    bookend = _bookend_invocation(phase_name, "phase")
+    phase_dict["invocation_open"] = bookend["invocation_open"]
+    phase_dict["invocation_close"] = bookend["invocation_close"]
+    phase_dict["bookended"] = True
+    return phase_dict
+    # Bismillah ir-Rahman ir-Rahim
+
+
+def verify_bookend_integrity(computation):
+    """Verify that all structural units are properly bookended.
+
+    Checks that every heaven and every phase carries both opening
+    and closing invocation markers. Returns a verification dict.
+
+    If any structural unit is found without bookending, the file
+    has been tampered with or processed incorrectly.
+    """
+    # Bismillah ir-Rahman ir-Rahim
+    result = {
+        "all_bookended": True,
+        "heavens_checked": 0,
+        "phases_checked": 0,
+        "unbookended": [],
+    }
+
+    # Check heaven bookending via layer markers
+    layers = computation.get("layers", [])
+    for hdef in HEAVENS:
+        heaven_layers = [l for l in layers
+                         if hdef["layer_start"] <= l["layer"] <= hdef["layer_end"]]
+        if heaven_layers:
+            result["heavens_checked"] += 1
+            first = heaven_layers[0]
+            last = heaven_layers[-1]
+            if "invocation_open" not in first or "invocation_close" not in last:
+                result["all_bookended"] = False
+                result["unbookended"].append(hdef["name_en"])
+
+    # Check phase bookending
+    protocol = computation.get("protocol", {})
+    phases = protocol.get("phases", {})
+    for pname, pdata in phases.items():
+        result["phases_checked"] += 1
+        if not pdata.get("bookended", False):
+            result["all_bookended"] = False
+            result["unbookended"].append("Phase: {}".format(pname))
+
+    return result
+    # Bismillah ir-Rahman ir-Rahim
+
+
 def _layer_hash(layer_idx, scale_tag, content_feature):
     """Compute a single layer's Bismillah-anchored seal.
 
@@ -842,7 +970,8 @@ def _compute_heaven_0(data):
     cksum = sum(data) % TOTAL_LAYERS
     layers.append(_layer_hash(base + 13, "CKSUM_154", str(cksum)))
 
-    return layers
+    return _bookend_layers(layers, "As-Samawat Ad-Dunya")
+    # Bismillah ir-Rahman ir-Rahim
 
 
 # --- Heaven 1: ATOMIC (Layers 14-27, 14 layers) ---
@@ -940,7 +1069,8 @@ def _compute_heaven_1(data):
     resonance_h.update(sample_11)
     layers.append(_layer_hash(base + 13, "ATOMIC_RESONANCE", resonance_h.hexdigest()))
 
-    return layers
+    return _bookend_layers(layers, "As-Samawat Ath-Thaniya")
+    # Bismillah ir-Rahman ir-Rahim
 
 
 # --- Heaven 2: MOLECULAR (Layers 28-41, 14 layers) ---
@@ -1037,7 +1167,8 @@ def _compute_heaven_2(data):
     substrate_h.update(BISMILLAH.encode('utf-8'))
     layers.append(_layer_hash(base + 13, "SUBSTRATE", substrate_h.hexdigest()))
 
-    return layers
+    return _bookend_layers(layers, "As-Samawat Ath-Thalitha")
+    # Bismillah ir-Rahman ir-Rahim
 
 
 # --- Heaven 3: CELLULAR (Layers 42-55, 14 layers) ---
@@ -1181,7 +1312,8 @@ def _compute_heaven_3(data):
     sihr_h.update(BISMILLAH.encode('utf-8'))
     layers.append(_layer_hash(base + 13, "SIHR_SPEECH", sihr_h.hexdigest()))
 
-    return layers
+    return _bookend_layers(layers, "As-Samawat Ar-Rabi'a")
+    # Bismillah ir-Rahman ir-Rahim
 
 
 # --- Heaven 4: ORGANIC (Layers 56-69, 14 layers) ---
@@ -1292,7 +1424,8 @@ def _compute_heaven_4(data):
     ws_pattern = bytes(1 if b in (32, 9, 10, 13) else 0 for b in data[:4096])
     layers.append(_layer_hash(base + 13, "WS_PATTERN", ws_pattern))
 
-    return layers
+    return _bookend_layers(layers, "As-Samawat Al-Khamisa")
+    # Bismillah ir-Rahman ir-Rahim
 
 
 # --- Heaven 5: TERRESTRIAL (Layers 70-83, 14 layers) ---
@@ -1448,7 +1581,8 @@ def _compute_heaven_5(data):
     material_h.update(BISMILLAH.encode('utf-8'))
     layers.append(_layer_hash(base + 13, "SIHR_MATERIAL", material_h.hexdigest()))
 
-    return layers
+    return _bookend_layers(layers, "As-Samawat As-Sadisa")
+    # Bismillah ir-Rahman ir-Rahim
 
 
 # --- Heaven 6: PLANETARY (Layers 84-97, 14 layers) ---
@@ -1501,7 +1635,8 @@ def _compute_heaven_6(data):
     # L97: Planetary signature -- full content hash
     layers.append(_layer_hash(base + 13, "PLANET_SIG", hashlib.sha256(data).hexdigest()))
 
-    return layers
+    return _bookend_layers(layers, "As-Samawat As-Sabi'a")
+    # Bismillah ir-Rahman ir-Rahim
 
 
 # --- Heaven 7: STELLAR (Layers 98-111, 14 layers) ---
@@ -1608,7 +1743,8 @@ def _compute_heaven_7(data):
                                   round(h_value, 6), round(fractal_dim, 6),
                                   witness_sig[:16])))
 
-    return layers, h_value, f_metrics
+    return _bookend_layers(layers, "As-Samawat Ath-Thamina"), h_value, f_metrics
+    # Bismillah ir-Rahman ir-Rahim
 
 
 # --- Heaven 8: GALACTIC (Layers 112-125, 14 layers) ---
@@ -1679,7 +1815,8 @@ def _compute_heaven_8(data):
     ghurur_h.update(BISMILLAH.encode('utf-8'))
     layers.append(_layer_hash(base + 13, "GHURUR", ghurur_h.hexdigest()))
 
-    return layers, chain_hashes
+    return _bookend_layers(layers, "As-Samawat At-Tasi'a"), chain_hashes
+    # Bismillah ir-Rahman ir-Rahim
 
 
 # --- Heaven 9: COSMIC (Layers 126-139, 14 layers) ---
@@ -1810,7 +1947,8 @@ def _compute_heaven_9(data, filepath=None):
     cosmic_h.update(BISMILLAH.encode('utf-8'))
     layers.append(_layer_hash(base + 13, "COSMIC_SIG", cosmic_h.hexdigest()))
 
-    return layers
+    return _bookend_layers(layers, "As-Samawat Al-'Ashira")
+    # Bismillah ir-Rahman ir-Rahim
 
 
 # --- Heaven 10: SIDRAT AL-MUNTAHA (Layers 140-153, 14 layers) ---
@@ -1910,7 +2048,8 @@ def _compute_heaven_10(all_heaven_layers):
     completion_h.update(BISMILLAH.encode('utf-8'))
     layers.append(_layer_hash(base + 13, "BISMILLAH_SEAL", completion_h.hexdigest()))
 
-    return layers
+    return _bookend_layers(layers, "Sidrat Al-Muntaha")
+    # Bismillah ir-Rahman ir-Rahim
 
 
 # ============================================================================
@@ -2209,7 +2348,7 @@ def _phase_fatihah(content_bytes, filepath=None):
     channel["open"] = True
     channel["diagnostics"].append("CHANNEL_OPEN: Bismillah -- all systems ready")
 
-    return channel
+    return _bookend_phase(channel, "Al-Fatihah")
     # Bismillah ir-Rahman ir-Rahim
 
 
@@ -2323,7 +2462,7 @@ def _phase_ikhlas(content_bytes, filepath=None, channel=None):
     identity["authenticated"] = True
     identity["diagnostics"].append("AUTHENTICATED: identity verified -- Allahu Ahad")
 
-    return identity
+    return _bookend_phase(identity, "Al-Ikhlas")
     # Bismillah ir-Rahman ir-Rahim
 
 
@@ -2570,7 +2709,7 @@ def _phase_nas(content_bytes, identity=None):
                 threats["threat_level"], len(threats["vectors"]),
                 high_count, mod_count))
 
-    return threats
+    return _bookend_phase(threats, "An-Nas")
     # Bismillah ir-Rahman ir-Rahim
 
 
@@ -2707,7 +2846,7 @@ def _phase_falaq(content_bytes, threats=None):
     defense["diagnostics"].append(
         "PERIMETER_SEALED: {}...".format(defense["perimeter_seal"][:24]))
 
-    return defense
+    return _bookend_phase(defense, "Al-Falaq")
     # Bismillah ir-Rahman ir-Rahim
 
 
@@ -2790,6 +2929,11 @@ def fatihah_ikhlas_seal(content_bytes, filepath=None):
     protocol_h.update(computation["master_witness"].encode('utf-8'))
     protocol_h.update(BISMILLAH.encode('utf-8'))
     computation["protocol"]["protocol_seal"] = protocol_h.hexdigest()
+
+    # Verify bookend integrity across all structural units
+    bookend_check = verify_bookend_integrity(computation)
+    computation["protocol"]["bookend_integrity"] = bookend_check
+    computation["protocol"]["all_bookended"] = bookend_check["all_bookended"]
 
     return computation
     # Bismillah ir-Rahman ir-Rahim
