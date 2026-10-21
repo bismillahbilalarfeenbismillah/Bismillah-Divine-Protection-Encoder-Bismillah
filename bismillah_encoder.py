@@ -738,31 +738,41 @@ def is_code_file(ext):
 # "And if you asked them, 'Who created the heavens and the earth?'
 #  they would surely say, 'Allah.'" (39:38)
 
-def _bookend_invocation(unit_name, unit_type="heaven"):
+def _bookend_invocation(unit_name, unit_type="heaven", content_digest=""):
     """Create protective invocation markers for a structural unit.
 
     Returns a dict with opening and closing invocation hashes,
-    binding the Bismillah to the specific structural boundary.
+    binding the Bismillah to the specific structural boundary
+    AND to the actual content being protected.
+
+    content_digest: a hex string derived from the real content of this
+    unit (layer seals for heavens, phase-dict hash for phases). This
+    binds the invocation to THIS file's data -- without it, the hash
+    would be a static constant identical across all files.
 
     Every heaven, every phase, every layer batch is thus bookended --
-    nothing enters or exits without the Name of Allah.
+    nothing enters or exits without the Name of Allah, and no
+    invocation can be transplanted from one file to another.
     """
     # Bismillah ir-Rahman ir-Rahim
     open_h = hashlib.sha256()
     open_h.update(BISMILLAH.encode('utf-8'))
     open_h.update("INVOCATION_OPEN|{}|{}".format(unit_type, unit_name).encode('utf-8'))
+    open_h.update(content_digest.encode('utf-8'))
     open_h.update(BISMILLAH_ARABIC.encode('utf-8'))
     open_h.update(BISMILLAH.encode('utf-8'))
 
     close_h = hashlib.sha256()
     close_h.update(BISMILLAH.encode('utf-8'))
     close_h.update("INVOCATION_CLOSE|{}|{}".format(unit_type, unit_name).encode('utf-8'))
+    close_h.update(content_digest.encode('utf-8'))
     close_h.update(BISMILLAH_ARABIC.encode('utf-8'))
     close_h.update(BISMILLAH.encode('utf-8'))
 
     return {
         "invocation_open": open_h.hexdigest(),
         "invocation_close": close_h.hexdigest(),
+        "content_digest": content_digest,
         "unit_name": unit_name,
         "unit_type": unit_type,
         "bookended": True,
@@ -774,21 +784,36 @@ def _bookend_layers(layers, heaven_name):
     """Wrap a heaven's layer batch with protective invocation markers.
 
     Inserts invocation hashes as metadata on the first and last layers
-    of each heaven, binding every structural boundary to Bismillah.
+    of each heaven, binding every structural boundary to Bismillah
+    AND to the actual content of the layers being sealed.
+
+    The content digest is computed from the concatenation of all layer
+    seals in this heaven -- so different file content produces different
+    seals produces different bookend hashes. No transplanting possible.
     """
     # Bismillah ir-Rahman ir-Rahim
     if not layers:
         return layers
 
-    bookend = _bookend_invocation(heaven_name, "heaven")
+    # Compute content digest from the actual layer seals
+    # This binds the invocation to THIS file's real computed content
+    digest_h = hashlib.sha256()
+    for layer in layers:
+        seal = layer.get("seal", "")
+        digest_h.update(seal.encode('utf-8'))
+    content_digest = digest_h.hexdigest()
+
+    bookend = _bookend_invocation(heaven_name, "heaven", content_digest)
 
     # Mark the first layer with the opening invocation
     layers[0]["invocation_open"] = bookend["invocation_open"]
     layers[0]["bookend_unit"] = heaven_name
+    layers[0]["content_digest"] = content_digest
 
     # Mark the last layer with the closing invocation
     layers[-1]["invocation_close"] = bookend["invocation_close"]
     layers[-1]["bookend_unit"] = heaven_name
+    layers[-1]["content_digest"] = content_digest
 
     return layers
     # Bismillah ir-Rahman ir-Rahim
@@ -799,11 +824,30 @@ def _bookend_phase(phase_dict, phase_name):
 
     Every phase in the Five-Phase Protocol opens and closes with
     Bismillah ir-Rahman ir-Rahim -- no phase stands unprotected.
+
+    The content digest is computed from the phase dict's real data
+    (all string values concatenated and hashed), so different file
+    content produces different phase outputs produces different
+    bookend hashes.
     """
     # Bismillah ir-Rahman ir-Rahim
-    bookend = _bookend_invocation(phase_name, "phase")
+    # Compute content digest from the phase's actual data
+    digest_h = hashlib.sha256()
+    for key in sorted(phase_dict.keys()):
+        val = phase_dict[key]
+        if isinstance(val, (str, int, float, bool)):
+            digest_h.update("{}={}".format(key, val).encode('utf-8'))
+        elif isinstance(val, dict):
+            digest_h.update("{}={}".format(key, sorted(val.items())).encode('utf-8'))
+        elif isinstance(val, list):
+            digest_h.update("{}={}".format(key, val).encode('utf-8'))
+    content_digest = digest_h.hexdigest()
+
+    bookend = _bookend_invocation(phase_name, "phase", content_digest)
     phase_dict["invocation_open"] = bookend["invocation_open"]
     phase_dict["invocation_close"] = bookend["invocation_close"]
+    phase_dict["content_digest"] = content_digest
+    phase_dict["bookend_unit"] = phase_name
     phase_dict["bookended"] = True
     return phase_dict
     # Bismillah ir-Rahman ir-Rahim
@@ -812,21 +856,28 @@ def _bookend_phase(phase_dict, phase_name):
 def verify_bookend_integrity(computation):
     """Verify that all structural units are properly bookended.
 
-    Checks that every heaven and every phase carries both opening
-    and closing invocation markers. Returns a verification dict.
+    Does NOT merely check for key presence -- that would pass equally
+    well whether the bookending ran correctly or was stubbed out with
+    garbage values. Instead, recomputes the expected invocation hashes
+    from the actual content (layer seals for heavens, phase-dict data
+    for phases) and compares against the stored hashes.
 
-    If any structural unit is found without bookending, the file
-    has been tampered with or processed incorrectly.
+    If any structural unit is found without bookending, or with hashes
+    that do not match the recomputed expectation, the file has been
+    tampered with or processed incorrectly.
     """
     # Bismillah ir-Rahman ir-Rahim
     result = {
         "all_bookended": True,
         "heavens_checked": 0,
+        "heavens_verified": 0,
         "phases_checked": 0,
+        "phases_verified": 0,
         "unbookended": [],
+        "hash_mismatches": [],
     }
 
-    # Check heaven bookending via layer markers
+    # Check heaven bookending via layer markers -- with hash recomputation
     layers = computation.get("layers", [])
     for hdef in HEAVENS:
         heaven_layers = [l for l in layers
@@ -835,18 +886,109 @@ def verify_bookend_integrity(computation):
             result["heavens_checked"] += 1
             first = heaven_layers[0]
             last = heaven_layers[-1]
+
+            # Step 1: check keys exist at all
             if "invocation_open" not in first or "invocation_close" not in last:
                 result["all_bookended"] = False
                 result["unbookended"].append(hdef["name_en"])
+                continue
 
-    # Check phase bookending
+            # Step 2: recompute the content digest from actual layer seals
+            digest_h = hashlib.sha256()
+            for layer in heaven_layers:
+                seal = layer.get("seal", "")
+                digest_h.update(seal.encode('utf-8'))
+            expected_digest = digest_h.hexdigest()
+
+            # Step 3: recompute expected invocation hashes
+            # Use the bookend_unit name stored on the layer itself --
+            # this is the exact name _bookend_layers was called with
+            stored_name = first.get("bookend_unit", hdef["name_en"])
+            expected = _bookend_invocation(
+                stored_name, "heaven", expected_digest)
+
+            # Step 4: compare stored vs recomputed
+            open_match = (first["invocation_open"] == expected["invocation_open"])
+            close_match = (last["invocation_close"] == expected["invocation_close"])
+
+            if open_match and close_match:
+                result["heavens_verified"] += 1
+            else:
+                result["all_bookended"] = False
+                mismatch_detail = {
+                    "unit": stored_name,
+                    "type": "heaven",
+                }
+                if not open_match:
+                    mismatch_detail["open_stored"] = first["invocation_open"][:16] + "..."
+                    mismatch_detail["open_expected"] = expected["invocation_open"][:16] + "..."
+                if not close_match:
+                    mismatch_detail["close_stored"] = last["invocation_close"][:16] + "..."
+                    mismatch_detail["close_expected"] = expected["invocation_close"][:16] + "..."
+                result["hash_mismatches"].append(mismatch_detail)
+
+    # Check phase bookending -- with hash recomputation
     protocol = computation.get("protocol", {})
     phases = protocol.get("phases", {})
     for pname, pdata in phases.items():
         result["phases_checked"] += 1
+
+        # Step 1: check keys exist
         if not pdata.get("bookended", False):
             result["all_bookended"] = False
             result["unbookended"].append("Phase: {}".format(pname))
+            continue
+
+        stored_open = pdata.get("invocation_open", "")
+        stored_close = pdata.get("invocation_close", "")
+        stored_digest = pdata.get("content_digest", "")
+
+        if not stored_open or not stored_close or not stored_digest:
+            result["all_bookended"] = False
+            result["unbookended"].append("Phase: {} (missing hash fields)".format(pname))
+            continue
+
+        # Step 2: recompute content digest from phase dict
+        # (exclude the bookend fields themselves to avoid circularity)
+        digest_h = hashlib.sha256()
+        exclude_keys = {"invocation_open", "invocation_close",
+                        "content_digest", "bookend_unit", "bookended"}
+        for key in sorted(pdata.keys()):
+            if key in exclude_keys:
+                continue
+            val = pdata[key]
+            if isinstance(val, (str, int, float, bool)):
+                digest_h.update("{}={}".format(key, val).encode('utf-8'))
+            elif isinstance(val, dict):
+                digest_h.update("{}={}".format(key, sorted(val.items())).encode('utf-8'))
+            elif isinstance(val, list):
+                digest_h.update("{}={}".format(key, val).encode('utf-8'))
+        expected_digest = digest_h.hexdigest()
+
+        # Step 3: recompute expected invocation hashes
+        # Use bookend_unit (the original Arabic name) not the dict key
+        unit_name = pdata.get("bookend_unit", pname)
+        expected = _bookend_invocation(unit_name, "phase", expected_digest)
+
+        # Step 4: compare
+        open_match = (stored_open == expected["invocation_open"])
+        close_match = (stored_close == expected["invocation_close"])
+
+        if open_match and close_match:
+            result["phases_verified"] += 1
+        else:
+            result["all_bookended"] = False
+            mismatch_detail = {
+                "unit": unit_name,
+                "type": "phase",
+            }
+            if not open_match:
+                mismatch_detail["open_stored"] = stored_open[:16] + "..."
+                mismatch_detail["open_expected"] = expected["invocation_open"][:16] + "..."
+            if not close_match:
+                mismatch_detail["close_stored"] = stored_close[:16] + "..."
+                mismatch_detail["close_expected"] = expected["invocation_close"][:16] + "..."
+            result["hash_mismatches"].append(mismatch_detail)
 
     return result
     # Bismillah ir-Rahman ir-Rahim
