@@ -706,6 +706,80 @@ def is_code_file(ext):
     return ext in COMMENT_STYLES
 
 
+def _md_syntax_prefix_len(line):
+    """Return the length of the markdown syntax prefix on a line.
+
+    Bismillah ir-Rahman ir-Rahim
+
+    For markdown files, ZWC payloads must be inserted AFTER the syntax
+    prefix so that heading markers (#), bold/italic markers (**/*),
+    list markers (- ), blockquote markers (> ), and horizontal rules
+    (---) are not corrupted by invisible characters splitting them
+    from the content they govern.
+
+    Returns the index at which actual content begins, i.e. the first
+    character position where a ZWC payload can safely be inserted
+    without breaking markdown rendering.
+
+    Bismillah ir-Rahman ir-Rahim
+    """
+    if not line or not line.strip():
+        return 0
+
+    i = 0
+    n = len(line)
+
+    # --- Leading whitespace (indented content) ---
+    while i < n and line[i] in ' \t':
+        i += 1
+
+    if i >= n:
+        return 0
+
+    # --- Blockquote markers: > or >> etc. ---
+    while i < n and line[i] == '>':
+        i += 1
+        if i < n and line[i] == ' ':
+            i += 1
+
+    # --- Heading markers: # ## ### etc. ---
+    if i < n and line[i] == '#':
+        while i < n and line[i] == '#':
+            i += 1
+        if i < n and line[i] == ' ':
+            i += 1
+        return i
+
+    # --- Horizontal rules: ---, ***, ___ (3+ chars, nothing else) ---
+    stripped = line.strip()
+    if len(stripped) >= 3 and all(c == stripped[0] for c in stripped) and stripped[0] in '-*_':
+        return n  # entire line is syntax, skip it
+
+    # --- Unordered list markers: - , * , +  (followed by space) ---
+    if i < n and line[i] in '-*+' and (i + 1) < n and line[i + 1] == ' ':
+        i += 2
+        return i
+
+    # --- Ordered list markers: 1. , 2. , 10.  etc. ---
+    j = i
+    while j < n and line[j].isdigit():
+        j += 1
+    if j > i and j < n and line[j] == '.' and (j + 1) < n and line[j + 1] == ' ':
+        return j + 2
+
+    # --- Bold/italic markers at line start: **, *, __, _ ---
+    if i < n and line[i] in '*_':
+        marker_char = line[i]
+        j = i
+        while j < n and line[j] == marker_char:
+            j += 1
+        # Only skip if this looks like an opening marker (next char is not space)
+        if j < n and line[j] != ' ':
+            return j
+
+    return i
+
+
 # ============================================================================
 #  THE 154-LAYER COMPUTATION ENGINE
 # ============================================================================
@@ -3114,22 +3188,44 @@ def seal_text_content(content, ext):
 
     if not is_code_file(ext) and not _has_zwc_payload(content):
         zwc_bismillah = text_to_zwc(BISMILLAH_ARABIC)
+        is_markdown = ext in {'.md', '.rst', '.txt'}
         for i, line in enumerate(lines):
             stripped = line.strip()
             if (stripped
                     and 'bismillah' not in stripped.lower().replace('-', '')
                     and len(stripped) > 10):
-                words = line.split(' ', 1)
-                if len(words) >= 2:
-                    lines[i] = words[0] + zwc_bismillah + ' ' + words[1]
+                if is_markdown:
+                    prefix_len = _md_syntax_prefix_len(line)
+                    # Skip pure-syntax lines (horizontal rules)
+                    if prefix_len >= len(line):
+                        continue
+                    # Insert after syntax prefix + first content char
+                    insert_at = prefix_len + 1 if prefix_len < len(line) else 1
+                    if insert_at <= len(line):
+                        lines[i] = line[:insert_at] + zwc_bismillah + line[insert_at:]
+                else:
+                    words = line.split(' ', 1)
+                    if len(words) >= 2:
+                        lines[i] = words[0] + zwc_bismillah + ' ' + words[1]
                 break
 
     return '\n'.join(lines)
 
 
-def embed_99_names_text(content):
-    """Embed all 99 Names as zero-width watermarks throughout text content."""
+def embed_99_names_text(content, ext='.md'):
+    """Embed all 99 Names as zero-width watermarks throughout text content.
+
+    Bismillah ir-Rahman ir-Rahim
+
+    For markdown files (.md, .rst), ZWC payloads are inserted after the
+    syntax prefix (heading markers, list markers, bold/italic markers,
+    etc.) so that markdown rendering is not corrupted.  Horizontal
+    rules and other pure-syntax lines are skipped entirely.
+
+    Bismillah ir-Rahman ir-Rahim
+    """
     lines = content.split('\n')
+    is_markdown = ext in {'.md', '.rst', '.txt'}
     name_idx = 0
     for i, line in enumerate(lines):
         stripped = line.strip()
@@ -3138,9 +3234,22 @@ def embed_99_names_text(content):
         if name_idx < len(AL_ASMA_UL_HUSNA):
             transliteration, _meaning = AL_ASMA_UL_HUSNA[name_idx]
             watermark = text_to_zwc(transliteration)
-            if len(line) > 1:
-                lines[i] = line[0] + watermark + line[1:]
-                name_idx += 1
+
+            if is_markdown:
+                prefix_len = _md_syntax_prefix_len(line)
+                # Skip lines that are entirely syntax (horizontal rules)
+                if prefix_len >= len(line):
+                    continue
+                # Insert ZWC after the syntax prefix + first content char
+                insert_at = prefix_len + 1 if prefix_len < len(line) else 1
+                if insert_at <= len(line):
+                    lines[i] = line[:insert_at] + watermark + line[insert_at:]
+                    name_idx += 1
+            else:
+                if len(line) > 1:
+                    lines[i] = line[0] + watermark + line[1:]
+                    name_idx += 1
+
         if name_idx >= len(AL_ASMA_UL_HUSNA):
             name_idx = 0
     return '\n'.join(lines)
@@ -3189,7 +3298,7 @@ def seal_text_file(filepath, embed_names=False):
         else:
             result["layers"].append("SURFACE_STEGO")
             if embed_names:
-                sealed = embed_99_names_text(sealed)
+                sealed = embed_99_names_text(sealed, ext)
                 result["layers"].append("SURFACE_99_NAMES_ZWC")
 
         with open(filepath, 'w', encoding='utf-8') as f:
