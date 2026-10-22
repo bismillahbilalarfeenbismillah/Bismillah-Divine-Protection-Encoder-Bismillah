@@ -139,6 +139,7 @@ License: MIT -- free for the ummah, free for all of creation, in sha Allah
 """
 
 import os
+import re
 import sys
 import json
 import math
@@ -168,7 +169,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "5.2.0"  # Anti-inversion defense upgrade
+ENCODER_VERSION = "5.4.0"  # Safe-markdown merge: after-word ZWC insertion
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -3199,10 +3200,19 @@ def seal_text_content(content, ext):
                     # Skip pure-syntax lines (horizontal rules)
                     if prefix_len >= len(line):
                         continue
-                    # Insert after syntax prefix + first content char
-                    insert_at = prefix_len + 1 if prefix_len < len(line) else 1
-                    if insert_at <= len(line):
+                    # Skip headings, code fences, thematic breaks entirely
+                    if stripped.startswith('#') or stripped.startswith('```') or stripped.startswith('---'):
+                        continue
+                    # Insert after first COMPLETE word past prefix,
+                    # not after first char (v5.2.0 bug: B+ZWC+ismillah)
+                    rest = line[prefix_len:]
+                    m = re.search(r'^([A-Za-z؀-ۿ]{2,}[A-Za-z0-9_؀-ۿ-]*)\s+', rest)
+                    if m:
+                        insert_at = prefix_len + m.end(1)
                         lines[i] = line[:insert_at] + zwc_bismillah + line[insert_at:]
+                    elif len(rest) > 1:
+                        # Fallback: insert after first word boundary
+                        lines[i] = line[:prefix_len] + rest[0] + zwc_bismillah + rest[1:]
                 else:
                     words = line.split(' ', 1)
                     if len(words) >= 2:
@@ -3240,10 +3250,20 @@ def embed_99_names_text(content, ext='.md'):
                 # Skip lines that are entirely syntax (horizontal rules)
                 if prefix_len >= len(line):
                     continue
-                # Insert ZWC after the syntax prefix + first content char
-                insert_at = prefix_len + 1 if prefix_len < len(line) else 1
-                if insert_at <= len(line):
+                # Skip headings, code fences, thematic breaks entirely
+                if stripped.startswith('#') or stripped.startswith('```') or stripped.startswith('---'):
+                    continue
+                # Insert ZWC after first COMPLETE word past prefix,
+                # not after first char (v5.2.0 bug: splits first word)
+                rest = line[prefix_len:]
+                m = re.search(r'^([A-Za-z؀-ۿ]{2,}[A-Za-z0-9_؀-ۿ-]*)\s+', rest)
+                if m:
+                    insert_at = prefix_len + m.end(1)
                     lines[i] = line[:insert_at] + watermark + line[insert_at:]
+                    name_idx += 1
+                elif len(rest) > 3:
+                    # Fallback for short or non-alpha lines: append at end
+                    lines[i] = line + watermark
                     name_idx += 1
             else:
                 if len(line) > 1:
