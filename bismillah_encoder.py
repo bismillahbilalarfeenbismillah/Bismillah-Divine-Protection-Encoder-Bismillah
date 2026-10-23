@@ -6647,17 +6647,31 @@ def seal_text_content(content, ext):
                     # Insert after first COMPLETE word past prefix,
                     # not after first char (v5.2.0 bug: B+ZWC+ismillah)
                     rest = line[prefix_len:]
-                    m = re.search(r'^([A-Za-z؀-ۿ]{2,}[A-Za-z0-9_؀-ۿ-]*)\s+', rest)
+                    # Strip leading BiDi overrides before matching so RTL
+                    # attacks (U+202E et al.) don't break first-word detection.
+                    # Track offset so insert_at maps back to the ORIGINAL
+                    # line position.  (Kimi K2.8 finding, v10.3.2 fix)
+                    leading_bidi = 0
+                    while leading_bidi < len(rest) and rest[leading_bidi] in BIDI_OVERRIDES:
+                        leading_bidi += 1
+                    clean_rest = rest[leading_bidi:]
+                    m = re.search(r'^([A-Za-z؀-ۿ]{2,}[A-Za-z0-9_؀-ۿ-]*)\s+', clean_rest)
                     if m:
-                        insert_at = prefix_len + m.end(1)
+                        insert_at = prefix_len + leading_bidi + m.end(1)
                         lines[i] = line[:insert_at] + zwc_bismillah + line[insert_at:]
-                    elif len(rest) > 1:
+                    elif len(clean_rest) > 1:
                         # Fallback: insert after first word boundary
                         lines[i] = line + ' ' + zwc_bismillah  # FIXED: safe append-at-end per Guide Section 1
                 else:
-                    words = line.split(' ', 1)
+                    # Non-markdown: also strip leading BiDi before split
+                    clean_line = line
+                    bidi_len = 0
+                    while bidi_len < len(line) and line[bidi_len] in BIDI_OVERRIDES:
+                        bidi_len += 1
+                    clean_line = line[bidi_len:]
+                    words = clean_line.split(' ', 1)
                     if len(words) >= 2:
-                        lines[i] = words[0] + zwc_bismillah + ' ' + words[1]
+                        lines[i] = line[:bidi_len] + words[0] + zwc_bismillah + ' ' + words[1]
                 break
 
     return '\n'.join(lines)
@@ -6698,18 +6712,28 @@ def embed_99_names_text(content, ext='.md'):
                 # Insert ZWC after first COMPLETE word past prefix,
                 # not after first char (v5.2.0 bug: splits first word)
                 rest = line[prefix_len:]
-                m = re.search(r'^([A-Za-z؀-ۿ]{2,}[A-Za-z0-9_؀-ۿ-]*)\s+', rest)
+                # Strip leading BiDi overrides (Kimi K2.8 fix)
+                leading_bidi = 0
+                while leading_bidi < len(rest) and rest[leading_bidi] in BIDI_OVERRIDES:
+                    leading_bidi += 1
+                clean_rest = rest[leading_bidi:]
+                m = re.search(r'^([A-Za-z؀-ۿ]{2,}[A-Za-z0-9_؀-ۿ-]*)\s+', clean_rest)
                 if m:
-                    insert_at = prefix_len + m.end(1)
+                    insert_at = prefix_len + leading_bidi + m.end(1)
                     lines[i] = line[:insert_at] + watermark + line[insert_at:]
                     name_idx += 1
-                elif len(rest) > 3:
+                elif len(clean_rest) > 3:
                     # Fallback for short or non-alpha lines: append at end
                     lines[i] = line + watermark
                     name_idx += 1
             else:
-                if len(line) > 1:
-                    lines[i] = line[0] + watermark + line[1:]
+                # Non-markdown: strip leading BiDi before insertion
+                bidi_len = 0
+                while bidi_len < len(line) and line[bidi_len] in BIDI_OVERRIDES:
+                    bidi_len += 1
+                clean_line = line[bidi_len:]
+                if len(clean_line) > 1:
+                    lines[i] = line[:bidi_len] + clean_line[0] + watermark + clean_line[1:]
                     name_idx += 1
 
         if name_idx >= len(AL_ASMA_UL_HUSNA):

@@ -260,14 +260,15 @@ class TestManifest(unittest.TestCase):
             manifest = json.load(f)
         self.assertEqual(manifest["encoder_version"], ENCODER_VERSION)
         self.assertIn("seal_timestamp", manifest)
-        self.assertEqual(manifest["manifest_version"], "2.0")
+        self.assertEqual(manifest["manifest_version"], "5.0")
 
     def test_manifest_has_self_exclusion_notice(self):
         generate_manifest(self.tmpdir)
         manifest_path = os.path.join(self.tmpdir, MANIFEST_FILENAME)
         with open(manifest_path, 'r') as f:
             manifest = json.load(f)
-        self.assertIn("self_exclusion", manifest)
+        # v5.0: manifest self-excludes by not listing itself in files
+        self.assertNotIn(MANIFEST_FILENAME, manifest["files"])
 
     def test_manifest_catalogs_all_files(self):
         generate_manifest(self.tmpdir)
