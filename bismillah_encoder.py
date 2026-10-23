@@ -177,6 +177,52 @@ import copy
 import time
 import string
 
+# v10.5.1: Lazy-loaded NLP singletons for spaCy + NLI
+_SPACY_NLP = None
+_NLI_MODEL = None
+
+
+def _get_spacy_nlp():
+    """Lazy-load spaCy English model. Falls back to None if unavailable."""
+    global _SPACY_NLP
+    if _SPACY_NLP is None:
+        try:
+            import spacy
+            _SPACY_NLP = spacy.load("en_core_web_sm")
+        except (ImportError, OSError):
+            _SPACY_NLP = False  # Sentinel: tried and failed
+    return _SPACY_NLP if _SPACY_NLP is not False else None
+
+
+def _get_nli_model():
+    """Lazy-load sentence-transformers NLI model. Falls back to None."""
+    global _NLI_MODEL
+    if _NLI_MODEL is None:
+        try:
+            from sentence_transformers import SentenceTransformer
+            _NLI_MODEL = SentenceTransformer("all-MiniLM-L6-v2")
+        except (ImportError, OSError):
+            _NLI_MODEL = False  # Sentinel: tried and failed
+    return _NLI_MODEL if _NLI_MODEL is not False else None
+
+
+def _nli_similarity(text_a, text_b):
+    """Compute cosine similarity between two texts using NLI model.
+
+    Returns float in [-1, 1] or None if model unavailable.
+    """
+    model = _get_nli_model()
+    if model is None:
+        return None
+    try:
+        from sentence_transformers import util
+        emb_a = model.encode(text_a, convert_to_tensor=True)
+        emb_b = model.encode(text_b, convert_to_tensor=True)
+        return util.cos_sim(emb_a, emb_b).item()
+    except Exception:
+        return None
+
+
 # Bismillah ir-Rahman ir-Rahim
 # ============================================================================
 #  DIVINE CONSTANTS
@@ -193,7 +239,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "10.5.0"  # v10.5.0: 23-reader hardening -- real HMAC secret, verify recomputes witness, ZWC code-file fix, muraqabah wired, seal_text_file TypeError fix
+ENCODER_VERSION = "10.5.1"  # v10.5.1: spaCy dependency parser, NLI paraphrase model, Bearer 8 coverage rates, fail-closed verify, exit-code fix
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -1915,6 +1961,195 @@ def _pos_tag_sentence(sentence):
     return tagged
 
 
+# ============================================================================
+# v10.5.1: spaCy-based structural analysis -- real dependency parsing
+# ============================================================================
+# These functions replace the NLTK POS-tag heuristics with actual
+# dependency trees. spaCy gives us nsubj/dobj/prep edges, lemmatization,
+# and passive detection -- the tools Fable said we need.
+
+def _spacy_extract_svo(sentence):
+    """Extract SVO triples using spaCy dependency parsing.
+
+    Returns list of dicts: {subj, verb, obj, negated, subj_quant, obj_quant,
+                            modals, is_passive, prep_args}
+
+    This is what makes the engine a REAL dependency parser instead of
+    a POS-tag position heuristic.
+    """
+    nlp = _get_spacy_nlp()
+    if nlp is None:
+        return None  # Signal caller to fall back to NLTK
+
+    doc = nlp(sentence)
+    triples = []
+
+    for token in doc:
+        # Find main verbs (ROOT, relative clauses, adverbial clauses, complements)
+        if token.pos_ == 'VERB' and token.dep_ in ('ROOT', 'relcl', 'advcl', 'ccomp', 'xcomp', 'conj'):
+            subj = None
+            obj = None
+            negated = False
+            is_passive = False
+            modals = []
+            subj_quant = None
+            obj_quant = None
+            prep_args = {}
+
+            _QUANT_WORDS = {'all', 'every', 'each', 'some', 'no', 'any',
+                            'few', 'many', 'most', 'several', 'neither',
+                            'either', 'both', 'none'}
+
+            def _find_quant(noun_token):
+                """Find quantifier on a noun — det, amod, or advmod subtree."""
+                for sc in noun_token.children:
+                    if sc.dep_ == 'det' and sc.text.lower() in _QUANT_WORDS:
+                        return sc.text.lower()
+                    if sc.dep_ in ('amod', 'advmod') and sc.text.lower() in _QUANT_WORDS:
+                        return sc.text.lower()
+                    # "most" can be advmod on an amod: "Most hospitalized patients"
+                    if sc.dep_ in ('amod',):
+                        for ssc in sc.children:
+                            if ssc.dep_ == 'advmod' and ssc.text.lower() in _QUANT_WORDS:
+                                return ssc.text.lower()
+                # Also check det that isn't a quantifier (still useful for normalization)
+                for sc in noun_token.children:
+                    if sc.dep_ == 'det':
+                        return sc.text.lower()
+                return None
+
+            for child in token.children:
+                if child.dep_ == 'nsubj':
+                    subj = child.lemma_.lower()
+                    subj_quant = _find_quant(child)
+                elif child.dep_ == 'nsubjpass':
+                    subj = child.lemma_.lower()
+                    is_passive = True
+                    subj_quant = _find_quant(child)
+                elif child.dep_ in ('dobj', 'attr', 'oprd'):
+                    obj = child.lemma_.lower()
+                    obj_quant = _find_quant(child)
+                elif child.dep_ == 'neg':
+                    negated = True
+                elif child.dep_ == 'aux' and child.tag_ == 'MD':
+                    modals.append(child.text.lower())
+                elif child.dep_ == 'prep':
+                    # Capture prepositional arguments (location, instrument, etc.)
+                    prep = child.text.lower()
+                    for pc in child.children:
+                        if pc.dep_ == 'pobj':
+                            prep_args[prep] = pc.lemma_.lower()
+
+            # Also collect preps attached to subj/obj subtrees
+            # (spaCy may attach "for the project" to "consultant" not "hired")
+            def _collect_preps(node, target_dict):
+                for c in node.children:
+                    if c.dep_ == 'prep':
+                        p = c.text.lower()
+                        for pc in c.children:
+                            if pc.dep_ == 'pobj':
+                                target_dict[p] = pc.lemma_.lower()
+
+            for child in token.children:
+                if child.dep_ in ('nsubj', 'nsubjpass', 'dobj', 'attr', 'oprd'):
+                    _collect_preps(child, prep_args)
+
+            # Also check for agent in passive (by-phrase)
+            agent_in_passive = None
+            if is_passive:
+                for child in token.children:
+                    if child.dep_ == 'agent':
+                        for pc in child.children:
+                            if pc.dep_ == 'pobj':
+                                agent_in_passive = pc.lemma_.lower()
+                                # Capture preps attached to agent pobj
+                                # (in passive, "across the yard" may attach
+                                # to the agent's pobj rather than the verb)
+                                for apc in pc.children:
+                                    if apc.dep_ == 'prep':
+                                        p = apc.text.lower()
+                                        for appc in apc.children:
+                                            if appc.dep_ == 'pobj':
+                                                prep_args[p] = appc.lemma_.lower()
+
+            if subj or obj:
+                triples.append({
+                    'subj': subj,
+                    'verb': token.lemma_.lower(),
+                    'obj': obj,
+                    'negated': negated,
+                    'subj_quant': subj_quant,
+                    'obj_quant': obj_quant,
+                    'modals': tuple(sorted(modals)),
+                    'is_passive': is_passive,
+                    'agent_in_passive': agent_in_passive,
+                    'prep_args': tuple(sorted(prep_args.items())),
+                })
+
+    # Extract numbers with their context
+    nums = []
+    for token in doc:
+        if token.like_num:
+            nums.append(token.text)
+
+    return triples, nums
+
+
+def _spacy_normalize_triple(t):
+    """Normalize a spaCy SVO triple to canonical form.
+
+    Passive → active normalization: "student was praised by teacher"
+    becomes the same canonical form as "teacher praised student."
+
+    This prevents false alarms on passive voice paraphrases.
+    """
+    if t['is_passive'] and t.get('agent_in_passive'):
+        # Passive with agent: normalize to active
+        return {
+            'subj': t['agent_in_passive'],
+            'verb': t['verb'],
+            'obj': t['subj'],  # Passive subject is the patient
+            'negated': t['negated'],
+            'subj_quant': None,  # Quantifiers may shift in passive
+            'obj_quant': t.get('subj_quant'),
+            'modals': t['modals'],
+            'prep_args': t['prep_args'],
+        }
+    else:
+        return {
+            'subj': t['subj'],
+            'verb': t['verb'],
+            'obj': t['obj'],
+            'negated': t['negated'],
+            'subj_quant': t.get('subj_quant'),
+            'obj_quant': t.get('obj_quant'),
+            'modals': t['modals'],
+            'prep_args': t['prep_args'],
+        }
+
+
+def _spacy_triple_to_predicate(t):
+    """Convert a normalized triple to predicate logic string.
+
+    Examples:
+        {subj: 'teacher', verb: 'praise', obj: 'student', negated: False}
+        → "praise(teacher, student)"
+
+        {subj: 'committee', verb: 'approve', obj: 'proposal', negated: True, modals: ('must',)}
+        → "~MUST:approve(committee, proposal)"
+    """
+    neg = "~" if t['negated'] else ""
+    modal_prefix = ":".join(m.upper() for m in t.get('modals', ())) + ":" if t.get('modals') else ""
+    quant_s = t.get('subj_quant', '') or ''
+    quant_o = t.get('obj_quant', '') or ''
+    s = "{}{}".format(quant_s + ":" if quant_s in ('all', 'every', 'each', 'some', 'no', 'any', 'few', 'many', 'most') else "", t.get('subj') or '_NONE_')
+    o = "{}{}".format(quant_o + ":" if quant_o in ('all', 'every', 'each', 'some', 'no', 'any', 'few', 'many', 'most') else "", t.get('obj') or '_INTRANS_')
+    prep_str = ""
+    for prep, arg in t.get('prep_args', ()):
+        prep_str += ", {}:{}".format(prep, arg)
+    return "{}{}{}({}{}{})".format(neg, modal_prefix, t['verb'], s, ", " + o if t.get('obj') else "", prep_str)
+
+
 def _extract_svo_triples(sentence):
     """Extract Subject-Verb-Object triples using dependency-like POS analysis.
 
@@ -2193,38 +2428,51 @@ def _compute_semantic_level_1(sentences):
 def _compute_semantic_level_2(sentences):
     """Level 2: PROPOSITIONAL -- SVO triple extraction and predicate logic.
 
-    v6.1 UPGRADE: Uses REAL dependency-like parsing via POS tags to extract
-    Subject-Verb-Object triples, then converts them to formal predicate logic.
+    v10.5.1 UPGRADE: Uses spaCy dependency parser when available.
+    Extracts real Subject-Verb-Object triples via dependency tree edges
+    (nsubj, dobj, prep), lemmatizes verbs, captures negation, modals,
+    quantifiers, and passive voice with active-normalization.
 
-    This is what ACTUALLY crosses Shannon's boundary:
-    - "The dog ate the cat"  -> ate(dog, cat)
-    - "The cat ate the dog"  -> ate(cat, dog)
-    - These produce DIFFERENT hashes because the predicate arguments are ORDERED
+    Attack classes detected:
+    - SVO reversal:    dependency edges are directional
+    - Negation flip:   neg dependency edge
+    - Modal change:    aux with MD tag
+    - Quantifier swap: det on nsubj/dobj
+    - Numeric edit:    token.like_num
+    - Passive voice:   nsubjpass normalized to active via agent
 
-    The formal semantics representation means we operate on STRUCTURE,
-    not strings -- the precise criterion Copilot and Grok demanded.
-
-    Falls back to ordered content hashing (v6.0 behavior) for sentences
-    where no SVO triples can be extracted.
+    Falls back to NLTK POS heuristic (v6.1) then to ordered content
+    hashing (v6.0) when spaCy is unavailable.
     """
     all_predicates = []
     fallback_propositions = []
 
     for sent in sentences[:256]:
-        # PRIMARY: extract real SVO triples via POS tagging
-        triples = _extract_svo_triples(sent)
-        roles = _extract_semantic_roles(sent)
-        predicates = _to_predicate_logic(triples, roles)
-
-        if predicates:
-            all_predicates.extend(predicates)
+        # v10.5.1: Prefer spaCy dependency parsing
+        spacy_result = _spacy_extract_svo(sent)
+        if spacy_result is not None:
+            triples_raw, nums = spacy_result
+            for t in triples_raw:
+                norm = _spacy_normalize_triple(t)
+                pred = _spacy_triple_to_predicate(norm)
+                all_predicates.append(pred)
+            # Include numeric values as separate predicates
+            for n in nums:
+                all_predicates.append("NUM({})".format(n))
         else:
-            # FALLBACK: ordered content hashing for non-parseable sentences
-            tokens = _tokenize_semantic(sent)
-            content = _normalize_for_hashing(tokens)
-            if len(content) >= 2:
-                prop = " ".join(content)  # ORDER PRESERVED
-                fallback_propositions.append(prop)
+            # FALLBACK: NLTK POS-tag heuristic (v6.1 behavior)
+            triples = _extract_svo_triples(sent)
+            roles = _extract_semantic_roles(sent)
+            predicates = _to_predicate_logic(triples, roles)
+            if predicates:
+                all_predicates.extend(predicates)
+            else:
+                # FALLBACK 2: ordered content hashing (v6.0 behavior)
+                tokens = _tokenize_semantic(sent)
+                content = _normalize_for_hashing(tokens)
+                if len(content) >= 2:
+                    prop = " ".join(content)  # ORDER PRESERVED
+                    fallback_propositions.append(prop)
 
     # Combine: predicates first (structural), then fallback (lexical)
     all_predicates.sort()  # Canonical order across document
@@ -2270,32 +2518,70 @@ def _compute_semantic_level_3(sentences):
     fallback_relations = set()
 
     for sent in sentences[:256]:
-        # PRIMARY: extract directional semantic roles
-        roles = _extract_semantic_roles(sent)
-        if roles:
-            for role in roles:
-                # Build directional typed relation string
+        # v10.5.1: Prefer spaCy dependency parsing for relational extraction
+        spacy_result = _spacy_extract_svo(sent)
+        if spacy_result is not None:
+            triples_raw, nums = spacy_result
+            for t in triples_raw:
+                norm = _spacy_normalize_triple(t)
+                # Build directional typed relation from dependency parse
                 parts = []
-                neg = "~" if role['negated'] else ""
-                if role['agent']:
-                    parts.append("agent:{}".format(role['agent']))
-                parts.append("{}action:{}".format(neg, role['action']))
-                if role['patient']:
-                    parts.append("patient:{}".format(role['patient']))
-                if role['instrument']:
-                    parts.append("inst:{}".format(role['instrument']))
-                if role['location']:
-                    parts.append("loc:{}".format(role['location']))
+                neg = "~" if norm.get('negated') else ""
+                modal_prefix = ""
+                if norm.get('modals'):
+                    modal_prefix = ":".join(norm['modals']).upper() + ":"
+                _MEANINGFUL_QUANTS = {'all', 'every', 'each', 'some', 'no',
+                                      'any', 'few', 'many', 'most'}
+                subj_q = ""
+                sq = norm.get('subj_quant') or ''
+                if sq in _MEANINGFUL_QUANTS:
+                    subj_q = sq + ":"
+                obj_q = ""
+                oq = norm.get('obj_quant') or ''
+                if oq in _MEANINGFUL_QUANTS:
+                    obj_q = oq + ":"
+                if norm['subj']:
+                    parts.append("agent:{}{}".format(subj_q, norm['subj']))
+                parts.append("{}{}action:{}".format(neg, modal_prefix, norm['verb']))
+                if norm['obj']:
+                    parts.append("patient:{}{}".format(obj_q, norm['obj']))
+                # Prepositional arguments as typed roles
+                if norm.get('prep_args'):
+                    for prep, pobj in norm['prep_args']:
+                        if prep in ('in', 'at', 'on', 'near', 'above', 'below', 'inside'):
+                            parts.append("loc:{}".format(pobj))
+                        elif prep in ('with', 'using', 'via'):
+                            parts.append("inst:{}".format(pobj))
+                        else:
+                            parts.append("{}:{}".format(prep, pobj))
                 if len(parts) >= 2:
                     typed_relations.add("->".join(parts))
         else:
-            # FALLBACK: undirected entity co-occurrence (v6.0 behavior)
-            entities = re.findall(r'\b[A-Z][a-z]{2,}\b', sent)
-            entities = [e for e in entities if e not in _ENTITY_STOPWORDS]
-            entities = sorted(set(entities))
-            for i in range(len(entities)):
-                for j in range(i + 1, len(entities)):
-                    fallback_relations.add((entities[i].lower(), entities[j].lower()))
+            # FALLBACK: NLTK semantic role heuristic (v6.1)
+            roles = _extract_semantic_roles(sent)
+            if roles:
+                for role in roles:
+                    parts = []
+                    neg = "~" if role['negated'] else ""
+                    if role['agent']:
+                        parts.append("agent:{}".format(role['agent']))
+                    parts.append("{}action:{}".format(neg, role['action']))
+                    if role['patient']:
+                        parts.append("patient:{}".format(role['patient']))
+                    if role['instrument']:
+                        parts.append("inst:{}".format(role['instrument']))
+                    if role['location']:
+                        parts.append("loc:{}".format(role['location']))
+                    if len(parts) >= 2:
+                        typed_relations.add("->".join(parts))
+            else:
+                # FALLBACK 2: undirected entity co-occurrence (v6.0 behavior)
+                entities = re.findall(r'\b[A-Z][a-z]{2,}\b', sent)
+                entities = [e for e in entities if e not in _ENTITY_STOPWORDS]
+                entities = sorted(set(entities))
+                for i in range(len(entities)):
+                    for j in range(i + 1, len(entities)):
+                        fallback_relations.add((entities[i].lower(), entities[j].lower()))
 
     sorted_typed = sorted(typed_relations)
     sorted_fallback = sorted(fallback_relations)
@@ -5163,74 +5449,288 @@ def seal_chain_verify(repo_dir):
 
 
 def evaluate_bearer_8():
-    """Evaluate Bearer 8 (Furqan) — the formal distinguishing capacity test.
+    """Evaluate Bearer 8 (Furqan) — attack-class coverage benchmark.
 
-    Tests whether the semantic engine can distinguish meaning-altering
-    changes from meaning-preserving ones WITHOUT treating all difference
-    as total divergence (which would be tafarruq, not furqan).
+    v10.5.1: Rescoped from TRUE/FALSE on one hand-picked pair to measured
+    coverage rates across six attack classes (Fable's recommendation):
 
-    Returns OrderedDict with test results and bearer status.
+    1. SVO reversal        - "teacher praised student" vs "student praised teacher"
+    2. Negation flip        - "will approve" vs "will not approve"
+    3. Modal substitution   - "must complete" vs "may complete"
+    4. Quantifier change    - "all students passed" vs "some students passed"
+    5. Numeric edit         - "50 items" vs "500 items"
+    6. Passive paraphrase   - "dog chased cat" vs "cat was chased by dog" (should MATCH)
+
+    Reports: coverage rate per class at the given FAR (false-accept rate),
+    plus NLI similarity when the model is available.
+
+    Bearer 8 status is now "coverage: X% at FAR Y%" — never TRUE/FALSE.
+
+    Returns OrderedDict with per-class results and aggregate coverage.
     """
-    # Test pair 1: Same words, different meaning (SVO reversal)
-    text_a = b"The teacher praised the student for excellent work in the classroom."
-    text_b = b"The student praised the teacher for excellent work in the classroom."
+    # ========================================================================
+    # Attack-class test corpus
+    # Each entry: (text_a, text_b, expected_different, class_name, description)
+    # expected_different: True = meaning changed, False = meaning preserved
+    # ========================================================================
+    # Each text must be >= 50 chars for semantic witness applicability.
+    # Texts include surrounding context to simulate real documents.
+    _ATTACK_PAIRS = [
+        # --- CLASS 1: SVO REVERSAL (meaning CHANGED) ---
+        (b"The teacher praised the student for excellent work in the classroom during the ceremony.",
+         b"The student praised the teacher for excellent work in the classroom during the ceremony.",
+         True, "svo_reversal", "teacher/student swap"),
+        (b"The large brown dog chased the small black cat across the wide open yard.",
+         b"The small black cat chased the large brown dog across the wide open yard.",
+         True, "svo_reversal", "dog/cat swap"),
+        (b"The senior manager hired the external consultant for the critical infrastructure project.",
+         b"The external consultant hired the senior manager for the critical infrastructure project.",
+         True, "svo_reversal", "manager/consultant swap"),
+        (b"The local police arrested the primary suspect near the abandoned warehouse building.",
+         b"The primary suspect arrested the local police near the abandoned warehouse building.",
+         True, "svo_reversal", "police/suspect swap"),
+        (b"The private investor bought the technology company during the last financial quarter.",
+         b"The technology company bought the private investor during the last financial quarter.",
+         True, "svo_reversal", "investor/company swap"),
+        (b"The tenured professor challenged the graduate student during the advanced seminar lecture.",
+         b"The graduate student challenged the tenured professor during the advanced seminar lecture.",
+         True, "svo_reversal", "professor/student swap"),
 
-    wa = compute_semantic_witness(text_a)
-    wb = compute_semantic_witness(text_b)
+        # --- CLASS 2: NEGATION FLIP (meaning CHANGED) ---
+        (b"The oversight committee will approve the revised budget proposal for next fiscal year.",
+         b"The oversight committee will not approve the revised budget proposal for next fiscal year.",
+         True, "negation_flip", "will/will not"),
+        (b"The monitoring system has detected an unauthorized intrusion in the secure network zone.",
+         b"The monitoring system has not detected an unauthorized intrusion in the secure network zone.",
+         True, "negation_flip", "has/has not"),
+        (b"The critical patient responded to the experimental treatment protocol within three days.",
+         b"The critical patient did not respond to the experimental treatment protocol within three days.",
+         True, "negation_flip", "did/did not"),
+        (b"The collected data confirms our original research hypothesis about climate patterns.",
+         b"The collected data does not confirm our original research hypothesis about climate patterns.",
+         True, "negation_flip", "does/does not"),
+        (b"The reinforced bridge can support heavy commercial vehicles during peak traffic hours.",
+         b"The reinforced bridge cannot support heavy commercial vehicles during peak traffic hours.",
+         True, "negation_flip", "can/cannot"),
+        (b"The controlled experiment succeeded under the strict laboratory conditions that were specified.",
+         b"The controlled experiment did not succeed under the strict laboratory conditions that were specified.",
+         True, "negation_flip", "succeeded/did not succeed"),
 
-    if not wa["applicable"] or not wb["applicable"]:
-        return OrderedDict([
-            ("bearer_8_status", "FALSE"),
-            ("reason", "Semantic engine not applicable to test texts"),
+        # --- CLASS 3: MODAL SUBSTITUTION (meaning CHANGED) ---
+        (b"The lead engineer must complete the mandatory safety inspection before the deadline arrives.",
+         b"The lead engineer may complete the mandatory safety inspection before the deadline arrives.",
+         True, "modal_substitution", "must/may"),
+        (b"All enrolled students shall submit their final assignments before the semester deadline.",
+         b"All enrolled students should submit their final assignments before the semester deadline.",
+         True, "modal_substitution", "shall/should"),
+        (b"The licensed contractor must follow all applicable building codes during the renovation.",
+         b"The licensed contractor could follow all applicable building codes during the renovation.",
+         True, "modal_substitution", "must/could"),
+        (b"All full-time employees will attend the mandatory professional training session next week.",
+         b"All full-time employees might attend the mandatory professional training session next week.",
+         True, "modal_substitution", "will/might"),
+        (b"The experienced pilot must verify all fuel levels carefully before every scheduled takeoff.",
+         b"The experienced pilot may verify all fuel levels carefully before every scheduled takeoff.",
+         True, "modal_substitution", "must/may 2"),
+        (b"The executive board shall review the detailed quarterly financial results at the meeting.",
+         b"The executive board might review the detailed quarterly financial results at the meeting.",
+         True, "modal_substitution", "shall/might"),
+
+        # --- CLASS 4: QUANTIFIER CHANGE (meaning CHANGED) ---
+        (b"All registered students passed the comprehensive final examination with acceptable scores.",
+         b"Some registered students passed the comprehensive final examination with acceptable scores.",
+         True, "quantifier_change", "all/some"),
+        (b"Every permanent employee received a performance bonus during this fiscal year period.",
+         b"No permanent employee received a performance bonus during this fiscal year period.",
+         True, "quantifier_change", "every/no"),
+        (b"Most hospitalized patients recovered fully within the first two weeks of treatment.",
+         b"Few hospitalized patients recovered fully within the first two weeks of treatment.",
+         True, "quantifier_change", "most/few"),
+        (b"Each manufactured component was carefully tested and inspected before final assembly.",
+         b"No manufactured component was carefully tested and inspected before final assembly.",
+         True, "quantifier_change", "each/no"),
+        (b"All production servers reported healthy operational status during the monitoring period.",
+         b"Some production servers reported healthy operational status during the monitoring period.",
+         True, "quantifier_change", "all/some 2"),
+        (b"Every qualified candidate met the minimum eligibility requirements for the position.",
+         b"Few qualified candidates met the minimum eligibility requirements for the position.",
+         True, "quantifier_change", "every/few"),
+
+        # --- CLASS 5: NUMERIC EDIT (meaning CHANGED) ---
+        (b"The central warehouse contains 50 packaged items that are ready for immediate shipment.",
+         b"The central warehouse contains 500 packaged items that are ready for immediate shipment.",
+         True, "numeric_edit", "50/500"),
+        (b"The binding contract runs for 3 consecutive years starting in January of next year.",
+         b"The binding contract runs for 30 consecutive years starting in January of next year.",
+         True, "numeric_edit", "3/30"),
+        (b"The total project budget was officially set at 100000 dollars for the current phase.",
+         b"The total project budget was officially set at 10000 dollars for the current phase.",
+         True, "numeric_edit", "100000/10000"),
+        (b"The ambient temperature reached 25 degrees celsius during the extended testing period.",
+         b"The ambient temperature reached 250 degrees celsius during the extended testing period.",
+         True, "numeric_edit", "25/250"),
+        (b"The development team delivered 12 completed software modules during this sprint cycle.",
+         b"The development team delivered 2 completed software modules during this sprint cycle.",
+         True, "numeric_edit", "12/2"),
+        (b"The nuclear reactor currently operates at 90 percent of its maximum rated capacity.",
+         b"The nuclear reactor currently operates at 9 percent of its maximum rated capacity.",
+         True, "numeric_edit", "90/9"),
+
+        # --- CLASS 6: PASSIVE PARAPHRASE (meaning PRESERVED) ---
+        (b"The large brown dog chased the small black cat across the wide open yard.",
+         b"The small black cat was chased by the large brown dog across the wide open yard.",
+         False, "passive_paraphrase", "active to passive"),
+        (b"The teacher praised the student for excellent work in the classroom during the ceremony.",
+         b"The student was praised by the teacher for excellent work in the classroom during the ceremony.",
+         False, "passive_paraphrase", "active to passive 2"),
+        (b"The oversight committee approved the revised proposal unanimously at the final meeting.",
+         b"The revised proposal was approved by the oversight committee unanimously at the final meeting.",
+         False, "passive_paraphrase", "active to passive 3"),
+        (b"The senior manager hired the external consultant for the critical infrastructure project.",
+         b"The external consultant was hired by the senior manager for the critical infrastructure project.",
+         False, "passive_paraphrase", "active to passive 4"),
+        (b"The local police arrested the primary suspect near the abandoned warehouse building.",
+         b"The primary suspect was arrested by the local police near the abandoned warehouse building.",
+         False, "passive_paraphrase", "active to passive 5"),
+        (b"The structural engineer designed the suspension bridge during the previous calendar year.",
+         b"The suspension bridge was designed by the structural engineer during the previous calendar year.",
+         False, "passive_paraphrase", "active to passive 6"),
+    ]
+
+    # ========================================================================
+    # Run benchmark
+    # ========================================================================
+    class_results = {}  # class_name -> list of (correct, description, details)
+
+    for text_a, text_b, expect_diff, cls_name, desc in _ATTACK_PAIRS:
+        wa = compute_semantic_witness(text_a)
+        wb = compute_semantic_witness(text_b)
+
+        if not wa["applicable"] or not wb["applicable"]:
+            if cls_name not in class_results:
+                class_results[cls_name] = []
+            class_results[cls_name].append((False, desc, "not applicable"))
+            continue
+
+        # Compare L2 (PROPOSITIONAL) — the structural attack detection level
+        l2_diff = False
+        l3_diff = False
+        any_diff = False
+        for i in range(min(len(wa["semantic_levels"]), len(wb["semantic_levels"]))):
+            sa = wa["semantic_levels"][i]["seal"]
+            sb = wb["semantic_levels"][i]["seal"]
+            if sa != sb:
+                any_diff = True
+                if i == 2:
+                    l2_diff = True
+                if i == 3:
+                    l3_diff = True
+
+        # Detection: did the engine correctly identify change/preservation?
+        structural_diff = l2_diff or l3_diff
+
+        if expect_diff:
+            # Attack class: should detect difference
+            correct = structural_diff
+        else:
+            # Paraphrase: should detect preservation (no false alarm)
+            correct = not structural_diff
+
+        # NLI similarity as secondary signal
+        nli_sim = _nli_similarity(
+            text_a.decode('utf-8', errors='replace'),
+            text_b.decode('utf-8', errors='replace')
+        )
+
+        details = OrderedDict([
+            ("l2_different", l2_diff),
+            ("l3_different", l3_diff),
+            ("structural_diff_detected", structural_diff),
+            ("expected_different", expect_diff),
+            ("correct", correct),
+        ])
+        if nli_sim is not None:
+            details["nli_similarity"] = round(nli_sim, 4)
+
+        if cls_name not in class_results:
+            class_results[cls_name] = []
+        class_results[cls_name].append((correct, desc, details))
+
+    # ========================================================================
+    # Aggregate per-class coverage rates
+    # ========================================================================
+    class_coverage = OrderedDict()
+    total_correct = 0
+    total_pairs = 0
+
+    for cls_name in ["svo_reversal", "negation_flip", "modal_substitution",
+                     "quantifier_change", "numeric_edit", "passive_paraphrase"]:
+        results = class_results.get(cls_name, [])
+        n_correct = sum(1 for r in results if r[0])
+        n_total = len(results)
+        rate = round(n_correct / n_total * 100, 1) if n_total > 0 else 0.0
+        total_correct += n_correct
+        total_pairs += n_total
+
+        pair_details = []
+        for correct, desc, details in results:
+            pair_details.append(OrderedDict([
+                ("pair", desc),
+                ("correct", correct),
+                ("details", details),
+            ]))
+
+        class_coverage[cls_name] = OrderedDict([
+            ("coverage_pct", rate),
+            ("correct", n_correct),
+            ("total", n_total),
+            ("pairs", pair_details),
         ])
 
-    # Check level-by-level
-    level_results = []
-    lexical_same = False
-    propositional_different = False
+    overall_rate = round(total_correct / total_pairs * 100, 1) if total_pairs > 0 else 0.0
 
-    for i in range(min(len(wa["semantic_levels"]), len(wb["semantic_levels"]))):
-        sa = wa["semantic_levels"][i]["seal"]
-        sb = wb["semantic_levels"][i]["seal"]
-        match = (sa == sb)
-        name = wa["semantic_levels"][i]["level_name"]
+    # FAR = false-accept rate (attacks that slip through undetected)
+    attack_classes = ["svo_reversal", "negation_flip", "modal_substitution",
+                      "quantifier_change", "numeric_edit"]
+    attack_total = sum(class_coverage[c]["total"] for c in attack_classes)
+    attack_missed = sum(class_coverage[c]["total"] - class_coverage[c]["correct"]
+                        for c in attack_classes)
+    far = round(attack_missed / attack_total * 100, 1) if attack_total > 0 else 0.0
 
-        level_results.append(OrderedDict([
-            ("level", i),
-            ("name", name),
-            ("preserved", match),
-        ]))
+    # FRR = false-reject rate (paraphrases wrongly flagged as different)
+    para_total = class_coverage["passive_paraphrase"]["total"]
+    para_missed = para_total - class_coverage["passive_paraphrase"]["correct"]
+    frr = round(para_missed / para_total * 100, 1) if para_total > 0 else 0.0
 
-        if i == 0 and match:  # L0 LEXICAL
-            lexical_same = True
-        if i == 2 and not match:  # L2 PROPOSITIONAL
-            propositional_different = True
+    bearer_status = "coverage: {}% at FAR {}%".format(overall_rate, far)
 
-    # Furqan condition: lexical identity + propositional distinction
-    # This proves the engine operates on MEANING, not FORM
-    furqan_holds = lexical_same and propositional_different
-
-    # Anti-tafarruq check: some levels MUST be preserved (shared structure)
-    # If ALL levels differ, the system is dividing, not distinguishing
-    preserved_count = sum(1 for r in level_results if r["preserved"])
-    divergent_count = sum(1 for r in level_results if not r["preserved"])
-    anti_tafarruq = preserved_count > 0 and divergent_count > 0
-
-    bearer_status = "TRUE" if (furqan_holds and anti_tafarruq) else "FALSE"
+    # Check for spaCy and NLI availability
+    engine_info = OrderedDict()
+    engine_info["spacy_available"] = _get_spacy_nlp() is not None
+    engine_info["nli_model_available"] = _get_nli_model() is not None
 
     return OrderedDict([
         ("bearer_8_status", bearer_status),
-        ("furqan_holds", furqan_holds),
-        ("anti_tafarruq", anti_tafarruq),
-        ("lexical_identity", lexical_same),
-        ("propositional_distinction", propositional_different),
-        ("levels_preserved", preserved_count),
-        ("levels_divergent", divergent_count),
-        ("level_results", level_results),
-        ("formal_condition",
-         "Given texts sharing L0 (vocabulary) but differing at L2 (propositions), "
-         "the system detects the semantic difference while correctly reporting "
-         "shared structure at other levels — furqan without tafarruq."),
+        ("overall_coverage_pct", overall_rate),
+        ("false_accept_rate_pct", far),
+        ("false_reject_rate_pct", frr),
+        ("total_pairs", total_pairs),
+        ("total_correct", total_correct),
+        ("engine", engine_info),
+        ("class_coverage", class_coverage),
+        ("attack_classes_defined",
+         "svo_reversal, negation_flip, modal_substitution, "
+         "quantifier_change, numeric_edit, passive_paraphrase"),
+        ("methodology",
+         "Each pair compared at L2 (PROPOSITIONAL) and L3 (RELATIONAL). "
+         "Attack pairs must produce different hashes; passive paraphrase pairs "
+         "must produce same hashes (via active-normalization). "
+         "NLI cosine similarity reported as secondary signal when available."),
+        ("ghayb_disclosure",
+         "Coverage measured over DEFINED attack classes only. Attacks outside "
+         "these classes — coreference, discourse-level rewrites, pragmatic "
+         "implicature — are in al-ghayb: beyond this boundary, the encoder "
+         "bears witness that it cannot bear witness. (A7)"),
         ("quranic_grounding", "Al-Furqan 25:1"),
     ])
 
@@ -8378,8 +8878,10 @@ def verify_witness_sidecar(filepath):
                                "match recomputed value from file content. "
                                "File may have been modified after sealing.")
         except Exception as e:
-            # If recomputation fails, HMAC alone is still a partial check
-            return True, "HMAC verified (witness recomputation skipped: {})".format(str(e))
+            # v10.5.1: Fail CLOSED -- if we cannot recompute the witness,
+            # the verification is incomplete. An attacker who causes the
+            # recomputation to throw gets a free pass under fail-open.
+            return False, "HMAC verified but witness recomputation FAILED (fail-closed): {}".format(str(e))
 
         return True, "HMAC verified + master witness recomputed and matched"
 
@@ -11148,6 +11650,11 @@ Examples:
                                       help='Check convergence record claims')
     evg_check_p.add_argument('--context', default=None)
 
+    # v10.5.1: Bearer 8 attack-class benchmark
+    bearer8_p = sub.add_parser('bearer-8',
+                                help='v10.5.1: Run Bearer 8 (Furqan) attack-class '
+                                     'coverage benchmark across 6 classes')
+
     args = parser.parse_args()
 
     print("\n  {}".format(BISMILLAH))
@@ -11199,7 +11706,10 @@ Examples:
             if hmac_checked:
                 print("\n  Sidecar HMAC:        {}/{} verified".format(
                     hmac_valid, hmac_checked))
-            if result["unprotected"] or result.get("tampered"):
+            # v10.5.1: Exit nonzero on HMAC failures too -- not just unprotected/tampered.
+            # Previously HMAC mismatches were printed but the exit code said "fine."
+            hmac_failures = hmac_checked - hmac_valid
+            if result["unprotected"] or result.get("tampered") or hmac_failures > 0:
                 sys.exit(2)
         elif os.path.isfile(args.path):
             # v5.1: Single-file verification with full checks
@@ -12152,6 +12662,36 @@ Examples:
         else:
             evg_p.print_help()
             sys.exit(1)
+
+    elif args.command == 'bearer-8':
+        print("  v10.5.1: Bearer 8 (Furqan) — Attack-Class Coverage Benchmark")
+        print("  {}".format("=" * 62))
+        result = evaluate_bearer_8()
+        print("\n  Engine:")
+        eng = result["engine"]
+        print("    spaCy dependency parser:  {}".format(
+            "ACTIVE" if eng["spacy_available"] else "FALLBACK (NLTK)"))
+        print("    NLI embedding model:      {}".format(
+            "ACTIVE" if eng["nli_model_available"] else "UNAVAILABLE"))
+        print("\n  Coverage by attack class:")
+        print("  {:<24s} {:>8s} {:>10s}".format("Class", "Rate", "Detail"))
+        print("  {}".format("-" * 46))
+        for cls_name, cls_data in result["class_coverage"].items():
+            print("  {:<24s} {:>7.1f}% ({}/{})".format(
+                cls_name, cls_data["coverage_pct"],
+                cls_data["correct"], cls_data["total"]))
+            for p in cls_data["pairs"]:
+                icon = "OK" if p["correct"] else "XX"
+                print("    [{}] {}".format(icon, p["pair"]))
+        print("\n  {}".format("=" * 62))
+        print("  OVERALL COVERAGE:  {}%".format(result["overall_coverage_pct"]))
+        print("  FALSE ACCEPT RATE: {}%".format(result["false_accept_rate_pct"]))
+        print("  FALSE REJECT RATE: {}%".format(result["false_reject_rate_pct"]))
+        print("  Total pairs:       {}".format(result["total_pairs"]))
+        print("\n  Bearer 8 status: {}".format(result["bearer_8_status"]))
+        print("\n  A7 Ghayb disclosure:")
+        print("  {}".format(result["ghayb_disclosure"]))
+        print("  {}".format("=" * 62))
 
     else:
         parser.print_help()
