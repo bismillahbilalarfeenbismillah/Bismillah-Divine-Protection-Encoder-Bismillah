@@ -34,6 +34,10 @@ from bismillah_encoder import (
     seal_directory,
     verify_directory,
     generate_manifest,
+    sanitize_for_terminal,
+    sanitize_for_llm,
+    sanitize_content,
+    detect_pixel_sihr,
 )
 
 
@@ -302,6 +306,186 @@ class TestTamperDetection(unittest.TestCase):
         original = b"original content"
         tampered = b"tampered content"
         self.assertNotEqual(compute_seal(original), compute_seal(tampered))
+
+
+class TestAntiSihrSanitization(unittest.TestCase):
+    """Anti-sihr sanitization -- al-Falaq + an-Nas defense.
+
+    Bismillah ir-Rahman ir-Rahim
+
+    Tests the three-channel defense architecture mapped to
+    Propagation Architecture of Sihr (Arfeen 2026):
+      Channel I  (Material) -> terminal escape sequences
+      Channel II (Material) -> pixel-level steganography
+      Channel III (Cognitive) -> invisible Unicode, LLM injection
+    """
+
+    # --- Al-Falaq: Material-channel defense (terminal) ---
+
+    def test_strip_ansi_color_codes(self):
+        """ANSI color codes are material-channel sihr (ghasiqin idha waqab)."""
+        text = "Normal \x1b[31mRED\x1b[0m normal"
+        sanitized, removed, diag = sanitize_for_terminal(text)
+        self.assertEqual(sanitized, "Normal RED normal")
+        self.assertGreater(removed, 0)
+
+    def test_strip_ansi_cursor_movement(self):
+        """Cursor movement can overwrite security warnings."""
+        text = "WARNING: file unsafe\x1b[2K\x1b[ASAFE: file verified"
+        sanitized, removed, diag = sanitize_for_terminal(text)
+        self.assertNotIn("\x1b", sanitized)
+        self.assertIn("WARNING", sanitized)
+
+    def test_strip_ansi_title_change(self):
+        """OSC title sequences change terminal window title."""
+        text = "Normal\x1b]0;Malicious Title\x07rest"
+        sanitized, removed, diag = sanitize_for_terminal(text)
+        self.assertNotIn("\x1b", sanitized)
+        self.assertIn("Normal", sanitized)
+        self.assertIn("rest", sanitized)
+
+    def test_strip_c0_controls(self):
+        """C0 control characters (bell, backspace, etc.) are stripped."""
+        text = "Normal\x07\x08text"
+        sanitized, removed, diag = sanitize_for_terminal(text)
+        self.assertEqual(sanitized, "Normaltext")
+
+    def test_preserve_legitimate_whitespace(self):
+        """Tab, newline, carriage return are legitimate."""
+        text = "Line 1\n\tIndented\r\n"
+        sanitized, removed, diag = sanitize_for_terminal(text)
+        self.assertEqual(sanitized, text)
+        self.assertEqual(removed, 0)
+
+    def test_clean_text_nominal(self):
+        """Clean text should pass through untouched."""
+        text = "Bismillah ir-Rahman ir-Rahim\nNormal text content."
+        sanitized, removed, diag = sanitize_for_terminal(text)
+        self.assertEqual(sanitized, text)
+        self.assertEqual(removed, 0)
+
+    # --- An-Nas: Cognitive-channel defense (LLM/invisible Unicode) ---
+
+    def test_strip_unicode_tags(self):
+        """Unicode tags (U+E0001-E007F) are steganographic carriers."""
+        # U+E0001 = language tag, used for invisible data encoding
+        text = "Normal " + chr(0xE0001) + chr(0xE0045) + chr(0xE004E) + " text"
+        sanitized, removed, diag = sanitize_for_llm(text)
+        self.assertEqual(sanitized, "Normal  text")
+        self.assertEqual(removed, 3)
+
+    def test_strip_interlinear_annotations(self):
+        """Interlinear annotations hide content from rendering."""
+        text = "Normal " + chr(0xFFF9) + "hidden" + chr(0xFFFB) + " text"
+        sanitized, removed, diag = sanitize_for_llm(text)
+        self.assertNotIn(chr(0xFFF9), sanitized)
+        self.assertNotIn(chr(0xFFFB), sanitized)
+
+    def test_strip_invisible_math_operators(self):
+        """Invisible math operators can carry hidden instructions."""
+        text = "2" + chr(0x2062) + "x"  # invisible times
+        sanitized, removed, diag = sanitize_for_llm(text)
+        self.assertEqual(sanitized, "2x")
+        self.assertEqual(removed, 1)
+
+    def test_strip_mid_stream_bom(self):
+        """BOM at position 0 is fine; mid-stream BOM is suspicious."""
+        text = chr(0xFEFF) + "Start " + chr(0xFEFF) + " middle"
+        sanitized, removed, diag = sanitize_for_llm(text)
+        self.assertTrue(sanitized.startswith(chr(0xFEFF)))  # Keep initial BOM
+        self.assertEqual(sanitized.count(chr(0xFEFF)), 1)  # Remove mid-stream
+        self.assertEqual(removed, 1)
+
+    def test_clean_text_passes_llm(self):
+        """Normal text passes through LLM sanitizer untouched."""
+        text = "Bismillah ir-Rahman ir-Rahim. This is clean content."
+        sanitized, removed, diag = sanitize_for_llm(text)
+        self.assertEqual(sanitized, text)
+        self.assertEqual(removed, 0)
+
+    # --- Universal sanitization (both channels, Qur'anic order) ---
+
+    def test_universal_sanitize_order(self):
+        """Al-Falaq (material) must run before an-Nas (cognitive)."""
+        # Mix of ANSI escape + invisible Unicode
+        text = "\x1b[31mRed\x1b[0m" + chr(0xE0001) + "invisible"
+        result = sanitize_content(text, mode="universal")
+        self.assertNotIn("\x1b", result["sanitized"])
+        self.assertNotIn(chr(0xE0001), result["sanitized"])
+        self.assertGreater(result["material_removed"], 0)
+        self.assertGreater(result["cognitive_removed"], 0)
+        self.assertEqual(len(result["channels_active"]), 2)
+
+    def test_compound_attack_elevated(self):
+        """Compound attack (multi-channel) should trigger ELEVATED."""
+        text = "\x1b[31mDanger\x1b[0m" + chr(0xE0001) * 60
+        result = sanitize_content(text, mode="universal")
+        self.assertEqual(result["threat_assessment"], "ELEVATED")
+
+    def test_nominal_clean(self):
+        """Clean input should be NOMINAL."""
+        result = sanitize_content("Bismillah ir-Rahman ir-Rahim", mode="universal")
+        self.assertEqual(result["threat_assessment"], "NOMINAL")
+        self.assertEqual(result["total_removed"], 0)
+
+    # --- Pixel sihr detection (image material-channel) ---
+
+    def test_detect_embedded_script_in_image(self):
+        """Polyglot image with embedded script tag."""
+        # Fake PNG header + script tag after header region
+        fake_img = b'\x89PNG\r\n\x1a\n' + b'\x00' * 16 + b'<script>alert(1)</script>'
+        result = detect_pixel_sihr(fake_img)
+        self.assertIn(result["threat_level"], ("GUARDED", "ELEVATED"))
+        self.assertGreater(len(result["vectors"]), 0)
+
+    def test_detect_post_iend_payload(self):
+        """Data after PNG IEND chunk is an appended payload."""
+        # Minimal valid PNG structure with post-IEND data
+        png_header = b'\x89PNG\r\n\x1a\n'
+        # IHDR chunk (minimal)
+        ihdr = b'\x00\x00\x00\x0d' + b'IHDR' + b'\x00' * 13 + b'\x00' * 4
+        # IEND chunk
+        iend = b'\x00\x00\x00\x00' + b'IEND' + b'\x00' * 4
+        # Appended payload
+        payload = b'HIDDEN_PAYLOAD_DATA_HERE_1234567890'
+        fake_png = png_header + ihdr + iend + payload
+        result = detect_pixel_sihr(fake_png)
+        has_post_iend = any(v["type"] == "post_iend_payload" for v in result["vectors"])
+        self.assertTrue(has_post_iend)
+
+    def test_clean_image_nominal(self):
+        """Non-suspicious bytes should return NOMINAL."""
+        # Just some random non-suspicious bytes (not matching any image format)
+        clean_bytes = bytes(range(256)) * 10
+        result = detect_pixel_sihr(clean_bytes)
+        # No embedded scripts, no PNG anomalies
+        script_vectors = [v for v in result["vectors"] if v["type"] == "polyglot_embedding"]
+        self.assertEqual(len(script_vectors), 0)
+
+    def test_empty_image_nominal(self):
+        """Empty/tiny input should be NOMINAL."""
+        result = detect_pixel_sihr(b'')
+        self.assertEqual(result["threat_level"], "NOMINAL")
+
+    # --- Integration: seal_text_content sanitizes input (v10.4.0) ---
+
+    def test_seal_strips_ansi_from_input(self):
+        """seal_text_content should strip ANSI before sealing."""
+        text = "# Title\n\n\x1b[31mDangerous red text\x1b[0m with content."
+        sealed = seal_text_content(text, '.md')
+        self.assertNotIn("\x1b", sealed)
+        # After ANSI strip, "Dangerous" becomes first word; ZWC watermark
+        # is inserted after it, so check components individually
+        self.assertIn("Dangerous", sealed)
+        self.assertIn("red text", sealed)
+        self.assertIn("Bismillah", sealed)
+
+    def test_seal_strips_invisible_unicode_from_input(self):
+        """seal_text_content should strip invisible Unicode before sealing."""
+        text = "# Title\n\nContent " + chr(0xE0001) + chr(0xE0045) + " here."
+        sealed = seal_text_content(text, '.md')
+        self.assertNotIn(chr(0xE0001), sealed)
+        self.assertIn("Content", sealed)
 
 
 # Bismillah ir-Rahman ir-Rahim

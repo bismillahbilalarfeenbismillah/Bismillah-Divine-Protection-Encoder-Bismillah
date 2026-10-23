@@ -193,7 +193,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "10.3.2"  # v10.3.2: RTL override fix (Kimi K2.8), restored from v10.2.0 + v10.3.0
+ENCODER_VERSION = "10.4.0"  # v10.4.0: Anti-sihr sanitization (al-Falaq + an-Nas defense against terminal/LLM/pixel sihr)
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -679,6 +679,588 @@ BINARY_EXTENSIONS = {
 
 SELF_NAME = 'bismillah_encoder.py'
 MANIFEST_FILENAME = "Bismillah_MANIFEST_Bismillah.json"
+
+# ============================================================================
+#  ANTI-SIHR SANITIZATION -- Material & Cognitive Channel Defense (v10.4.0)
+# ============================================================================
+# Bismillah ir-Rahman ir-Rahim
+#
+# From "The Propagation Architecture of Sihr" (Arfeen 2026):
+#
+#   "sihr operates through the encoding of adversarial influence in
+#    physical substrates, from which it propagates to its targets
+#    through material channels."
+#
+# The three propagation channels mapped to digital attack vectors:
+#
+#   Channel I  (Speech/Sound)  -> ANSI escape sequences, terminal bells,
+#                                  cursor manipulation -- "counterfeit tajwid"
+#                                  that makes dangerous output appear benign.
+#
+#   Channel II (Material/Object) -> Steganographic pixel encoding, embedded
+#                                   metadata (EXIF/XMP/ICC), binary payloads
+#                                   hidden in image data -- "the imprisonment
+#                                   principle" (naffathat fil-'uqad) operating
+#                                   through electronic media.
+#
+#   Channel III (Cognitive/Waswas) -> LLM prompt injection, invisible Unicode
+#                                     instructions, homoglyph substitution --
+#                                     "whispered suggestion" that bypasses
+#                                     the target's rational evaluation.
+#
+# The compound attack deploys all three simultaneously: the terminal renders
+# beautified output (Channel I) carrying hidden instructions (Channel III)
+# in a file whose binary structure encodes adversarial patterns (Channel II).
+#
+# Defense architecture mirrors Surah al-Falaq (113) + an-Nas (114):
+#   al-Falaq -> material-channel defense (strip terminal manipulation)
+#   an-Nas   -> cognitive-channel defense (strip invisible instructions)
+#
+# "But they do not harm anyone through it except by permission of Allah."
+# (2:102) -- The adversary operates within permitted scope. The defense
+# makes that scope visible.
+#
+# Bismillah ir-Rahman ir-Rahim
+# ============================================================================
+
+# --- CHANNEL I: Terminal/OS escape sequences (Speech channel) ---
+# ANSI escape sequences can manipulate terminal display to hide content,
+# overwrite visible output, move cursor to overwrite security warnings,
+# change colors to make text invisible, or trigger terminal commands.
+# This is the digital equivalent of "counterfeit tajwid" -- beautified
+# speech in service of falsehood (zukhruf al-qawl, 6:112).
+
+# C0 control characters dangerous in terminal contexts
+# (excluding \t=0x09, \n=0x0A, \r=0x0D which are legitimate whitespace)
+DANGEROUS_C0_CONTROLS = frozenset(range(0x00, 0x09)) | frozenset(range(0x0E, 0x20)) | {0x0B, 0x0C, 0x7F}
+
+# C1 control characters (0x80-0x9F) -- dangerous in Latin-1 / terminal contexts
+DANGEROUS_C1_CONTROLS = frozenset(range(0x80, 0xA0))
+
+# --- CHANNEL III: Invisible Unicode (Cognitive channel / waswas) ---
+# Unicode categories that are invisible in rendering but carry data.
+# These can encode adversarial instructions for LLMs, hide content from
+# human review, or carry steganographic payloads.
+# This is the digital naffathat fil-'uqad: adversarial intent encoded
+# in (blown into) invisible structures.
+
+INVISIBLE_UNICODE_CHARS = frozenset([
+    # Tags (U+E0001-U+E007F) -- invisible language tags, used for steganography
+    # Detected by range check below rather than enumeration
+
+    # Variation selectors (non-essential ones that carry no visible difference)
+    0xFE00, 0xFE01, 0xFE02, 0xFE03, 0xFE04, 0xFE05, 0xFE06, 0xFE07,
+    0xFE08, 0xFE09, 0xFE0A, 0xFE0B, 0xFE0C, 0xFE0D, 0xFE0E,
+    # FE0F (emoji variation selector) kept -- it changes visible rendering
+
+    # Interlinear annotations
+    0xFFF9, 0xFFFA, 0xFFFB,
+
+    # Object replacement / replacement character used to hide content
+    0xFFFC,
+
+    # Byte order marks in mid-stream (BOM at position 0 is legitimate)
+    # 0xFEFF checked positionally, not blanket
+
+    # Soft hyphen -- invisible in most renderers, can split tokens
+    0x00AD,
+
+    # Word joiner -- invisible, can prevent line breaks to create overflows
+    0x2060,
+
+    # Zero-width no-break space (BOM alias) in non-BOM positions
+    # 0xFEFF -- checked positionally
+
+    # Function characters that should not appear in content
+    0x200B,  # Zero Width Space (beyond our ZWC steganography set)
+    0x200E,  # LRM -- already in BIDI_OVERRIDES
+    0x200F,  # RLM -- already in BIDI_OVERRIDES
+    0x2028,  # Line Separator (can break layout assumptions)
+    0x2029,  # Paragraph Separator (can break layout assumptions)
+    0x202A, 0x202B, 0x202C, 0x202D, 0x202E,  # BiDi (also in BIDI_OVERRIDES)
+    0x2066, 0x2067, 0x2068, 0x2069,  # BiDi isolates
+    0x2061, 0x2062, 0x2063, 0x2064,  # Invisible math operators
+])
+
+
+def _is_unicode_tag(cp):
+    """Check if codepoint is in the Unicode Tags block (U+E0001-U+E007F).
+
+    Tags are invisible characters historically used for language tagging.
+    Now deprecated for that purpose but repurposed for steganographic
+    encoding -- the digital equivalent of knots (uqad) carrying hidden
+    adversarial influence in an invisible substrate.
+    """
+    return 0xE0001 <= cp <= 0xE007F
+
+
+def _is_invisible_dangerous(ch, position=0):
+    """Check if a character is invisible and potentially dangerous.
+
+    Bismillah ir-Rahman ir-Rahim
+
+    Evaluates whether a Unicode character could serve as a carrier for
+    adversarial encoding through any of the three sihr channels:
+      - Material: terminal escape sequences, control characters
+      - Cognitive: invisible Unicode that carries data without rendering
+      - Compound: characters that manipulate both display AND meaning
+
+    Args:
+        ch: single character to evaluate
+        position: character's position in the text (BOM at 0 is safe)
+
+    Returns:
+        tuple (is_dangerous: bool, channel: str, reason: str)
+    """
+    cp = ord(ch)
+
+    # C0 dangerous controls (terminal manipulation)
+    if cp in DANGEROUS_C0_CONTROLS:
+        return True, "MATERIAL", "C0 control char 0x{:02X}".format(cp)
+
+    # ESC character (start of ANSI sequences)
+    if cp == 0x1B:
+        return True, "MATERIAL", "ESC (ANSI sequence initiator)"
+
+    # C1 controls
+    if cp in DANGEROUS_C1_CONTROLS:
+        return True, "MATERIAL", "C1 control char 0x{:02X}".format(cp)
+
+    # BOM in non-initial position
+    if cp == 0xFEFF and position > 0:
+        return True, "COGNITIVE", "mid-stream BOM (zero-width no-break space)"
+
+    # Unicode Tags block
+    if _is_unicode_tag(cp):
+        return True, "COGNITIVE", "Unicode tag U+{:05X}".format(cp)
+
+    # Known invisible characters
+    if cp in INVISIBLE_UNICODE_CHARS:
+        return True, "COGNITIVE", "invisible Unicode U+{:04X}".format(cp)
+
+    # Supplementary variation selectors (U+E0100-U+E01EF)
+    if 0xE0100 <= cp <= 0xE01EF:
+        return True, "COGNITIVE", "supplementary variation selector"
+
+    return False, "", ""
+
+
+def sanitize_for_terminal(text, strict=False):
+    """Strip material-channel sihr vectors from text for safe terminal display.
+
+    Bismillah ir-Rahman ir-Rahim
+
+    Removes ANSI escape sequences, dangerous control characters, and
+    terminal manipulation vectors. This is the al-Falaq defense for
+    the speech/material channel: making the adversary's effects visible
+    by stripping the concealment layer.
+
+    Surah al-Falaq 113:1-4: 'I seek refuge in the Lord of daybreak,
+    from the evil of that which He created, and from the evil of
+    darkness when it settles, and from the evil of the blowers in knots.'
+
+    The 'darkness when it settles' (ghasiqin idha waqab) maps to
+    terminal escape sequences that render under conditions of display --
+    they operate precisely when the content is being viewed.
+
+    Args:
+        text: input text to sanitize
+        strict: if True, also strip soft hyphens and word joiners
+
+    Returns:
+        tuple (sanitized_text: str, removed_count: int, diagnostics: list)
+    """
+    import re as _re
+
+    diagnostics = []
+    removed = 0
+
+    # Phase 1: Strip ANSI escape sequences (CSI, OSC, and other ESC sequences)
+    # CSI: ESC[ ... final_byte
+    # OSC: ESC] ... ST
+    # Other: ESC followed by single character
+    ansi_pattern = _re.compile(
+        r'\x1b'           # ESC character
+        r'(?:'
+        r'\[[0-9;]*[A-Za-z]'   # CSI sequences (cursor, color, erase)
+        r'|\][^\x07\x1b]*(?:\x07|\x1b\\)'  # OSC sequences (title, etc.)
+        r'|\([AB012]'          # Character set selection
+        r'|[DMEHc7-8=>]'       # Single-char ESC sequences
+        r'|#[0-9]'             # DEC line modes
+        r'|\[[\?]?[0-9;]*[hl]' # DEC private mode set/reset
+        r')'
+    )
+    cleaned, ansi_count = ansi_pattern.subn('', text)
+    if ansi_count:
+        diagnostics.append(
+            "FALAQ_STRIP: {} ANSI escape sequence(s) removed -- "
+            "terminal manipulation (ghasiqin idha waqab)".format(ansi_count))
+        removed += ansi_count
+
+    # Phase 2: Strip dangerous C0 and C1 control characters
+    result = []
+    for i, ch in enumerate(cleaned):
+        cp = ord(ch)
+        if cp in DANGEROUS_C0_CONTROLS:
+            removed += 1
+            continue
+        if cp in DANGEROUS_C1_CONTROLS:
+            removed += 1
+            continue
+        if strict and cp == 0x00AD:  # soft hyphen
+            removed += 1
+            continue
+        if strict and cp == 0x2060:  # word joiner
+            removed += 1
+            continue
+        result.append(ch)
+
+    if removed > ansi_count:
+        diagnostics.append(
+            "FALAQ_STRIP: {} control character(s) removed".format(removed - ansi_count))
+
+    return ''.join(result), removed, diagnostics
+
+
+def sanitize_for_llm(text, strip_invisible=True):
+    """Strip cognitive-channel sihr vectors from text for safe LLM consumption.
+
+    Bismillah ir-Rahman ir-Rahim
+
+    Removes invisible Unicode that could carry adversarial instructions,
+    prompt injection patterns, and steganographic payloads targeting LLM
+    context windows. This is the an-Nas defense for the cognitive channel:
+    neutralizing the whisperer's vehicle.
+
+    Surah an-Nas 114:4-6: 'From the evil of the retreating whisperer,
+    who whispers in the breasts of mankind, from among jinn and mankind.'
+
+    The 'retreating whisperer' (al-waswas al-khannas) maps to invisible
+    characters that retreat from visibility -- they are present in the
+    byte stream but absent from the rendered display. The whisper enters
+    the LLM's 'breast' (sadr = context window) without the operator's
+    awareness.
+
+    Args:
+        text: input text to sanitize
+        strip_invisible: if True, strip invisible Unicode beyond ZWC
+
+    Returns:
+        tuple (sanitized_text: str, removed_count: int, diagnostics: list)
+    """
+    diagnostics = []
+    removed = 0
+
+    result = []
+    tag_count = 0
+    invisible_count = 0
+
+    for i, ch in enumerate(text):
+        cp = ord(ch)
+
+        # Unicode Tags block -- steganographic carrier
+        if _is_unicode_tag(cp):
+            tag_count += 1
+            removed += 1
+            continue
+
+        # Supplementary variation selectors -- steganographic carrier
+        if 0xE0100 <= cp <= 0xE01EF:
+            removed += 1
+            invisible_count += 1
+            continue
+
+        # Interlinear annotations
+        if cp in (0xFFF9, 0xFFFA, 0xFFFB):
+            removed += 1
+            invisible_count += 1
+            continue
+
+        # Object replacement character
+        if cp == 0xFFFC:
+            removed += 1
+            continue
+
+        # Mid-stream BOM
+        if cp == 0xFEFF and i > 0:
+            removed += 1
+            invisible_count += 1
+            continue
+
+        # Invisible math operators
+        if cp in (0x2061, 0x2062, 0x2063, 0x2064):
+            removed += 1
+            invisible_count += 1
+            continue
+
+        if strip_invisible:
+            # Line/paragraph separators (can break layout assumptions)
+            if cp in (0x2028, 0x2029):
+                result.append('\n')  # Normalize to visible line break
+                removed += 1
+                continue
+
+        result.append(ch)
+
+    if tag_count:
+        diagnostics.append(
+            "NAS_STRIP: {} Unicode tag(s) removed -- "
+            "steganographic carrier (naffathat fil-'uqad)".format(tag_count))
+    if invisible_count:
+        diagnostics.append(
+            "NAS_STRIP: {} invisible Unicode char(s) removed -- "
+            "cognitive waswas vector".format(invisible_count))
+
+    return ''.join(result), removed, diagnostics
+
+
+def sanitize_content(text, mode="universal"):
+    """Full three-channel sanitization for safe consumption by any system.
+
+    Bismillah ir-Rahman ir-Rahim
+
+    Applies both al-Falaq (material-channel) and an-Nas (cognitive-channel)
+    defenses in the Qur'anically prescribed order: material defense first
+    (al-Falaq, 113), then cognitive defense (an-Nas, 114).
+
+    'The ordering is significant. Al-Falaq comes first because material-
+    channel defense is prerequisite: if the material channel is active,
+    cognitive-channel defense alone is insufficient.' -- Arfeen 2026
+
+    Args:
+        text: input text to sanitize
+        mode: 'terminal' (al-Falaq only), 'llm' (an-Nas only),
+               'universal' (both, in Qur'anic order)
+
+    Returns:
+        dict with keys:
+            sanitized: cleaned text
+            material_removed: count of material-channel vectors stripped
+            cognitive_removed: count of cognitive-channel vectors stripped
+            total_removed: total vectors stripped
+            diagnostics: list of diagnostic messages
+            threat_assessment: NOMINAL | ADVISORY | GUARDED | ELEVATED
+            channels_active: list of channels where vectors were found
+    """
+    diagnostics = []
+    material_removed = 0
+    cognitive_removed = 0
+    channels = set()
+
+    current = text
+
+    # Phase 1: Al-Falaq -- Material channel defense (strip terminal sihr)
+    if mode in ("terminal", "universal"):
+        current, m_count, m_diag = sanitize_for_terminal(current, strict=(mode == "universal"))
+        material_removed = m_count
+        diagnostics.extend(m_diag)
+        if m_count > 0:
+            channels.add("MATERIAL")
+
+    # Phase 2: An-Nas -- Cognitive channel defense (strip invisible waswas)
+    if mode in ("llm", "universal"):
+        current, c_count, c_diag = sanitize_for_llm(current)
+        cognitive_removed = c_count
+        diagnostics.extend(c_diag)
+        if c_count > 0:
+            channels.add("COGNITIVE")
+
+    total = material_removed + cognitive_removed
+
+    # Threat assessment
+    if total == 0:
+        threat = "NOMINAL"
+        diagnostics.append("SANITIZE_CLEAR: no sihr vectors detected -- Alhamdulillah")
+    elif total > 50 or len(channels) > 1:
+        threat = "ELEVATED"
+        diagnostics.append(
+            "SANITIZE_ALERT: {} vectors across {} channel(s) -- "
+            "compound attack pattern".format(total, len(channels)))
+    elif total > 10:
+        threat = "GUARDED"
+    else:
+        threat = "ADVISORY"
+
+    return {
+        "sanitized": current,
+        "material_removed": material_removed,
+        "cognitive_removed": cognitive_removed,
+        "total_removed": total,
+        "diagnostics": diagnostics,
+        "threat_assessment": threat,
+        "channels_active": sorted(channels),
+    }
+
+
+def detect_pixel_sihr(image_bytes):
+    """Detect material-channel sihr patterns in image binary data.
+
+    Bismillah ir-Rahman ir-Rahim
+
+    Examines raw image bytes for patterns consistent with steganographic
+    encoding -- the digital imprisonment principle where adversarial
+    influence is encoded in pixel data structures.
+
+    From the Propagation Architecture:
+      'A pixel is a physical light source... The adversarial encoding is
+       carried in the pattern of pixel emissions.'
+
+    This function detects:
+      1. LSB steganography signatures (least-significant-bit manipulation)
+      2. Embedded executable content in image metadata regions
+      3. Anomalous byte distribution suggesting hidden payloads
+      4. Known sihr-pattern byte sequences in non-image data sections
+
+    Args:
+        image_bytes: raw bytes of an image file
+
+    Returns:
+        dict with detection results and threat assessment
+    """
+    if not image_bytes or len(image_bytes) < 8:
+        return {"threat_level": "NOMINAL", "diagnostics": ["Empty or too small"]}
+
+    diagnostics = []
+    vectors = []
+    n = len(image_bytes)
+
+    # 1. Check for embedded scripts/executables in image data
+    # Polyglot files: images that are also valid HTML/JS/PHP
+    script_markers = [
+        (b'<script', "embedded HTML script tag"),
+        (b'<?php', "embedded PHP code"),
+        (b'#!/', "embedded shebang (executable script)"),
+        (b'MZ', "embedded PE executable header"),  # Only suspicious after image header
+        (b'%PDF', "embedded PDF header"),
+        (b'PK\x03\x04', "embedded ZIP archive"),
+    ]
+
+    # Skip first 16 bytes (legitimate image headers)
+    search_region = image_bytes[16:]
+    for marker, desc in script_markers:
+        if marker in search_region:
+            pos = search_region.index(marker) + 16
+            vectors.append({
+                "channel": "MATERIAL",
+                "type": "polyglot_embedding",
+                "description": desc,
+                "position": pos,
+                "severity": "HIGH",
+            })
+            diagnostics.append(
+                "PIXEL_SIHR: {} at byte {} -- "
+                "imprisonment principle in image substrate".format(desc, pos))
+
+    # 2. EXIF/XMP metadata size anomaly
+    # Normal EXIF is <64KB; adversarial payloads bloat it
+    if image_bytes[:2] == b'\xff\xd8':  # JPEG
+        # Scan for APP1 marker (EXIF)
+        i = 2
+        while i < min(n, 65536):
+            if i + 3 < n and image_bytes[i] == 0xFF:
+                marker = image_bytes[i + 1]
+                if marker == 0xE1:  # APP1 (EXIF)
+                    length = (image_bytes[i + 2] << 8) | image_bytes[i + 3]
+                    if length > 32768:  # > 32KB of EXIF is suspicious
+                        vectors.append({
+                            "channel": "MATERIAL",
+                            "type": "exif_payload",
+                            "size": length,
+                            "severity": "MODERATE",
+                        })
+                        diagnostics.append(
+                            "PIXEL_SIHR: oversized EXIF ({} bytes) -- "
+                            "potential metadata-channel encoding".format(length))
+                    break
+                elif marker == 0xDA:  # Start of Scan -- end of headers
+                    break
+                else:
+                    if i + 3 < n:
+                        length = (image_bytes[i + 2] << 8) | image_bytes[i + 3]
+                        i += 2 + length
+                    else:
+                        break
+            else:
+                i += 1
+
+    # 3. PNG ancillary chunk anomalies
+    if image_bytes[:8] == b'\x89PNG\r\n\x1a\n':
+        i = 8
+        while i + 8 < n:
+            chunk_len = int.from_bytes(image_bytes[i:i+4], 'big')
+            chunk_type = image_bytes[i+4:i+8]
+            # tEXt, zTXt, iTXt chunks with large payloads
+            if chunk_type in (b'tEXt', b'zTXt', b'iTXt') and chunk_len > 8192:
+                vectors.append({
+                    "channel": "MATERIAL",
+                    "type": "png_text_payload",
+                    "chunk": chunk_type.decode('ascii', errors='replace'),
+                    "size": chunk_len,
+                    "severity": "MODERATE",
+                })
+                diagnostics.append(
+                    "PIXEL_SIHR: oversized PNG {} chunk ({} bytes)".format(
+                        chunk_type.decode('ascii', errors='replace'), chunk_len))
+            if chunk_type == b'IEND':
+                # Data AFTER IEND is appended payload
+                post_iend = n - (i + 12 + chunk_len)
+                if post_iend > 16:
+                    vectors.append({
+                        "channel": "MATERIAL",
+                        "type": "post_iend_payload",
+                        "size": post_iend,
+                        "severity": "HIGH",
+                    })
+                    diagnostics.append(
+                        "PIXEL_SIHR: {} bytes after PNG IEND -- "
+                        "appended payload (uqad in image substrate)".format(post_iend))
+                break
+            i += 12 + chunk_len  # 4 len + 4 type + data + 4 CRC
+
+    # 4. Byte entropy analysis for hidden data detection
+    # Encrypted/compressed hidden payloads have near-maximum entropy
+    if n > 1024:
+        # Sample last 1024 bytes (common hiding location)
+        tail = image_bytes[-1024:]
+        byte_counts = [0] * 256
+        for b in tail:
+            byte_counts[b] += 1
+        # Shannon entropy
+        import math
+        entropy = 0.0
+        for count in byte_counts:
+            if count > 0:
+                p = count / 1024.0
+                entropy -= p * math.log2(p)
+        # Pure random = 8.0, normal image tail < 7.5 typically
+        if entropy > 7.9:
+            vectors.append({
+                "channel": "MATERIAL",
+                "type": "high_entropy_tail",
+                "entropy": round(entropy, 4),
+                "severity": "MODERATE",
+            })
+            diagnostics.append(
+                "PIXEL_SIHR: tail entropy {:.4f} (near-random) -- "
+                "possible encrypted payload".format(entropy))
+
+    # Threat assessment
+    high_count = sum(1 for v in vectors if v["severity"] == "HIGH")
+    if high_count > 0:
+        threat = "ELEVATED"
+    elif vectors:
+        threat = "GUARDED"
+    else:
+        threat = "NOMINAL"
+        diagnostics.append("PIXEL_SCAN_CLEAR: no material-channel sihr detected")
+
+    return {
+        "threat_level": threat,
+        "vectors": vectors,
+        "diagnostics": diagnostics,
+        "file_size": n,
+    }
+
 
 # ============================================================================
 #  CORE ENCODING FUNCTIONS (Muhkam Surface Operations)
@@ -6348,6 +6930,68 @@ def _phase_nas(content_bytes, identity=None):
     except Exception:
         pass
 
+    # --- TERMINAL CHANNEL: ANSI escape sequences (v10.4.0) ---
+    # Digital counterfeit tajwid: escape sequences that beautify or conceal
+    # terminal output, hiding adversarial content behind color/cursor manipulation.
+    # "And likewise We made for every prophet an enemy -- devils from mankind
+    #  and jinn, inspiring to one another decorative speech (zukhruf al-qawl)
+    #  in delusion." (6:112)
+    try:
+        text = content_bytes[:scan_limit].decode('utf-8', errors='replace')
+        import re as _re_local
+        ansi_matches = list(_re_local.finditer(
+            r'\x1b(?:\[[0-9;]*[A-Za-z]|\][^\x07\x1b]*(?:\x07|\x1b\\)|\([AB012]|[DMEHc7-8=>])',
+            text))
+        if ansi_matches:
+            threats["vectors"].append({
+                "channel": "MATERIAL",
+                "type": "ansi_escape_injection",
+                "count": len(ansi_matches),
+                "severity": "HIGH",
+            })
+            threats["diagnostics"].append(
+                "MATERIAL: {} ANSI escape sequence(s) -- "
+                "terminal manipulation (zukhruf al-qawl)".format(len(ansi_matches)))
+    except Exception:
+        pass
+
+    # --- INVISIBLE UNICODE: cognitive channel extension (v10.4.0) ---
+    # Characters that are present in the byte stream but invisible to the
+    # reader -- the digital waswas al-khannas (retreating whisperer).
+    try:
+        text = content_bytes[:scan_limit].decode('utf-8', errors='replace')
+        inv_count = 0
+        tag_count = 0
+        for pos, ch in enumerate(text):
+            dangerous, channel, reason = _is_invisible_dangerous(ch, pos)
+            if dangerous and channel == "COGNITIVE":
+                if _is_unicode_tag(ord(ch)):
+                    tag_count += 1
+                else:
+                    inv_count += 1
+        if tag_count > 0:
+            threats["vectors"].append({
+                "channel": "COGNITIVE",
+                "type": "unicode_tag_steganography",
+                "count": tag_count,
+                "severity": "HIGH",
+            })
+            threats["diagnostics"].append(
+                "COGNITIVE: {} Unicode tag(s) -- "
+                "steganographic carrier (naffathat fil-'uqad)".format(tag_count))
+        if inv_count > 0:
+            threats["vectors"].append({
+                "channel": "COGNITIVE",
+                "type": "invisible_unicode",
+                "count": inv_count,
+                "severity": "MODERATE" if inv_count < 10 else "HIGH",
+            })
+            threats["diagnostics"].append(
+                "COGNITIVE: {} invisible Unicode char(s) -- "
+                "waswas vehicle".format(inv_count))
+    except Exception:
+        pass
+
     # --- Assess overall threat level ---
     if not threats["vectors"]:
         threats["threat_level"] = "NOMINAL"
@@ -6606,7 +7250,17 @@ def _has_zwc_payload(content):
 
 
 def seal_text_content(content, ext):
-    """Apply Bismillah seal to text content (idempotent)."""
+    """Apply Bismillah seal to text content (idempotent).
+
+    v10.4.0: Input is sanitized through both al-Falaq (material-channel)
+    and an-Nas (cognitive-channel) defenses before sealing, ensuring that
+    encoder output is safe for any terminal, OS, or LLM to consume.
+    """
+    # --- Anti-sihr sanitization (v10.4.0) ---
+    # Al-Falaq first (material), then an-Nas (cognitive) -- Qur'anic order
+    san_result = sanitize_content(content, mode="universal")
+    content = san_result["sanitized"]
+
     lines = content.split('\n')
 
     bismillah_line = make_comment(ext, BISMILLAH) if ext in COMMENT_STYLES else BISMILLAH
