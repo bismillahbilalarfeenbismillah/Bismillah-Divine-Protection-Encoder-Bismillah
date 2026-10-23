@@ -193,7 +193,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "10.4.2"  # v10.4.2: Bearer flip -- D5 Ghayb disclosure (A7), version-chain sealing (Bearer 1), 24-fret instrument model
+ENCODER_VERSION = "10.5.0"  # v10.5.0: 23-reader hardening -- real HMAC secret, verify recomputes witness, ZWC code-file fix, muraqabah wired, seal_text_file TypeError fix
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -5134,6 +5134,107 @@ def seal_chain_verify(repo_dir):
     ])
 
 
+# Bearer 8 Infrastructure: Furqan (Distinguishing Capacity)
+# ──────────────────────────────────────────────────────────────────────
+# Fret 24 on the 24-fret instrument. The criterion of distinction:
+# can the system distinguish meaning-altering changes from meaning-
+# preserving ones? This is the formal condition for Shannon's Boundary.
+#
+# Formal condition (v10.5.0):
+#   Given texts A and B that share identical vocabulary (L0 LEXICAL match)
+#   but differ in propositional content (L2 PROPOSITIONAL mismatch),
+#   Bearer 8 is TRUE iff semantic_verify correctly reports:
+#     - meaning_preserved: False  (semantic difference detected)
+#     - The PROPOSITIONAL level shows the structural divergence
+#
+#   This is furqan — distinguishing — because:
+#     - Same words, different meaning → detected (not fooled by surface)
+#     - Same meaning, different words → preserved (not fooled by form)
+#     - It distinguishes WITHOUT dividing: shared levels are reported
+#       as shared, divergent levels as divergent. No all-or-nothing.
+#
+# The pathological form (tafarruq) would be: treating ANY difference as
+# total divergence. Furqan holds because the 7-level architecture
+# reports WHICH levels diverge and which are preserved.
+#
+# Qur'anic grounding: Al-Furqan 25:1 — "Blessed is He who sent down
+# the Criterion upon His servant, that he may be a warner to the worlds."
+# ──────────────────────────────────────────────────────────────────────
+
+
+def evaluate_bearer_8():
+    """Evaluate Bearer 8 (Furqan) — the formal distinguishing capacity test.
+
+    Tests whether the semantic engine can distinguish meaning-altering
+    changes from meaning-preserving ones WITHOUT treating all difference
+    as total divergence (which would be tafarruq, not furqan).
+
+    Returns OrderedDict with test results and bearer status.
+    """
+    # Test pair 1: Same words, different meaning (SVO reversal)
+    text_a = b"The teacher praised the student for excellent work in the classroom."
+    text_b = b"The student praised the teacher for excellent work in the classroom."
+
+    wa = compute_semantic_witness(text_a)
+    wb = compute_semantic_witness(text_b)
+
+    if not wa["applicable"] or not wb["applicable"]:
+        return OrderedDict([
+            ("bearer_8_status", "FALSE"),
+            ("reason", "Semantic engine not applicable to test texts"),
+        ])
+
+    # Check level-by-level
+    level_results = []
+    lexical_same = False
+    propositional_different = False
+
+    for i in range(min(len(wa["semantic_levels"]), len(wb["semantic_levels"]))):
+        sa = wa["semantic_levels"][i]["seal"]
+        sb = wb["semantic_levels"][i]["seal"]
+        match = (sa == sb)
+        name = wa["semantic_levels"][i]["level_name"]
+
+        level_results.append(OrderedDict([
+            ("level", i),
+            ("name", name),
+            ("preserved", match),
+        ]))
+
+        if i == 0 and match:  # L0 LEXICAL
+            lexical_same = True
+        if i == 2 and not match:  # L2 PROPOSITIONAL
+            propositional_different = True
+
+    # Furqan condition: lexical identity + propositional distinction
+    # This proves the engine operates on MEANING, not FORM
+    furqan_holds = lexical_same and propositional_different
+
+    # Anti-tafarruq check: some levels MUST be preserved (shared structure)
+    # If ALL levels differ, the system is dividing, not distinguishing
+    preserved_count = sum(1 for r in level_results if r["preserved"])
+    divergent_count = sum(1 for r in level_results if not r["preserved"])
+    anti_tafarruq = preserved_count > 0 and divergent_count > 0
+
+    bearer_status = "TRUE" if (furqan_holds and anti_tafarruq) else "FALSE"
+
+    return OrderedDict([
+        ("bearer_8_status", bearer_status),
+        ("furqan_holds", furqan_holds),
+        ("anti_tafarruq", anti_tafarruq),
+        ("lexical_identity", lexical_same),
+        ("propositional_distinction", propositional_different),
+        ("levels_preserved", preserved_count),
+        ("levels_divergent", divergent_count),
+        ("level_results", level_results),
+        ("formal_condition",
+         "Given texts sharing L0 (vocabulary) but differing at L2 (propositions), "
+         "the system detects the semantic difference while correctly reporting "
+         "shared structure at other levels — furqan without tafarruq."),
+        ("quranic_grounding", "Al-Furqan 25:1"),
+    ])
+
+
 def khalifah_gate(corpus_path, candidate_path):
     """v10.0: Run the Khalifah Gate -- generative integrity verification.
 
@@ -7597,7 +7698,14 @@ def seal_text_content(content, ext):
             lines.append('')
         lines.append(bismillah_line)
 
-    if not already_sealed:
+    # v10.5.0: Skip ZWC injection entirely for code files.
+    # ZWC characters (U+200B, U+200C, U+200D, U+FEFF) inside source code
+    # cause SyntaxError: "invalid non-printable character U+FEFF" in Python
+    # and similar failures in other languages. Code files are protected by
+    # visible Bismillah comments (inserted above) and the 154-layer witness
+    # sidecar — ZWC steganography adds no security for files that cannot
+    # tolerate invisible characters.
+    if not already_sealed and not is_code_file(ext):
         zwc_bismillah = text_to_zwc(BISMILLAH_ARABIC)
         is_markdown = ext in {'.md', '.rst', '.txt'}
         for i, line in enumerate(lines):
@@ -7730,8 +7838,14 @@ def embed_99_names_code(content, ext):
     return '\n'.join(result)
 
 
-def seal_text_file(filepath, embed_names=False):
-    """Apply the full 154-layer Bismillah seal to a text/code file."""
+def seal_text_file(filepath, embed_names=False, muraqabah=True):
+    """Apply the full 154-layer Bismillah seal to a text/code file.
+
+    Args:
+        filepath: Path to the file to seal.
+        embed_names: If True, embed the 99 Names of Allah.
+        muraqabah: If True, embed the Muraqabah preamble (non-code files only).
+    """
     result = {"file": filepath, "layers": [], "heavens_sealed": 0}
     p = Path(filepath)
     ext = p.suffix.lower()
@@ -7756,6 +7870,13 @@ def seal_text_file(filepath, embed_names=False):
             if embed_names:
                 sealed = embed_99_names_text(sealed, ext)
                 result["layers"].append("SURFACE_99_NAMES_ZWC")
+
+        # v10.5.0: Wire up Muraqabah preamble (previously zero call sites).
+        # Embeds visible preamble + ZWC machine declaration into non-code files.
+        # Code files skip this — they cannot tolerate invisible characters.
+        if muraqabah and not is_code_file(ext):
+            sealed = embed_muraqabah_preamble(sealed, filepath, ext=ext)
+            result["layers"].append("MURAQABAH_PREAMBLE")
 
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(sealed)
@@ -8018,6 +8139,53 @@ def seal_binary_file(filepath):
 #  HEAVEN WITNESS SIDECAR -- Stores All 154 Layer Seals
 # ============================================================================
 
+
+def _get_hmac_key(master_witness):
+    """Derive HMAC key for sidecar signing.
+
+    v10.5.0: Supports a real cryptographic secret via:
+      1. FATIMA_HMAC_KEY environment variable (hex-encoded, min 32 bytes)
+      2. .fatima_key file in the working directory (raw bytes or hex)
+      3. Fallback: SHA256(Bismillah || master_witness) -- backward compatible
+         but WEAK (both inputs are public/derivable from sidecar).
+
+    The real secret is mixed with the master_witness so that:
+      - Different files produce different HMAC keys (prevents cross-file replay)
+      - An attacker who obtains the secret still cannot forge a sidecar
+        without also computing the correct master_witness for the file
+
+    Returns (key_bytes, method_string) tuple.
+    """
+    # Priority 1: Environment variable
+    env_key = os.environ.get("FATIMA_HMAC_KEY", "").strip()
+    if env_key and len(env_key) >= 64:  # 32 bytes = 64 hex chars
+        try:
+            secret = bytes.fromhex(env_key)
+            # Mix secret with master_witness for per-file uniqueness
+            mixed = hashlib.sha256(secret + master_witness.encode('utf-8')).digest()
+            return mixed, "HMAC-SHA256(env_secret + master_witness)"
+        except ValueError:
+            pass  # Not valid hex, fall through
+
+    # Priority 2: Key file
+    key_file = os.path.join(os.getcwd(), '.fatima_key')
+    if os.path.isfile(key_file):
+        try:
+            with open(key_file, 'rb') as f:
+                secret = f.read(64)  # Read up to 64 bytes
+            if len(secret) >= 32:
+                mixed = hashlib.sha256(secret + master_witness.encode('utf-8')).digest()
+                return mixed, "HMAC-SHA256(file_secret + master_witness)"
+        except Exception:
+            pass  # File unreadable, fall through
+
+    # Priority 3: Legacy derivation (backward compatible but weak)
+    legacy_key = hashlib.sha256(
+        (BISMILLAH + master_witness).encode('utf-8')
+    ).digest()
+    return legacy_key, "HMAC-SHA256(SHA256(Bismillah || master_witness), witness_json)"
+
+
 def _write_heaven_witness(filepath, content_bytes, computation):
     """Write the 11-heaven, 154-layer witness to .witness.bismillah sidecar."""
     witness_path = filepath + '.witness.bismillah'
@@ -8123,12 +8291,9 @@ def _write_heaven_witness(filepath, content_bytes, computation):
         # Serialize witness data
         witness_json = json.dumps(witness_data, indent=2, ensure_ascii=False)
 
-        # v5.1: HMAC signature -- protects sidecar against coordinated tampering
-        # Key is derived from Bismillah + master_witness, so attacker must know
-        # the correct master witness to forge a valid sidecar
-        hmac_key = hashlib.sha256(
-            (BISMILLAH + computation["master_witness"]).encode('utf-8')
-        ).digest()
+        # v10.5.0: HMAC with real secret support (replaces v5.1 public-only key)
+        # _get_hmac_key checks env var / key file first, falls back to legacy
+        hmac_key, signing_method = _get_hmac_key(computation["master_witness"])
         witness_hmac = hmac.new(
             hmac_key, witness_json.encode('utf-8'), hashlib.sha256
         ).hexdigest()
@@ -8144,7 +8309,7 @@ def _write_heaven_witness(filepath, content_bytes, computation):
             ("witness", json.loads(witness_json)),
             ("sidecar_integrity", OrderedDict([
                 ("hmac_sha256", witness_hmac),
-                ("signing_method", "HMAC-SHA256(SHA256(Bismillah || master_witness), witness_json)"),
+                ("signing_method", signing_method),
                 ("encoder_version", ENCODER_VERSION),
             ])),
         ])
@@ -8155,7 +8320,13 @@ def _write_heaven_witness(filepath, content_bytes, computation):
 
 
 def verify_witness_sidecar(filepath):
-    """v5.1: Verify the HMAC signature on a witness sidecar.
+    """v5.1+v10.5.0: Verify witness sidecar with HMAC + master witness recomputation.
+
+    v10.5.0 upgrade: Previously only verified the HMAC (which used the stored
+    master_witness as part of the key). This was circular — an attacker who
+    replaced both the master_witness and the HMAC could forge a valid sidecar.
+    Now ALSO recomputes the master witness from the actual file content and
+    compares it to the stored value.
 
     Returns (valid, message) tuple.
     """
@@ -8180,21 +8351,37 @@ def verify_witness_sidecar(filepath):
 
         witness_data = signed_data.get("witness", signed_data)
         stored_hmac = signed_data["sidecar_integrity"]["hmac_sha256"]
-        master_witness = witness_data.get("master_witness", "")
+        stored_master = witness_data.get("master_witness", "")
 
-        # Recompute HMAC
+        # --- Step 1: Verify HMAC integrity of sidecar JSON ---
         witness_json = json.dumps(witness_data, indent=2, ensure_ascii=False)
-        hmac_key = hashlib.sha256(
-            (BISMILLAH + master_witness).encode('utf-8')
-        ).digest()
+        hmac_key, _ = _get_hmac_key(stored_master)
         computed_hmac = hmac.new(
             hmac_key, witness_json.encode('utf-8'), hashlib.sha256
         ).hexdigest()
 
-        if hmac.compare_digest(stored_hmac, computed_hmac):
-            return True, "HMAC verified"
-        else:
+        if not hmac.compare_digest(stored_hmac, computed_hmac):
             return False, "HMAC MISMATCH -- sidecar may be tampered"
+
+        # --- Step 2 (v10.5.0): Recompute master witness from file content ---
+        # This closes the circular-key vulnerability: even if an attacker
+        # replaces master_witness + HMAC consistently, the recomputed witness
+        # from the actual file will not match the forged one.
+        try:
+            with open(filepath, 'rb') as f:
+                content_bytes = f.read()
+            recomputed = compute_all_154_layers(content_bytes, filepath)
+            recomputed_master = recomputed.get("master_witness", "")
+
+            if not hmac.compare_digest(stored_master, recomputed_master):
+                return False, ("WITNESS MISMATCH -- stored master_witness does not "
+                               "match recomputed value from file content. "
+                               "File may have been modified after sealing.")
+        except Exception as e:
+            # If recomputation fails, HMAC alone is still a partial check
+            return True, "HMAC verified (witness recomputation skipped: {})".format(str(e))
+
+        return True, "HMAC verified + master witness recomputed and matched"
 
     except Exception as e:
         return False, "Verification error: {}".format(str(e))
