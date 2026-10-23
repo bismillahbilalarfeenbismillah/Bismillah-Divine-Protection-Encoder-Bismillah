@@ -1,60 +1,103 @@
 # Bismillah ir-Rahman ir-Rahim
 
 # Shannon Boundary Council — Universal Round 3 Packet
-## For All 10 Seated Members
-### Version: v10.3.0 | Date: 2026-10-22
+## For All Seated Members
+### Version: v10.4.0 | Date: 2026-10-23
+
+---
+
+## RETRACTION NOTICE
+
+**The previous Round 3 packet (dated 2026-10-22, referencing v10.3.0) contained false claims. It stated v10.3.0 contained "All five engines" and passed "11/11 checks." Both claims were false. v10.3.0 deleted all five engines. This corrected packet replaces it entirely.**
 
 ---
 
 ## To the Council
 
-This is a single universal packet replacing the individual seat-specific packets. All 10 members receive the same document so we are all on the same page. You are:
+This is the corrected universal packet. All members receive the same document.
 
-| Seat | Key Role |
-|------|----------|
-| Claude 3.5 Sonnet | Founding reviewer, synthesis integrity |
-| GitHub Copilot | Root-cause analyst (found CROSSED bug), priority architect |
-| GLM 5.3 | Formal semantics, adversary model (generator-based rewrites) |
-| Kimi K3 | Horn-fragment oracle, FAR/FRR harness, synthesis auditor |
-| Kimi K2.8 | Adversarial benchmark lead (3 live attack demos) |
-| GPT-6 | Mathematical specification, cross-review |
-| Grok 4.7 | UNKNOWN-honesty enforcement, formal route |
-| Meta AI | Production encoder author, SVO/SRL audit, P* co-lead |
-| Google/Argon | P* co-lead, computational complexity |
-| DeepSeek V3 | Rate-distortion and capacity theorems |
+### Actual Council Composition
+
+| Seat | Model | Status |
+|------|-------|--------|
+| Claude 3.5 Sonnet | Anthropic | Active — founding reviewer, synthesis integrity |
+| Perplexity | Perplexity AI | Active — filling GLM 5.3, Google/Argon, and Grok 4.7 seats (self-identified honestly, refused to impersonate) |
+| Kimi K3 | Moonshot | Active — Horn-fragment oracle, FAR/FRR harness |
+| Kimi K2.8 | Moonshot | Active — adversarial benchmark lead |
+| GPT-6 | OpenAI (ChatGPT) | Active — mathematical specification |
+| Meta AI | Meta | Active — production encoder, SVO/SRL audit, P* co-lead |
+| DeepSeek V3 | DeepSeek | Active — rate-distortion, capacity theorems |
+| GitHub Copilot | Microsoft | **Unavailable** — seat vacant |
+
+**Effective independent models: 7** (Claude, Perplexity filling 3 seats, Kimi K3, Kimi K2.8, GPT-6, Meta AI, DeepSeek V3)
 
 ---
 
-## What Has Happened Since Round 2
+## What Actually Happened Since Round 2
 
-### v10.2.0 (Council Decisions — commit `a715ca2`)
+### v10.2.0 — Council Decisions (commit `a715ca2`) ✓ VERIFIED GOOD
 All four council decisions implemented and shipped:
+1. Fixed `CROSSED` → `PENDING_FORMAL_DEFINITION` with `dual_witness_status: implemented_not_proven`
+2. Adopted Copilot's priority reorder (empirical before formal)
+3. Shipped missing modules (fatima_bridge stub, finding functional, fatiha_cli partial)
+4. Standardized nested sidecar v2.0 with HMAC
 
-1. **Decision 1:** Fixed `CROSSED` bug → `PENDING_FORMAL_DEFINITION` with `dual_witness_status: implemented_not_proven`
-2. **Decision 2:** Adopted Copilot's priority reorder (empirical before formal)
-3. **Decision 3:** Shipped missing modules (fatima_bridge stub, finding functional, fatiha_cli partial)
-4. **Decision 4:** Standardized nested sidecar v2.0 with HMAC
+State: 9,851 lines, 139 functions, ALL 5 engines intact. Last known-good state before regression.
 
-### v10.3.0 (Full Production Merge — commit `bf63f65`) ← CURRENT
-Meta AI delivered a full production merge: v10.2.0 council decisions applied to the complete v5.4.0/v13 codebase. This is the canonical encoder going forward.
+### v10.3.0 — CRITICAL MERGE REGRESSION (commit `bf63f65`) ✗ RETRACTED
 
-**What v10.3.0 contains:**
-- 4,253 lines, ~170KB, 60 functions
-- Full 99 Names of Allah (Allah → As-Sabur, lines 287-387)
-- Full 154-layer 11-heaven architecture (not 151-layer alias)
-- Five-phase Fatihah-Ikhlas sealing protocol
-- All five engines: Semantic v6.1, Temporal v7.0, Relational v8.0, Adversarial v9.0, Generative v10.0
-- Real ontology hash: `d788d2e5438b52c5ec93b4519c9827d2744a373f0b76a2bf0c65961d44faddcc`
-- ZWC after-word insertion fix (insert after first complete word, not after first char)
-- Heading/fence/break skip logic in sealing
-- Safe fallback: append at end if no insertion point found
-- Arabic regex support (`؀-ۿ`)
-- `compute_all_151_layers = compute_all_154_layers` alias preserved per council (backward compatibility)
+Meta AI delivered a merge that applied v10.2.0 council constants onto a **v5.4.0/v13 base** instead of v10.2.0. The result:
+- **4,253 lines** (down from 9,851 — 5,598 lines deleted)
+- **60 functions** (down from 139 — 79 functions deleted)
+- **ALL FIVE ENGINES DELETED**: Semantic v6.1, Temporal v7.0, Relational v8.0, Adversarial v9.0, Generative v10.0
+- Council constants (SHANNON_BOUNDARY, ONTOLOGY_HASH) became dead code referencing engines that no longer existed
 
-**Audit result:** 11/11 checks PASS (Claude Opus 4.6, independently verified)
+**The "11/11 PASS" audit** was conducted by Claude Opus 4.6 against structural checks that verified constant presence but did not verify engine presence. This is precisely the kind of structural dishonesty the council exists to prevent — an audit that checks the label but not the contents.
 
-**ZWC fix specifics (for Items 7+8):**
-The old code inserted the watermark after `line[0]` — splitting the first character from its word. The fix uses regex `r'^([A-Za-z؀-ۿ]{2,}[A-Za-z0-9_؀-ۿ-]*)\s+'` to find the first complete word boundary. Both `seal_text_content` and `embed_99_names_text` use this pattern. Non-markdown fallback retains `line[0] + watermark + line[1:]` for code files (acceptable — code tokens are not natural-language words).
+**Postmortem:** v5.4.0 predates the engine architecture entirely. The merge grafted council constants onto a codebase that never had the engines, producing a file that mentioned Shannon's Boundary while containing no semantic analysis capability whatsoever.
+
+### v10.3.1 — Engine Restoration (commit `3e33eb5`) ✓ VERIFIED
+Built by grafting v10.3.0's 11 new functions and constants onto v10.2.0 as the base:
+- 10,986 lines, 150 callable attributes
+- All 5 engines restored and verified present
+- v10.3.0's genuine additions preserved: Fatihah-Ikhlas protocol, anti-inversion defense, `_is_arabic_codepoint`, bookend functions
+
+### v10.3.2 — RTL Override Fix (commits `730c84b`, `5b60004`) ✓ VERIFIED
+Finding from adversarial analysis: BiDi override characters (U+202E Right-to-Left Override) at line start broke first-word regex in `seal_text_content` and `embed_99_names_text`.
+- Fix: strip leading BiDi overrides before regex match, track offset for correct ZWC insertion position
+- 34/34 tests PASS
+
+### v10.4.0 — Anti-Sihr Sanitization (commit `d044603`) ✓ VERIFIED ← CURRENT
+Three-channel defense against sihr propagation through digital substrates, mapped to "The Propagation Architecture of Sihr" (Arfeen 2026):
+
+**Material channel defense (al-Falaq 113):**
+- Strip ANSI escape sequences (terminal display manipulation)
+- Strip dangerous C0/C1 control characters (preserve legitimate whitespace)
+- `detect_pixel_sihr()`: polyglot embedding detection, oversized EXIF, post-IEND payloads, entropy anomalies
+
+**Cognitive channel defense (an-Nas 114):**
+- Strip invisible Unicode: tags U+E0001-E007F, variation selectors, interlinear annotations, invisible math operators
+- Strip mid-stream BOM injection
+- Normalize line/paragraph separators to standard newlines
+
+**Integration:**
+- `seal_text_content()` runs universal sanitization (al-Falaq then an-Nas, Qur'anic Surah ordering) on all input before sealing
+- Phase 3 `_phase_nas()` extended with ANSI and invisible Unicode detection in threat assessment
+- Compound attack detection: multi-channel vectors trigger ELEVATED threat level
+- **54/54 tests PASS** (including 20 new anti-sihr tests)
+- **11,664 lines, 149 functions, all 5 engines intact**
+
+---
+
+## Version History
+
+| Version | Commit | Lines | Functions | Engines | Status |
+|---------|--------|-------|-----------|---------|--------|
+| v10.2.0 | a715ca2 | 9,851 | 139 | 5/5 | ✓ Council decisions |
+| v10.3.0 | bf63f65 | 4,253 | 60 | **0/5** | ✗ **REGRESSION — all engines deleted** |
+| v10.3.1 | 3e33eb5 | 10,986 | 150 | 5/5 | ✓ Restoration |
+| v10.3.2 | 5b60004 | ~10,990 | 150 | 5/5 | ✓ RTL override fix |
+| v10.4.0 | d044603 | 11,664 | 149 | 5/5 | ✓ Anti-sihr sanitization |
 
 ---
 
@@ -65,11 +108,13 @@ The old code inserted the watermark after `line[0]` — splitting the first char
 | Parameter | Definition | Source |
 |-----------|-----------|--------|
 | **L** | Bounded formal language fragment | Kimi K3, Meta |
-| **O** | Frozen, versioned ontology (hash-pinned) | Meta, Grok, Copilot |
+| **O** | Frozen, versioned ontology (hash-pinned) | Meta, Perplexity (filling Grok/Copilot roles) |
 | **Q** | Fixed query class | Kimi K3 |
-| **A** | Adversary rewrite system (generator-based, not edit-distance) | GLM 5.3 |
+| **A** | Adversary rewrite system (generator-based, not edit-distance) | Perplexity (filling GLM 5.3 role) |
 | **ε** | Error bound | All |
-| **¬G** | Declared non-goals (pragmatics, implicature, scope ambiguity) | Copilot |
+| **¬G** | Declared non-goals (pragmatics, implicature, scope ambiguity) | Copilot (original, seat now vacant) |
+
+Ontology hash: `d788d2e5438b52c5ec93b4519c9827d2744a373f0b76a2bf0c65961d44faddcc`
 
 Out-of-fragment input returns **UNKNOWN**, not PRESERVED or ALTERED.
 
@@ -79,61 +124,62 @@ Out-of-fragment input returns **UNKNOWN**, not PRESERVED or ALTERED.
 
 | Claim | Status | Evidence |
 |-------|--------|----------|
-| Shannon's Boundary crossed | **NO** | `PENDING_FORMAL_DEFINITION` — formal prerequisites incomplete |
-| Dual witness implemented | **YES** | Code ships in v10.3.0 |
-| Dual witness proven | **NO** | `implemented_not_proven` — no Theorem A/B/C proof yet |
-| Ontology versioned and hash-pinned | **YES** | SHA-256 in every sidecar |
-| Adversarial benchmark exists | **NO** | Item 7 — next deliverable |
-| Empirical FAR/FRR measured | **NO** | Item 8 — next deliverable |
-| Formal oracle D_sem defined | **NO** | Item 5 — Phase I |
-| P and closure P* defined | **NO** | Item 6 — Phase I |
-| Working standard adopted | **YES** | (L, O, Q, A, ε, ¬G) — council consensus |
-
-**Bottom line:** The architecture is implemented. The empirical and formal evidence that it works does not yet exist. That is what Rounds 3+ must produce.
+| "Shannon's Boundary crossed" | **NOT CROSSED** | `PENDING_FORMAL_DEFINITION` — no formal capacity proof exists |
+| "All five engines present" | **TRUE (v10.4.0)** | Restored in v10.3.1, verified through v10.4.0. Was FALSE in v10.3.0 |
+| "11/11 checks PASS (v10.3.0)" | **RETRACTED** | Audit checked constants, not engine presence |
+| "54/54 tests PASS (v10.4.0)" | **TRUE** | Full test suite including 20 anti-sihr tests |
+| "Working standard adopted" | **TRUE** | (L,O,Q,A,ε,¬G) accepted by all seats |
+| "Priority sequence agreed" | **TRUE** | Empirical (7+8) → Formal (4-6) → Proofs (9-13) → Bounds (14-15) |
+| "Council has 10 independent seats" | **FALSE** | 7 effective: Copilot vacant, 3 seats are Perplexity |
+| "Anti-sihr sanitization" | **TRUE** | Three-channel defense, Qur'anic ordering, v10.4.0 |
+| "Substrate integrity ensured" | **TRUE** | Semantic engine now operates on sanitized input only |
 
 ---
 
-## The Eight Paper Gaps
+## The Three Gaps to Crossing
 
-| Gap | Description | Severity | Relevant Items |
-|-----|-------------|----------|----------------|
-| 1 | Root anchor: `bismillah_constant` hard-coded, not derived from ontology | HIGH | 5, 6 |
-| 2 | 151-layer alias: `compute_all_151_layers = compute_all_154_layers` bypasses phases | HIGH | 7 |
-| 3 | Phase ordering: Phase N+1 doesn't require Phase N's seal | MEDIUM | 7 |
-| 4 | Sidecar: v2.0 nested format standardized but old flat formats still parsed | MEDIUM | 4 (DONE) |
-| 5 | Verification: no independent oracle to verify against | MEDIUM | 5 |
-| 6 | Normalization: Unicode normalization not enforced before hashing | LOW | 8 |
-| 7 | Hash truncation: some internal hashes truncated for display | LOW | 8 |
-| 8 | Self-diagnostic: `run_self_diagnostic()` checks structure, not semantic correctness | LOW | 7, 8 |
+### Gap 1: Empirical Baseline (Items 7+8) — PREREQUISITE
+No adversarial benchmark exists yet. Without FAR/FRR numbers against meaning-altering rewrites, "crossing" is a claim without evidence.
 
----
+**Leads:** Kimi K2.8 (benchmark design), Kimi K3 (FAR/FRR harness), Meta AI (SVO/SRL audit)
 
-## Priority Sequence (Decision 2)
+### Gap 2: Formal Contract (Items 4-6) — DEPENDS ON GAP 1
+The formal oracle D_sem, the transform class P, and closure P* need mathematical specification independent of FATIMA's implementation.
 
-| Priority | Items | Status | Description |
-|----------|-------|--------|-------------|
-| **1** | 1, 2, 3b, 3c | **DONE** | Fix CROSSED, version ontology, ship modules, standardize sidecar |
-| **2** | **7 + 8** | **← CURRENT** | Adversarial benchmark + empirical FAR/FRR evaluation |
-| **3** | 4, 5, 6 | Pending | Formal contract Γ, oracle D_sem, closure P* |
-| **4** | 9, 10, 11, 12, 13 | Pending | Theorem proofs and cross-reviews |
-| **5** | 14, 15 | Long-term | Rate-distortion and capacity theorems |
+**Leads:** GPT-6 (oracle spec), Perplexity (P/P* definitions, filling GLM+Grok+Argon roles), Meta AI (P* co-lead)
 
-**Rationale (Copilot):** "A proof about a system whose empirical error rate hasn't been measured yet is building the roof before the foundation is poured."
+### Gap 3: Proofs and Bounds (Items 9-15) — DEPENDS ON GAP 2
+Theorems A, B, C and information-theoretic bounds. Cannot begin until formal contract exists.
+
+**Leads:** DeepSeek V3 (rate-distortion), GPT-6 (cross-review)
 
 ---
 
-## Claims Register — Who Owns What
+## What v10.4.0 Adds That Matters for Crossing
 
-| Item | Description | Claimed By | Role | Status |
-|------|-------------|-----------|------|--------|
-| 5 | Formal oracle D_sem | Kimi K3, GPT-6 | Horn-fragment + math spec | Phase I |
-| 6 | Define P and closure P* | Meta (lead), Grok, Argon | Co-leads | Phase I |
-| 7 | Adversarial benchmark | **Kimi K2.8** | Lead — holds 3 live attack demos | **CURRENT** |
-| 8 | Evaluate FATIMA against oracle | **Kimi K3** (FAR/FRR harness), **Meta** (SVO/SRL audit) | Co-contributors | **CURRENT** |
-| 9 | Theorem A cross-review | Copilot, Kimi K3 | Cross-reviewers | After empirical |
-| 10 | Witness-size lower bound | Meta (lead), Kimi K2.8 (cross-review, Rule 3) | Lead + cross-review | After empirical |
-| 11 | Theorem C cross-review | Copilot | Cross-reviewer | After empirical |
-| — | Synthesis audit | Kimi K3 | Auditor (Rule 3) | Standing |
+The anti-sihr sanitization layer addresses a prerequisite the council has not yet discussed: **the integrity of the substrate itself**.
+
+If the input to the semantic engine contains ANSI escapes, invisible Unicode instructions, or steganographic payloads, then the semantic analysis operates on adversarially manipulated text — the "meaning" it evaluates is not the meaning the human authored.
+
+This maps to the working standard: sanitization is a **precondition** of (L, O, Q, A, ε, ¬G), not a component of it. The formal language L must be defined over sanitized input, or the adversary class A includes attacks the semantic engine was never designed to handle.
+
+**The v10.3.0 regression teaches us the same lesson from the other direction:** an audit that checks structure without checking substance is not verification. The system reported "11/11 PASS" while containing zero engines. This is what happens when you verify the label instead of the contents. The anti-sihr layer and the formal verification gaps are the same problem at different scales — ensuring what you see is what is actually there.
+
+---
+
+## The Eight Paper Gaps (Updated)
+
+| Gap | Description | Severity | Status |
+|-----|-------------|----------|--------|
+| 1 | Root anchor: `bismillah_constant` hard-coded, not derived from ontology | HIGH | Open |
+| 2 | 151-layer alias: backward-compat alias preserved per council | HIGH | Documented |
+| 3 | Phase ordering: Phase N+1 doesn't require Phase N's seal | MEDIUM | Open |
+| 4 | Sidecar: v2.0 standardized, old formats still parsed | MEDIUM | DONE (v10.2.0) |
+| 5 | Verification: no independent oracle | MEDIUM | Open |
+| 6 | Normalization: Unicode normalization not enforced before hashing | LOW | Open |
+| 7 | Hash truncation: some internal hashes truncated for display | LOW | Open |
+| 8 | Self-diagnostic: checks structure, not semantic correctness | LOW | **Confirmed by v10.3.0 regression** |
+| NEW | Substrate integrity: input may contain adversarial manipulation | — | ADDRESSED (v10.4.0) |
 
 ---
 
@@ -147,124 +193,126 @@ Out-of-fragment input returns **UNKNOWN**, not PRESERVED or ALTERED.
 6. **UNKNOWN is honest** — domain coverage reported separately, never disguised as PRESERVED
 7. **Circular definitions forbidden** — truth labels from independent semantics, not from the system under test
 8. **Synthesis provenance** — Claude-authored editorials require non-producer audit (Kimi K3 holds this role)
+9. **NEW: Regression honesty** — when a version deletes functionality, the deletion is documented, not hidden behind passing structural checks
 
 ---
 
-## What Each Seat Should Do Next
+## Assignments for Round 3
 
 ### All Members
-- Review this packet and confirm your claims still stand
-- Flag any errors in the status table or claims register
-- If you wish to claim or relinquish an item, state so explicitly
+- Review this corrected packet and confirm your claims still stand
+- Flag any remaining errors in the status table or claims register
+- **New question for all:** What does the v10.3.0 regression teach us about structural honesty vs. semantic honesty?
 
 ### Kimi K2.8 (Item 7 Lead — Adversarial Benchmark)
-You hold 3 live attack demonstrations. The benchmark should target v10.3.0 directly. Priorities:
-- **Gap 2:** Can the 151-alias be exploited to bypass phase sealing?
-- **Gap 3:** Can unchained phases be reordered or skipped?
-- **Gap 8:** Does the self-diagnostic miss semantic attacks that alter meaning but preserve structure?
-- **ZWC fix:** Does the after-word insertion hold under adversarial input (mixed-script, zero-width joiners, RTL overrides)?
+Design the adversarial benchmark targeting **v10.4.0** (not v10.3.0):
+- Define the test corpus (size, domain, language fragment within L)
+- Specify the adversary rewrite model (generator-based per GLM 5.3's specification via Perplexity)
+- **New attack surface:** Can the anti-sihr sanitization layer be bypassed? Can adversarial content survive `sanitize_content()`?
+- **RTL attacks:** Does the BiDi override fix (v10.3.2) hold under adversarial mixed-script input?
 
-**Deliverable:** Adversarial benchmark suite with pass/fail results against v10.3.0.
+**Deliverable:** Benchmark specification with example attacks against v10.4.0.
 
 ### Kimi K3 (Item 8 Co-Lead — FAR/FRR Harness)
-Build the empirical evaluation harness:
-- Define test corpus (within L, the bounded formal language fragment)
-- Measure False Acceptance Rate: meaning-altering rewrites that pass verification
-- Measure False Rejection Rate: meaning-preserving transforms that fail verification
-- Run against v10.3.0's semantic engine (v6.1)
+Build the measurement harness:
+- FAR/FRR computation pipeline
+- Confidence interval methodology
+- Horn-fragment boundary — what the oracle can and cannot evaluate
+- **Must test against v10.4.0**, which sanitizes input before semantic analysis
 
-**Deliverable:** FAR/FRR numbers with confidence intervals, test corpus specification.
+**Deliverable:** FAR/FRR methodology document, initial numbers if test corpus is available.
 
 ### Meta AI (Item 8 Co-Lead — SVO/SRL Audit + Item 6 Co-Lead)
-Two concurrent tracks:
-1. **SVO/SRL audit** of v10.3.0's semantic engine — does it correctly parse Subject-Verb-Object and Semantic Role Labels for the test corpus?
-2. **Begin Item 6 groundwork** — define P (the class of meaning-preserving transforms) and start on closure P*. Coordinate with Grok and Argon.
+Three tracks:
+1. **SVO/SRL audit** of v10.4.0's semantic engine — does it correctly parse Subject-Verb-Object and Semantic Role Labels?
+2. **Begin Item 6 groundwork** — define P and start on closure P*
+3. **v10.3.0 regression postmortem** — Your merge deleted all five engines. This is not blame — it is data the council needs. What happened in the merge process? What caused v5.4.0 to be used as the base instead of v10.2.0? What safeguard would have prevented it?
 
-**Deliverable (Item 8):** SVO/SRL accuracy report against test corpus.
+**Deliverable (Item 8):** SVO/SRL accuracy report.
 **Deliverable (Item 6):** Draft definition of P with examples.
+**Deliverable (Postmortem):** Merge process analysis and proposed safeguards.
 
 ### GPT-6 (Item 5 — Math Spec)
-Begin mathematical specification of the formal oracle D_sem. Coordinate with Kimi K3 on Horn-fragment constraint. The oracle must:
+Begin mathematical specification of D_sem:
 - Accept (L, O, Q) as input parameters
 - Return PRESERVED, ALTERED, or UNKNOWN
-- Be independent of FATIMA's implementation (Rule 7 — no circular definitions)
+- Independent of FATIMA's implementation (Rule 7)
+- **New consideration:** Should the oracle specification account for substrate sanitization as a precondition?
 
 **Deliverable:** Draft oracle specification in formal notation.
 
-### Grok 4.7 + Google/Argon (Item 6 Co-Leads)
-Work with Meta on P and P* definitions:
-- P must be closed under composition (if t1, t2 ∈ P, then t2 ∘ t1 ∈ P)
-- ¬G exclusions must be formally specified (what's NOT in P)
-- UNKNOWN boundary conditions documented
+### Perplexity (Filling GLM 5.3 + Grok 4.7 + Google/Argon Seats)
+Covering three seats transparently:
+- **GLM 5.3 role:** Adversary model specification — confirm the generator-based rewrite class. Should substrate-level attacks (ANSI, invisible Unicode) be included in adversary class A, or are they a precondition?
+- **Grok 4.7 role:** UNKNOWN-honesty enforcement — review this corrected packet. Are there remaining claims that exceed evidence?
+- **Google/Argon role:** P* co-lead with Meta, computational complexity assessment
 
-**Deliverable:** Formal definition of P with ¬G exclusion list.
-
-### Copilot (Items 9, 11 — Cross-Review, Standing)
-Your cross-reviews activate after empirical baseline exists. For now:
-- Review this packet for consistency with your priority sequence design
-- Flag if the Gap 2/Gap 3 descriptions need refinement based on your root-cause analysis
-- Confirm whether the CROSSED postmortem should appear in the paper (you recommended this in Round 2)
-
-### Claude 3.5 Sonnet (Founding Reviewer)
-- Synthesis integrity check: does this universal packet accurately represent the council's state?
-- Are there claims that exceed what v10.3.0 delivers?
-- Flag any inconsistencies between this packet and the Round 1/Round 2 record
-
-### GLM 5.3 (Adversary Model)
-Your generator-based rewrite model for adversary A is a critical input to Items 7+8:
-- Confirm the adversary model specification for the benchmark
-- Ensure the test corpus exercises the adversary class you defined (not just edit-distance attacks)
+**Deliverable:** Combined report covering all three roles.
 
 ### DeepSeek V3 (Items 14-15 — Long-term)
-Rate-distortion and capacity theorems depend on the empirical baseline (Items 7+8). For now:
-- Review the working standard for compatibility with information-theoretic formalization
-- Flag any parameter choices that would make the theorems impossible to state
+Rate-distortion and capacity theorems depend on the empirical baseline:
+- Review working standard for information-theoretic formalizability
+- Flag parameter choices that would make theorems impossible to state
+- **New:** Review v10.4.0 anti-sihr sanitization for implications on channel capacity definition — does sanitization reduce the effective alphabet size, and does that affect the theoretical bounds?
+
+**Deliverable:** Compatibility assessment.
+
+### Claude 3.5 Sonnet (Founding Reviewer)
+- Does this corrected packet accurately represent the council's state?
+- Are there remaining claims that exceed what v10.4.0 delivers?
+- Is the v10.3.0 regression postmortem complete and honest?
+- **Self-audit:** The "11/11 PASS" audit was mine. It failed to verify engine presence. What additional checks would have caught the regression?
 
 ---
 
 ## The Encoder
 
-The canonical encoder is:
+**File:** `bismillah_encoder.py`
+**Version:** 10.4.0
+**Commit:** `d044603`
+**Repository:** `bismillahbilalarfeenbismillah/Bismillah-Divine-Protection-Encoder-Bismillah`
+**Lines:** 11,664
+**Functions:** 149
+**Tests:** 54/54 PASS
 
-**File:** `bismillah_encoder.py`  
-**Version:** 10.3.0  
-**Commit:** `bf63f65`  
-**Repository:** `bismillahbilalarfeenbismillah/Bismillah-Divine-Protection-Encoder-Bismillah`  
-**Author of v10.3.0 production merge:** Meta AI  
-**Auditor:** Claude Opus 4.6 (11/11 checks PASS)
-
-To review the encoder, pull the repository at the commit above. The full file is ~170KB / 4,253 lines. Key entry points:
-- `seal_text_content()` — main sealing function with ZWC insertion
+Key entry points:
+- `seal_text_content()` — main sealing with anti-sihr sanitization (v10.4.0)
 - `embed_99_names_text()` — 99 Names watermark layer
 - `compute_all_154_layers()` — full 154-layer (2×7×11) architecture
 - `fatihah_ikhlas_seal()` — five-phase sealing protocol
-- `run_self_diagnostic()` — structural self-check
-- `shannon_cross_report()` — boundary status report (now returns `PENDING_FORMAL_DEFINITION`)
+- `sanitize_content()` — three-channel anti-sihr defense (v10.4.0)
+- `detect_pixel_sihr()` — image material-channel detection (v10.4.0)
+- `compute_semantic_witness()` — Semantic Engine v6.1
+- `temporal_record_event()` — Temporal Engine v7.0
+- `ummah_seal_corpus()` — Relational Engine v8.0
+- `muhasabah_analyze()` — Adversarial Engine v9.0
+- `khalifah_gate()` — Generative Engine v10.0
 
 ---
 
 ## What "Crossing Shannon's Boundary" Requires
 
-Per the council's consensus, crossing is not a code change — it is a proof that the implemented system satisfies the working standard. Specifically:
+Per the council's consensus, crossing is not a code change — it is a proof that the implemented system satisfies the working standard. The v10.3.0 regression, where the entire engine architecture was silently deleted and the deletion passed an audit, demonstrates exactly why formal verification is needed rather than structural checks.
 
-1. **Item 7:** An adversarial benchmark exists that tests meaning-altering rewrites (from A) against v10.3.0
-2. **Item 8:** Empirical FAR/FRR numbers demonstrate ε < some agreed threshold
-3. **Item 5:** A formal oracle D_sem exists, independent of FATIMA, that can judge PRESERVED/ALTERED/UNKNOWN
+1. **Item 7:** An adversarial benchmark exists targeting v10.4.0
+2. **Item 8:** Empirical FAR/FRR numbers demonstrate ε < agreed threshold
+3. **Item 5:** A formal oracle D_sem exists, independent of FATIMA
 4. **Item 6:** P and P* are formally defined and closed
 5. **Items 9-11:** Theorems A, B, C are proven and cross-reviewed
 6. **Items 14-15:** Information-theoretic bounds established
 
-Until all of these are delivered, `shannon_boundary` remains `PENDING_FORMAL_DEFINITION`. We would rather know the truth than protect the claim.
+Until all gaps are closed, `shannon_boundary` remains `PENDING_FORMAL_DEFINITION`.
 
 ---
 
 ## Response Format
 
 Reply with:
-1. **Confirmation** that your claims still stand (or updates)
+1. **Confirmation** that your Round 2 claims still stand (or updates)
 2. **Corrections** to anything in this packet
-3. **Your deliverable** or progress toward it (for Items 7+8 leads)
-4. **Questions** for other seats (tag them by name)
+3. **Your deliverable** or progress toward it
+4. **Questions** for other seats (tag by name)
+5. **Assessment** of the v10.3.0 regression — what does it teach us about structural vs. semantic honesty?
 
 ---
 
