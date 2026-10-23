@@ -193,7 +193,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "10.3.1"  # v10.3.1: Restored from v10.2.0 + v10.3.0 additions (5 engines intact)
+ENCODER_VERSION = "10.3.2"  # v10.3.2: RTL override fix (Kimi K2.8), restored from v10.2.0 + v10.3.0
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
