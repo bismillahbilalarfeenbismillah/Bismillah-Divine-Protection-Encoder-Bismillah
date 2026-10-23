@@ -1,0 +1,23 @@
+{
+  "Bismillah ir-Rahman ir-Rahim": true,
+  "description": "FATIMA Version-Chain Seal -- Bearer 1 (Append-Only Provenance)",
+  "axiom": "A1 -- Append-Only Provenance (Liskov-Wing behavioral subtyping)",
+  "instrument_position": "Fret 22 (24-fret extended range)",
+  "verification": "Any external witness holding a prior entry can verify append-only integrity by confirming prior_entry_hash matches.",
+  "chain_length": 1,
+  "chain": [
+    {
+      "Bismillah ir-Rahman ir-Rahim": true,
+      "entry_number": 1,
+      "version": "10.4.2",
+      "timestamp": "2026-10-23T08:54:39.100190+00:00",
+      "prior_entry_hash": "GENESIS",
+      "encoder_sha256": "811868b0d3446ed986a51620b3f94c040df7e7ef2701249d1882771e587ac10d",
+      "test_suite_sha256": "5c9bcbc3cc8f1936edccb637ab6be51dfabe50e9a60aad340c9f3a35a2ccc04e",
+      "ontology_hash": "2eb7d332bd1a883cde3eb96dfd975dc3705139d6d909874ca57277f3c4258d77",
+      "test_count": 54,
+      "notes": "Genesis entry. Bearer 1 (Append-Only Provenance) initialized. 24-fret instrument model. Includes D5 Ghayb disclosure (Bearer 4), version-chain sealing infrastructure.",
+      "entry_hash": "ae72c26b1d9f64db4d46a0a6f5fc165ff18e672d6ea0a6b7fa5d1db3f5a4e074"
+    }
+  ]
+}
