@@ -1,6 +1,6 @@
 # Bismillah ir-Rahman ir-Rahim
 """
-Bismillah Divine Protection Encoder -- FATIMA v10.3.1 -- 11-Heaven, 154-Layer Architecture
+Bismillah Divine Protection Encoder -- FATIMA v10.4.1 -- 11-Heaven, 154-Layer Architecture
 with Semantic Integrity Engine (Shannon's Boundary Crossing),
 Temporal Integrity Engine (The Living Witness),
 Relational Integrity Engine (The Ummah Witness),
@@ -193,7 +193,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "10.4.0"  # v10.4.0: Anti-sihr sanitization (al-Falaq + an-Nas defense against terminal/LLM/pixel sihr)
+ENCODER_VERSION = "10.4.1"  # v10.4.1: Council Priority 1 fixes (D1-D4, D6, D12-D13) -- idempotence, modal blindness, heavens bookending, waswas self-flag, PENDING boundary
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -1723,8 +1723,12 @@ def is_code_file(ext):
 _STOPWORDS = frozenset({
     'a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
     'of', 'with', 'by', 'from', 'is', 'was', 'are', 'were', 'be', 'been',
-    'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would',
-    'could', 'should', 'may', 'might', 'shall', 'can', 'this', 'that',
+    'being', 'have', 'has', 'had', 'do', 'does', 'did',
+    # NOTE: Deontic modals EXCLUDED from stopwords (D4 fix, v10.4.1).
+    # 'will', 'would', 'could', 'should', 'may', 'might', 'shall', 'can'
+    # are meaning-critical: "must reject" ≠ "may reject" (FAR vulnerability).
+    # Argon's empirical baseline: FAR 1/6 traced to modal stripping.
+    'this', 'that',
     'these', 'those', 'it', 'its', 'i', 'me', 'my', 'we', 'our', 'you',
     'your', 'he', 'she', 'him', 'her', 'his', 'they', 'them', 'their',
     'what', 'which', 'who', 'whom', 'how', 'when', 'where', 'why',
@@ -2568,11 +2572,12 @@ def semantic_verify(original_bytes, candidate_bytes, threshold=0.5):
         "changed_levels": changed_levels,
         "diagnosis": diagnosis,
         "syntactic_match": (original_bytes == candidate_bytes),
-        "crossed_boundary": (not (original_bytes == candidate_bytes)) and verified,
+        "boundary_status": "PENDING_FORMAL_DEFINITION",
+        "meaning_preserved": (not (original_bytes == candidate_bytes)) and verified,
         "boundary_note": (
-            "ABOVE Shannon's boundary: meaning preserved despite bit changes"
+            "Meaning preserved despite bit changes (formal crossing proof pending)"
             if (not (original_bytes == candidate_bytes)) and verified
-            else "BELOW Shannon's boundary: comparing bits only"
+            else "Bits identical: no boundary test applicable"
             if original_bytes == candidate_bytes
             else "MEANING ALTERED: semantic integrity compromised"
         ),
@@ -6414,6 +6419,11 @@ def compute_all_154_layers(content_bytes, filepath=None):
     for hdef in HEAVENS:
         heaven_layers = [l for l in all_layers
                          if hdef["layer_start"] <= l["layer"] <= hdef["layer_end"]]
+        # D3 fix (v10.4.1): Apply bookend invocations to each heaven's layers.
+        # _bookend_layers() existed since v10.3.1 but was never called here.
+        # Without this, heaven boundaries are unsigned -- content can be
+        # transplanted between heavens without detection.
+        _bookend_layers(heaven_layers, hdef["name_en"])
         heaven_h = hashlib.sha256()
         heaven_h.update(BISMILLAH.encode('utf-8'))
         for l in heaven_layers:
@@ -7204,7 +7214,20 @@ def fatihah_ikhlas_seal(content_bytes, filepath=None):
     protocol["phases_completed"] = 2
 
     # Phase 3: AN-NAS -- Threat Model
-    threats = _phase_nas(content_bytes, identity)
+    # D2 fix (v10.4.1): Strip our own ZWC watermark before threat assessment.
+    # Without this, _phase_nas detects our legitimate ZWC payload as hostile
+    # zero-width injection (self-flagged waswas). We evaluate the semantic
+    # content, not our own steganographic layer.
+    try:
+        text_for_nas = content_bytes.decode('utf-8', errors='replace')
+        # Remove FATIMA ZWC alphabet: ZW_ZERO (U+200B), ZW_ONE (U+200C),
+        # ZW_SEP (U+200D), ZW_BOUNDARY (U+FEFF)
+        for zwc_char in (ZW_ZERO, ZW_ONE, ZW_SEP, ZW_BOUNDARY):
+            text_for_nas = text_for_nas.replace(zwc_char, '')
+        clean_for_nas = text_for_nas.encode('utf-8')
+    except Exception:
+        clean_for_nas = content_bytes  # fallback: assess as-is
+    threats = _phase_nas(clean_for_nas, identity)
     protocol["phases"]["nas"] = threats
     protocol["phases_completed"] = 3
 
@@ -7256,10 +7279,21 @@ def seal_text_content(content, ext):
     and an-Nas (cognitive-channel) defenses before sealing, ensuring that
     encoder output is safe for any terminal, OS, or LLM to consume.
     """
+    # --- D1 fix (v10.4.1): Check for existing ZWC payload BEFORE sanitization ---
+    # sanitize_content strips ZWC characters (including ZW_BOUNDARY U+FEFF),
+    # so checking _has_zwc_payload after sanitization always returns False,
+    # breaking idempotence: re-sealing a sealed file would double-embed ZWC.
+    already_sealed = not is_code_file(ext) and _has_zwc_payload(content)
+
     # --- Anti-sihr sanitization (v10.4.0) ---
     # Al-Falaq first (material), then an-Nas (cognitive) -- Qur'anic order
-    san_result = sanitize_content(content, mode="universal")
-    content = san_result["sanitized"]
+    # D1 continued: If already sealed, skip sanitization to preserve our own
+    # ZWC payload. The content was sanitized on its FIRST seal; re-sanitizing
+    # would destroy the steganographic watermark (ZW_BOUNDARY = U+FEFF is
+    # stripped as mid-stream BOM by sanitize_for_llm).
+    if not already_sealed:
+        san_result = sanitize_content(content, mode="universal")
+        content = san_result["sanitized"]
 
     lines = content.split('\n')
 
@@ -7282,7 +7316,7 @@ def seal_text_content(content, ext):
             lines.append('')
         lines.append(bismillah_line)
 
-    if not is_code_file(ext) and not _has_zwc_payload(content):
+    if not already_sealed:
         zwc_bismillah = text_to_zwc(BISMILLAH_ARABIC)
         is_markdown = ext in {'.md', '.rst', '.txt'}
         for i, line in enumerate(lines):
@@ -10836,7 +10870,7 @@ Examples:
                     result.get("reason", "unknown")))
             else:
                 print("\n  {} SEMANTIC WITNESS {} ".format("=" * 20, "=" * 20))
-                print("  Shannon's Boundary: CROSSED")
+                print("  Shannon's Boundary: PENDING_FORMAL_DEFINITION")
                 print("  Semantic Master Seal: {}".format(
                     result["semantic_master_seal"][:32] + "..."))
                 print("  Levels: {} (muhkam constant = {})".format(
@@ -10890,9 +10924,9 @@ Examples:
                 print("  Threshold: {:.0%}".format(result["threshold"]))
                 print("  Syntactic match (bits identical): {}".format(
                     result["syntactic_match"]))
-                if result.get("crossed_boundary"):
-                    print("  >>> SHANNON'S BOUNDARY CROSSED <<<")
-                    print("  Bits differ but meaning is preserved.")
+                if result.get("boundary_status") == "PENDING_FORMAL_DEFINITION":
+                    print("  >>> SHANNON'S BOUNDARY: PENDING_FORMAL_DEFINITION <<<")
+                    print("  Formal capacity proof required before crossing claim.")
                 print()
                 for comp in result["comparisons"]:
                     icon = "OK" if comp["preserved"] else "XX"
