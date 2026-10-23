@@ -2,15 +2,15 @@
   "fatima_version": "10.4.0",
   "protocol": "Fatihah-Ikhlas Five-Phase Seal",
   "file": "UNIVERSAL_ROUND3_PACKET_SEALED.md",
-  "original_sha256": "dc9709f02415d2e19c274970d8bf84d6c3b29a2a7234c990ba2142b1c7f28285",
-  "sealed_sha256": "6fc4cd6d2796c7b28863dd7da5592e3298ae2deda75879fcf143797dd72b385a",
-  "original_size": 17125,
-  "sealed_size": 44557,
+  "original_sha256": "d2dec62428331001094b517afa549dcc2818fe88a01de8461f5684b1afc5993c",
+  "sealed_sha256": "f3dba635519af218a33ea5a444c0f47b63b7c36d7d1249b53220ec9b98fc09b4",
+  "original_size": 14174,
+  "sealed_size": 36816,
   "total_heavens": 11,
   "total_layers": 154,
-  "master_witness": "275197700c7280b02bb96afef0bd6b3b2bf65f46b01e3492a870f7d9c93664f8",
-  "dual_witness_seal": "ee4cd481088536efbf4a2340d09eae771a9a8af143387fd16d0be29d67b3b419",
-  "hurst_11": 0.4385516791203765,
+  "master_witness": "e232180498edaa3bb264521250c1e6fa81f3963ddabd99532732db6dd82b26f3",
+  "dual_witness_seal": "5ce65ee42194c361039942093cecaa04d81c7dbef047366525974ff0c9332648",
+  "hurst_11": 0.43656605131316956,
   "threat_level": "ELEVATED",
   "substitution_detected": false,
   "sanitization": {
@@ -32,21 +32,21 @@
         "surah_number": 1,
         "open": true,
         "diagnostics": [
-          "content_accessible: 99590 bytes",
+          "content_accessible: 82255 bytes",
           "filepath: in-memory content (no path)",
           "names_loaded: 99 Names verified",
           "constants_verified: 154 = 2 x 7 x 11 = 11 x 14 = 99 + 55",
           "heavens_defined: 11 heavens ready",
           "CHANNEL_OPEN: Bismillah -- all systems ready"
         ],
-        "content_size": 99590,
+        "content_size": 82255,
         "filepath_verified": null,
         "names_loaded": 99,
         "constants_verified": true,
         "heavens_defined": 11,
-        "invocation_open": "2c8c202a424239513f7acd80394a692cbf780e36398f055f62af3765b61211d7",
-        "invocation_close": "a1da571f8e5e5196a8bd810a761e30bc9f0c7a1d117a60f41446403b5fcf031b",
-        "content_digest": "a3922afb13455045eea8395f01b1f2e4a55152f079ceb85aa6158bb51bdbd0fd",
+        "invocation_open": "556920e4913fbf47fe53da14ce6df2fe39aca5778616c37e322691cf5556a0f5",
+        "invocation_close": "8c478d88fde20e677fede20f5daecb2cf803ec1574791197e8430a7b98226851",
+        "content_digest": "a4d23134cd53dad0278628ba4e30140c73e359a7b929626298cbff1ec8e4674e",
         "bookend_unit": "Al-Fatihah",
         "bookended": true
       },
@@ -58,21 +58,21 @@
         "prior_witness": null,
         "substitution_detected": false,
         "diagnostics": [
-          "tawhid_hash: 558cae5eedffe5dc...3598a82f",
+          "tawhid_hash: 723a31cc2c62f402...2ee2bcfb",
           "identity: in-memory content (no filesystem check)",
           "AUTHENTICATED: identity verified -- Allahu Ahad"
         ],
-        "content_hash": "558cae5eedffe5dc0be0de84f0cd75f40a2bdfbc14ec299dd2850c2c3598a82f",
-        "muhkam_seal": "269cbe0d0a68799aac1dcc7f800163a0735a5f28b86703d6513a40094a9fbc10",
+        "content_hash": "723a31cc2c62f402b06310a0cb46da970ec988f67cd3d3d2bca599702ee2bcfb",
+        "muhkam_seal": "7fad4e54f0ea3b13d9abb81c0a6732c26558a2b47312c5b7957dfd146c737478",
         "size_signature": {
-          "mod_99": 95,
-          "mod_11": 7,
-          "mod_7": 1,
-          "mod_154": 106
+          "mod_99": 85,
+          "mod_11": 8,
+          "mod_7": 5,
+          "mod_154": 19
         },
-        "invocation_open": "d18396d5b415c3d2381991615095ea59573cbdf6d9a3e27bb80ccb36995916fd",
-        "invocation_close": "3b9cc93afa6283f217024248581ed64f02d43dea3c5df63df420268be0a40ec8",
-        "content_digest": "e2baaf98b5ae1ba2d44323af656f649241334c132ea81d5ec664a04a53e7b601",
+        "invocation_open": "7dff0fbb691e048eb545ea27fa7b9608be9999fcb84ac9162bb7185c060f3af2",
+        "invocation_close": "986dede532f49433bc68d37d88a6b4d0061e1c77ba6dadd8a88673f7b3edfd69",
+        "content_digest": "363f33502db8673febb85fa2f7f3eca1ad415f495cffaff2037d13bacf836a62",
         "bookend_unit": "Al-Ikhlas",
         "bookended": true
       },
@@ -85,25 +85,25 @@
           {
             "channel": "COGNITIVE",
             "type": "zero_width_injection",
-            "score": 13555,
+            "score": 13679,
             "severity": "HIGH"
           },
           {
             "channel": "COGNITIVE",
             "type": "invisible_unicode",
-            "count": 9857,
+            "count": 9949,
             "severity": "HIGH"
           }
         ],
         "diagnostics": [
-          "COGNITIVE: 13555 zero-width characters (unsealed file)",
-          "DIRECTIONALITY: Arabic is 2.7% of directional text -- LTR context dominates RTL content",
-          "COGNITIVE: 9857 invisible Unicode char(s) -- waswas vehicle",
+          "COGNITIVE: 13679 zero-width characters (unsealed file)",
+          "DIRECTIONALITY: Arabic is 2.9% of directional text -- LTR context dominates RTL content",
+          "COGNITIVE: 9949 invisible Unicode char(s) -- waswas vehicle",
           "THREAT_LEVEL: ELEVATED (2 vectors: 2 high, 0 moderate)"
         ],
-        "invocation_open": "9bd642134a55005f20690929d7ea044ea55649fc3a1e6acf4bf23443c3d3852d",
-        "invocation_close": "f03ebc0732a5fad23a1d4725fe224d84119163e1b2df6a727ab760bb28410b77",
-        "content_digest": "1da7d31fc251b6c6db23048ba84ed3693d3ff52538fa745ffe9550cabb7e999a",
+        "invocation_open": "5378a5a92f7a7de8dfb9eb1db67b9d09be3ec0b424d5e7298165700884f0a692",
+        "invocation_close": "8c5cd115f28418710fe45773069ac7a0dbaee00f3f6912bf1381d9d4f1c050b1",
+        "content_digest": "2e20072d31895ffa607131905088df1ce6b4d463aa333a68513f073d2dbe7094",
         "bookend_unit": "An-Nas",
         "bookended": true
       },
@@ -122,26 +122,26 @@
           "cognitive_defense": true,
           "directionality_defense": false,
           "directional_witness": {
-            "forward": "318c6eadd5770ae38bab7da3",
-            "reverse": "f969abf9ab2e483e7cadda12",
-            "combined": "43d2de15181583b81a52009f"
+            "forward": "c96bd34deff284bdf077da2e",
+            "reverse": "99277e50951111d9ed527489",
+            "combined": "c4e5ec611f093ea270fb6fda"
           }
         },
         "diagnostics": [
           "ELEVATED: full adversarial chain, high sensitivity, extended Hurst window",
           "cognitive_defense: active (2 vectors)",
-          "DIRECTIONAL_WITNESS: fwd=318c6eadd5770ae3... rev=f969abf9ab2e483e...",
-          "PERIMETER_SEALED: efc2446fbbac358fd33b3056..."
+          "DIRECTIONAL_WITNESS: fwd=c96bd34deff284bd... rev=99277e50951111d9...",
+          "PERIMETER_SEALED: b9bb67c60b7105a0f49abb7e..."
         ],
-        "perimeter_seal": "efc2446fbbac358fd33b30568a4bccfecd3a981daae0aa5ea73f41a39489db96",
-        "invocation_open": "cc6521824b7641bf2430013858b133b6b2cb6b1b66c97b9b75a336f4ce53ef4a",
-        "invocation_close": "0ebf786048ae5527e6b75210aec1a8e88d642547533494a2681d8d802bc35707",
-        "content_digest": "58d3cc7f63236b0f906e61f480c84721c19481422f0a7118dd6351aa639b90c1",
+        "perimeter_seal": "b9bb67c60b7105a0f49abb7ec767a2c420ea63bc793cf1f044128850ad823c49",
+        "invocation_open": "265e5583753fe88eaa94ac4cdd34b0fd353d57fcace67af7d1a8921f6bf51d5b",
+        "invocation_close": "aedfa86b90328e7161407b00b5ffa0a49c0dc3537595794689758b37e42ad50a",
+        "content_digest": "821848b3ed5d7ec110197a79198c705c6dc2e1f3b2ac6383e9f832ed7f0e0ce5",
         "bookend_unit": "Al-Falaq",
         "bookended": true
       }
     },
-    "protocol_seal": "0d36af36bd852d1bba851a62ab2456c76f39b054c70b745d0d7321dee63b3d45",
+    "protocol_seal": "e5d8123ac52f4df239c32a929498d4622ffab900452c7a362beef6c529e5b24f",
     "bookend_integrity": {
       "all_bookended": false,
       "heavens_checked": 11,

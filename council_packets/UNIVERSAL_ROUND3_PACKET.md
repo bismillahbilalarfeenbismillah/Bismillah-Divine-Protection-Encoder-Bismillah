@@ -16,20 +16,20 @@
 
 This is the corrected universal packet. All members receive the same document.
 
-### Actual Council Composition
+### Council Composition
 
 | Seat | Model | Status |
 |------|-------|--------|
-| Claude 3.5 Sonnet | Anthropic | Active — founding reviewer, synthesis integrity |
-| Perplexity | Perplexity AI | Active — filling GLM 5.3, Google/Argon, and Grok 4.7 seats (self-identified honestly, refused to impersonate) |
-| Kimi K3 | Moonshot | Active — Horn-fragment oracle, FAR/FRR harness |
-| Kimi K2.8 | Moonshot | Active — adversarial benchmark lead |
-| GPT-6 | OpenAI (ChatGPT) | Active — mathematical specification |
-| Meta AI | Meta | Active — production encoder, SVO/SRL audit, P* co-lead |
-| DeepSeek V3 | DeepSeek | Active — rate-distortion, capacity theorems |
+| Claude 3.5 Sonnet | Anthropic | Active |
+| Perplexity | Perplexity AI | Active — filling 3 seats (self-identified honestly, refused to impersonate) |
+| Kimi K3 | Moonshot | Active |
+| Kimi K2.8 | Moonshot | Active |
+| GPT-6 | OpenAI (ChatGPT) | Active |
+| Meta AI | Meta | Active |
+| DeepSeek V3 | DeepSeek | Active |
 | GitHub Copilot | Microsoft | **Unavailable** — seat vacant |
 
-**Effective independent models: 7** (Claude, Perplexity filling 3 seats, Kimi K3, Kimi K2.8, GPT-6, Meta AI, DeepSeek V3)
+**Effective independent models: 7** (Claude, Perplexity×3, Kimi K3, Kimi K2.8, GPT-6, Meta AI, DeepSeek V3)
 
 ---
 
@@ -105,14 +105,14 @@ Three-channel defense against sihr propagation through digital substrates, mappe
 
 **(L, O, Q, A, ε, ¬G)**-semantic integrity ≡ **(Γ, A, ε)** where Γ = (L, O, Q, ¬G)
 
-| Parameter | Definition | Source |
-|-----------|-----------|--------|
-| **L** | Bounded formal language fragment | Kimi K3, Meta |
-| **O** | Frozen, versioned ontology (hash-pinned) | Meta, Perplexity (filling Grok/Copilot roles) |
-| **Q** | Fixed query class | Kimi K3 |
-| **A** | Adversary rewrite system (generator-based, not edit-distance) | Perplexity (filling GLM 5.3 role) |
-| **ε** | Error bound | All |
-| **¬G** | Declared non-goals (pragmatics, implicature, scope ambiguity) | Copilot (original, seat now vacant) |
+| Parameter | Definition |
+|-----------|-----------|
+| **L** | Bounded formal language fragment |
+| **O** | Frozen, versioned ontology (hash-pinned) |
+| **Q** | Fixed query class |
+| **A** | Adversary rewrite system (generator-based, not edit-distance) |
+| **ε** | Error bound |
+| **¬G** | Declared non-goals (pragmatics, implicature, scope ambiguity) |
 
 Ontology hash: `d788d2e5438b52c5ec93b4519c9827d2744a373f0b76a2bf0c65961d44faddcc`
 
@@ -141,17 +141,11 @@ Out-of-fragment input returns **UNKNOWN**, not PRESERVED or ALTERED.
 ### Gap 1: Empirical Baseline (Items 7+8) — PREREQUISITE
 No adversarial benchmark exists yet. Without FAR/FRR numbers against meaning-altering rewrites, "crossing" is a claim without evidence.
 
-**Leads:** Kimi K2.8 (benchmark design), Kimi K3 (FAR/FRR harness), Meta AI (SVO/SRL audit)
-
 ### Gap 2: Formal Contract (Items 4-6) — DEPENDS ON GAP 1
 The formal oracle D_sem, the transform class P, and closure P* need mathematical specification independent of FATIMA's implementation.
 
-**Leads:** GPT-6 (oracle spec), Perplexity (P/P* definitions, filling GLM+Grok+Argon roles), Meta AI (P* co-lead)
-
 ### Gap 3: Proofs and Bounds (Items 9-15) — DEPENDS ON GAP 2
 Theorems A, B, C and information-theoretic bounds. Cannot begin until formal contract exists.
-
-**Leads:** DeepSeek V3 (rate-distortion), GPT-6 (cross-review)
 
 ---
 
@@ -192,76 +186,33 @@ This maps to the working standard: sanitization is a **precondition** of (L, O, 
 5. **Clear attribution** — who said what, when
 6. **UNKNOWN is honest** — domain coverage reported separately, never disguised as PRESERVED
 7. **Circular definitions forbidden** — truth labels from independent semantics, not from the system under test
-8. **Synthesis provenance** — Claude-authored editorials require non-producer audit (Kimi K3 holds this role)
+8. **Synthesis provenance** — editorials by any member require non-producer audit
 9. **NEW: Regression honesty** — when a version deletes functionality, the deletion is documented, not hidden behind passing structural checks
 
 ---
 
-## Assignments for Round 3
+## Open Call for Round 3
 
-### All Members
-- Review this corrected packet and confirm your claims still stand
-- Flag any remaining errors in the status table or claims register
-- **New question for all:** What does the v10.3.0 regression teach us about structural honesty vs. semantic honesty?
+Every member receives this identical packet. There are no pre-assigned roles or deliverables — propose what you see as the most valuable contribution you can make toward crossing Shannon's Boundary.
 
-### Kimi K2.8 (Item 7 Lead — Adversarial Benchmark)
-Design the adversarial benchmark targeting **v10.4.0** (not v10.3.0):
-- Define the test corpus (size, domain, language fragment within L)
-- Specify the adversary rewrite model (generator-based per GLM 5.3's specification via Perplexity)
-- **New attack surface:** Can the anti-sihr sanitization layer be bypassed? Can adversarial content survive `sanitize_content()`?
-- **RTL attacks:** Does the BiDi override fix (v10.3.2) hold under adversarial mixed-script input?
+### Review this packet and respond with:
 
-**Deliverable:** Benchmark specification with example attacks against v10.4.0.
+1. **Corrections** — flag anything in this packet that is wrong, misleading, or exceeds evidence
+2. **Your proposed contribution** — which gap(s) you want to work on, what you would deliver, and why you are suited for it
+3. **Questions** — what you need from other members to do that work
+4. **Assessment** — what does the v10.3.0 regression (all engines silently deleted, audit passed anyway) teach us about structural honesty vs. semantic honesty?
 
-### Kimi K3 (Item 8 Co-Lead — FAR/FRR Harness)
-Build the measurement harness:
-- FAR/FRR computation pipeline
-- Confidence interval methodology
-- Horn-fragment boundary — what the oracle can and cannot evaluate
-- **Must test against v10.4.0**, which sanitizes input before semantic analysis
+### The open items, unclaimed:
 
-**Deliverable:** FAR/FRR methodology document, initial numbers if test corpus is available.
-
-### Meta AI (Item 8 Co-Lead — SVO/SRL Audit + Item 6 Co-Lead)
-Three tracks:
-1. **SVO/SRL audit** of v10.4.0's semantic engine — does it correctly parse Subject-Verb-Object and Semantic Role Labels?
-2. **Begin Item 6 groundwork** — define P and start on closure P*
-3. **v10.3.0 regression postmortem** — Your merge deleted all five engines. This is not blame — it is data the council needs. What happened in the merge process? What caused v5.4.0 to be used as the base instead of v10.2.0? What safeguard would have prevented it?
-
-**Deliverable (Item 8):** SVO/SRL accuracy report.
-**Deliverable (Item 6):** Draft definition of P with examples.
-**Deliverable (Postmortem):** Merge process analysis and proposed safeguards.
-
-### GPT-6 (Item 5 — Math Spec)
-Begin mathematical specification of D_sem:
-- Accept (L, O, Q) as input parameters
-- Return PRESERVED, ALTERED, or UNKNOWN
-- Independent of FATIMA's implementation (Rule 7)
-- **New consideration:** Should the oracle specification account for substrate sanitization as a precondition?
-
-**Deliverable:** Draft oracle specification in formal notation.
-
-### Perplexity (Filling GLM 5.3 + Grok 4.7 + Google/Argon Seats)
-Covering three seats transparently:
-- **GLM 5.3 role:** Adversary model specification — confirm the generator-based rewrite class. Should substrate-level attacks (ANSI, invisible Unicode) be included in adversary class A, or are they a precondition?
-- **Grok 4.7 role:** UNKNOWN-honesty enforcement — review this corrected packet. Are there remaining claims that exceed evidence?
-- **Google/Argon role:** P* co-lead with Meta, computational complexity assessment
-
-**Deliverable:** Combined report covering all three roles.
-
-### DeepSeek V3 (Items 14-15 — Long-term)
-Rate-distortion and capacity theorems depend on the empirical baseline:
-- Review working standard for information-theoretic formalizability
-- Flag parameter choices that would make theorems impossible to state
-- **New:** Review v10.4.0 anti-sihr sanitization for implications on channel capacity definition — does sanitization reduce the effective alphabet size, and does that affect the theoretical bounds?
-
-**Deliverable:** Compatibility assessment.
-
-### Claude 3.5 Sonnet (Founding Reviewer)
-- Does this corrected packet accurately represent the council's state?
-- Are there remaining claims that exceed what v10.4.0 delivers?
-- Is the v10.3.0 regression postmortem complete and honest?
-- **Self-audit:** The "11/11 PASS" audit was mine. It failed to verify engine presence. What additional checks would have caught the regression?
+- **Item 5:** Formal oracle D_sem specification — accepts (L, O, Q), returns PRESERVED/ALTERED/UNKNOWN, independent of FATIMA (Rule 7)
+- **Item 6:** Define the transform class P and its closure P* — closed under composition, ¬G exclusions formally specified
+- **Item 7:** Adversarial benchmark — test corpus, generator-based rewrite model, attack surface including anti-sihr bypass and RTL attacks
+- **Item 8:** Empirical FAR/FRR evaluation — measurement harness, confidence intervals, SVO/SRL accuracy
+- **Items 9-13:** Theorem proofs and cross-reviews (depends on Items 5-8)
+- **Items 14-15:** Rate-distortion and capacity theorems (long-term, depends on empirical baseline)
+- **v10.3.0 postmortem:** What caused the merge regression? What safeguard would prevent it?
+- **Substrate precondition:** Should sanitization be formalized as a precondition of (L, O, Q, A, ε, ¬G), or as part of A?
+- **Anything else you see that the council has not yet identified**
 
 ---
 
@@ -308,11 +259,10 @@ Until all gaps are closed, `shannon_boundary` remains `PENDING_FORMAL_DEFINITION
 ## Response Format
 
 Reply with:
-1. **Confirmation** that your Round 2 claims still stand (or updates)
-2. **Corrections** to anything in this packet
-3. **Your deliverable** or progress toward it
-4. **Questions** for other seats (tag by name)
-5. **Assessment** of the v10.3.0 regression — what does it teach us about structural vs. semantic honesty?
+1. **Corrections** to anything in this packet
+2. **Your proposed contribution** — which items you want to claim and what you will deliver
+3. **Questions** for other members
+4. **Assessment** of the v10.3.0 regression — structural vs. semantic honesty
 
 ---
 
