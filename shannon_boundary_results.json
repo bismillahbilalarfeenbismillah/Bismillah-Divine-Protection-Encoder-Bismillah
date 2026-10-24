@@ -1,46 +1,45 @@
 {
   "Bismillah ir-Rahman ir-Rahim": true,
-  "harness_version": "2.0",
+  "harness_version": "2.1",
   "remediations": [
-    "R1_crash_seal_split",
+    "R1_error_seal_split",
+    "R1.1_errors_not_detection",
     "R2_baseline_ablation",
     "R3_semantic",
     "R4_reproducibility"
   ],
   "encoder_version": "10.8.0",
   "reproducibility": {
-    "seed": 4016794880,
+    "seed": 5135585,
     "input_sha256": "d59feece3006c498bd1f6e9e4627614c0f449f1007207d9759d126a596c0ed07",
     "input_size": 77
   },
   "report": {
-    "seal_detection_rate": 0.9548306148055207,
-    "crash_rate": 0.0451693851944793,
-    "total_detection_rate": 1.0,
+    "seal_detection_rate": 1.0,
+    "error_rate": 0.04956085319949812,
     "total_mutations": 1594,
-    "seal_detections": 1522,
-    "crash_detections": 72,
+    "valid_trials": 1515,
+    "seal_detections": 1515,
+    "computation_errors": 79,
     "undetected": 0
   },
   "tests": {
     "bit_level": {
       "total": 616,
       "seal_detected": 616,
-      "crash_detected": 0,
+      "computation_errors": 0,
       "undetected": 0,
       "seal_detection_rate": 1.0,
-      "total_detection_rate": 1.0,
       "undetected_positions": [],
-      "time_seconds": 11.598214626312256
+      "time_seconds": 9.560685873031616
     },
     "byte_level": {
       "total": 616,
       "seal_detected": 616,
-      "crash_detected": 0,
+      "computation_errors": 0,
       "undetected": 0,
       "seal_detection_rate": 1.0,
-      "total_detection_rate": 1.0,
-      "time_seconds": 12.155610799789429
+      "time_seconds": 9.992433786392212
     },
     "block_level": {
       "results_by_size": {
@@ -48,7 +47,7 @@
           "block_size": 1,
           "trials": 50,
           "seal_detected": 50,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -56,7 +55,7 @@
           "block_size": 2,
           "trials": 50,
           "seal_detected": 50,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -64,7 +63,7 @@
           "block_size": 4,
           "trials": 50,
           "seal_detected": 50,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -72,7 +71,7 @@
           "block_size": 8,
           "trials": 50,
           "seal_detected": 50,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -80,41 +79,40 @@
           "block_size": 16,
           "trials": 50,
           "seal_detected": 50,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
         "32": {
           "block_size": 32,
           "trials": 50,
-          "seal_detected": 30,
-          "crash_detected": 20,
+          "seal_detected": 23,
+          "computation_errors": 27,
           "undetected": 0,
-          "seal_detection_rate": 0.6
+          "seal_detection_rate": 1.0
         },
         "64": {
           "block_size": 64,
           "trials": 50,
           "seal_detected": 0,
-          "crash_detected": 50,
+          "computation_errors": 50,
           "undetected": 0,
-          "seal_detection_rate": 0.0
+          "seal_detection_rate": 0
         }
       },
-      "time_seconds": 6.4555418491363525,
-      "seal_detected": 280,
-      "crash_detected": 70,
+      "time_seconds": 5.56203293800354,
+      "seal_detected": 273,
+      "computation_errors": 77,
       "undetected": 0,
       "total": 350,
-      "seal_detection_rate": 0.8
+      "seal_detection_rate": 0.78
     },
     "adversarial": {
       "total": 12,
       "seal_detected": 10,
-      "crash_detected": 2,
+      "computation_errors": 2,
       "undetected": 0,
-      "seal_detection_rate": 0.8333333333333334,
-      "total_detection_rate": 1.0,
+      "seal_detection_rate": 1.0,
       "details": [
         {
           "mutation": "append_null_byte",
@@ -167,8 +165,8 @@
         },
         {
           "mutation": "bitwise_not_entire_file",
-          "detected": true,
-          "detection_type": "crash",
+          "detected": false,
+          "detection_type": "error",
           "layers_changed": 0,
           "scales_changed": 0
         },
@@ -188,8 +186,8 @@
         },
         {
           "mutation": "right_shift_all_bits",
-          "detected": true,
-          "detection_type": "crash",
+          "detected": false,
+          "detection_type": "error",
           "layers_changed": 0,
           "scales_changed": 0
         },
@@ -206,14 +204,14 @@
       "total": 500,
       "sha256_detected": 500,
       "fatima_seal_detected": 500,
-      "fatima_crash_detected": 0,
+      "fatima_computation_errors": 0,
       "both_detected": 500,
       "sha256_only": 0,
       "fatima_only": 0,
       "neither": 0,
       "sha256_rate": 1.0,
       "fatima_seal_rate": 1.0,
-      "time_seconds": 9.314533472061157
+      "time_seconds": 8.2377450466156
     }
   },
   "diagnostics": {
@@ -223,62 +221,75 @@
         "single_bit": 1.0,
         "single_byte": 1.0,
         "small_block_4": 1.0,
-        "medium_block_32": 1.0,
+        "medium_block_32": 0.7,
         "append": 1.0,
         "truncate": 1.0
       },
       "scale_hits": {
         "single_bit": {
-          "0": 328,
-          "1": 282,
-          "2": 505,
-          "3": 92,
-          "4": 16,
-          "5": 168,
-          "6": 151,
-          "7": 438,
-          "8": 396,
-          "9": 389,
-          "10": 654
+          "0": 306,
+          "9": 388,
+          "10": 655,
+          "1": 284,
+          "2": 497,
+          "3": 95,
+          "4": 19,
+          "5": 158,
+          "6": 165,
+          "7": 449,
+          "8": 378
         },
         "single_byte": {
-          "0": 378,
-          "1": 295,
-          "2": 492,
-          "3": 148,
-          "4": 16,
-          "5": 248,
-          "6": 153,
-          "7": 395,
-          "8": 373,
-          "9": 402,
-          "10": 657
+          "0": 391,
+          "9": 411,
+          "10": 662,
+          "1": 279,
+          "2": 478,
+          "3": 162,
+          "5": 255,
+          "6": 164,
+          "8": 401,
+          "4": 28,
+          "7": 431
         },
         "small_block_4": {
-          "0": 481,
-          "9": 436,
-          "1": 428,
-          "10": 692,
-          "2": 523,
-          "3": 224,
-          "4": 67,
-          "5": 395,
-          "6": 195,
-          "7": 584,
-          "8": 427
+          "0": 458,
+          "1": 442,
+          "2": 521,
+          "3": 226,
+          "4": 72,
+          "5": 386,
+          "6": 194,
+          "7": 569,
+          "8": 423,
+          "9": 428,
+          "10": 691
+        },
+        "medium_block_32": {
+          "0": 431,
+          "1": 413,
+          "2": 386,
+          "3": 209,
+          "4": 162,
+          "5": 438,
+          "6": 295,
+          "7": 420,
+          "8": 356,
+          "9": 331,
+          "10": 490
         },
         "append": {
-          "9": 516,
-          "0": 593,
-          "1": 334,
+          "9": 514,
+          "0": 595,
+          "1": 336,
           "10": 700,
           "2": 150,
-          "3": 205,
-          "4": 58,
-          "5": 152,
+          "3": 204,
+          "4": 62,
+          "5": 147,
           "6": 200,
           "7": 600,
-          "8": 175
+          "8": 179
         },
         "truncate": {
           "0": 450,
@@ -292,49 +303,36 @@
           "8": 600,
           "9": 500,
           "10": 700
-        },
-        "medium_block_32": {
-          "0": 388,
-          "1": 377,
-          "2": 352,
-          "3": 201,
-          "4": 148,
-          "5": 391,
-          "6": 267,
-          "7": 384,
-          "8": 330,
-          "9": 308,
-          "10": 448
         }
       },
       "domain_hits": {
         "single_bit": {
-          "heaven": 1407,
-          "earth": 2012
+          "heaven": 1387,
+          "earth": 2007
         },
         "single_byte": {
-          "heaven": 1461,
-          "earth": 2096
+          "heaven": 1496,
+          "earth": 2166
         },
         "small_block_4": {
-          "heaven": 1899,
-          "earth": 2553
+          "heaven": 1904,
+          "earth": 2506
+        },
+        "medium_block_32": {
+          "heaven": 1791,
+          "earth": 2140
         },
         "append": {
-          "heaven": 1356,
-          "earth": 2327
+          "heaven": 1352,
+          "earth": 2335
         },
         "truncate": {
           "heaven": 2100,
           "earth": 2350
-        },
-        "medium_block_32": {
-          "heaven": 1655,
-          "earth": 1939
         }
       },
-      "crash_counts": {
-        "medium_block_32": 18
+      "error_counts": {
+        "medium_block_32": 15
       }
     },
     "size_threshold": {
@@ -344,7 +342,7 @@
           "size": 16,
           "trials": 128,
           "seal_detected": 128,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -352,7 +350,7 @@
           "size": 32,
           "trials": 200,
           "seal_detected": 200,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -360,7 +358,7 @@
           "size": 64,
           "trials": 200,
           "seal_detected": 200,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -368,7 +366,7 @@
           "size": 128,
           "trials": 200,
           "seal_detected": 200,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -376,7 +374,7 @@
           "size": 256,
           "trials": 200,
           "seal_detected": 200,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -384,7 +382,7 @@
           "size": 512,
           "trials": 200,
           "seal_detected": 200,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -392,7 +390,7 @@
           "size": 1024,
           "trials": 200,
           "seal_detected": 200,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -400,7 +398,7 @@
           "size": 2048,
           "trials": 200,
           "seal_detected": 200,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -408,7 +406,7 @@
           "size": 4096,
           "trials": 200,
           "seal_detected": 200,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         },
@@ -416,7 +414,7 @@
           "size": 8192,
           "trials": 200,
           "seal_detected": 200,
-          "crash_detected": 0,
+          "computation_errors": 0,
           "undetected": 0,
           "seal_detection_rate": 1.0
         }
@@ -425,7 +423,7 @@
     "ablation": {
       "test": "ablation",
       "valid_trials": 500,
-      "crashes_excluded": 0,
+      "errors_excluded": 0,
       "full_detected": 500,
       "heaven_detected": 500,
       "earth_detected": 500,
@@ -436,7 +434,7 @@
       "full_rate": 1.0,
       "heaven_rate": 1.0,
       "earth_rate": 1.0,
-      "time_seconds": 9.319157600402832
+      "time_seconds": 8.252872228622437
     },
     "semantic": {
       "test": "semantic",
@@ -560,17 +558,17 @@
     }
   },
   "mutation_log": {
-    "seed": 4016794880,
+    "seed": 5135585,
     "input_sha256": "d59feece3006c498bd1f6e9e4627614c0f449f1007207d9759d126a596c0ed07",
     "input_size": 77,
     "summary": {
       "total_mutations": 1594,
-      "seal_detections": 1522,
-      "crash_detections": 72,
+      "seal_detections": 1515,
+      "computation_errors": 79,
       "undetected": 0,
-      "seal_detection_rate": 0.9548306148055207,
-      "crash_rate": 0.0451693851944793,
-      "total_detection_rate": 1.0
+      "valid_trials": 1515,
+      "seal_detection_rate": 1.0,
+      "error_rate": 0.04956085319949812
     },
     "log_sample": [
       {

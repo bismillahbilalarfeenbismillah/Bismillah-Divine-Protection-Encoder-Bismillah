@@ -8,11 +8,13 @@ Finite-Benchmark Detection Test Harness for the 154-Layer FATIMA Architecture
 Measures the 154-layer witness's mutation detection rate across a finite
 set of systematic and adversarial mutations.
 
-REMEDIATION v2.0 — addresses ChatGPT's valid critiques:
-  [R1] Crash-detection vs seal-detection separated and reported independently
-  [R2] SHA-256 baseline comparison + heaven-only / earth-only ablation
-  [R3] Semantic mutation tests (negation, paraphrase, role-reversal)
-  [R4] Full reproducibility: input digest, random seed, mutation log
+REMEDIATION v2.1 — addresses ChatGPT's valid critiques:
+  [R1]   Error vs seal detection separated and reported independently
+  [R1.1] Computation errors are NOT detection — excluded from detection rate
+         denominator. Only seal divergence counts. Zero-failure binomial bound.
+  [R2]   SHA-256 baseline comparison + heaven-only / earth-only ablation
+  [R3]   Semantic mutation tests (negation, paraphrase, role-reversal)
+  [R4]   Full reproducibility: input digest, random seed, mutation log
 
 Terminology correction: "Shannon proximity" renamed to "finite-benchmark
 detection rate" — this harness measures detection over a finite mutation
@@ -80,15 +82,17 @@ class DetectionResult:
 
     def __init__(self, changed_layers, detection_type):
         self.changed_layers = changed_layers  # set of layer indices
-        self.detection_type = detection_type  # "seal" | "crash" | "none"
+        self.detection_type = detection_type  # "seal" | "error" | "none"
 
     @property
     def detected(self):
-        return self.detection_type != "none"
+        """Only seal divergence counts as detection. Errors are NOT detection."""
+        return self.detection_type == "seal"
 
     @property
-    def is_crash_detection(self):
-        return self.detection_type == "crash"
+    def is_error(self):
+        """Computation failed — cannot determine whether mutation was detected."""
+        return self.detection_type == "error"
 
     @property
     def is_seal_detection(self):
@@ -98,17 +102,16 @@ class DetectionResult:
 def detect_mutation(original_result, mutated_result):
     """Compare two SealResults. Returns DetectionResult.
 
-    [R1] Three outcomes:
+    [R1+R1.1] Three outcomes:
       - "seal":  valid seals computed, at least one layer differs
-      - "crash": mutated content caused encoder to crash (reported separately)
+      - "error": one or both computations crashed — NOT a detection
       - "none":  valid seals computed, all 154 layers identical (blind spot)
     """
-    if mutated_result.crashed:
-        return DetectionResult(set(), "crash")
+    if original_result.crashed or mutated_result.crashed:
+        return DetectionResult(set(), "error")
 
-    if original_result.crashed:
-        # Original also crashed — can't compare
-        return DetectionResult(set(), "crash")
+    if len(original_result.seals) != 154 or len(mutated_result.seals) != 154:
+        return DetectionResult(set(), "error")
 
     changed = set()
     for i in range(len(original_result.seals)):
@@ -178,16 +181,17 @@ class MutationLog:
     def summary(self):
         total = len(self.entries)
         seal_det = sum(1 for e in self.entries if e["detection_type"] == "seal")
-        crash_det = sum(1 for e in self.entries if e["detection_type"] == "crash")
+        errors = sum(1 for e in self.entries if e["detection_type"] == "error")
         undetected = sum(1 for e in self.entries if e["detection_type"] == "none")
+        valid = seal_det + undetected  # only valid trials count for rate
         return {
             "total_mutations": total,
             "seal_detections": seal_det,
-            "crash_detections": crash_det,
+            "computation_errors": errors,
             "undetected": undetected,
-            "seal_detection_rate": seal_det / total if total > 0 else 0,
-            "crash_rate": crash_det / total if total > 0 else 0,
-            "total_detection_rate": (seal_det + crash_det) / total if total > 0 else 0,
+            "valid_trials": valid,
+            "seal_detection_rate": seal_det / valid if valid > 0 else 0,
+            "error_rate": errors / total if total > 0 else 0,
         }
 
     def to_dict(self):
@@ -227,7 +231,7 @@ def test_bit_level(content_bytes, max_bits=None):
 
     original = compute_layer_seals(bytes(data))
     seal_detected = 0
-    crash_detected = 0
+    computation_errors = 0
     undetected = 0
     undetected_positions = []
     layers_triggered = defaultdict(int)
@@ -248,8 +252,8 @@ def test_bit_level(content_bytes, max_bits=None):
             seal_detected += 1
             for layer in result.changed_layers:
                 layers_triggered[layer] += 1
-        elif result.is_crash_detection:
-            crash_detected += 1
+        elif result.is_error:
+            computation_errors += 1
         else:
             undetected += 1
             undetected_positions.append(bit_pos)
@@ -260,7 +264,8 @@ def test_bit_level(content_bytes, max_bits=None):
             print("    Progress: {}/{} bits ({:.1f}/s)".format(
                 count + 1, len(bit_positions), rate), end='\r')
 
-    total = seal_detected + crash_detected + undetected
+    total = seal_detected + computation_errors + undetected
+    valid = seal_detected + undetected
     elapsed = time.time() - t0
 
     print("  " + " " * 70)
@@ -268,13 +273,11 @@ def test_bit_level(content_bytes, max_bits=None):
     print("    Bits tested:         {}".format(total))
     print("    Seal detections:     {} ({:.4f}%)".format(
         seal_detected, seal_detected / total * 100 if total else 0))
-    print("    Crash detections:    {} ({:.4f}%)".format(
-        crash_detected, crash_detected / total * 100 if total else 0))
+    print("    Computation errors:  {} ({:.4f}%)".format(
+        computation_errors, computation_errors / total * 100 if total else 0))
     print("    Undetected:          {}".format(undetected))
-    print("    Seal detection rate: {:.6f}%".format(
-        seal_detected / total * 100 if total else 0))
-    print("    Total detect rate:   {:.6f}%".format(
-        (seal_detected + crash_detected) / total * 100 if total else 0))
+    print("    Seal detection rate: {:.6f}% (of {} valid trials)".format(
+        seal_detected / valid * 100 if valid else 0, valid))
     print("    Time:                {:.1f}s".format(elapsed))
 
     if undetected_positions:
@@ -284,10 +287,9 @@ def test_bit_level(content_bytes, max_bits=None):
         "test": "bit_level",
         "total": total,
         "seal_detected": seal_detected,
-        "crash_detected": crash_detected,
+        "computation_errors": computation_errors,
         "undetected": undetected,
-        "seal_detection_rate": seal_detected / total if total else 0,
-        "total_detection_rate": (seal_detected + crash_detected) / total if total else 0,
+        "seal_detection_rate": seal_detected / valid if valid else 0,
         "undetected_positions": undetected_positions[:50],
         "time_seconds": elapsed,
     }
@@ -314,7 +316,7 @@ def test_byte_level(content_bytes, max_positions=None, substitutions_per_byte=8)
 
     original = compute_layer_seals(bytes(data))
     seal_detected = 0
-    crash_detected = 0
+    computation_errors = 0
     undetected = 0
     t0 = time.time()
 
@@ -335,8 +337,8 @@ def test_byte_level(content_bytes, max_positions=None, substitutions_per_byte=8)
 
             if result.is_seal_detection:
                 seal_detected += 1
-            elif result.is_crash_detection:
-                crash_detected += 1
+            elif result.is_error:
+                computation_errors += 1
             else:
                 undetected += 1
 
@@ -346,27 +348,27 @@ def test_byte_level(content_bytes, max_positions=None, substitutions_per_byte=8)
             print("    Progress: {}/{} positions ({:.1f}/s)".format(
                 count + 1, len(positions), rate), end='\r')
 
-    total = seal_detected + crash_detected + undetected
+    total = seal_detected + computation_errors + undetected
+    valid = seal_detected + undetected
     elapsed = time.time() - t0
 
     print("  " + " " * 70)
     print("  Results:")
     print("    Mutations tested:    {}".format(total))
     print("    Seal detections:     {}".format(seal_detected))
-    print("    Crash detections:    {}".format(crash_detected))
+    print("    Computation errors:  {}".format(computation_errors))
     print("    Undetected:          {}".format(undetected))
-    print("    Seal detection rate: {:.6f}%".format(
-        seal_detected / total * 100 if total else 0))
+    print("    Seal detection rate: {:.6f}% (of {} valid trials)".format(
+        seal_detected / valid * 100 if valid else 0, valid))
     print("    Time:                {:.1f}s".format(elapsed))
 
     return {
         "test": "byte_level",
         "total": total,
         "seal_detected": seal_detected,
-        "crash_detected": crash_detected,
+        "computation_errors": computation_errors,
         "undetected": undetected,
-        "seal_detection_rate": seal_detected / total if total else 0,
-        "total_detection_rate": (seal_detected + crash_detected) / total if total else 0,
+        "seal_detection_rate": seal_detected / valid if valid else 0,
         "time_seconds": elapsed,
     }
 
@@ -394,7 +396,7 @@ def test_block_level(content_bytes, block_sizes=None, trials_per_size=50):
             continue
 
         seal_det = 0
-        crash_det = 0
+        err_count = 0
         undet = 0
 
         for trial in range(trials_per_size):
@@ -415,23 +417,24 @@ def test_block_level(content_bytes, block_sizes=None, trials_per_size=50):
 
             if result.is_seal_detection:
                 seal_det += 1
-            elif result.is_crash_detection:
-                crash_det += 1
+            elif result.is_error:
+                err_count += 1
             else:
                 undet += 1
 
-        total = seal_det + crash_det + undet
+        total = seal_det + err_count + undet
+        valid = seal_det + undet
         results_by_size[bsize] = {
             "block_size": bsize,
             "trials": total,
             "seal_detected": seal_det,
-            "crash_detected": crash_det,
+            "computation_errors": err_count,
             "undetected": undet,
-            "seal_detection_rate": seal_det / total if total else 0,
+            "seal_detection_rate": seal_det / valid if valid else 0,
         }
-        print("    Block {:>4d}B: seal={} crash={} miss={} rate={:.2f}%".format(
-            bsize, seal_det, crash_det, undet,
-            seal_det / total * 100 if total else 0))
+        print("    Block {:>4d}B: seal={} err={} miss={} rate={:.2f}%".format(
+            bsize, seal_det, err_count, undet,
+            seal_det / valid * 100 if valid else 0))
 
     elapsed = time.time() - t0
     print("    Time: {:.1f}s".format(elapsed))
@@ -474,8 +477,8 @@ def test_adversarial(content_bytes):
         if result.is_seal_detection:
             status = "SEAL-DETECTED ({} layers, {} scales)".format(
                 entry["layers_changed"], entry["scales_changed"])
-        elif result.is_crash_detection:
-            status = "CRASH-DETECTED (encoder exception)"
+        elif result.is_error:
+            status = "COMPUTATION-ERROR (encoder exception)"
         else:
             status = "UNDETECTED"
         print("    {}: {}".format(name, status))
@@ -508,23 +511,23 @@ def test_adversarial(content_bytes):
 
     total = len(results)
     seal_count = sum(1 for r in results if r["detection_type"] == "seal")
-    crash_count = sum(1 for r in results if r["detection_type"] == "crash")
+    error_count = sum(1 for r in results if r["detection_type"] == "error")
     undet_count = sum(1 for r in results if r["detection_type"] == "none")
+    valid = seal_count + undet_count
 
     print("  Summary:")
-    print("    Total:         {}".format(total))
-    print("    Seal-detected: {}".format(seal_count))
-    print("    Crash-detected:{}".format(crash_count))
-    print("    Undetected:    {}".format(undet_count))
+    print("    Total:           {}".format(total))
+    print("    Seal-detected:   {}".format(seal_count))
+    print("    Compute errors:  {}".format(error_count))
+    print("    Undetected:      {}".format(undet_count))
 
     return {
         "test": "adversarial",
         "total": total,
         "seal_detected": seal_count,
-        "crash_detected": crash_count,
+        "computation_errors": error_count,
         "undetected": undet_count,
-        "seal_detection_rate": seal_count / total if total else 0,
-        "total_detection_rate": (seal_count + crash_count) / total if total else 0,
+        "seal_detection_rate": seal_count / valid if valid else 0,
         "details": results,
     }
 
@@ -548,7 +551,7 @@ def test_coverage_map(content_bytes, sample_mutations=200):
     }
     scale_hits = defaultdict(lambda: defaultdict(int))
     domain_hits = defaultdict(lambda: defaultdict(int))
-    crash_counts = defaultdict(int)
+    error_counts = defaultdict(int)
 
     trials_per_cat = sample_mutations // len(categories)
 
@@ -559,8 +562,8 @@ def test_coverage_map(content_bytes, sample_mutations=200):
         data[byte_idx] ^= (1 << bit_idx)
         result = detect_mutation(original, compute_layer_seals(bytes(data)))
         data[byte_idx] ^= (1 << bit_idx)
-        if result.is_crash_detection:
-            crash_counts["single_bit"] += 1
+        if result.is_error:
+            error_counts["single_bit"] += 1
         for l in result.changed_layers:
             scale_hits["single_bit"][layer_to_scale(l)] += 1
             domain_hits["single_bit"][layer_to_domain_type(l)] += 1
@@ -572,8 +575,8 @@ def test_coverage_map(content_bytes, sample_mutations=200):
         data[pos] = (orig + random.randint(1, 255)) % 256
         result = detect_mutation(original, compute_layer_seals(bytes(data)))
         data[pos] = orig
-        if result.is_crash_detection:
-            crash_counts["single_byte"] += 1
+        if result.is_error:
+            error_counts["single_byte"] += 1
         for l in result.changed_layers:
             scale_hits["single_byte"][layer_to_scale(l)] += 1
             domain_hits["single_byte"][layer_to_domain_type(l)] += 1
@@ -588,8 +591,8 @@ def test_coverage_map(content_bytes, sample_mutations=200):
                 data[pos] = (data[pos] + 1) % 256
             result = detect_mutation(original, compute_layer_seals(bytes(data)))
             data[pos:pos + 4] = orig_block
-            if result.is_crash_detection:
-                crash_counts["small_block_4"] += 1
+            if result.is_error:
+                error_counts["small_block_4"] += 1
             for l in result.changed_layers:
                 scale_hits["small_block_4"][layer_to_scale(l)] += 1
                 domain_hits["small_block_4"][layer_to_domain_type(l)] += 1
@@ -604,8 +607,8 @@ def test_coverage_map(content_bytes, sample_mutations=200):
                 data[pos] = (data[pos] + 1) % 256
             result = detect_mutation(original, compute_layer_seals(bytes(data)))
             data[pos:pos + 32] = orig_block
-            if result.is_crash_detection:
-                crash_counts["medium_block_32"] += 1
+            if result.is_error:
+                error_counts["medium_block_32"] += 1
             for l in result.changed_layers:
                 scale_hits["medium_block_32"][layer_to_scale(l)] += 1
                 domain_hits["medium_block_32"][layer_to_domain_type(l)] += 1
@@ -614,8 +617,8 @@ def test_coverage_map(content_bytes, sample_mutations=200):
         # Append
         appended = bytes(data) + bytes([random.randint(0, 255)])
         result = detect_mutation(original, compute_layer_seals(appended))
-        if result.is_crash_detection:
-            crash_counts["append"] += 1
+        if result.is_error:
+            error_counts["append"] += 1
         for l in result.changed_layers:
             scale_hits["append"][layer_to_scale(l)] += 1
             domain_hits["append"][layer_to_domain_type(l)] += 1
@@ -624,8 +627,8 @@ def test_coverage_map(content_bytes, sample_mutations=200):
         # Truncate
         if n > 1:
             result = detect_mutation(original, compute_layer_seals(bytes(data[:-1])))
-            if result.is_crash_detection:
-                crash_counts["truncate"] += 1
+            if result.is_error:
+                error_counts["truncate"] += 1
             for l in result.changed_layers:
                 scale_hits["truncate"][layer_to_scale(l)] += 1
                 domain_hits["truncate"][layer_to_domain_type(l)] += 1
@@ -636,17 +639,17 @@ def test_coverage_map(content_bytes, sample_mutations=200):
     print("    {:>16s}".format(""), end="")
     for s in range(11):
         print(" {:>5s}".format("S" + str(s)), end="")
-    print("  {:>7s} {:>6s}".format("DETECT", "CRASH"))
+    print("  {:>7s} {:>6s}".format("DETECT", "ERROR"))
 
     for cat in categories:
         detections = categories[cat]
         det_rate = sum(detections) / len(detections) if detections else 0
-        crashes = crash_counts.get(cat, 0)
+        errors = error_counts.get(cat, 0)
         print("    {:>16s}".format(cat), end="")
         for s in range(11):
             hits = scale_hits[cat].get(s, 0)
             print(" {:>5s}".format(str(hits) if hits > 0 else "-"), end="")
-        print("  {:>6.1f}% {:>5d}".format(det_rate * 100, crashes))
+        print("  {:>6.1f}% {:>5d}".format(det_rate * 100, errors))
 
     # Heaven vs Earth complementarity
     print("\n    Heaven-Earth Complementarity:")
@@ -663,7 +666,7 @@ def test_coverage_map(content_bytes, sample_mutations=200):
         "categories": {cat: sum(v) / len(v) if v else 0 for cat, v in categories.items()},
         "scale_hits": {cat: dict(hits) for cat, hits in scale_hits.items()},
         "domain_hits": {cat: dict(hits) for cat, hits in domain_hits.items()},
-        "crash_counts": dict(crash_counts),
+        "error_counts": dict(error_counts),
     }
 
 
@@ -694,7 +697,7 @@ def test_size_threshold(base_content, sizes=None, bit_trials_per_size=200):
         original = compute_layer_seals(bytes(data))
 
         seal_det = 0
-        crash_det = 0
+        err_count = 0
         undet = 0
 
         for _ in range(min(bit_trials_per_size, n * 8)):
@@ -707,23 +710,24 @@ def test_size_threshold(base_content, sizes=None, bit_trials_per_size=200):
             result = detect_mutation(original, mutated)
             if result.is_seal_detection:
                 seal_det += 1
-            elif result.is_crash_detection:
-                crash_det += 1
+            elif result.is_error:
+                err_count += 1
             else:
                 undet += 1
 
-        total = seal_det + crash_det + undet
+        total = seal_det + err_count + undet
+        valid = seal_det + undet
         results.append({
             "size": size,
             "trials": total,
             "seal_detected": seal_det,
-            "crash_detected": crash_det,
+            "computation_errors": err_count,
             "undetected": undet,
-            "seal_detection_rate": seal_det / total if total else 0,
+            "seal_detection_rate": seal_det / valid if valid else 0,
         })
-        print("    Size {:>6d}B: seal={} crash={} miss={} rate={:.2f}%".format(
-            size, seal_det, crash_det, undet,
-            seal_det / total * 100 if total else 0))
+        print("    Size {:>6d}B: seal={} err={} miss={} rate={:.2f}%".format(
+            size, seal_det, err_count, undet,
+            seal_det / valid * 100 if valid else 0))
 
     return {"test": "size_threshold", "results": results}
 
@@ -752,7 +756,7 @@ def test_sha256_baseline(content_bytes, trials=300):
 
     sha_detected = 0
     fatima_seal_detected = 0
-    fatima_crash_detected = 0
+    fatima_errors = 0
     both_detected = 0
     sha_only = 0
     fatima_only = 0
@@ -779,8 +783,8 @@ def test_sha256_baseline(content_bytes, trials=300):
             sha_detected += 1
         if fatima_result.is_seal_detection:
             fatima_seal_detected += 1
-        if fatima_result.is_crash_detection:
-            fatima_crash_detected += 1
+        if fatima_result.is_error:
+            fatima_errors += 1
 
         fatima_det = fatima_result.detected
         if sha_det and fatima_det:
@@ -800,8 +804,8 @@ def test_sha256_baseline(content_bytes, trials=300):
         sha_detected, sha_detected / total * 100))
     print("    FATIMA seal-detected:    {} ({:.4f}%)".format(
         fatima_seal_detected, fatima_seal_detected / total * 100))
-    print("    FATIMA crash-detected:   {} ({:.4f}%)".format(
-        fatima_crash_detected, fatima_crash_detected / total * 100))
+    print("    FATIMA compute errors:   {} ({:.4f}%)".format(
+        fatima_errors, fatima_errors / total * 100))
     print("    Both detected:           {}".format(both_detected))
     print("    SHA-256 only:            {}".format(sha_only))
     print("    FATIMA only:             {}".format(fatima_only))
@@ -813,7 +817,7 @@ def test_sha256_baseline(content_bytes, trials=300):
         "total": total,
         "sha256_detected": sha_detected,
         "fatima_seal_detected": fatima_seal_detected,
-        "fatima_crash_detected": fatima_crash_detected,
+        "fatima_computation_errors": fatima_errors,
         "both_detected": both_detected,
         "sha256_only": sha_only,
         "fatima_only": fatima_only,
@@ -859,7 +863,7 @@ def test_ablation(content_bytes, trials=300):
     earth_only_det = 0   # earth catches it, heaven doesn't
     both_det = 0
     neither_det = 0
-    crashes = 0
+    comp_errors = 0
     t0 = time.time()
 
     for trial in range(min(trials, n * 8)):
@@ -871,7 +875,7 @@ def test_ablation(content_bytes, trials=300):
         data[byte_idx] ^= (1 << bit_idx)
 
         if mutated.crashed:
-            crashes += 1
+            comp_errors += 1
             continue
 
         # Full detection
@@ -905,12 +909,12 @@ def test_ablation(content_bytes, trials=300):
         else:
             neither_det += 1
 
-    valid = min(trials, n * 8) - crashes
+    valid = min(trials, n * 8) - comp_errors
     if valid == 0:
-        print("    All trials crashed. Cannot perform ablation.")
-        return {"test": "ablation", "error": "all_crashed"}
+        print("    All trials errored. Cannot perform ablation.")
+        return {"test": "ablation", "error": "all_errored"}
 
-    print("  Results ({} valid mutations, {} crashes excluded):".format(valid, crashes))
+    print("  Results ({} valid mutations, {} errors excluded):".format(valid, comp_errors))
     print("    Full 154-layer:    {} / {} = {:.4f}%".format(
         full_det, valid, full_det / valid * 100))
     print("    Heaven-only (77):  {} / {} = {:.4f}%".format(
@@ -936,7 +940,7 @@ def test_ablation(content_bytes, trials=300):
     return {
         "test": "ablation",
         "valid_trials": valid,
-        "crashes_excluded": crashes,
+        "errors_excluded": comp_errors,
         "full_detected": full_det,
         "heaven_detected": heaven_det,
         "earth_detected": earth_det,
@@ -1114,7 +1118,7 @@ def generate_report(all_results, content_size, reproducibility):
 
     # [R1] Separated detection table
     print("  {:>25s}  {:>10s}  {:>10s}  {:>10s}  {:>8s}".format(
-        "Test", "Seal-Det", "Crash-Det", "Undetect", "Total"))
+        "Test", "Seal-Det", "Comp-Err", "Undetect", "Total"))
     print("  " + "-" * 68)
 
     for r in all_results:
@@ -1122,28 +1126,32 @@ def generate_report(all_results, content_size, reproducibility):
             print("  {:>25s}  {:>10d}  {:>10d}  {:>10d}  {:>8d}".format(
                 r["test"],
                 r.get("seal_detected", 0),
-                r.get("crash_detected", 0),
+                r.get("computation_errors", 0),
                 r.get("undetected", 0),
                 r.get("total", 0)))
 
     # Mutation log summary
     log_summary = mutation_log.summary()
+    valid = log_summary["valid_trials"]
     print("")
     print("  AGGREGATE (from mutation log):")
     print("    Total mutations tested:   {}".format(log_summary["total_mutations"]))
+    print("    Valid trials (non-error):  {}".format(valid))
     print("    Seal detections:          {} ({:.4f}%)".format(
         log_summary["seal_detections"],
         log_summary["seal_detection_rate"] * 100))
-    print("    Crash detections:         {} ({:.4f}%)".format(
-        log_summary["crash_detections"],
-        log_summary["crash_rate"] * 100))
-    print("    Undetected:               {} ({:.4f}%)".format(
-        log_summary["undetected"],
-        (1 - log_summary["total_detection_rate"]) * 100))
-    print("    Seal detection rate:      {:.6f}%".format(
+    print("    Computation errors:       {} ({:.4f}%)".format(
+        log_summary["computation_errors"],
+        log_summary["error_rate"] * 100))
+    print("    Undetected:               {}".format(log_summary["undetected"]))
+    print("    Seal detection rate:      {:.6f}% (of valid trials only)".format(
         log_summary["seal_detection_rate"] * 100))
-    print("    Total detection rate:     {:.6f}%".format(
-        log_summary["total_detection_rate"] * 100))
+
+    # Zero-failure confidence bound (exact binomial)
+    if log_summary["undetected"] == 0 and valid > 0:
+        import math
+        g95 = 1 - 0.05 ** (1.0 / valid)
+        print("    G_95 upper bound:         {:.6f}% (zero-failure binomial)".format(g95 * 100))
 
     seal_rate = log_summary["seal_detection_rate"]
     if seal_rate >= 1.0:
@@ -1170,11 +1178,11 @@ def generate_report(all_results, content_size, reproducibility):
 
     return {
         "seal_detection_rate": log_summary["seal_detection_rate"],
-        "crash_rate": log_summary["crash_rate"],
-        "total_detection_rate": log_summary["total_detection_rate"],
+        "error_rate": log_summary["error_rate"],
         "total_mutations": log_summary["total_mutations"],
+        "valid_trials": log_summary["valid_trials"],
         "seal_detections": log_summary["seal_detections"],
-        "crash_detections": log_summary["crash_detections"],
+        "computation_errors": log_summary["computation_errors"],
         "undetected": log_summary["undetected"],
     }
 
@@ -1191,9 +1199,9 @@ def main():
     random.seed(seed)
 
     print("\n  {}".format(BISMILLAH))
-    print("  Finite-Benchmark Detection Test Harness v2.0")
+    print("  Finite-Benchmark Detection Test Harness v2.1")
     print("  FATIMA v{} -- 154-Layer Architecture".format(encoder.ENCODER_VERSION))
-    print("  Remediation: R1(crash/seal) R2(baseline+ablation) R3(semantic) R4(reproducibility)")
+    print("  Remediation: R1(error/seal split) R1.1(errors≠detection) R2(baseline+ablation) R3(semantic) R4(reproducibility)")
     print("  Random seed: {}".format(seed))
     print("  " + "=" * 60)
 
@@ -1252,10 +1260,10 @@ def main():
     all_results.append(r2)
 
     r3 = test_block_level(content_bytes)
-    block_totals = {"seal_detected": 0, "crash_detected": 0, "undetected": 0, "total": 0}
+    block_totals = {"seal_detected": 0, "computation_errors": 0, "undetected": 0, "total": 0}
     for v in r3["results_by_size"].values():
         block_totals["seal_detected"] += v["seal_detected"]
-        block_totals["crash_detected"] += v["crash_detected"]
+        block_totals["computation_errors"] += v["computation_errors"]
         block_totals["undetected"] += v["undetected"]
         block_totals["total"] += v["trials"]
     r3.update(block_totals)
@@ -1297,9 +1305,9 @@ def main():
     )
     output_data = {
         BISMILLAH: True,
-        "harness_version": "2.0",
-        "remediations": ["R1_crash_seal_split", "R2_baseline_ablation",
-                         "R3_semantic", "R4_reproducibility"],
+        "harness_version": "2.1",
+        "remediations": ["R1_error_seal_split", "R1.1_errors_not_detection",
+                         "R2_baseline_ablation", "R3_semantic", "R4_reproducibility"],
         "encoder_version": encoder.ENCODER_VERSION,
         "reproducibility": reproducibility,
         "report": report,
