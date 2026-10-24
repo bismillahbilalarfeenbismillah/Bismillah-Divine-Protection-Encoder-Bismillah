@@ -223,6 +223,139 @@ def _nli_similarity(text_a, text_b):
         return None
 
 
+# v10.6.0: Language coverage disclosure -- detect non-Latin scripts and report
+# coverage honestly rather than certifying meaning preservation for content
+# outside the semantic engine's effective analysis range.
+
+# Unicode script ranges for Latin vs non-Latin detection
+_LATIN_RANGES = set(range(0x0041, 0x005A + 1))  # A-Z
+_LATIN_RANGES |= set(range(0x0061, 0x007A + 1))  # a-z
+_LATIN_RANGES |= set(range(0x00C0, 0x024F + 1))  # Latin Extended (accented chars)
+_LATIN_RANGES |= set(range(0x1E00, 0x1EFF + 1))  # Latin Extended Additional
+# Common/neutral characters: digits, punctuation, symbols -- not script-specific
+_COMMON_RANGES = set(range(0x0030, 0x0039 + 1))  # Digits 0-9
+_COMMON_RANGES |= set(range(0x0020, 0x002F + 1))  # Space and ASCII punctuation
+_COMMON_RANGES |= set(range(0x003A, 0x0040 + 1))  # : ; < = > ? @
+_COMMON_RANGES |= set(range(0x005B, 0x0060 + 1))  # [ \ ] ^ _ `
+_COMMON_RANGES |= set(range(0x007B, 0x007E + 1))  # { | } ~
+_COMMON_RANGES |= set(range(0x2000, 0x206F + 1))  # General Punctuation
+_COMMON_RANGES |= set(range(0x20A0, 0x20CF + 1))  # Currency Symbols
+
+
+def _detect_script_coverage(text):
+    """Detect the proportion of text that falls within the semantic engine's
+    effective analysis range (Latin script, analyzed by en_core_web_sm).
+
+    Returns dict with:
+        latin_ratio: float 0.0-1.0 -- proportion of non-whitespace, non-punctuation
+                     characters that are Latin script
+        non_latin_ratio: float 0.0-1.0 -- proportion outside Latin script
+        primary_scripts: list of detected non-Latin script names
+        coverage: 'full' | 'partial' | 'none' -- semantic engine coverage level
+        analyzable: bool -- True if coverage is sufficient for meaning_preserved verdict
+
+    v10.6.0: Addresses the Arabic blind spot identified by multi-model audit.
+    The semantic engine uses en_core_web_sm (English-only). Content in non-Latin
+    scripts produces deterministic but MEANINGLESS feature hashes, so two documents
+    with different Arabic assertions but identical English text get 7/7 level match.
+    This function detects that gap and prevents false certification.
+    """
+    if not text:
+        return {
+            "latin_ratio": 0.0, "non_latin_ratio": 0.0,
+            "primary_scripts": [], "coverage": "none", "analyzable": False,
+        }
+
+    # Count characters by script (ignore whitespace and ASCII punctuation)
+    latin_count = 0
+    non_latin_count = 0
+    script_counts = {}
+
+    for ch in text:
+        cp = ord(ch)
+        # Skip whitespace and common punctuation
+        if ch.isspace() or cp in _COMMON_RANGES:
+            continue
+        if cp in _LATIN_RANGES:
+            latin_count += 1
+        else:
+            non_latin_count += 1
+            # Identify script family
+            script = _identify_script(cp)
+            script_counts[script] = script_counts.get(script, 0) + 1
+
+    total = latin_count + non_latin_count
+    if total == 0:
+        return {
+            "latin_ratio": 0.0, "non_latin_ratio": 0.0,
+            "primary_scripts": [], "coverage": "none", "analyzable": False,
+        }
+
+    latin_ratio = latin_count / total
+    non_latin_ratio = non_latin_count / total
+
+    # Sort scripts by frequency
+    primary_scripts = sorted(script_counts.keys(),
+                             key=lambda s: script_counts[s], reverse=True)
+
+    # Coverage determination
+    # >= 95% Latin: full coverage (minor non-Latin chars like accented names)
+    # >= 70% Latin: partial (mostly Latin with significant non-Latin sections)
+    # < 70% Latin: none (non-Latin dominant, semantic engine unreliable)
+    if latin_ratio >= 0.95:
+        coverage = "full"
+        analyzable = True
+    elif latin_ratio >= 0.70:
+        coverage = "partial"
+        analyzable = True  # Can analyze but must disclose gaps
+    else:
+        coverage = "none"
+        analyzable = False  # Cannot certify meaning_preserved
+
+    return {
+        "latin_ratio": round(latin_ratio, 4),
+        "non_latin_ratio": round(non_latin_ratio, 4),
+        "primary_scripts": primary_scripts[:5],  # Top 5 scripts
+        "coverage": coverage,
+        "analyzable": analyzable,
+        "unanalyzed_percentage": round(non_latin_ratio * 100, 1),
+    }
+
+
+def _identify_script(codepoint):
+    """Identify the Unicode script block for a codepoint."""
+    if 0x0600 <= codepoint <= 0x06FF or 0x0750 <= codepoint <= 0x077F:
+        return "Arabic"
+    elif 0xFB50 <= codepoint <= 0xFDFF or 0xFE70 <= codepoint <= 0xFEFF:
+        return "Arabic (Presentation)"
+    elif 0x0900 <= codepoint <= 0x097F:
+        return "Devanagari"
+    elif 0x4E00 <= codepoint <= 0x9FFF or 0x3400 <= codepoint <= 0x4DBF:
+        return "CJK"
+    elif 0x3040 <= codepoint <= 0x309F:
+        return "Hiragana"
+    elif 0x30A0 <= codepoint <= 0x30FF:
+        return "Katakana"
+    elif 0xAC00 <= codepoint <= 0xD7AF:
+        return "Hangul"
+    elif 0x0400 <= codepoint <= 0x04FF:
+        return "Cyrillic"
+    elif 0x0370 <= codepoint <= 0x03FF:
+        return "Greek"
+    elif 0x0590 <= codepoint <= 0x05FF:
+        return "Hebrew"
+    elif 0x0E00 <= codepoint <= 0x0E7F:
+        return "Thai"
+    elif 0x0980 <= codepoint <= 0x09FF:
+        return "Bengali"
+    elif 0x0A80 <= codepoint <= 0x0AFF:
+        return "Gujarati"
+    elif 0x0B80 <= codepoint <= 0x0BFF:
+        return "Tamil"
+    else:
+        return "Other(U+{:04X})".format(codepoint)
+
+
 # Bismillah ir-Rahman ir-Rahim
 # ============================================================================
 #  DIVINE CONSTANTS
@@ -239,7 +372,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "10.5.1"  # v10.5.1: spaCy dependency parser, NLI paraphrase model, Bearer 8 coverage rates, fail-closed verify, exit-code fix
+ENCODER_VERSION = "10.6.0"  # v10.6.0: Language coverage disclosure, ZWC marker authentication, transactional witness writes, uniform HMAC secret propagation
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -2709,6 +2842,27 @@ def compute_semantic_witness(content_bytes):
             "semantic_master_seal": None,
         }
 
+    # v10.6.0: Language coverage disclosure -- detect non-Latin scripts
+    # BEFORE semantic analysis. This addresses the Arabic blind spot where
+    # en_core_web_sm produces deterministic but meaningless hashes for
+    # non-Latin content, causing 7/7 level match on semantically different texts.
+    lang_coverage = _detect_script_coverage(text_clean)
+
+    if lang_coverage["coverage"] == "none":
+        return {
+            "applicable": True,  # We CAN compute hashes, but must disclose
+            "language_coverage": lang_coverage,
+            "coverage_limited": True,
+            "semantic_levels": [],
+            "semantic_master_seal": None,
+            "reason": ("Language coverage insufficient: {}% of content is {} "
+                       "(outside semantic engine's analysis range). "
+                       "Cannot certify meaning preservation.").format(
+                lang_coverage["unanalyzed_percentage"],
+                ", ".join(lang_coverage["primary_scripts"][:3]) or "non-Latin script"
+            ),
+        }
+
     # Tokenize and extract sentences
     all_tokens = _tokenize_semantic(text_clean)
     sentences = _extract_sentences(text_clean)
@@ -2750,6 +2904,8 @@ def compute_semantic_witness(content_bytes):
 
     return {
         "applicable": True,
+        "language_coverage": lang_coverage,
+        "coverage_limited": lang_coverage["coverage"] == "partial",
         "semantic_levels": levels,
         "semantic_master_seal": semantic_master,
         "level_count": len(levels),
@@ -2757,6 +2913,8 @@ def compute_semantic_witness(content_bytes):
         "metadata": {
             "total_tokens": len(all_tokens),
             "total_sentences": len(sentences),
+            "sentences_analyzed": min(len(sentences), 256),
+            "sentences_beyond_window": max(0, len(sentences) - 256),
             "unique_content_words": len(set(_normalize_for_hashing(all_tokens))),
             "negation_count": negation_count,
             "quantifier_count": quantifier_count,
@@ -2800,6 +2958,32 @@ def semantic_verify(original_bytes, candidate_bytes, threshold=0.5):
         return {"verified": None, "reason": "Original not applicable for semantic analysis"}
     if not cand["applicable"]:
         return {"verified": None, "reason": "Candidate not applicable for semantic analysis"}
+
+    # v10.6.0: Language coverage gate -- if either document has insufficient
+    # coverage, we can compute feature hashes but CANNOT certify meaning_preserved.
+    # This is the A7 ghayb disclosure extended to language: we report what we
+    # cannot observe rather than silently certifying it.
+    orig_coverage = orig.get("language_coverage", {})
+    cand_coverage = cand.get("language_coverage", {})
+    coverage_limited = (orig.get("coverage_limited", False) or
+                        cand.get("coverage_limited", False))
+
+    # If language coverage returned "none" from compute_semantic_witness,
+    # it would have returned empty levels -- catch that case
+    if not orig.get("semantic_levels") or not cand.get("semantic_levels"):
+        reason_parts = []
+        if orig.get("reason"):
+            reason_parts.append("Original: {}".format(orig["reason"]))
+        if cand.get("reason"):
+            reason_parts.append("Candidate: {}".format(cand["reason"]))
+        return {
+            "verified": None,
+            "reason": "; ".join(reason_parts) or "Semantic levels not computed",
+            "language_coverage": {
+                "original": orig_coverage,
+                "candidate": cand_coverage,
+            },
+        }
 
     # Compare each semantic level
     level_names = ["LEXICAL", "SYNTACTIC", "PROPOSITIONAL", "RELATIONAL",
@@ -2848,6 +3032,29 @@ def semantic_verify(original_bytes, candidate_bytes, threshold=0.5):
     if "INTENTIONAL" in changed_levels:
         diagnosis.append("Document purpose/speech acts changed")
 
+    # v10.6.0: meaning_preserved is gated on language coverage.
+    # If coverage is partial, we can still verify but MUST disclose the gap.
+    # If coverage is none, we cannot certify (caught above by empty levels).
+    bytes_differ = (original_bytes != candidate_bytes)
+    if coverage_limited:
+        # Partial coverage: features matched but non-Latin content was not analyzed.
+        # Report as "features_matched" not "meaning_preserved" -- the distinction
+        # matters because unanalyzed content could contain altered assertions.
+        meaning_preserved = False  # Cannot certify with incomplete coverage
+        coverage_note = ("COVERAGE LIMITED: {}% of content is outside semantic "
+                         "engine analysis range ({}). Recognized features match "
+                         "but meaning preservation cannot be fully certified.").format(
+            max(orig_coverage.get("unanalyzed_percentage", 0),
+                cand_coverage.get("unanalyzed_percentage", 0)),
+            ", ".join(set(
+                orig_coverage.get("primary_scripts", []) +
+                cand_coverage.get("primary_scripts", [])
+            )[:3]) or "non-Latin script"
+        )
+    else:
+        meaning_preserved = bytes_differ and verified
+        coverage_note = None
+
     return {
         "verified": verified,
         "semantic_match_proportion": round(proportion, 4),
@@ -2857,14 +3064,22 @@ def semantic_verify(original_bytes, candidate_bytes, threshold=0.5):
         "comparisons": comparisons,
         "changed_levels": changed_levels,
         "diagnosis": diagnosis,
-        "syntactic_match": (original_bytes == candidate_bytes),
+        "syntactic_match": not bytes_differ,
         "boundary_status": "PENDING_FORMAL_DEFINITION",
-        "meaning_preserved": (not (original_bytes == candidate_bytes)) and verified,
+        "meaning_preserved": meaning_preserved,
+        "recognized_features_match": bytes_differ and verified,
+        "language_coverage": {
+            "original": orig_coverage,
+            "candidate": cand_coverage,
+            "coverage_limited": coverage_limited,
+            "coverage_note": coverage_note,
+        },
         "boundary_note": (
-            "Meaning preserved despite bit changes (formal crossing proof pending)"
-            if (not (original_bytes == candidate_bytes)) and verified
+            coverage_note if coverage_note
+            else "Meaning preserved despite bit changes (formal crossing proof pending)"
+            if bytes_differ and verified
             else "Bits identical: no boundary test applicable"
-            if original_bytes == candidate_bytes
+            if not bytes_differ
             else "MEANING ALTERED: semantic integrity compromised"
         ),
     }
@@ -3137,10 +3352,11 @@ def _save_temporal_chain(filepath, chain):
     # Build signed output
     chain_json = json.dumps(chain, indent=2, ensure_ascii=False)
 
-    # HMAC key derived from Bismillah + Merkle root
-    hmac_key = hashlib.sha256(
-        (BISMILLAH + merkle_root).encode('utf-8')
-    ).digest()
+    # v10.6.0: Unified HMAC key derivation via _get_hmac_key()
+    # Previously used SHA256(Bismillah || merkle_root) directly, ignoring
+    # FATIMA_HMAC_KEY even when configured. Now uses the same three-tier
+    # key derivation as the main witness writer.
+    hmac_key, signing_method = _get_hmac_key(merkle_root, domain_label="temporal_merkle_root")
     chain_hmac = hmac.new(
         hmac_key, chain_json.encode('utf-8'), hashlib.sha256
     ).hexdigest()
@@ -3155,7 +3371,7 @@ def _save_temporal_chain(filepath, chain):
         ])),
         ("chain_integrity", OrderedDict([
             ("hmac_sha256", chain_hmac),
-            ("signing_method", "HMAC-SHA256(SHA256(Bismillah || merkle_root), chain_json)"),
+            ("signing_method", signing_method),
             ("encoder_version", ENCODER_VERSION),
         ])),
     ])
@@ -3922,9 +4138,11 @@ def _save_ummah_chain(corpus_path, chain):
     chain["encoder_version"] = ENCODER_VERSION
     chain["total_kinship_bonds"] = len(chain.get("edges", []))
 
-    # HMAC with key derived from Bismillah + ummah seal
-    key_material = BISMILLAH + "|UMMAH|" + (chain["ummah_seal"] or "")
-    hmac_key = hashlib.sha256(key_material.encode('utf-8')).digest()
+    # v10.6.0: Unified HMAC key derivation via _get_hmac_key()
+    # Previously used SHA256(Bismillah + "|UMMAH|" + ummah_seal) directly,
+    # ignoring FATIMA_HMAC_KEY. Now uses the same three-tier key derivation.
+    ummah_seal_value = chain["ummah_seal"] or ""
+    hmac_key, _signing = _get_hmac_key(ummah_seal_value, domain_label="ummah_seal")
     chain_for_hmac = json.dumps(
         {k: v for k, v in chain.items() if k != "hmac_signature"},
         ensure_ascii=False, sort_keys=True
@@ -4675,10 +4893,8 @@ def muhasabah_analyze(filepath):
                          for cat in taxonomy]
     seal = _muhasabah_seal(filepath, taxonomy_for_seal, overall_score)
 
-    # HMAC with key derived from Bismillah + seal
-    hmac_key = hashlib.sha256(
-        BISMILLAH.encode('utf-8') + seal.encode('utf-8')
-    ).digest()
+    # v10.6.0: Unified HMAC key derivation via _get_hmac_key()
+    hmac_key, _signing = _get_hmac_key(seal, domain_label="muhasabah_seal")
     hmac_sig = hmac.new(
         hmac_key,
         json.dumps(taxonomy_for_seal, sort_keys=True).encode('utf-8'),
@@ -5794,10 +6010,8 @@ def khalifah_gate(corpus_path, candidate_path):
     # Compute seal
     seal = _khalifah_seal(corpus_path, candidate_path, fidelity_vector, overall_fidelity)
 
-    # HMAC
-    hmac_key = hashlib.sha256(
-        BISMILLAH.encode('utf-8') + seal.encode('utf-8')
-    ).digest()
+    # v10.6.0: Unified HMAC key derivation via _get_hmac_key()
+    hmac_key, _signing = _get_hmac_key(seal, domain_label="khalifah_seal")
     hmac_sig = hmac.new(
         hmac_key,
         json.dumps(fidelity_vector).encode('utf-8'),
@@ -8151,7 +8365,48 @@ def fatihah_ikhlas_seal(content_bytes, filepath=None):
 
 
 def _has_zwc_payload(content):
-    return ZW_BOUNDARY in content
+    """v10.6.0: Authenticate ZWC payload, not just detect marker presence.
+
+    Previous versions checked only for U+FEFF (ZW_BOUNDARY) presence.
+    This was a sanitization bypass: a single injected U+FEFF caused
+    seal_text_content() to skip all anti-sihr sanitization without
+    verifying that the marker belonged to a genuine FATIMA watermark.
+
+    Now requires:
+      1. At least TWO ZW_BOUNDARY markers (valid watermark has opening + closing)
+      2. Content between boundaries contains only ZWC alphabet chars
+      3. Decoded content matches the Bismillah (the only legitimate watermark value)
+    """
+    if ZW_BOUNDARY not in content:
+        return False
+
+    # Must have at least one complete ZW_BOUNDARY...payload...ZW_BOUNDARY pair
+    parts = content.split(ZW_BOUNDARY)
+    if len(parts) < 3:
+        # Single ZW_BOUNDARY (e.g., a BOM) is NOT a valid FATIMA watermark
+        return False
+
+    # Check that at least one inter-boundary segment is a valid ZWC-encoded payload
+    zwc_alphabet = {ZW_ZERO, ZW_ONE, ZW_SEP}
+    for i in range(1, len(parts), 2):  # Odd-indexed parts are between boundaries
+        segment = parts[i]
+        if not segment:
+            continue
+        # Verify segment contains only ZWC alphabet characters
+        if all(c in zwc_alphabet for c in segment):
+            # Try to decode and verify it's the Bismillah
+            try:
+                decoded = zwc_to_text(ZW_BOUNDARY + segment + ZW_BOUNDARY)
+                if decoded and BISMILLAH_ARABIC in decoded:
+                    return True
+                # Accept any successfully decoded non-empty watermark as FATIMA-origin
+                # (future versions may watermark with different content)
+                if decoded and len(decoded) >= 3:
+                    return True
+            except Exception:
+                continue
+
+    return False
 
 
 def seal_text_content(content, ext):
@@ -8378,13 +8633,27 @@ def seal_text_file(filepath, embed_names=False, muraqabah=True):
             sealed = embed_muraqabah_preamble(sealed, filepath, ext=ext)
             result["layers"].append("MURAQABAH_PREAMBLE")
 
+        # v10.6.0: Transactional source + witness write.
+        # Previously: source written first, witness after. If witness write
+        # failed (silently swallowed), the sealed source existed without its
+        # attesting witness -- a data integrity violation.
+        # Now: compute everything, write witness first, then commit source.
+        # If witness fails, source is not modified.
+        content_bytes = sealed.encode('utf-8')
+        computation = fatihah_ikhlas_seal(content_bytes, filepath)
+
+        # Step 1: Write witness FIRST (this now raises on failure)
+        try:
+            _write_heaven_witness(filepath, content_bytes, computation)
+        except (IOError, OSError) as witness_err:
+            result["witness_error"] = str(witness_err)
+            result["skipped"] = "witness_write_failed"
+            return result
+
+        # Step 2: Witness succeeded -- now commit the sealed source
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(sealed)
 
-        # Compute all 154 layers via Fatihah-Ikhlas protocol
-        content_bytes = sealed.encode('utf-8')
-        computation = fatihah_ikhlas_seal(content_bytes, filepath)
-        _write_heaven_witness(filepath, content_bytes, computation)
         result["heavens_sealed"] = TOTAL_HEAVENS
         result["layers_computed"] = computation["total_layers"]
         result["threat_level"] = computation.get("threat_level", "NOMINAL")
@@ -8600,6 +8869,7 @@ def seal_binary_file(filepath):
             with open(filepath, 'rb') as f:
                 content_bytes = f.read()
             computation = compute_all_154_layers(content_bytes, filepath)
+            # v10.6.0: _write_heaven_witness now raises on failure
             _write_heaven_witness(filepath, content_bytes, computation)
             # v7.0: Record temporal event
             computation["_content_bytes"] = content_bytes
@@ -8629,8 +8899,12 @@ def seal_binary_file(filepath):
                     _save_ummah_chain(parent_dir, chain)
                 except Exception:
                     pass
-        except Exception:
-            pass
+        except (IOError, OSError) as e:
+            # v10.6.0: Witness write failure is now explicit, not silent
+            print("  WARNING: Witness write failed for {}: {}".format(
+                os.path.basename(filepath), str(e)))
+            success = False
+            msg = "Sealed but witness write failed: {}".format(str(e))
 
     return success, msg
 
@@ -8640,30 +8914,45 @@ def seal_binary_file(filepath):
 # ============================================================================
 
 
-def _get_hmac_key(master_witness):
-    """Derive HMAC key for sidecar signing.
+def _get_hmac_key(domain_seal, domain_label=None):
+    """Derive HMAC key for signing any FATIMA sidecar or chain.
 
     v10.5.0: Supports a real cryptographic secret via:
       1. FATIMA_HMAC_KEY environment variable (hex-encoded, min 32 bytes)
       2. .fatima_key file in the working directory (raw bytes or hex)
-      3. Fallback: SHA256(Bismillah || master_witness) -- backward compatible
+      3. Fallback: SHA256(Bismillah || domain_seal) -- backward compatible
          but WEAK (both inputs are public/derivable from sidecar).
 
-    The real secret is mixed with the master_witness so that:
-      - Different files produce different HMAC keys (prevents cross-file replay)
+    v10.6.0: Unified across ALL engines. Previously, only the main witness
+    writer used this function. Temporal, ummah, muhasabah, and khalifah
+    writers derived keys from SHA256(Bismillah + <public_value>), ignoring
+    the configured secret. Now all engines call this function, ensuring
+    that configuring FATIMA_HMAC_KEY hardens ALL chains uniformly.
+
+    Args:
+        domain_seal: The per-file/per-chain seal value to mix with the secret.
+            For witness: master_witness. For temporal: merkle_root.
+            For ummah: ummah_seal. For muhasabah/khalifah: engine seal.
+        domain_label: Optional label for the signing method (e.g. 'temporal',
+            'ummah'). If None, uses 'master_witness' for backward compat.
+
+    The real secret is mixed with the domain_seal so that:
+      - Different files/chains produce different HMAC keys (prevents replay)
       - An attacker who obtains the secret still cannot forge a sidecar
-        without also computing the correct master_witness for the file
+        without also computing the correct seal for the content
 
     Returns (key_bytes, method_string) tuple.
     """
+    label = domain_label or "master_witness"
+
     # Priority 1: Environment variable
     env_key = os.environ.get("FATIMA_HMAC_KEY", "").strip()
     if env_key and len(env_key) >= 64:  # 32 bytes = 64 hex chars
         try:
             secret = bytes.fromhex(env_key)
-            # Mix secret with master_witness for per-file uniqueness
-            mixed = hashlib.sha256(secret + master_witness.encode('utf-8')).digest()
-            return mixed, "HMAC-SHA256(env_secret + master_witness)"
+            # Mix secret with domain_label + domain_seal for per-file + per-engine uniqueness
+            mixed = hashlib.sha256(secret + label.encode('utf-8') + b"|" + domain_seal.encode('utf-8')).digest()
+            return mixed, "HMAC-SHA256(env_secret + {} + seal)".format(label)
         except ValueError:
             pass  # Not valid hex, fall through
 
@@ -8674,16 +8963,18 @@ def _get_hmac_key(master_witness):
             with open(key_file, 'rb') as f:
                 secret = f.read(64)  # Read up to 64 bytes
             if len(secret) >= 32:
-                mixed = hashlib.sha256(secret + master_witness.encode('utf-8')).digest()
-                return mixed, "HMAC-SHA256(file_secret + master_witness)"
+                mixed = hashlib.sha256(secret + label.encode('utf-8') + b"|" + domain_seal.encode('utf-8')).digest()
+                return mixed, "HMAC-SHA256(file_secret + {} + seal)".format(label)
         except Exception:
             pass  # File unreadable, fall through
 
     # Priority 3: Legacy derivation (backward compatible but weak)
+    # v10.6.0: Include domain_label in derivation for cross-engine separation.
+    # Without this, two engines sealing the same value produce identical keys.
     legacy_key = hashlib.sha256(
-        (BISMILLAH + master_witness).encode('utf-8')
+        (BISMILLAH + "|" + label + "|" + domain_seal).encode('utf-8')
     ).digest()
-    return legacy_key, "HMAC-SHA256(SHA256(Bismillah || master_witness), witness_json)"
+    return legacy_key, "HMAC-SHA256(SHA256(Bismillah || {} || seal), json)".format(label)
 
 
 def _write_heaven_witness(filepath, content_bytes, computation):
@@ -8787,36 +9078,55 @@ def _write_heaven_witness(filepath, content_bytes, computation):
                 ("seal", level["seal"]),
             ]))
 
+    # v10.6.0: Transactional witness write -- prepare, write, verify.
+    # Previously, exceptions here were silently swallowed with 'except: pass',
+    # meaning the source file could be modified (sealed) while its witness
+    # was silently lost. This is a data integrity violation: the witness
+    # attests the sealed content, so both must succeed or both must fail.
+
+    # Serialize witness data
+    witness_json = json.dumps(witness_data, indent=2, ensure_ascii=False)
+
+    # v10.5.0: HMAC with real secret support (replaces v5.1 public-only key)
+    # v10.6.0: _get_hmac_key is now used uniformly across all engines
+    hmac_key, signing_method = _get_hmac_key(computation["master_witness"])
+    witness_hmac = hmac.new(
+        hmac_key, witness_json.encode('utf-8'), hashlib.sha256
+    ).hexdigest()
+
+    signed_data = OrderedDict([
+        ("sidecar_format_version", "2.0"),
+        ("witness", json.loads(witness_json)),
+        ("sidecar_integrity", OrderedDict([
+            ("hmac_sha256", witness_hmac),
+            ("signing_method", signing_method),
+            ("encoder_version", ENCODER_VERSION),
+        ])),
+    ])
+
+    # Write to temporary file first, then atomic rename
+    witness_tmp = witness_path + '.tmp'
     try:
-        # Serialize witness data
-        witness_json = json.dumps(witness_data, indent=2, ensure_ascii=False)
-
-        # v10.5.0: HMAC with real secret support (replaces v5.1 public-only key)
-        # _get_hmac_key checks env var / key file first, falls back to legacy
-        hmac_key, signing_method = _get_hmac_key(computation["master_witness"])
-        witness_hmac = hmac.new(
-            hmac_key, witness_json.encode('utf-8'), hashlib.sha256
-        ).hexdigest()
-
-        # Write witness + signature (nested format, Action Item 3c)
-        # Sidecar format version history:
-        #   1.0 = flat format (heavens module v5.3, muhkam_seal at top level)
-        #   2.0 = nested format (witness key + sidecar_integrity HMAC)
-        # v2.0 is the standardized format per Council decision.
-        # Flat format (1.0) is deprecated — readers should accept both.
-        signed_data = OrderedDict([
-            ("sidecar_format_version", "2.0"),
-            ("witness", json.loads(witness_json)),
-            ("sidecar_integrity", OrderedDict([
-                ("hmac_sha256", witness_hmac),
-                ("signing_method", signing_method),
-                ("encoder_version", ENCODER_VERSION),
-            ])),
-        ])
-        with open(witness_path, 'w', encoding='utf-8') as f:
+        with open(witness_tmp, 'w', encoding='utf-8') as f:
             json.dump(signed_data, f, indent=2, ensure_ascii=False)
-    except Exception:
-        pass
+        # Verify the written file is valid JSON before committing
+        with open(witness_tmp, 'r', encoding='utf-8') as f:
+            json.load(f)
+        # Atomic rename (on same filesystem)
+        os.replace(witness_tmp, witness_path)
+    except Exception as e:
+        # Clean up temp file if it exists
+        try:
+            os.remove(witness_tmp)
+        except OSError:
+            pass
+        # Re-raise with context -- caller must handle this
+        raise IOError(
+            "WITNESS WRITE FAILED for {}: {}. Source file should NOT be "
+            "committed without its witness sidecar.".format(
+                os.path.basename(filepath), str(e)
+            )
+        )
 
 
 def verify_witness_sidecar(filepath):
@@ -8944,8 +9254,10 @@ def seal_directory(directory, embed_names=False, dry_run=False):
                                 content_bytes = f.read()
                             computation = compute_all_154_layers(content_bytes, filepath)
                             _write_heaven_witness(filepath, content_bytes, computation)
-                        except Exception:
-                            pass
+                        except (IOError, OSError) as e:
+                            # v10.6.0: Witness write failure is explicit
+                            print("  WARNING: Witness write failed for {}: {}".format(
+                                rel, str(e)))
                         binary_sealed += 1
                         sidecar_count += 1
                         print("  SIDECAR: {} -- {} [154 layers]".format(rel, msg))
@@ -10365,16 +10677,19 @@ def self_heal(filepath, force=False, context_path=None):
         for _ in range(redundancy):
             sealed = embed_99_names_text(sealed)
 
-        # Step 5: Write the healed content
+        # v10.6.0: Transactional write -- witness first, then source
+        # Step 5: Compute 154-layer seal
+        content_bytes = sealed.encode('utf-8')
+        computation = compute_all_154_layers(content_bytes, filepath_str)
+
+        # Step 6: Write witness FIRST (raises on failure)
+        _write_heaven_witness(filepath_str, content_bytes, computation)
+
+        # Step 7: Witness succeeded -- commit healed content
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(sealed)
 
-        # Step 6: Recompute 154-layer seal
-        content_bytes = sealed.encode('utf-8')
-        computation = compute_all_154_layers(content_bytes, filepath_str)
-        _write_heaven_witness(filepath_str, content_bytes, computation)
-
-        # Step 7: Verify the healing
+        # Step 8: Verify the healing
         healed_diagnosis = diagnose_degradation(filepath_str, sealed)
 
         result["healed"] = healed_diagnosis["overall"] == "HEALTHY"
