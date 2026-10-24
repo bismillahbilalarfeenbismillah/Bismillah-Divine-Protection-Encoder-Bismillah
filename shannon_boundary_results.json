@@ -1,0 +1,252 @@
+{
+  "Bismillah ir-Rahman ir-Rahim": true,
+  "encoder_version": "10.8.0",
+  "test_file_size": 77,
+  "report": {
+    "aggregate_detection_rate": 1.0,
+    "shannon_proximity": 1.0,
+    "shannon_gap": 0.0,
+    "min_rate": 1.0,
+    "max_rate": 1.0
+  },
+  "tests": [
+    {
+      "test": "bit_level",
+      "total": 616,
+      "detected": 616,
+      "undetected": 0,
+      "detection_rate": 1.0,
+      "shannon_gap": 0.0,
+      "undetected_positions": [],
+      "scales_triggered": {
+        "0": 3931,
+        "9": 4797,
+        "10": 8098,
+        "1": 3481,
+        "2": 6187,
+        "3": 1184,
+        "5": 2127,
+        "6": 1895,
+        "8": 4566,
+        "7": 5697,
+        "4": 246
+      },
+      "time_seconds": 10.676377058029175
+    },
+    {
+      "test": "byte_level",
+      "total": 616,
+      "detected": 616,
+      "undetected": 0,
+      "detection_rate": 1.0,
+      "shannon_gap": 0.0,
+      "undetected_details": [],
+      "time_seconds": 10.683828115463257
+    },
+    {
+      "test": "block_level",
+      "results_by_size": {
+        "1": {
+          "block_size": 1,
+          "trials": 50,
+          "detected": 50,
+          "undetected": 0,
+          "detection_rate": 1.0
+        },
+        "2": {
+          "block_size": 2,
+          "trials": 50,
+          "detected": 50,
+          "undetected": 0,
+          "detection_rate": 1.0
+        },
+        "4": {
+          "block_size": 4,
+          "trials": 50,
+          "detected": 50,
+          "undetected": 0,
+          "detection_rate": 1.0
+        },
+        "8": {
+          "block_size": 8,
+          "trials": 50,
+          "detected": 50,
+          "undetected": 0,
+          "detection_rate": 1.0
+        },
+        "16": {
+          "block_size": 16,
+          "trials": 50,
+          "detected": 50,
+          "undetected": 0,
+          "detection_rate": 1.0
+        },
+        "32": {
+          "block_size": 32,
+          "trials": 50,
+          "detected": 50,
+          "undetected": 0,
+          "detection_rate": 1.0
+        },
+        "64": {
+          "block_size": 64,
+          "trials": 50,
+          "detected": 50,
+          "undetected": 0,
+          "detection_rate": 1.0
+        }
+      },
+      "time_seconds": 5.763948678970337,
+      "detection_rate": 1.0,
+      "total": 350
+    },
+    {
+      "test": "adversarial",
+      "total": 12,
+      "detected": 12,
+      "undetected": 0,
+      "detection_rate": 1.0,
+      "details": [
+        {
+          "mutation": "append_null_byte",
+          "detected": true,
+          "layers_changed": 73,
+          "scales_changed": 11
+        },
+        {
+          "mutation": "append_space",
+          "detected": true,
+          "layers_changed": 70,
+          "scales_changed": 10
+        },
+        {
+          "mutation": "prepend_null_byte",
+          "detected": true,
+          "layers_changed": 105,
+          "scales_changed": 11
+        },
+        {
+          "mutation": "insert_zwsp_middle",
+          "detected": true,
+          "layers_changed": 98,
+          "scales_changed": 11
+        },
+        {
+          "mutation": "insert_zwnj_middle",
+          "detected": true,
+          "layers_changed": 98,
+          "scales_changed": 11
+        },
+        {
+          "mutation": "insert_bom_start",
+          "detected": true,
+          "layers_changed": 111,
+          "scales_changed": 11
+        },
+        {
+          "mutation": "swap_bytes_5_0",
+          "detected": true,
+          "layers_changed": 60,
+          "scales_changed": 9
+        },
+        {
+          "mutation": "bitwise_not_entire_file",
+          "detected": true,
+          "layers_changed": 154,
+          "scales_changed": 11
+        },
+        {
+          "mutation": "duplicate_content",
+          "detected": true,
+          "layers_changed": 112,
+          "scales_changed": 11
+        },
+        {
+          "mutation": "truncate_last_byte",
+          "detected": true,
+          "layers_changed": 93,
+          "scales_changed": 11
+        },
+        {
+          "mutation": "right_shift_all_bits",
+          "detected": true,
+          "layers_changed": 154,
+          "scales_changed": 11
+        },
+        {
+          "mutation": "bidi_override_inject",
+          "detected": true,
+          "layers_changed": 99,
+          "scales_changed": 11
+        }
+      ]
+    },
+    {
+      "test": "size_threshold",
+      "results": [
+        {
+          "size": 16,
+          "trials": 128,
+          "detected": 128,
+          "detection_rate": 1.0
+        },
+        {
+          "size": 32,
+          "trials": 200,
+          "detected": 200,
+          "detection_rate": 1.0
+        },
+        {
+          "size": 64,
+          "trials": 200,
+          "detected": 200,
+          "detection_rate": 1.0
+        },
+        {
+          "size": 128,
+          "trials": 200,
+          "detected": 200,
+          "detection_rate": 1.0
+        },
+        {
+          "size": 256,
+          "trials": 200,
+          "detected": 200,
+          "detection_rate": 1.0
+        },
+        {
+          "size": 512,
+          "trials": 200,
+          "detected": 200,
+          "detection_rate": 1.0
+        },
+        {
+          "size": 1024,
+          "trials": 200,
+          "detected": 200,
+          "detection_rate": 1.0
+        },
+        {
+          "size": 2048,
+          "trials": 200,
+          "detected": 200,
+          "detection_rate": 1.0
+        },
+        {
+          "size": 4096,
+          "trials": 200,
+          "detected": 200,
+          "detection_rate": 1.0
+        },
+        {
+          "size": 8192,
+          "trials": 200,
+          "detected": 200,
+          "detection_rate": 1.0
+        }
+      ],
+      "detection_rate": 1.0,
+      "total": 1928
+    }
+  ]
+}
