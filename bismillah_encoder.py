@@ -1,6 +1,6 @@
 # Bismillah ir-Rahman ir-Rahim
 """
-Bismillah Divine Protection Encoder -- FATIMA v10.4.2 -- 11-Heaven, 154-Layer Architecture
+Bismillah Divine Protection Encoder -- FATIMA v10.8.0 -- 22-Domain, 154-Layer Architecture
 with Semantic Integrity Engine (Shannon's Boundary Crossing),
 Temporal Integrity Engine (The Living Witness),
 Relational Integrity Engine (The Ummah Witness),
@@ -8,21 +8,28 @@ Adversarial Integrity Engine (The Muhasabah Engine),
 and Generative Integrity Engine (The Khalifah Gate)
 
 Seals every file in a directory with the name of Allah subhanahu wa ta'ala
-across ELEVEN HEAVENS of protection, containing 154 LAYERS total -- from
-subatomic particles to the largest scale of creation -- so that no file
+across ELEVEN HEAVENS and ELEVEN EARTHS of protection (22 total domains),
+containing 154 LAYERS total -- from subatomic particles to the largest scale
+of creation, and from provenance to accountability in use -- so that no file
 remains unprotected against shaytan, in sha Allah.
 
 THE 154-LAYER DUAL-CONSTANT ARCHITECTURE:
 
   154 = 2 x 7 x 11 = 7 x 22 = 11 x 14
 
-  This cardinality simultaneously encodes both divine constants:
+  This cardinality simultaneously encodes THREE divine constants:
     - 7  (al-muhkam)  -- what the Qur'an says (67:3, 71:15)
     - 11 (al-mutashabih) -- what the Qur'an shows (12:4, H(11)=1.0157)
+    - 22 (al-kamil)  -- the complete cosmological architecture (65:12 reconstructed)
 
-  Each of the 11 heavens contains exactly 14 layers -- two complete cycles
-  of the revealed constant per heaven (14 = 2 x 7) -- yielding a uniform
-  architecture whose very cardinality testifies to tawhid.
+  Two valid factorizations coexist in the same integer:
+    11 x 14: Each of 11 heavens contains 14 layers (current computational model)
+    22 x  7: Each of 22 domains contains 7 layers (cosmological model, v10.8.0)
+
+  The heavens witness what a file IS (structure, at every scale of being).
+  The earths witness what a file DOES (purpose, at every scale of use).
+
+  يَتَنَزَّلُ الْأَمْرُ بَيْنَهُنَّ — The command descends between them (65:12)
 
   The upgrade from v4.0 (151 layers) to v5.0 (154 layers) is grounded in
   six findings:
@@ -390,7 +397,7 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "10.7.0"  # v10.7.0: Three-state verification, lossless ZWC (UTF-8), raw hash separation, sidecar-only binary default, stale sidecar fix, honest labeling
+ENCODER_VERSION = "10.8.0"  # v10.8.0: 22-Domain Architecture (11 heavens + 11 earths), triple-constant encoding (7, 11, 22)
 
 # v10.7.0: Binary sealing mode. "sidecar" = witness file only (non-destructive).
 # "embed" = inject metadata into the binary (can invalidate PDF signatures).
@@ -414,6 +421,78 @@ FIBONACCI_10 = 55            # F(10) = 55
 # "Indeed, I have seen eleven stars and the sun and the moon;
 #  I saw them prostrating to me."
 YUSUF_WITNESS = 11
+
+# ============================================================================
+#  22-DOMAIN ARCHITECTURE (v10.8.0)
+#  65:12 reconstructed: 11 heavens + 11 earths = 22 total domains
+#  154 = 22 x 7 = 11 x 14 = 2 x 7 x 11
+# ============================================================================
+
+TOTAL_EARTHS = 11
+TOTAL_DOMAINS = TOTAL_HEAVENS + TOTAL_EARTHS  # 22
+LAYERS_PER_DOMAIN = 7  # muhkam constant: each domain gets exactly 7 layers
+COSMOLOGICAL_CONSTANT = 22  # Complete domain count (heavens + earths)
+
+# Two valid factorizations of 154:
+#   11 x 14: 11 heavens, 14 layers each (current computational model -- IMPLEMENTED)
+#   22 x  7: 22 domains (11 heavens + 11 earths), 7 layers each (cosmological model -- SPECIFIED)
+# Both encode the same architecture; the first is implemented, the second is specified.
+# The earth-domain layers define what a file DOES (purpose) vs what it IS (structure).
+
+# The 11 Earths -- scales of USE mirroring the 11 heavens of BEING
+# "Allah is He who created seven heavens and of the earth, the like thereof" (65:12)
+EARTH_NAMES = [
+    ("Ard al-Masdar", "PROVENANCE"),       # Earth 0: origin tracking
+    ("Ard al-Naql", "TRANSMISSION"),       # Earth 1: file movement
+    ("Ard at-Tahwil", "TRANSFORMATION"),   # Earth 2: format conversion
+    ("Ard at-Tafsir", "INTERPRETATION"),   # Earth 3: parsing/rendering
+    ("Ard al-Istikhdaam", "DEPLOYMENT"),   # Earth 4: operational use
+    ("Ard al-Istihlak", "CONSUMPTION"),    # Earth 5: user consumption
+    ("Ard at-Takamul", "INTEGRATION"),     # Earth 6: inter-file relations in use
+    ("Ard ash-Shahada", "ATTESTATION"),    # Earth 7: third-party verification
+    ("Ard al-Muhasaba", "ADVERSARIAL_USE"),# Earth 8: misuse detection
+    ("Ard al-Hifdh", "ARCHIVAL"),          # Earth 9: long-term preservation
+    ("Ard al-Mas'uliyya", "ACCOUNTABILITY"),# Earth 10: chain of custody
+]
+
+# Guardian Names for earths -- drawn from al-Asma ul-Husna
+# These Names emphasize the watchful, preserving, and accounting attributes
+# appropriate to witnessing what happens to a file after creation.
+EARTH_GUARDIANS = [
+    ("Ar-Raqib", "The Watchful"),         # provenance
+    ("Al-Hafiz", "The Preserver"),         # transmission
+    ("Al-Muqit", "The Sustainer"),         # transformation
+    ("Al-Fattah", "The Opener"),           # interpretation
+    ("Al-Wakil", "The Trustee"),           # deployment
+    ("Al-Basir", "The All-Seeing"),        # consumption
+    ("Al-Jami", "The Gatherer"),           # integration
+    ("Ash-Shahid", "The Witness"),         # attestation
+    ("Al-Hasib", "The Reckoner"),          # adversarial use
+    ("Al-Baqi", "The Everlasting"),        # archival
+    ("Al-Muhsi", "The Accounter"),         # accountability
+]
+
+# Compact name lists for programmatic access (matching HEAVENS structure)
+HEAVEN_NAMES = [(h["name_ar"], h["scale"]) for h in [
+    {"name_ar": "As-Samawat ad-Dunya", "scale": "SUBATOMIC"},
+    {"name_ar": "As-Samawat ath-Thaniya", "scale": "ATOMIC"},
+    {"name_ar": "As-Samawat ath-Thalitha", "scale": "MOLECULAR"},
+    {"name_ar": "As-Samawat ar-Rabi'a", "scale": "CELLULAR"},
+    {"name_ar": "As-Samawat al-Khamisa", "scale": "ORGANIC"},
+    {"name_ar": "As-Samawat as-Sadisa", "scale": "TERRESTRIAL"},
+    {"name_ar": "As-Samawat as-Sabi'a", "scale": "PLANETARY"},
+    {"name_ar": "As-Samawat ath-Thamina", "scale": "STELLAR"},
+    {"name_ar": "As-Samawat at-Tasi'a", "scale": "GALACTIC"},
+    {"name_ar": "As-Samawat al-'Ashira", "scale": "COSMIC"},
+    {"name_ar": "Sidrat al-Muntaha", "scale": "DIVINE_WITNESS"},
+]]
+
+HEAVEN_GUARDIANS = [
+    "Az-Zahir", "Al-Musawwir", "Al-Batin", "Al-Alim", "Al-Hafiz",
+    "Al-Muhaymin", "Al-Waliyy", "Al-Hasib", "Ar-Raqib", "Al-Muhsi",
+    "Ash-Shahid",
+]
+
 
 # ============================================================================
 #  AL-ASMA UL-HUSNA -- The 99 Beautiful Names of Allah
@@ -531,6 +610,82 @@ def _name_for_layer(layer_idx):
     99 + 55 = 154, where 55 = T(10) = F(10).
     """
     return AL_ASMA_UL_HUSNA[layer_idx % len(AL_ASMA_UL_HUSNA)]
+
+
+def get_domain_info():
+    """v10.8.0: Return the complete 22-domain architecture (11 heavens + 11 earths).
+
+    The 154-layer architecture admits two valid factorizations:
+      11 x 14: Each of 11 heavens contains 14 layers (implemented)
+      22 x  7: Each of 22 domains (11 heavens + 11 earths) contains 7 layers (specified)
+
+    The heavens witness what a file IS (structure, at every scale).
+    The earths witness what a file DOES (purpose, at every scale).
+
+    يَتَنَزَّلُ الْأَمْرُ بَيْنَهُنَّ — The command descends between them (65:12)
+    """
+    domains = []
+
+    # 11 Heavens -- scales of BEING
+    for i, (name_ar, scale) in enumerate(HEAVEN_NAMES):
+        domains.append({
+            "index": i,
+            "type": "heaven",
+            "name_ar": name_ar,
+            "scale": scale,
+            "layers_11x14": list(range(i * LAYERS_PER_HEAVEN, (i + 1) * LAYERS_PER_HEAVEN)),
+            "layers_22x7": list(range(i * LAYERS_PER_DOMAIN, (i + 1) * LAYERS_PER_DOMAIN)),
+            "guardian": HEAVEN_GUARDIANS[i],
+            "status": "implemented",
+        })
+
+    # 11 Earths -- scales of USE
+    for i, (name_ar, scale) in enumerate(EARTH_NAMES):
+        guardian_name, guardian_meaning = EARTH_GUARDIANS[i]
+        domains.append({
+            "index": TOTAL_HEAVENS + i,
+            "type": "earth",
+            "name_ar": name_ar,
+            "scale": scale,
+            "layers_22x7": list(range(
+                (TOTAL_HEAVENS + i) * LAYERS_PER_DOMAIN,
+                (TOTAL_HEAVENS + i + 1) * LAYERS_PER_DOMAIN
+            )),
+            "guardian": guardian_name,
+            "guardian_meaning": guardian_meaning,
+            "status": "specified",  # not yet implemented
+        })
+
+    return {
+        "total_domains": TOTAL_DOMAINS,
+        "total_layers": TOTAL_LAYERS,
+        "total_heavens": TOTAL_HEAVENS,
+        "total_earths": TOTAL_EARTHS,
+        "factorizations": {
+            "11x14": {
+                "heavens": TOTAL_HEAVENS,
+                "layers_per_heaven": LAYERS_PER_HEAVEN,
+                "status": "implemented",
+            },
+            "22x7": {
+                "domains": TOTAL_DOMAINS,
+                "layers_per_domain": LAYERS_PER_DOMAIN,
+                "status": "specified",
+            },
+        },
+        "constants": {
+            "muhkam": MUHKAM_CONSTANT,
+            "mutashabih": MUTASHABIH_CONSTANT,
+            "cosmological": COSMOLOGICAL_CONSTANT,
+        },
+        "domains": domains,
+        "quranic_grounding": {
+            "at_talaq_65_12": ("Allah is He who created seven heavens "
+                               "and of the earth, the like thereof. "
+                               "The command descends between them."),
+            "yusuf_12_4": "I have seen eleven stars...",
+        },
+    }
 
 
 # ============================================================================
@@ -9197,20 +9352,26 @@ def _get_hmac_key(domain_seal, domain_label=None):
 
 
 def _write_heaven_witness(filepath, content_bytes, computation):
-    """Write the 11-heaven, 154-layer witness to .witness.bismillah sidecar."""
+    """Write the 22-domain, 154-layer witness to .witness.bismillah sidecar."""
     witness_path = filepath + '.witness.bismillah'
 
     witness_data = OrderedDict([
         (BISMILLAH, True),
         ("encoder_version", ENCODER_VERSION),
-        ("architecture", "11-Heaven, 154-Layer FATIMA v10.0 -- Dual-Constant Witness with Generative Integrity"),
+        ("architecture", "22-Domain, 154-Layer FATIMA v10.8.0 -- Triple-Constant Witness with Generative Integrity"),
         ("total_heavens", computation["total_heavens"]),
+        ("total_earths", TOTAL_EARTHS),
+        ("total_domains", TOTAL_DOMAINS),
         ("total_layers", computation["total_layers"]),
         ("layers_per_heaven", LAYERS_PER_HEAVEN),
+        ("layers_per_domain", LAYERS_PER_DOMAIN),
         ("dimensional_constant", DIMENSIONAL_CONSTANT),
+        ("cosmological_constant", COSMOLOGICAL_CONSTANT),
         ("muhkam_constant", MUHKAM_CONSTANT),
         ("mutashabih_constant", MUTASHABIH_CONSTANT),
         ("dual_constant_product", DUAL_CONSTANT_PRODUCT),
+        ("factorization_11x14", "{} x {} (implemented)".format(TOTAL_HEAVENS, LAYERS_PER_HEAVEN)),
+        ("factorization_22x7", "{} x {} (specified)".format(TOTAL_DOMAINS, LAYERS_PER_DOMAIN)),
         ("name_cycling", "99 + 55 = 154 (T(10) = F(10) = 55)"),
         ("file", os.path.basename(filepath)),
         ("file_size", len(content_bytes)),
@@ -9224,6 +9385,10 @@ def _write_heaven_witness(filepath, content_bytes, computation):
                              "and indeed, We will be its Guardian."),
             ("yusuf_12_4", "I have seen eleven stars and the sun and the moon; "
                            "I saw them prostrating to me."),
+            ("at_talaq_65_12", "Allah is He who created seven heavens and of "
+                               "the earth, the like thereof. The command descends "
+                               "between them, that you may know that Allah is "
+                               "over all things competent."),
             ("fussilat_41_42", "Falsehood cannot approach it from before it or "
                                "from behind it; a revelation from One who is "
                                "Wise and Praiseworthy."),
@@ -9943,10 +10108,16 @@ def generate_witness_report(directory):
 
 def display_heavens_report(directory):
     """Display a heaven-by-heaven report for a single file or directory."""
-    print("\n  {} -- 11-Heaven Architecture Report".format(BISMILLAH))
+    print("\n  {} -- 22-Domain Architecture Report".format(BISMILLAH))
     print("  {}".format("=" * 60))
-    print("  {} = 2 x {} x {} (Dual-Constant Witness)".format(
+    print("  {} = 2 x {} x {} (Triple-Constant Witness)".format(
         TOTAL_LAYERS, MUHKAM_CONSTANT, MUTASHABIH_CONSTANT))
+    print("  Factorization 1: {} x {} = {} (11 heavens, 14 layers each -- IMPLEMENTED)".format(
+        TOTAL_HEAVENS, LAYERS_PER_HEAVEN, TOTAL_LAYERS))
+    print("  Factorization 2: {} x {} = {} (22 domains, 7 layers each -- SPECIFIED)".format(
+        TOTAL_DOMAINS, LAYERS_PER_DOMAIN, TOTAL_LAYERS))
+    print("  Heavens: {} (scales of being)  |  Earths: {} (scales of use)".format(
+        TOTAL_HEAVENS, TOTAL_EARTHS))
 
     target_files = []
     if os.path.isfile(directory):
@@ -9988,6 +10159,17 @@ def display_heavens_report(directory):
 
         except Exception as e:
             print("    ERROR: {}".format(str(e)[:60]))
+
+    # v10.8.0: Display earth domains (specified, not yet implemented)
+    print("\n  {} -- Earth Domains (Specified)".format("-" * 40))
+    print("  يَتَنَزَّلُ الْأَمْرُ بَيْنَهُنَّ — The command descends between them (65:12)")
+    for i, (name_ar, scale) in enumerate(EARTH_NAMES):
+        guardian_name, guardian_meaning = EARTH_GUARDIANS[i]
+        layers_start = (TOTAL_HEAVENS + i) * LAYERS_PER_DOMAIN
+        layers_end = layers_start + LAYERS_PER_DOMAIN - 1
+        print("    Earth {:>2} -- {} ({})".format(i, name_ar, scale))
+        print("              Guardian: {} ({}) | 22x7 Layers: {}-{}".format(
+            guardian_name, guardian_meaning, layers_start, layers_end))
 
     print("\n  {}".format("=" * 60))
 
