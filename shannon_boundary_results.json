@@ -1,252 +1,1979 @@
 {
   "Bismillah ir-Rahman ir-Rahim": true,
+  "harness_version": "2.0",
+  "remediations": [
+    "R1_crash_seal_split",
+    "R2_baseline_ablation",
+    "R3_semantic",
+    "R4_reproducibility"
+  ],
   "encoder_version": "10.8.0",
-  "test_file_size": 77,
-  "report": {
-    "aggregate_detection_rate": 1.0,
-    "shannon_proximity": 1.0,
-    "shannon_gap": 0.0,
-    "min_rate": 1.0,
-    "max_rate": 1.0
+  "reproducibility": {
+    "seed": 4016794880,
+    "input_sha256": "d59feece3006c498bd1f6e9e4627614c0f449f1007207d9759d126a596c0ed07",
+    "input_size": 77
   },
-  "tests": [
-    {
-      "test": "bit_level",
+  "report": {
+    "seal_detection_rate": 0.9548306148055207,
+    "crash_rate": 0.0451693851944793,
+    "total_detection_rate": 1.0,
+    "total_mutations": 1594,
+    "seal_detections": 1522,
+    "crash_detections": 72,
+    "undetected": 0
+  },
+  "tests": {
+    "bit_level": {
       "total": 616,
-      "detected": 616,
+      "seal_detected": 616,
+      "crash_detected": 0,
       "undetected": 0,
-      "detection_rate": 1.0,
-      "shannon_gap": 0.0,
+      "seal_detection_rate": 1.0,
+      "total_detection_rate": 1.0,
       "undetected_positions": [],
-      "scales_triggered": {
-        "0": 3931,
-        "9": 4797,
-        "10": 8098,
-        "1": 3481,
-        "2": 6187,
-        "3": 1184,
-        "5": 2127,
-        "6": 1895,
-        "8": 4566,
-        "7": 5697,
-        "4": 246
-      },
-      "time_seconds": 10.676377058029175
+      "time_seconds": 11.598214626312256
     },
-    {
-      "test": "byte_level",
+    "byte_level": {
       "total": 616,
-      "detected": 616,
+      "seal_detected": 616,
+      "crash_detected": 0,
       "undetected": 0,
-      "detection_rate": 1.0,
-      "shannon_gap": 0.0,
-      "undetected_details": [],
-      "time_seconds": 10.683828115463257
+      "seal_detection_rate": 1.0,
+      "total_detection_rate": 1.0,
+      "time_seconds": 12.155610799789429
     },
-    {
-      "test": "block_level",
+    "block_level": {
       "results_by_size": {
         "1": {
           "block_size": 1,
           "trials": 50,
-          "detected": 50,
+          "seal_detected": 50,
+          "crash_detected": 0,
           "undetected": 0,
-          "detection_rate": 1.0
+          "seal_detection_rate": 1.0
         },
         "2": {
           "block_size": 2,
           "trials": 50,
-          "detected": 50,
+          "seal_detected": 50,
+          "crash_detected": 0,
           "undetected": 0,
-          "detection_rate": 1.0
+          "seal_detection_rate": 1.0
         },
         "4": {
           "block_size": 4,
           "trials": 50,
-          "detected": 50,
+          "seal_detected": 50,
+          "crash_detected": 0,
           "undetected": 0,
-          "detection_rate": 1.0
+          "seal_detection_rate": 1.0
         },
         "8": {
           "block_size": 8,
           "trials": 50,
-          "detected": 50,
+          "seal_detected": 50,
+          "crash_detected": 0,
           "undetected": 0,
-          "detection_rate": 1.0
+          "seal_detection_rate": 1.0
         },
         "16": {
           "block_size": 16,
           "trials": 50,
-          "detected": 50,
+          "seal_detected": 50,
+          "crash_detected": 0,
           "undetected": 0,
-          "detection_rate": 1.0
+          "seal_detection_rate": 1.0
         },
         "32": {
           "block_size": 32,
           "trials": 50,
-          "detected": 50,
+          "seal_detected": 30,
+          "crash_detected": 20,
           "undetected": 0,
-          "detection_rate": 1.0
+          "seal_detection_rate": 0.6
         },
         "64": {
           "block_size": 64,
           "trials": 50,
-          "detected": 50,
+          "seal_detected": 0,
+          "crash_detected": 50,
           "undetected": 0,
-          "detection_rate": 1.0
+          "seal_detection_rate": 0.0
         }
       },
-      "time_seconds": 5.763948678970337,
-      "detection_rate": 1.0,
-      "total": 350
-    },
-    {
-      "test": "adversarial",
-      "total": 12,
-      "detected": 12,
+      "time_seconds": 6.4555418491363525,
+      "seal_detected": 280,
+      "crash_detected": 70,
       "undetected": 0,
-      "detection_rate": 1.0,
+      "total": 350,
+      "seal_detection_rate": 0.8
+    },
+    "adversarial": {
+      "total": 12,
+      "seal_detected": 10,
+      "crash_detected": 2,
+      "undetected": 0,
+      "seal_detection_rate": 0.8333333333333334,
+      "total_detection_rate": 1.0,
       "details": [
         {
           "mutation": "append_null_byte",
           "detected": true,
-          "layers_changed": 73,
+          "detection_type": "seal",
+          "layers_changed": 71,
           "scales_changed": 11
         },
         {
           "mutation": "append_space",
           "detected": true,
-          "layers_changed": 70,
-          "scales_changed": 10
+          "detection_type": "seal",
+          "layers_changed": 71,
+          "scales_changed": 11
         },
         {
           "mutation": "prepend_null_byte",
           "detected": true,
-          "layers_changed": 105,
+          "detection_type": "seal",
+          "layers_changed": 103,
           "scales_changed": 11
         },
         {
           "mutation": "insert_zwsp_middle",
           "detected": true,
-          "layers_changed": 98,
+          "detection_type": "seal",
+          "layers_changed": 95,
           "scales_changed": 11
         },
         {
           "mutation": "insert_zwnj_middle",
           "detected": true,
-          "layers_changed": 98,
+          "detection_type": "seal",
+          "layers_changed": 95,
           "scales_changed": 11
         },
         {
           "mutation": "insert_bom_start",
           "detected": true,
-          "layers_changed": 111,
+          "detection_type": "seal",
+          "layers_changed": 108,
           "scales_changed": 11
         },
         {
-          "mutation": "swap_bytes_5_0",
+          "mutation": "swap_first_two_bytes",
           "detected": true,
-          "layers_changed": 60,
+          "detection_type": "seal",
+          "layers_changed": 56,
           "scales_changed": 9
         },
         {
           "mutation": "bitwise_not_entire_file",
           "detected": true,
-          "layers_changed": 154,
-          "scales_changed": 11
+          "detection_type": "crash",
+          "layers_changed": 0,
+          "scales_changed": 0
         },
         {
           "mutation": "duplicate_content",
           "detected": true,
-          "layers_changed": 112,
+          "detection_type": "seal",
+          "layers_changed": 113,
           "scales_changed": 11
         },
         {
           "mutation": "truncate_last_byte",
           "detected": true,
-          "layers_changed": 93,
+          "detection_type": "seal",
+          "layers_changed": 89,
           "scales_changed": 11
         },
         {
           "mutation": "right_shift_all_bits",
           "detected": true,
-          "layers_changed": 154,
-          "scales_changed": 11
+          "detection_type": "crash",
+          "layers_changed": 0,
+          "scales_changed": 0
         },
         {
           "mutation": "bidi_override_inject",
           "detected": true,
-          "layers_changed": 99,
+          "detection_type": "seal",
+          "layers_changed": 94,
           "scales_changed": 11
         }
       ]
     },
-    {
+    "sha256_baseline": {
+      "total": 500,
+      "sha256_detected": 500,
+      "fatima_seal_detected": 500,
+      "fatima_crash_detected": 0,
+      "both_detected": 500,
+      "sha256_only": 0,
+      "fatima_only": 0,
+      "neither": 0,
+      "sha256_rate": 1.0,
+      "fatima_seal_rate": 1.0,
+      "time_seconds": 9.314533472061157
+    }
+  },
+  "diagnostics": {
+    "coverage_map": {
+      "test": "coverage_map",
+      "categories": {
+        "single_bit": 1.0,
+        "single_byte": 1.0,
+        "small_block_4": 1.0,
+        "medium_block_32": 1.0,
+        "append": 1.0,
+        "truncate": 1.0
+      },
+      "scale_hits": {
+        "single_bit": {
+          "0": 328,
+          "1": 282,
+          "2": 505,
+          "3": 92,
+          "4": 16,
+          "5": 168,
+          "6": 151,
+          "7": 438,
+          "8": 396,
+          "9": 389,
+          "10": 654
+        },
+        "single_byte": {
+          "0": 378,
+          "1": 295,
+          "2": 492,
+          "3": 148,
+          "4": 16,
+          "5": 248,
+          "6": 153,
+          "7": 395,
+          "8": 373,
+          "9": 402,
+          "10": 657
+        },
+        "small_block_4": {
+          "0": 481,
+          "9": 436,
+          "1": 428,
+          "10": 692,
+          "2": 523,
+          "3": 224,
+          "4": 67,
+          "5": 395,
+          "6": 195,
+          "7": 584,
+          "8": 427
+        },
+        "append": {
+          "9": 516,
+          "0": 593,
+          "1": 334,
+          "10": 700,
+          "2": 150,
+          "3": 205,
+          "4": 58,
+          "5": 152,
+          "6": 200,
+          "7": 600,
+          "8": 175
+        },
+        "truncate": {
+          "0": 450,
+          "1": 300,
+          "2": 200,
+          "3": 150,
+          "4": 50,
+          "5": 150,
+          "6": 700,
+          "7": 650,
+          "8": 600,
+          "9": 500,
+          "10": 700
+        },
+        "medium_block_32": {
+          "0": 388,
+          "1": 377,
+          "2": 352,
+          "3": 201,
+          "4": 148,
+          "5": 391,
+          "6": 267,
+          "7": 384,
+          "8": 330,
+          "9": 308,
+          "10": 448
+        }
+      },
+      "domain_hits": {
+        "single_bit": {
+          "heaven": 1407,
+          "earth": 2012
+        },
+        "single_byte": {
+          "heaven": 1461,
+          "earth": 2096
+        },
+        "small_block_4": {
+          "heaven": 1899,
+          "earth": 2553
+        },
+        "append": {
+          "heaven": 1356,
+          "earth": 2327
+        },
+        "truncate": {
+          "heaven": 2100,
+          "earth": 2350
+        },
+        "medium_block_32": {
+          "heaven": 1655,
+          "earth": 1939
+        }
+      },
+      "crash_counts": {
+        "medium_block_32": 18
+      }
+    },
+    "size_threshold": {
       "test": "size_threshold",
       "results": [
         {
           "size": 16,
           "trials": 128,
-          "detected": 128,
-          "detection_rate": 1.0
+          "seal_detected": 128,
+          "crash_detected": 0,
+          "undetected": 0,
+          "seal_detection_rate": 1.0
         },
         {
           "size": 32,
           "trials": 200,
-          "detected": 200,
-          "detection_rate": 1.0
+          "seal_detected": 200,
+          "crash_detected": 0,
+          "undetected": 0,
+          "seal_detection_rate": 1.0
         },
         {
           "size": 64,
           "trials": 200,
-          "detected": 200,
-          "detection_rate": 1.0
+          "seal_detected": 200,
+          "crash_detected": 0,
+          "undetected": 0,
+          "seal_detection_rate": 1.0
         },
         {
           "size": 128,
           "trials": 200,
-          "detected": 200,
-          "detection_rate": 1.0
+          "seal_detected": 200,
+          "crash_detected": 0,
+          "undetected": 0,
+          "seal_detection_rate": 1.0
         },
         {
           "size": 256,
           "trials": 200,
-          "detected": 200,
-          "detection_rate": 1.0
+          "seal_detected": 200,
+          "crash_detected": 0,
+          "undetected": 0,
+          "seal_detection_rate": 1.0
         },
         {
           "size": 512,
           "trials": 200,
-          "detected": 200,
-          "detection_rate": 1.0
+          "seal_detected": 200,
+          "crash_detected": 0,
+          "undetected": 0,
+          "seal_detection_rate": 1.0
         },
         {
           "size": 1024,
           "trials": 200,
-          "detected": 200,
-          "detection_rate": 1.0
+          "seal_detected": 200,
+          "crash_detected": 0,
+          "undetected": 0,
+          "seal_detection_rate": 1.0
         },
         {
           "size": 2048,
           "trials": 200,
-          "detected": 200,
-          "detection_rate": 1.0
+          "seal_detected": 200,
+          "crash_detected": 0,
+          "undetected": 0,
+          "seal_detection_rate": 1.0
         },
         {
           "size": 4096,
           "trials": 200,
-          "detected": 200,
-          "detection_rate": 1.0
+          "seal_detected": 200,
+          "crash_detected": 0,
+          "undetected": 0,
+          "seal_detection_rate": 1.0
         },
         {
           "size": 8192,
           "trials": 200,
-          "detected": 200,
-          "detection_rate": 1.0
+          "seal_detected": 200,
+          "crash_detected": 0,
+          "undetected": 0,
+          "seal_detection_rate": 1.0
         }
-      ],
-      "detection_rate": 1.0,
-      "total": 1928
+      ]
+    },
+    "ablation": {
+      "test": "ablation",
+      "valid_trials": 500,
+      "crashes_excluded": 0,
+      "full_detected": 500,
+      "heaven_detected": 500,
+      "earth_detected": 500,
+      "both_detected": 500,
+      "heaven_only": 0,
+      "earth_only": 0,
+      "neither": 0,
+      "full_rate": 1.0,
+      "heaven_rate": 1.0,
+      "earth_rate": 1.0,
+      "time_seconds": 9.319157600402832
+    },
+    "semantic": {
+      "test": "semantic",
+      "total": 10,
+      "fatima_detected": 10,
+      "sha256_detected": 10,
+      "fatima_rate": 1.0,
+      "sha256_rate": 1.0,
+      "details": [
+        {
+          "name": "negation_insert",
+          "category": "negation",
+          "fatima_detected": true,
+          "fatima_type": "seal",
+          "fatima_layers_changed": 98,
+          "sha256_detected": true,
+          "byte_difference": 7,
+          "original_len": 34,
+          "mutated_len": 41
+        },
+        {
+          "name": "negation_remove",
+          "category": "negation",
+          "fatima_detected": true,
+          "fatima_type": "seal",
+          "fatima_layers_changed": 97,
+          "sha256_detected": true,
+          "byte_difference": 4,
+          "original_len": 31,
+          "mutated_len": 27
+        },
+        {
+          "name": "role_reversal",
+          "category": "role_reversal",
+          "fatima_detected": true,
+          "fatima_type": "seal",
+          "fatima_layers_changed": 77,
+          "sha256_detected": true,
+          "byte_difference": 26,
+          "original_len": 45,
+          "mutated_len": 45
+        },
+        {
+          "name": "numeric_change",
+          "category": "numeric",
+          "fatima_detected": true,
+          "fatima_type": "seal",
+          "fatima_layers_changed": 88,
+          "sha256_detected": true,
+          "byte_difference": 1,
+          "original_len": 41,
+          "mutated_len": 42
+        },
+        {
+          "name": "numeric_subtle",
+          "category": "numeric",
+          "fatima_detected": true,
+          "fatima_type": "seal",
+          "fatima_layers_changed": 50,
+          "sha256_detected": true,
+          "byte_difference": 1,
+          "original_len": 29,
+          "mutated_len": 29
+        },
+        {
+          "name": "paraphrase_same_meaning",
+          "category": "paraphrase",
+          "fatima_detected": true,
+          "fatima_type": "seal",
+          "fatima_layers_changed": 106,
+          "sha256_detected": true,
+          "byte_difference": 41,
+          "original_len": 43,
+          "mutated_len": 43
+        },
+        {
+          "name": "synonym_substitution",
+          "category": "paraphrase",
+          "fatima_detected": true,
+          "fatima_type": "seal",
+          "fatima_layers_changed": 105,
+          "sha256_detected": true,
+          "byte_difference": 2,
+          "original_len": 45,
+          "mutated_len": 43
+        },
+        {
+          "name": "homoglyph_attack",
+          "category": "homoglyph",
+          "fatima_detected": true,
+          "fatima_type": "seal",
+          "fatima_layers_changed": 108,
+          "sha256_detected": true,
+          "byte_difference": 1,
+          "original_len": 32,
+          "mutated_len": 33
+        },
+        {
+          "name": "whitespace_semantic",
+          "category": "whitespace",
+          "fatima_detected": true,
+          "fatima_type": "seal",
+          "fatima_layers_changed": 68,
+          "sha256_detected": true,
+          "byte_difference": 1,
+          "original_len": 11,
+          "mutated_len": 12
+        },
+        {
+          "name": "case_change_meaning",
+          "category": "case_change",
+          "fatima_detected": true,
+          "fatima_type": "seal",
+          "fatima_layers_changed": 59,
+          "sha256_detected": true,
+          "byte_difference": 1,
+          "original_len": 28,
+          "mutated_len": 28
+        }
+      ]
     }
-  ]
+  },
+  "mutation_log": {
+    "seed": 4016794880,
+    "input_sha256": "d59feece3006c498bd1f6e9e4627614c0f449f1007207d9759d126a596c0ed07",
+    "input_size": 77,
+    "summary": {
+      "total_mutations": 1594,
+      "seal_detections": 1522,
+      "crash_detections": 72,
+      "undetected": 0,
+      "seal_detection_rate": 0.9548306148055207,
+      "crash_rate": 0.0451693851944793,
+      "total_detection_rate": 1.0
+    },
+    "log_sample": [
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_0",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 67
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_1",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 69
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_2",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 69
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_3",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 63
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_4",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 80
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_5",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 67
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_6",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 73
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_7",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 77
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_8",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_9",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_10",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 74
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_11",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_12",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 81
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_13",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 77
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_14",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 86
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_15",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 88
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_16",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 72
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_17",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 59
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_18",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 58
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_19",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_20",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 60
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_21",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 62
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_22",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 68
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_23",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_24",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_25",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_26",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 80
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_27",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 73
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_28",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 84
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_29",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 75
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_30",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 83
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_31",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 84
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_32",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 74
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_33",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 75
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_34",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_35",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_36",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 77
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_37",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_38",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 83
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_39",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 85
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_40",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_41",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_42",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 77
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_43",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_44",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 87
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_45",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 79
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_46",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 87
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_47",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 90
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_48",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 74
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_49",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 75
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_50",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_51",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_52",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 86
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_53",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 79
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_54",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 86
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_55",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 89
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_56",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 81
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_57",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_58",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_59",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_60",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 77
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_61",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 77
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_62",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 85
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_63",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 85
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_64",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_65",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 73
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_66",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_67",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 82
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_68",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 74
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_69",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 80
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_70",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 85
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_71",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 84
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_72",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 79
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_73",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 77
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_74",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_75",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 77
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_76",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_77",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 82
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_78",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 79
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_79",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 81
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_80",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_81",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 73
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_82",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 72
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_83",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 69
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_84",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 77
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_85",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 75
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_86",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 81
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_87",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 84
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_88",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_89",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_90",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 69
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_91",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 72
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_92",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 74
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_93",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 79
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_94",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 82
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_95",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 80
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_96",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_97",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 68
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_98",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_99",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_100",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 68
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_101",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_102",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 79
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_103",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 75
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_104",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_105",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_106",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_107",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_108",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 68
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_109",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_110",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 83
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_111",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 83
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_112",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 79
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_113",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 74
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_114",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_115",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_116",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 79
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_117",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_118",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 86
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_119",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 87
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_120",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 73
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_121",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 69
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_122",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 66
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_123",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_124",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 74
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_125",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_126",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 82
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_127",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 84
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_128",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 65
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_129",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 68
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_130",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_131",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_132",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 80
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_133",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_134",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_135",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 79
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_136",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_137",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_138",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 68
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_139",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 66
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_140",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 73
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_141",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 72
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_142",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 80
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_143",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 81
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_144",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 56
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_145",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 64
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_146",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 54
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_147",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 54
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_148",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 63
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_149",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 61
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_150",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 68
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_151",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 66
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_152",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 75
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_153",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 73
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_154",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 73
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_155",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 74
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_156",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 75
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_157",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_158",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_159",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_160",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_161",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 69
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_162",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_163",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 65
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_164",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 74
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_165",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_166",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 77
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_167",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 81
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_168",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 65
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_169",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 66
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_170",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 65
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_171",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 68
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_172",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 70
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_173",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 75
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_174",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_175",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_176",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 74
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_177",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_178",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 73
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_179",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 73
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_180",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_181",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 79
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_182",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 82
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_183",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 78
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_184",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 69
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_185",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 68
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_186",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 68
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_187",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 68
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_188",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 64
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_189",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_190",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 81
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_191",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 81
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_192",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 76
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_193",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 71
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_194",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 66
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_195",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 74
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_196",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 75
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_197",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 75
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_198",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 83
+      },
+      {
+        "test": "bit_level",
+        "mutation": "flip_bit_199",
+        "detected": true,
+        "detection_type": "seal",
+        "layers_changed": 83
+      }
+    ],
+    "log_total": 1594
+  }
 }
