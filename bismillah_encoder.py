@@ -177,9 +177,9 @@ import copy
 import time
 import string
 
-# v10.5.1: Lazy-loaded NLP singletons for spaCy + NLI
+# v10.5.1: Lazy-loaded NLP singletons for spaCy + sentence embedding
 _SPACY_NLP = None
-_NLI_MODEL = None
+_EMBEDDING_MODEL = None
 
 
 def _get_spacy_nlp():
@@ -194,24 +194,38 @@ def _get_spacy_nlp():
     return _SPACY_NLP if _SPACY_NLP is not False else None
 
 
-def _get_nli_model():
-    """Lazy-load sentence-transformers NLI model. Falls back to None."""
-    global _NLI_MODEL
-    if _NLI_MODEL is None:
+def _get_embedding_model():
+    """Lazy-load sentence-transformers embedding model (all-MiniLM-L6-v2).
+
+    v10.7.0: Renamed from _get_nli_model(). The model produces sentence
+    EMBEDDINGS for cosine similarity, not NLI entailment scores.
+    Falls back to None if sentence-transformers is unavailable.
+    """
+    global _EMBEDDING_MODEL
+    if _EMBEDDING_MODEL is None:
         try:
             from sentence_transformers import SentenceTransformer
-            _NLI_MODEL = SentenceTransformer("all-MiniLM-L6-v2")
+            _EMBEDDING_MODEL = SentenceTransformer("all-MiniLM-L6-v2")
         except (ImportError, OSError):
-            _NLI_MODEL = False  # Sentinel: tried and failed
-    return _NLI_MODEL if _NLI_MODEL is not False else None
+            _EMBEDDING_MODEL = False  # Sentinel: tried and failed
+    return _EMBEDDING_MODEL if _EMBEDDING_MODEL is not False else None
 
 
-def _nli_similarity(text_a, text_b):
-    """Compute cosine similarity between two texts using NLI model.
+# Backward-compatible alias
+_get_nli_model = _get_embedding_model
+
+
+def _embedding_similarity(text_a, text_b):
+    """Compute cosine similarity between two texts using sentence embeddings.
+
+    v10.7.0: Renamed from _nli_similarity(). The model (all-MiniLM-L6-v2)
+    produces sentence EMBEDDINGS for cosine similarity comparison, not
+    NLI entailment/contradiction scores. The distinction matters: cosine
+    similarity measures semantic closeness, not logical entailment.
 
     Returns float in [-1, 1] or None if model unavailable.
     """
-    model = _get_nli_model()
+    model = _get_embedding_model()
     if model is None:
         return None
     try:
@@ -221,6 +235,10 @@ def _nli_similarity(text_a, text_b):
         return util.cos_sim(emb_a, emb_b).item()
     except Exception:
         return None
+
+
+# Backward-compatible alias
+_nli_similarity = _embedding_similarity
 
 
 # v10.6.0: Language coverage disclosure -- detect non-Latin scripts and report
@@ -372,7 +390,11 @@ LAYERS_PER_HEAVEN = 14
 HURST_HARMONIC = 1.0157      # H(11) via harmonic R/S analysis
 HURST_PARTITIONED = 0.9898   # H_inter(11) via partitioned analysis
 HURST_PERFECT = 1.0          # Perfect persistence -- the convergence target
-ENCODER_VERSION = "10.6.0"  # v10.6.0: Language coverage disclosure, ZWC marker authentication, transactional witness writes, uniform HMAC secret propagation
+ENCODER_VERSION = "10.7.0"  # v10.7.0: Three-state verification, lossless ZWC (UTF-8), raw hash separation, sidecar-only binary default, stale sidecar fix, honest labeling
+
+# v10.7.0: Binary sealing mode. "sidecar" = witness file only (non-destructive).
+# "embed" = inject metadata into the binary (can invalidate PDF signatures).
+BINARY_SEAL_MODE = "sidecar"  # Default: sidecar-only (non-destructive)
 
 # The dual-constant architecture (Paper 5, Paper 6)
 # 154 = 2 x 7 x 11 -- both divine constants present simultaneously
@@ -1780,8 +1802,8 @@ def verify_bookend_integrity(computation):
 
 
 
-def text_to_zwc(message):
-    """Encode a text message into zero-width characters."""
+def text_to_zwc_v1(message):
+    """Legacy v1 ZWC encoding: 16-bit codepoints (loses non-BMP chars like emoji)."""
     encoded = ZW_BOUNDARY
     for char in message:
         bits = format(ord(char), '016b')
@@ -1792,11 +1814,117 @@ def text_to_zwc(message):
     return encoded
 
 
-def zwc_to_text(encoded):
-    """Decode zero-width characters back to text."""
+def text_to_zwc_v2(message):
+    """v10.7.0: Encode text into ZWC using UTF-8 bytes (lossless for all Unicode).
+
+    Unlike text_to_zwc_v1() which uses 16-bit codepoints (dropping non-BMP chars
+    like emoji), this encodes the raw UTF-8 byte sequence. A 4-byte length
+    prefix (big-endian) allows exact round-trip recovery.
+
+    Format: ZW_BOUNDARY + [4-byte length as 8-bit groups] + [UTF-8 bytes as 8-bit groups] + ZW_BOUNDARY
+    Each byte is encoded as 8 ZWC bits, separated by ZW_SEP.
+    """
+    utf8_bytes = message.encode('utf-8')
+    length = len(utf8_bytes)
+    # 4-byte big-endian length prefix
+    length_bytes = length.to_bytes(4, 'big')
+    all_bytes = length_bytes + utf8_bytes
+
+    encoded = ZW_BOUNDARY
+    for byte_val in all_bytes:
+        bits = format(byte_val, '08b')
+        for bit in bits:
+            encoded += ZW_ONE if bit == '1' else ZW_ZERO
+        encoded += ZW_SEP
+    encoded += ZW_BOUNDARY
+    return encoded
+
+
+def text_to_zwc(message):
+    """Encode text into ZWC. v10.7.0: Uses UTF-8 bytes (lossless for all Unicode)."""
+    return text_to_zwc_v2(message)
+
+
+def zwc_to_text_v1(encoded):
+    """Legacy v1 ZWC decoding: 16-bit codepoints."""
     result = []
     content = encoded.replace(ZW_BOUNDARY, '')
     chars = content.split(ZW_SEP)
+    for char_bits in chars:
+        if not char_bits:
+            continue
+        bits = ''
+        for zwc in char_bits:
+            if zwc == ZW_ZERO:
+                bits += '0'
+            elif zwc == ZW_ONE:
+                bits += '1'
+        if bits and len(bits) == 16:
+            result.append(chr(int(bits, 2)))
+    return ''.join(result)
+
+
+def zwc_to_text_v2(encoded):
+    """v10.7.0: Decode ZWC back to text using UTF-8 byte encoding (lossless).
+
+    Handles the v2 format (8-bit bytes with 4-byte length prefix).
+    Falls back to v1 (16-bit codepoints) if format detection fails.
+    """
+    content = encoded.replace(ZW_BOUNDARY, '')
+    byte_groups = content.split(ZW_SEP)
+
+    raw_bytes = []
+    for group in byte_groups:
+        if not group:
+            continue
+        bits = ''
+        for zwc in group:
+            if zwc == ZW_ZERO:
+                bits += '0'
+            elif zwc == ZW_ONE:
+                bits += '1'
+        if bits and len(bits) == 8:
+            raw_bytes.append(int(bits, 2))
+        elif bits and len(bits) == 16:
+            # v1 format detected -- fall back
+            return zwc_to_text_v1(encoded)
+
+    if len(raw_bytes) < 4:
+        return ''
+
+    # Extract length prefix
+    length = int.from_bytes(bytes(raw_bytes[:4]), 'big')
+    payload = bytes(raw_bytes[4:])
+
+    if len(payload) < length:
+        # Truncated -- try v1 fallback
+        return zwc_to_text_v1(encoded)
+
+    try:
+        return payload[:length].decode('utf-8')
+    except UnicodeDecodeError:
+        return zwc_to_text_v1(encoded)
+
+
+def zwc_to_text(encoded):
+    """Decode ZWC back to text. Auto-detects v1 (16-bit) vs v2 (UTF-8 bytes)."""
+    content = encoded.replace(ZW_BOUNDARY, '')
+    chars = content.split(ZW_SEP)
+
+    # Detect format: if first non-empty group has 8 bits, it's v2
+    for group in chars:
+        if not group:
+            continue
+        bit_count = sum(1 for c in group if c in (ZW_ZERO, ZW_ONE))
+        if bit_count == 8:
+            return zwc_to_text_v2(encoded)
+        elif bit_count == 16:
+            break  # v1 format
+        else:
+            break
+
+    # v1 decode (original logic)
+    result = []
     for char_bits in chars:
         if not char_bits:
             continue
@@ -1833,11 +1961,34 @@ def _nfc(data):
 
 
 def compute_seal(content_bytes):
-    """Compute Bismillah-anchored integrity seal (NFC-normalized)."""
+    """Compute Bismillah-anchored integrity seal (NFC-normalized).
+
+    Note: This normalizes content to NFC before hashing. Different byte
+    sequences that are Unicode-equivalent (composed vs decomposed) will
+    produce the SAME seal. This is correct for meaning-equivalence but
+    not for bit-identity. Use compute_raw_hash() when exact byte-level
+    identity is required.
+    """
     h = hashlib.sha256()
     h.update(BISMILLAH.encode('utf-8'))
     h.update(_nfc(content_bytes))
     h.update(BISMILLAH.encode('utf-8'))
+    return h.hexdigest()
+
+
+def compute_raw_hash(content_bytes):
+    """v10.7.0: Raw SHA-256 of content bytes WITHOUT NFC normalization.
+
+    compute_seal() NFC-normalizes, meaning different byte sequences
+    (composed vs decomposed Unicode) produce the same seal. This is
+    correct for MEANING-equivalence but NOT for BIT-identity.
+
+    This function provides the raw byte hash for cases where the caller
+    needs to verify exact byte-level identity (e.g., binary files,
+    exact-copy verification).
+    """
+    h = hashlib.sha256()
+    h.update(content_bytes)
     return h.hexdigest()
 
 
@@ -5678,7 +5829,7 @@ def evaluate_bearer_8():
     6. Passive paraphrase   - "dog chased cat" vs "cat was chased by dog" (should MATCH)
 
     Reports: coverage rate per class at the given FAR (false-accept rate),
-    plus NLI similarity when the model is available.
+    plus sentence embedding cosine similarity when the model is available.
 
     Bearer 8 status is now "coverage: X% at FAR Y%" — never TRUE/FALSE.
 
@@ -5852,8 +6003,8 @@ def evaluate_bearer_8():
             # Paraphrase: should detect preservation (no false alarm)
             correct = not structural_diff
 
-        # NLI similarity as secondary signal
-        nli_sim = _nli_similarity(
+        # Sentence embedding cosine similarity as secondary signal
+        embed_sim = _embedding_similarity(
             text_a.decode('utf-8', errors='replace'),
             text_b.decode('utf-8', errors='replace')
         )
@@ -5865,8 +6016,8 @@ def evaluate_bearer_8():
             ("expected_different", expect_diff),
             ("correct", correct),
         ])
-        if nli_sim is not None:
-            details["nli_similarity"] = round(nli_sim, 4)
+        if embed_sim is not None:
+            details["embedding_similarity"] = round(embed_sim, 4)
 
         if cls_name not in class_results:
             class_results[cls_name] = []
@@ -5920,10 +6071,10 @@ def evaluate_bearer_8():
 
     bearer_status = "coverage: {}% at FAR {}%".format(overall_rate, far)
 
-    # Check for spaCy and NLI availability
+    # Check for spaCy and sentence embedding model availability
     engine_info = OrderedDict()
     engine_info["spacy_available"] = _get_spacy_nlp() is not None
-    engine_info["nli_model_available"] = _get_nli_model() is not None
+    engine_info["embedding_model_available"] = _get_embedding_model() is not None
 
     return OrderedDict([
         ("bearer_8_status", bearer_status),
@@ -5941,7 +6092,7 @@ def evaluate_bearer_8():
          "Each pair compared at L2 (PROPOSITIONAL) and L3 (RELATIONAL). "
          "Attack pairs must produce different hashes; passive paraphrase pairs "
          "must produce same hashes (via active-normalization). "
-         "NLI cosine similarity reported as secondary signal when available."),
+         "Sentence embedding cosine similarity reported as secondary signal when available."),
         ("ghayb_disclosure",
          "Coverage measured over DEFINED attack classes only. Attacks outside "
          "these classes — coreference, discourse-level rewrites, pragmatic "
@@ -8670,8 +8821,16 @@ def seal_text_file(filepath, embed_names=False, muraqabah=True):
 # ============================================================================
 
 
-def seal_ooxml(filepath):
-    """Inject Bismillah into OOXML metadata."""
+def seal_ooxml(filepath, embed=None):
+    """Inject Bismillah into OOXML metadata.
+
+    v10.7.0: Defaults to sidecar-only (non-destructive) unless embed=True
+    or BINARY_SEAL_MODE="embed". OOXML rewriting can corrupt documents.
+    """
+    if embed is None:
+        embed = (BINARY_SEAL_MODE == "embed")
+    if not embed:
+        return create_sidecar(filepath)
     try:
         if not zipfile.is_zipfile(filepath):
             return False, "Not a valid ZIP/OOXML"
@@ -8709,8 +8868,16 @@ def seal_ooxml(filepath):
         return False, str(e)
 
 
-def seal_pdf(filepath):
-    """Inject Bismillah into PDF metadata."""
+def seal_pdf(filepath, embed=None):
+    """Inject Bismillah into PDF metadata.
+
+    v10.7.0: Defaults to sidecar-only (non-destructive) unless embed=True
+    or BINARY_SEAL_MODE="embed". PDF rewriting can invalidate digital signatures.
+    """
+    if embed is None:
+        embed = (BINARY_SEAL_MODE == "embed")
+    if not embed:
+        return create_sidecar(filepath)
     try:
         from pypdf import PdfReader, PdfWriter
         reader = PdfReader(filepath)
@@ -8738,8 +8905,16 @@ def seal_pdf(filepath):
         return False, str(e)
 
 
-def seal_png(filepath):
-    """Inject Bismillah into PNG text chunk."""
+def seal_png(filepath, embed=None):
+    """Inject Bismillah into PNG text chunk.
+
+    v10.7.0: Defaults to sidecar-only (non-destructive) unless embed=True
+    or BINARY_SEAL_MODE="embed".
+    """
+    if embed is None:
+        embed = (BINARY_SEAL_MODE == "embed")
+    if not embed:
+        return create_sidecar(filepath)
     try:
         from PIL import Image
         from PIL.PngImagePlugin import PngInfo
@@ -8761,7 +8936,16 @@ def seal_png(filepath):
         return False, str(e)
 
 
-def seal_jpg(filepath):
+def seal_jpg(filepath, embed=None):
+    """Inject Bismillah into JPEG EXIF metadata.
+
+    v10.7.0: Defaults to sidecar-only (non-destructive) unless embed=True
+    or BINARY_SEAL_MODE="embed".
+    """
+    if embed is None:
+        embed = (BINARY_SEAL_MODE == "embed")
+    if not embed:
+        return create_sidecar(filepath)
     try:
         from PIL import Image
         img = Image.open(filepath)
@@ -8778,7 +8962,16 @@ def seal_jpg(filepath):
         return False, str(e)
 
 
-def seal_mp3(filepath):
+def seal_mp3(filepath, embed=None):
+    """Inject Bismillah into MP3 ID3 tags.
+
+    v10.7.0: Defaults to sidecar-only (non-destructive) unless embed=True
+    or BINARY_SEAL_MODE="embed".
+    """
+    if embed is None:
+        embed = (BINARY_SEAL_MODE == "embed")
+    if not embed:
+        return create_sidecar(filepath)
     try:
         import mutagen
         from mutagen.id3 import ID3, COMM
@@ -8795,7 +8988,16 @@ def seal_mp3(filepath):
         return False, str(e)
 
 
-def seal_flac(filepath):
+def seal_flac(filepath, embed=None):
+    """Inject Bismillah into FLAC metadata.
+
+    v10.7.0: Defaults to sidecar-only (non-destructive) unless embed=True
+    or BINARY_SEAL_MODE="embed".
+    """
+    if embed is None:
+        embed = (BINARY_SEAL_MODE == "embed")
+    if not embed:
+        return create_sidecar(filepath)
     try:
         from mutagen.flac import FLAC
         audio = FLAC(filepath)
@@ -8822,11 +9024,24 @@ def seal_zip(filepath):
 
 
 def create_sidecar(filepath):
-    """Create companion .bismillah sidecar file."""
+    """Create companion .bismillah sidecar file.
+
+    v10.7.0: If sidecar already exists but source file is newer,
+    regenerate the sidecar (previously returned early with stale data).
+    """
     try:
         sidecar = filepath + '.bismillah'
         if os.path.exists(sidecar):
-            return True, "Sidecar exists"
+            # v10.7.0: Check if source has changed since sidecar was created.
+            # If the source is newer, update the sidecar instead of skipping.
+            try:
+                source_mtime = os.path.getmtime(filepath)
+                sidecar_mtime = os.path.getmtime(sidecar)
+                if sidecar_mtime >= source_mtime:
+                    return True, "Sidecar exists (up to date)"
+                # Source is newer — fall through to regenerate
+            except OSError:
+                return True, "Sidecar exists"
         sha256 = hashlib.sha256()
         with open(filepath, 'rb') as f:
             file_bytes = f.read()
@@ -8938,8 +9153,12 @@ def _get_hmac_key(domain_seal, domain_label=None):
 
     The real secret is mixed with the domain_seal so that:
       - Different files/chains produce different HMAC keys (prevents replay)
-      - An attacker who obtains the secret still cannot forge a sidecar
-        without also computing the correct seal for the content
+      - An attacker without the secret cannot forge a valid HMAC even if
+        they can compute the seal from the content (the seal is public data)
+      - Note: the HMAC protects sidecar integrity. If an attacker has BOTH
+        the secret AND the file content, they can produce a valid sidecar.
+        The secret's purpose is to prevent unauthorized third-party sidecars,
+        not to provide authentication against a fully-compromised environment.
 
     Returns (key_bytes, method_string) tuple.
     """
@@ -8996,6 +9215,7 @@ def _write_heaven_witness(filepath, content_bytes, computation):
         ("file", os.path.basename(filepath)),
         ("file_size", len(content_bytes)),
         ("muhkam_seal", compute_seal(content_bytes)),
+        ("content_sha256_raw", compute_raw_hash(content_bytes)),
         ("hurst_11", computation["hurst_11"]),
         ("master_witness", computation["master_witness"]),
         ("heavens", []),
@@ -9328,13 +9548,59 @@ def seal_directory(directory, embed_names=False, dry_run=False):
     return {"text": text_sealed, "binary": binary_sealed, "failed": failed}
 
 
+def _extract_witness_seal(witness_path):
+    """Extract muhkam_seal from a .witness.bismillah sidecar file.
+
+    Handles all sidecar format versions:
+      - v2.0 nested: muhkam_seal inside "witness" dict
+      - v1.0 flat: muhkam_seal at top level
+      - Top-level muhkam_seal (written by _write_heaven_witness)
+
+    Returns the stored seal string, or "" if not found / unreadable.
+    """
+    try:
+        with open(witness_path, 'r', encoding='utf-8') as wf:
+            w_data = json.load(wf)
+        # v2.0 nested format (standard)
+        witness_inner = w_data.get("witness", {})
+        if isinstance(witness_inner, dict):
+            stored = witness_inner.get("muhkam_seal", "")
+        else:
+            stored = ""
+        if not stored:
+            # Top-level muhkam_seal (written by _write_heaven_witness / v1.0 flat)
+            stored = w_data.get("muhkam_seal", "")
+        return stored
+    except Exception:
+        return ""
+
+
 def verify_directory(directory, strict=False):
-    """Verify 154-layer Bismillah protection across all files."""
+    """Verify 154-layer Bismillah protection across all files.
+
+    v10.7.0: Three-state verification model (Kimi K2 audit).
+    Previously, files were classified as "protected" or "unprotected" using
+    keyword detection (checking if "ismillah" appears in file bytes). This
+    caused false positives: ANY file mentioning "Bismillah" reported as
+    "protected" even without cryptographic sealing.
+
+    Three states:
+      1. integrity_verified -- cryptographic recomputation: compute_seal()
+         of file content matches muhkam_seal stored in witness sidecar.
+         This is the ONLY state that means "cryptographically verified."
+      2. witness_present -- a .witness.bismillah sidecar exists alongside
+         the file, but the seal has not been recomputed against content.
+      3. marker_detected -- file contains Bismillah text marker (keyword
+         match only). NOT cryptographically verified.
+
+    Files with none of the above are "unprotected."
+    """
     ZWC_BYTES = [b'\xe2\x80\x8b', b'\xe2\x80\x8c', b'\xe2\x80\x8d', b'\xef\xbb\xbf']
     total = 0
-    protected = 0
+    integrity_verified = 0  # Seal recomputation matched witness
+    witness_present = 0     # .witness.bismillah sidecar exists (not yet verified)
+    marker_detected = 0     # Keyword match only -- NOT cryptographically verified
     unprotected = []
-    witness_verified = 0
 
     for dirpath, dirnames, filenames in os.walk(directory):
         if '.git' in dirpath:
@@ -9346,15 +9612,46 @@ def verify_directory(directory, strict=False):
             total += 1
             ext = os.path.splitext(fname)[1].lower()
 
+            # Skip sidecar/witness files themselves -- they are metadata, not content
             if fname.endswith('.bismillah'):
-                protected += 1
+                # Sidecar files count toward total but are inherently part of
+                # the protection system, not content files needing protection.
+                marker_detected += 1
                 continue
 
-            if os.path.exists(fp + '.bismillah'):
-                protected += 1
-                if os.path.exists(fp + '.witness.bismillah'):
-                    witness_verified += 1
+            # --- Priority 1: Witness sidecar exists ---
+            witness_path = fp + '.witness.bismillah'
+            if os.path.exists(witness_path):
+                # Attempt cryptographic verification: recompute seal from
+                # actual file content and compare to stored muhkam_seal.
+                try:
+                    with open(fp, 'rb') as f:
+                        content_bytes = f.read()
+                    stored_seal = _extract_witness_seal(witness_path)
+                    if stored_seal:
+                        computed_seal = compute_seal(content_bytes)
+                        if hmac.compare_digest(stored_seal, computed_seal):
+                            integrity_verified += 1
+                        else:
+                            # Witness exists but seal doesn't match -- count as
+                            # witness_present (the mismatch is surfaced in strict mode)
+                            witness_present += 1
+                    else:
+                        # Witness file exists but no seal found in it
+                        witness_present += 1
+                except Exception:
+                    # Can't read file or witness -- count as witness_present
+                    witness_present += 1
                 continue
+
+            # --- Priority 2: .bismillah sidecar (no witness) ---
+            if os.path.exists(fp + '.bismillah'):
+                marker_detected += 1
+                continue
+
+            # --- Priority 3: Keyword/marker detection ---
+            # Honestly labeled: this is NOT cryptographic verification.
+            has_marker = False
 
             if is_text_file(ext) or ext == '' or ext == '.gitignore':
                 try:
@@ -9363,14 +9660,11 @@ def verify_directory(directory, strict=False):
                     for zwc in ZWC_BYTES:
                         data = data.replace(zwc, b'')
                     if b'ismillah' in data or b'ISMILLAH' in data:
-                        protected += 1
-                        if os.path.exists(fp + '.witness.bismillah'):
-                            witness_verified += 1
-                        continue
+                        has_marker = True
                 except Exception:
                     pass
 
-            if ext in OOXML_EXTENSIONS:
+            if not has_marker and ext in OOXML_EXTENSIONS:
                 try:
                     if zipfile.is_zipfile(fp):
                         with zipfile.ZipFile(fp, 'r') as z:
@@ -9378,35 +9672,41 @@ def verify_directory(directory, strict=False):
                                 if 'core.xml' in entry or 'Bismillah' in entry:
                                     content = z.read(entry).decode('utf-8', errors='replace')
                                     if 'ismillah' in content.lower():
-                                        protected += 1
+                                        has_marker = True
                                         break
-                            else:
+                            if not has_marker:
                                 unprotected.append(os.path.relpath(fp, directory))
+                            else:
+                                marker_detected += 1
                             continue
                 except Exception:
                     pass
 
-            if ext == '.zip':
+            if not has_marker and ext == '.zip':
                 try:
                     if zipfile.is_zipfile(fp):
                         with zipfile.ZipFile(fp, 'r') as z:
                             if 'Bismillah.txt' in z.namelist():
-                                protected += 1
-                                continue
+                                has_marker = True
                 except Exception:
                     pass
 
-            try:
-                with open(fp, 'rb') as f:
-                    data = f.read(8000)
-                if b'ismillah' in data or b'Bismillah' in data:
-                    protected += 1
-                    continue
-            except Exception:
-                pass
+            if not has_marker:
+                try:
+                    with open(fp, 'rb') as f:
+                        data = f.read(8000)
+                    if b'ismillah' in data or b'Bismillah' in data:
+                        has_marker = True
+                except Exception:
+                    pass
 
-            unprotected.append(os.path.relpath(fp, directory))
+            if has_marker:
+                marker_detected += 1
+            else:
+                unprotected.append(os.path.relpath(fp, directory))
 
+    # Backward-compatible "protected" = sum of all three states
+    protected = integrity_verified + witness_present + marker_detected
     pct = (protected / total * 100) if total > 0 else 0
 
     print("\n  {} -- 11-Heaven Verification Report".format(BISMILLAH))
@@ -9416,8 +9716,11 @@ def verify_directory(directory, strict=False):
     print("  Dual-constant:       {} = 2 x {} x {}".format(
         TOTAL_LAYERS, MUHKAM_CONSTANT, MUTASHABIH_CONSTANT))
     print("  Total files:         {}".format(total))
-    print("  Protected:           {}".format(protected))
-    print("  Witness sidecars:    {}".format(witness_verified))
+    # v10.7.0: Three-state breakdown replaces single "Protected" count
+    print("  Integrity verified:  {} (cryptographic seal recomputation matched)".format(integrity_verified))
+    print("  Witness present:     {} (sidecar exists, seal not yet matched)".format(witness_present))
+    print("  Marker detected:     {} (keyword match only -- NOT cryptographically verified)".format(marker_detected))
+    print("  Total protected:     {}".format(protected))
     print("  Unprotected:         {}".format(len(unprotected)))
     print("  Protection:          {:.4f}%".format(pct))
 
@@ -9457,7 +9760,7 @@ def verify_directory(directory, strict=False):
         else:
             print("\n  STRICT: No manifest found. Run 'manifest' first.")
 
-        # Verify witness sidecars
+        # Verify witness sidecars (strict mode does full HMAC + master witness check)
         print("\n  WITNESS SIDECAR VERIFICATION:")
         witness_check = 0
         for dirpath, dirnames, filenames in os.walk(directory):
@@ -9470,22 +9773,11 @@ def verify_directory(directory, strict=False):
                     source_path = witness_path.replace('.witness.bismillah', '')
                     if os.path.exists(source_path):
                         try:
-                            with open(witness_path, 'r', encoding='utf-8') as wf:
-                                w_data = json.load(wf)
                             with open(source_path, 'rb') as sf:
                                 source_bytes = sf.read()
-                            # muhkam_seal lives under w_data["witness"]
-                            # but check multiple locations for robustness
-                            witness_inner = w_data.get("witness", {})
-                            if isinstance(witness_inner, dict):
-                                stored = witness_inner.get("muhkam_seal", "")
-                            else:
-                                stored = ""
-                            if not stored:
-                                # Fallback: check top level (legacy format)
-                                stored = w_data.get("muhkam_seal", "")
+                            stored = _extract_witness_seal(witness_path)
                             computed = compute_seal(source_bytes)
-                            if stored == computed:
+                            if stored and hmac.compare_digest(stored, computed):
                                 witness_check += 1
                             else:
                                 rel = os.path.relpath(source_path, directory)
@@ -9503,13 +9795,19 @@ def verify_directory(directory, strict=False):
     record_experience("verify_directory", directory, outcome, {
         "total_files": total,
         "protected": protected,
+        "integrity_verified": integrity_verified,
+        "witness_present": witness_present,
+        "marker_detected": marker_detected,
         "unprotected_count": len(unprotected),
         "tampered_count": len(tampered),
-        "witness_verified": witness_verified,
     })
 
-    return {"total": total, "protected": protected, "unprotected": unprotected,
-            "tampered": tampered, "witness_verified": witness_verified}
+    return {"total": total, "protected": protected,
+            "integrity_verified": integrity_verified,
+            "witness_present": witness_present,
+            "marker_detected": marker_detected,
+            "unprotected": unprotected,
+            "tampered": tampered}
 
 
 def generate_manifest(directory):
@@ -12986,8 +13284,8 @@ Examples:
         eng = result["engine"]
         print("    spaCy dependency parser:  {}".format(
             "ACTIVE" if eng["spacy_available"] else "FALLBACK (NLTK)"))
-        print("    NLI embedding model:      {}".format(
-            "ACTIVE" if eng["nli_model_available"] else "UNAVAILABLE"))
+        print("    Sentence embedding model: {}".format(
+            "ACTIVE" if eng.get("embedding_model_available", eng.get("nli_model_available")) else "UNAVAILABLE"))
         print("\n  Coverage by attack class:")
         print("  {:<24s} {:>8s} {:>10s}".format("Class", "Rate", "Detail"))
         print("  {}".format("-" * 46))
