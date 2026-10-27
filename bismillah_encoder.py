@@ -983,7 +983,9 @@ BIDI_OVERRIDES = {
 }
 
 # Dangerous overrides that FORCE directionality regardless of script
-BIDI_DANGEROUS = {'‭', '‮', '‪', '‫'}
+# LRO (U+202D) and RLO (U+202E) are true overrides -- CVE-2021-42574 attack surface
+# LRE (U+202A) and RLE (U+202B) are embeddings (suggest, don't force) -- lower severity
+BIDI_DANGEROUS = {'‭', '‮'}  # LRO, RLO only
 
 # Arabic Unicode ranges for directionality classification
 ARABIC_RANGES = [

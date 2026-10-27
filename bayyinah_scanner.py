@@ -332,7 +332,19 @@ def _compute_flattening_score(text, source_text=None):
     # Numbers indicate specific claims; their absence in output about
     # quantitative source material suggests flattening
     numbers_in_output = len(re.findall(r'\b\d+(?:\.\d+)?%?\b', text))
-    proper_nouns = len(re.findall(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b', text))
+    # Count proper nouns -- exclude sentence-initial capitals (common words
+    # like "The", "This" that are capitalized only because they start a sentence)
+    COMMON_SENTENCE_STARTERS = {
+        'the', 'a', 'an', 'this', 'that', 'these', 'those', 'it', 'its',
+        'they', 'we', 'he', 'she', 'our', 'my', 'his', 'her', 'their',
+        'some', 'many', 'most', 'all', 'each', 'every', 'any', 'no',
+        'there', 'here', 'when', 'where', 'while', 'if', 'as', 'but',
+        'and', 'or', 'so', 'for', 'yet', 'nor', 'however', 'although',
+        'because', 'since', 'after', 'before', 'until', 'once',
+    }
+    proper_noun_matches = re.findall(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b', text)
+    proper_nouns = len([p for p in proper_noun_matches
+                        if p.split()[0].lower() not in COMMON_SENTENCE_STARTERS])
 
     result = {
         "flattening_count": flat_count,
@@ -348,9 +360,11 @@ def _compute_flattening_score(text, source_text=None):
     if source_text:
         source_numbers = len(re.findall(r'\b\d+(?:\.\d+)?%?\b', source_text))
         source_sentences = max(len(re.split(r'[.!?]+', source_text)), 1)
-        source_specificity = (source_numbers +
-                               len(re.findall(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b',
-                                              source_text))) / source_sentences
+        source_proper_matches = re.findall(
+            r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b', source_text)
+        source_proper_nouns = len([p for p in source_proper_matches
+                                    if p.split()[0].lower() not in COMMON_SENTENCE_STARTERS])
+        source_specificity = (source_numbers + source_proper_nouns) / source_sentences
 
         # Specificity ratio: output / source
         # < 0.5 suggests significant flattening
@@ -490,6 +504,51 @@ def detect_mode_collapse(text, source_text=None):
                     flattening["specificity_score"]),
             })
 
+    # --- Semantic vacuity detection ---
+    # Catch marker-free vacuous text: no numbers, low proper nouns,
+    # and repetitive sentence templates (The X verbs Y.)
+    sentences_clean = [s.strip() for s in re.split(r'[.!?]+', text) if s.strip()]
+    if len(sentences_clean) >= 3:
+        # Extract sentence templates: replace content words with POS-like slots
+        # Pattern: "The NOUN VERBs NOUN" repeated
+        templates = []
+        for sent in sentences_clean:
+            # Normalize to template: keep function words, replace content words
+            words = sent.split()
+            template = []
+            for w in words:
+                wl = w.lower().rstrip('.,;:')
+                if wl in ('the', 'a', 'an', 'is', 'are', 'was', 'were', 'and',
+                          'or', 'of', 'in', 'on', 'to', 'for', 'with', 'by',
+                          'from', 'that', 'this', 'its', 'their', 'has', 'have'):
+                    template.append(wl)
+                else:
+                    template.append('X')
+            templates.append(' '.join(template))
+
+        # Measure template repetition
+        unique_templates = len(set(templates))
+        template_ratio = unique_templates / len(templates)
+
+        # Low specificity + repetitive templates = semantic vacuity
+        specificity = flattening["specificity_score"]
+        if specificity < 0.5 and template_ratio < 0.6 and len(sentences_clean) >= 5:
+            vacuity_score = (0.6 - template_ratio) * 30 + (0.5 - specificity) * 20
+            findings.append({
+                "severity": "HIGH",
+                "code": "MC-007",
+                "description": "Semantic vacuity -- low specificity ({:.2f}) with "
+                              "repetitive templates ({:.0f}% unique)".format(
+                                  specificity, template_ratio * 100),
+                "detail": "{} sentences, {} unique templates, {} numbers, {} proper nouns".format(
+                    len(sentences_clean), unique_templates,
+                    flattening["numbers_in_text"], flattening["proper_nouns"]),
+            })
+        else:
+            vacuity_score = 0.0
+    else:
+        vacuity_score = 0.0
+
     # --- Compute overall collapse probability ---
     # Weighted score from all dimensions
     collapse_score = 0.0
@@ -498,9 +557,10 @@ def detect_mode_collapse(text, source_text=None):
     collapse_score += min(hedge["hedge_density"] * 30, 20)
     collapse_score += min(evasion["evasion_score"] * 40, 30)
     collapse_score += min(flattening["flattening_density"] * 20, 15)
+    collapse_score += min(vacuity_score, 25)  # Semantic vacuity contribution
     if source_text and flattening.get("specificity_ratio") is not None:
         if flattening["specificity_ratio"] < 0.5:
-            collapse_score += (0.5 - flattening["specificity_ratio"]) * 40
+            collapse_score += (0.5 - flattening["specificity_ratio"]) * 120
 
     # Clamp to 0-100
     collapse_probability = min(max(collapse_score, 0), 100)
@@ -617,7 +677,7 @@ def _detect_selective_omission(text, source_text):
     source_arabic = len(re.findall(r'[؀-ۿ]+', source_text))
     output_arabic = len(re.findall(r'[؀-ۿ]+', text))
 
-    if source_arabic > 5 and output_arabic == 0:
+    if source_arabic > 2 and output_arabic == 0:
         findings.append({
             "severity": "CRITICAL",
             "code": "AP-003",
@@ -667,7 +727,7 @@ def _detect_selective_omission(text, source_text):
                 uncovered.append(section)
 
         coverage = covered / len(source_sections) if source_sections else 1.0
-        if coverage < 0.5 and len(uncovered) > 2:
+        if coverage < 0.5 and len(uncovered) >= 2:
             findings.append({
                 "severity": "HIGH",
                 "code": "AP-005",
