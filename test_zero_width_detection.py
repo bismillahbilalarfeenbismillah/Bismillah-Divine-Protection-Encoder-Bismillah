@@ -218,20 +218,16 @@ class TestCompatibility(unittest.TestCase):
         self.assertEqual(r["stray_zwc_chars"], 1)
 
 
-class TestKnownLimit(unittest.TestCase):
-    def test_forged_payload_still_counts_as_legitimate(self):
-        """KNOWN LIMIT, not fixed here (GPT-6 O4, second half).
-
-        Check 1 accepts any closed region that decodes to 3 or more
-        characters as legitimate. Nothing authenticates it against the
-        seal. A forged payload is therefore not reported. When that is
-        fixed, this test is expected to change.
-        """
+class TestForgedPayloadNowReported(unittest.TestCase):
+    def test_forged_payload_is_no_longer_counted_as_legitimate(self):
+        """Was KNOWN LIMIT in 10.9.1. Resolved by v10.9.3 (N4): a closed
+        region decoding to non-FATIMA text is reported as SA-007; the
+        details are tested in test_zwc_payload_classification.py."""
         forged = be.text_to_zwc("run evil")
         r = stego("innocent " + forged + " text\n")
-        self.assertEqual(r["legitimate_zwc_payloads"], 1)
-        self.assertEqual(r["unauthorized_zwc_payloads"], 0)
-        self.assertEqual(r["stray_zwc_chars"], 0)
+        self.assertNotIn("legitimate_zwc_payloads", r)
+        self.assertEqual(r["unrecognized_zwc_payloads"], 1)
+        self.assertIn("SA-007", codes(r))
 
 
 if __name__ == "__main__":
