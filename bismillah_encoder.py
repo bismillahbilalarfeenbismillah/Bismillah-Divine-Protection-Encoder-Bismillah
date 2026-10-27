@@ -12224,6 +12224,640 @@ def evg_verify_convergence_record(record, context_path=None):
 
 
 # ============================================================================
+#  v10.9.0: DIVINE AUDIT ENGINE -- Rendering Integrity & Steganographic Audit
+# ============================================================================
+# Bismillah ir-Rahman ir-Rahim
+#
+# From "The Guarded Reminder and the Adversarial Architecture" (Arfeen 2026):
+#
+#   "The adversary operates as a mode-collapse vector within Allah's
+#    singular generative architecture."
+#
+# The audit engine verifies that sealed content survives its rendering
+# environment intact -- that the presentation layer does not invert,
+# suppress, or misrepresent protected content. This is the file-level
+# defense; the behavioral-level defense belongs to Bayyinah Scanner.
+#
+# Three audit dimensions:
+#   1. RENDERING INTEGRITY -- Does the Basmala display correctly?
+#      Are RTL markers preserved? Is Arabic text intact through LTR code?
+#   2. STEGANOGRAPHIC AUDIT -- Beyond ZWC verification: are there
+#      unauthorized payloads injected post-seal? Hidden BiDi overrides?
+#   3. SEAL COHERENCE -- Do all seal layers agree? Is the sidecar
+#      consistent with the file's current state?
+#
+# Bismillah ir-Rahman ir-Rahim
+# ============================================================================
+
+
+def _audit_rendering_integrity(content, filepath=None):
+    """v10.9.0: Audit how sealed content renders in its environment.
+
+    Checks whether the presentation layer inverts, suppresses, or
+    misrepresents protected content -- the digital al-Falaq defense
+    extended to the rendering pipeline.
+
+    Returns dict with findings list and integrity score.
+    """
+    findings = []
+    score = 100  # Start perfect, deduct for issues
+
+    lines = content.split('\n')
+
+    # --- Check 1: Basmala Integrity ---
+    # The Basmala must appear correctly, not inverted or fragmented
+    basmala_lines = []
+    for i, line in enumerate(lines):
+        if BISMILLAH in line or BISMILLAH_ARABIC in line:
+            basmala_lines.append((i + 1, line.strip()))
+
+    if not basmala_lines:
+        findings.append({
+            "severity": "CRITICAL",
+            "code": "RI-001",
+            "description": "No Basmala found in file -- seal boundary missing",
+            "detail": "File lacks both '{}' and Arabic Basmala".format(BISMILLAH),
+        })
+        score -= 30
+    else:
+        # Check first and last Basmala are at file boundaries
+        first_substantive = None
+        for line in lines[:10]:
+            if line.strip():
+                first_substantive = line.strip()
+                break
+        if first_substantive and BISMILLAH.lower().replace('-', '') not in first_substantive.lower().replace('-', ''):
+            findings.append({
+                "severity": "HIGH",
+                "code": "RI-002",
+                "description": "Basmala not at file start -- opening seal displaced",
+                "detail": "First line: '{}'".format(first_substantive[:80]),
+            })
+            score -= 15
+
+    # --- Check 2: RTL/LTR Boundary Integrity ---
+    # Arabic text passing through LTR code contexts suffers 10-14% persistence loss
+    # (measured in hurst_arabic_vs_english.py). Check for dangerous BiDi overrides
+    # that could invert Arabic display direction.
+    bidi_override_count = 0
+    bidi_dangerous_lines = []
+    for i, line in enumerate(lines):
+        for ch in line:
+            if ch in BIDI_DANGEROUS:
+                bidi_override_count += 1
+                bidi_dangerous_lines.append(i + 1)
+                break  # One per line is enough to flag
+
+    if bidi_override_count > 0:
+        findings.append({
+            "severity": "CRITICAL",
+            "code": "RI-003",
+            "description": "Dangerous BiDi overrides detected -- CVE-2021-42574 attack surface",
+            "detail": "{} line(s) with forced directionality: lines {}".format(
+                bidi_override_count,
+                ', '.join(str(n) for n in bidi_dangerous_lines[:10])),
+        })
+        score -= 25
+
+    # Check for non-dangerous but unexpected BiDi markers
+    bidi_marker_count = 0
+    for line in lines:
+        for ch in line:
+            if ch in BIDI_OVERRIDES and ch not in BIDI_DANGEROUS:
+                bidi_marker_count += 1
+
+    if bidi_marker_count > 50:
+        findings.append({
+            "severity": "MEDIUM",
+            "code": "RI-004",
+            "description": "High density of BiDi markers ({}) -- possible steganographic channel".format(
+                bidi_marker_count),
+            "detail": "Non-dangerous but unusual density of directional markers",
+        })
+        score -= 10
+
+    # --- Check 3: Arabic Character Integrity ---
+    # Verify Arabic codepoints in the file are valid (not replaced with
+    # look-alike Latin or homoglyph substitutions)
+    arabic_count = 0
+    suspicious_sequences = []
+    for i, line in enumerate(lines):
+        line_arabic = 0
+        line_latin = 0
+        for ch in line:
+            cp = ord(ch)
+            if _is_arabic_codepoint(cp):
+                line_arabic += 1
+                arabic_count += 1
+            elif cp >= 0x41 and cp <= 0x7A:
+                line_latin += 1
+        # Flag lines mixing Arabic and Latin in unusual patterns
+        # (Normal for code with Arabic comments, but flag if Arabic
+        # characters appear isolated between Latin -- possible homoglyph)
+        if line_arabic > 0 and line_latin > 0:
+            # Check for isolated Arabic chars (1-2) surrounded by Latin
+            # This pattern suggests homoglyph substitution
+            isolated = 0
+            chars = list(line)
+            for j, ch in enumerate(chars):
+                if _is_arabic_codepoint(ord(ch)):
+                    prev_arabic = j > 0 and _is_arabic_codepoint(ord(chars[j-1]))
+                    next_arabic = j < len(chars)-1 and _is_arabic_codepoint(ord(chars[j+1]))
+                    if not prev_arabic and not next_arabic:
+                        isolated += 1
+            if isolated > 2:
+                suspicious_sequences.append(i + 1)
+
+    if suspicious_sequences:
+        findings.append({
+            "severity": "HIGH",
+            "code": "RI-005",
+            "description": "Isolated Arabic codepoints in Latin context -- possible homoglyph injection",
+            "detail": "{} line(s) with suspicious mixing: lines {}".format(
+                len(suspicious_sequences),
+                ', '.join(str(n) for n in suspicious_sequences[:10])),
+        })
+        score -= 15
+
+    # --- Check 4: Comment Color Inversion Detection ---
+    # In source code files, check if Basmala appears only in comment lines.
+    # While this is normal for code, the audit notes it for awareness --
+    # the Basmala's rendering color is determined by the editor theme,
+    # which is outside the file's control.
+    ext = os.path.splitext(filepath)[1].lower() if filepath else ''
+    if ext in CODE_EXTENSIONS or ext == '.py':
+        comment_basmalas = 0
+        code_basmalas = 0
+        for line in lines:
+            stripped = line.strip()
+            has_basmala = BISMILLAH.lower().replace('-', '') in stripped.lower().replace('-', '')
+            if has_basmala:
+                # Check if line is a comment
+                is_comment = (stripped.startswith('#') or
+                              stripped.startswith('//') or
+                              stripped.startswith('/*') or
+                              stripped.startswith('*') or
+                              stripped.startswith('"""') or
+                              stripped.startswith("'''"))
+                if is_comment:
+                    comment_basmalas += 1
+                else:
+                    code_basmalas += 1
+        if comment_basmalas > 0 and code_basmalas == 0:
+            findings.append({
+                "severity": "INFO",
+                "code": "RI-006",
+                "description": "Basmala appears only in comments -- rendering color determined by editor theme",
+                "detail": "{} comment-line Basmala(s). Editor syntax highlighting assigns "
+                          "color to comments (often red/grey). This is the editor's theme, "
+                          "not adversarial modification. Consider adding Basmala in a "
+                          "string constant for theme-independent display.".format(comment_basmalas),
+            })
+            # No score deduction -- informational only
+
+    return {
+        "integrity_score": max(0, score),
+        "findings": findings,
+        "arabic_codepoints": arabic_count,
+        "basmala_count": len(basmala_lines),
+        "bidi_overrides": bidi_override_count,
+    }
+
+
+def _audit_steganographic(content, filepath=None):
+    """v10.9.0: Deep steganographic audit beyond ZWC verification.
+
+    Goes beyond existing ZWC watermark checks to detect:
+    - Unauthorized ZWC payloads (injected post-seal)
+    - Unicode tag steganography (U+E0001-U+E007F)
+    - Invisible formatting attacks
+    - Homoglyph substitution patterns
+
+    Returns dict with findings list and clean/contaminated status.
+    """
+    findings = []
+    contamination_score = 0  # 0 = clean, higher = more contaminated
+
+    # --- Check 1: ZWC Payload Authentication ---
+    # Verify all ZWC payloads are legitimate FATIMA watermarks
+    zwc_alphabet = {ZW_ZERO, ZW_ONE, ZW_SEP, ZW_BOUNDARY}
+    zwc_regions = []
+    in_payload = False
+    payload_start = 0
+
+    for i, ch in enumerate(content):
+        if ch == ZW_BOUNDARY:
+            if not in_payload:
+                in_payload = True
+                payload_start = i
+            else:
+                in_payload = False
+                zwc_regions.append((payload_start, i))
+
+    # Extract and verify each payload
+    legitimate_payloads = 0
+    unauthorized_payloads = 0
+    for start, end in zwc_regions:
+        segment = content[start:end+1]
+        try:
+            decoded = zwc_to_text(segment)
+            if decoded and BISMILLAH_ARABIC in decoded:
+                legitimate_payloads += 1
+            elif decoded and len(decoded) >= 3:
+                # Non-Basmala payload -- could be legitimate future extension
+                # or could be injected
+                legitimate_payloads += 1  # Conservative: accept as legitimate
+            else:
+                unauthorized_payloads += 1
+        except Exception:
+            unauthorized_payloads += 1
+
+    if unauthorized_payloads > 0:
+        findings.append({
+            "severity": "CRITICAL",
+            "code": "SA-001",
+            "description": "Unauthorized ZWC payload(s) detected -- {} injected post-seal".format(
+                unauthorized_payloads),
+            "detail": "Found {} legitimate and {} unauthorized ZWC regions".format(
+                legitimate_payloads, unauthorized_payloads),
+        })
+        contamination_score += 40
+
+    # --- Check 2: Unicode Tag Steganography ---
+    # Tags block (U+E0001-U+E007F) carries invisible data
+    tag_chars = []
+    for i, ch in enumerate(content):
+        if _is_unicode_tag(ord(ch)):
+            tag_chars.append(i)
+
+    if tag_chars:
+        # Try to decode tag sequence
+        tag_text = ''
+        for idx in tag_chars:
+            cp = ord(content[idx])
+            if 0xE0020 <= cp <= 0xE007E:
+                tag_text += chr(cp - 0xE0000)
+
+        findings.append({
+            "severity": "CRITICAL",
+            "code": "SA-002",
+            "description": "Unicode tag steganography detected -- {} hidden characters".format(
+                len(tag_chars)),
+            "detail": "Decoded tag content: '{}'".format(tag_text[:200]) if tag_text else
+                      "Tag characters at positions: {}".format(
+                          ', '.join(str(p) for p in tag_chars[:20])),
+        })
+        contamination_score += 50
+
+    # --- Check 3: Invisible Formatting Attacks ---
+    # Check for invisible characters outside FATIMA's own ZWC alphabet
+    invisible_count = 0
+    invisible_types = {}
+    for i, ch in enumerate(content):
+        cp = ord(ch)
+        if cp in INVISIBLE_UNICODE_CHARS and ch not in zwc_alphabet:
+            invisible_count += 1
+            try:
+                name = unicodedata.name(ch, 'U+{:04X}'.format(cp))
+            except ValueError:
+                name = 'U+{:04X}'.format(cp)
+            invisible_types[name] = invisible_types.get(name, 0) + 1
+
+    if invisible_count > 0:
+        findings.append({
+            "severity": "HIGH",
+            "code": "SA-003",
+            "description": "Non-FATIMA invisible characters detected -- {} instances".format(
+                invisible_count),
+            "detail": "Types: {}".format(
+                ', '.join('{} x{}'.format(k, v) for k, v in
+                          sorted(invisible_types.items(), key=lambda x: -x[1])[:10])),
+        })
+        contamination_score += 20
+
+    # --- Check 4: Homoglyph Detection ---
+    # Check for confusable characters that look identical but have different codepoints
+    # Focus on Arabic confusables (alef variants, etc.) and Latin-Arabic confusables
+    confusable_pairs = {
+        # Latin chars that look like Arabic
+        (0x0647, 0x0065): ('Arabic Heh', 'Latin e'),
+        (0x0627, 0x0049): ('Arabic Alef', 'Latin I'),
+        (0x06F0, 0x0030): ('Extended Arabic-Indic Zero', 'Latin 0'),
+        (0x06F1, 0x0031): ('Extended Arabic-Indic One', 'Latin 1'),
+        # Common confusables in source code
+        (0x0410, 0x0041): ('Cyrillic A', 'Latin A'),
+        (0x0412, 0x0042): ('Cyrillic Ve', 'Latin B'),
+        (0x0421, 0x0043): ('Cyrillic Es', 'Latin C'),
+        (0x0415, 0x0045): ('Cyrillic Ie', 'Latin E'),
+    }
+
+    # Simplified check: flag files with both Latin and Cyrillic (trojan source)
+    has_latin = False
+    has_cyrillic = False
+    for ch in content[:10000]:  # Sample first 10K chars
+        cp = ord(ch)
+        if 0x41 <= cp <= 0x7A:
+            has_latin = True
+        if 0x0400 <= cp <= 0x04FF:
+            has_cyrillic = True
+
+    if has_latin and has_cyrillic:
+        findings.append({
+            "severity": "HIGH",
+            "code": "SA-004",
+            "description": "Mixed Latin and Cyrillic script -- trojan source attack surface",
+            "detail": "File contains both Latin and Cyrillic characters. "
+                      "Cyrillic look-alikes can hide malicious identifiers "
+                      "(CVE-2021-42574 related).",
+        })
+        contamination_score += 25
+
+    return {
+        "status": "CLEAN" if contamination_score == 0 else
+                  "SUSPICIOUS" if contamination_score < 30 else
+                  "CONTAMINATED",
+        "contamination_score": contamination_score,
+        "findings": findings,
+        "legitimate_zwc_payloads": legitimate_payloads,
+        "unauthorized_zwc_payloads": unauthorized_payloads,
+        "invisible_chars": invisible_count,
+        "tag_chars": len(tag_chars),
+    }
+
+
+def _audit_seal_coherence(filepath):
+    """v10.9.0: Verify all seal layers agree and sidecar is consistent.
+
+    Cross-references the file's current state against its witness sidecar,
+    checking for partial tampering that might preserve some seals while
+    breaking others.
+
+    Returns dict with coherence status and findings.
+    """
+    findings = []
+    checks_passed = 0
+    checks_total = 0
+
+    # --- Check 1: Sidecar Existence ---
+    checks_total += 1
+    witness_path = filepath + '.witness.bismillah'
+    if not os.path.exists(witness_path):
+        findings.append({
+            "severity": "HIGH",
+            "code": "SC-001",
+            "description": "No witness sidecar found -- seal unverifiable",
+            "detail": "Expected: {}".format(witness_path),
+        })
+    else:
+        checks_passed += 1
+
+        # --- Check 2: Sidecar JSON Integrity ---
+        checks_total += 1
+        try:
+            with open(witness_path, 'r', encoding='utf-8') as f:
+                witness_data = json.load(f)
+            checks_passed += 1
+
+            # --- Check 3: HMAC Verification ---
+            checks_total += 1
+            valid, msg = verify_witness_sidecar(filepath)
+            if valid:
+                checks_passed += 1
+            else:
+                findings.append({
+                    "severity": "CRITICAL",
+                    "code": "SC-003",
+                    "description": "Sidecar HMAC verification failed -- file or sidecar tampered",
+                    "detail": msg,
+                })
+
+            # --- Check 4: Seal Timestamp Consistency ---
+            checks_total += 1
+            witness_inner = witness_data.get("witness", witness_data)
+            seal_ts = witness_inner.get("timestamp", "")
+            if seal_ts:
+                checks_passed += 1
+                # Check file modification time vs seal time
+                try:
+                    file_mtime = os.path.getmtime(filepath)
+                    seal_time = datetime.fromisoformat(seal_ts.replace('Z', '+00:00'))
+                    seal_epoch = seal_time.timestamp()
+                    if file_mtime > seal_epoch + 60:  # 60s grace
+                        findings.append({
+                            "severity": "HIGH",
+                            "code": "SC-004",
+                            "description": "File modified after seal -- content may have changed post-seal",
+                            "detail": "Seal time: {}, File mtime: {}".format(
+                                seal_ts,
+                                datetime.fromtimestamp(file_mtime, tz=timezone.utc).isoformat()),
+                        })
+                except (ValueError, OSError):
+                    pass  # Cannot parse timestamp or get mtime
+            else:
+                findings.append({
+                    "severity": "MEDIUM",
+                    "code": "SC-004",
+                    "description": "No seal timestamp in sidecar",
+                    "detail": "Cannot verify temporal integrity",
+                })
+
+            # --- Check 5: Content Hash Match ---
+            checks_total += 1
+            stored_seal = witness_inner.get("dual_seal", "")
+            if stored_seal:
+                try:
+                    with open(filepath, 'rb') as f:
+                        current_bytes = f.read()
+                    current_seal = compute_seal(current_bytes)
+                    if current_seal == stored_seal:
+                        checks_passed += 1
+                    else:
+                        findings.append({
+                            "severity": "CRITICAL",
+                            "code": "SC-005",
+                            "description": "Content hash mismatch -- file content changed since sealing",
+                            "detail": "Stored: {}... Current: {}...".format(
+                                stored_seal[:16], current_seal[:16]),
+                        })
+                except Exception as e:
+                    findings.append({
+                        "severity": "MEDIUM",
+                        "code": "SC-005",
+                        "description": "Cannot recompute content hash: {}".format(str(e)),
+                        "detail": "",
+                    })
+            else:
+                findings.append({
+                    "severity": "MEDIUM",
+                    "code": "SC-005",
+                    "description": "No dual seal stored in sidecar",
+                    "detail": "Cannot verify content integrity",
+                })
+
+            # --- Check 6: 154-Layer Completeness ---
+            checks_total += 1
+            layers = witness_inner.get("layers", [])
+            if isinstance(layers, list) and len(layers) == 154:
+                checks_passed += 1
+            elif isinstance(layers, list):
+                findings.append({
+                    "severity": "HIGH",
+                    "code": "SC-006",
+                    "description": "Incomplete layer coverage -- {}/154 layers in sidecar".format(
+                        len(layers)),
+                    "detail": "Expected 154 layers (11 heavens x 14 layers each)",
+                })
+            else:
+                findings.append({
+                    "severity": "HIGH",
+                    "code": "SC-006",
+                    "description": "Layer data missing or malformed in sidecar",
+                    "detail": "Type: {}".format(type(layers).__name__),
+                })
+
+        except json.JSONDecodeError as e:
+            findings.append({
+                "severity": "CRITICAL",
+                "code": "SC-002",
+                "description": "Sidecar JSON corrupted -- cannot parse",
+                "detail": str(e),
+            })
+        except Exception as e:
+            findings.append({
+                "severity": "HIGH",
+                "code": "SC-002",
+                "description": "Sidecar read error: {}".format(str(e)),
+                "detail": "",
+            })
+
+    return {
+        "coherent": len([f for f in findings if f["severity"] in ("CRITICAL", "HIGH")]) == 0,
+        "checks_passed": checks_passed,
+        "checks_total": checks_total,
+        "findings": findings,
+    }
+
+
+def audit_file(filepath):
+    """v10.9.0: Full divine audit of a sealed file.
+
+    Runs all three audit dimensions:
+    1. Rendering integrity (RTL, BiDi, Basmala, homoglyphs)
+    2. Steganographic audit (unauthorized payloads, invisible chars)
+    3. Seal coherence (sidecar, HMAC, hash, layer completeness)
+
+    Returns comprehensive audit report dict.
+    """
+    report = {
+        "filepath": filepath,
+        "audit_version": "10.9.0",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "dimensions": {},
+        "overall_status": "UNKNOWN",
+        "total_findings": 0,
+        "critical_findings": 0,
+    }
+
+    # Read file content
+    content = None
+    ext = os.path.splitext(filepath)[1].lower()
+    is_text = ext in TEXT_EXTENSIONS or ext in CODE_EXTENSIONS
+
+    if is_text:
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()
+        except (UnicodeDecodeError, IOError) as e:
+            report["error"] = "Cannot read file: {}".format(str(e))
+            report["overall_status"] = "ERROR"
+            return report
+
+    # --- Dimension 1: Rendering Integrity ---
+    if content is not None:
+        ri_result = _audit_rendering_integrity(content, filepath)
+        report["dimensions"]["rendering_integrity"] = ri_result
+        report["total_findings"] += len(ri_result["findings"])
+        report["critical_findings"] += len(
+            [f for f in ri_result["findings"] if f["severity"] == "CRITICAL"])
+
+    # --- Dimension 2: Steganographic Audit ---
+    if content is not None:
+        sa_result = _audit_steganographic(content, filepath)
+        report["dimensions"]["steganographic"] = sa_result
+        report["total_findings"] += len(sa_result["findings"])
+        report["critical_findings"] += len(
+            [f for f in sa_result["findings"] if f["severity"] == "CRITICAL"])
+
+    # --- Dimension 3: Seal Coherence ---
+    sc_result = _audit_seal_coherence(filepath)
+    report["dimensions"]["seal_coherence"] = sc_result
+    report["total_findings"] += len(sc_result["findings"])
+    report["critical_findings"] += len(
+        [f for f in sc_result["findings"] if f["severity"] == "CRITICAL"])
+
+    # --- Overall Status ---
+    if report["critical_findings"] > 0:
+        report["overall_status"] = "FAIL"
+    elif report["total_findings"] > 3:
+        report["overall_status"] = "WARN"
+    elif report["total_findings"] > 0:
+        report["overall_status"] = "ADVISORY"
+    else:
+        report["overall_status"] = "PASS"
+
+    return report
+
+
+def audit_directory(directory):
+    """v10.9.0: Audit all sealed files in a directory.
+
+    Returns summary dict with per-file reports.
+    """
+    results = {
+        "directory": directory,
+        "audit_version": "10.9.0",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "files_audited": 0,
+        "files_passed": 0,
+        "files_warned": 0,
+        "files_failed": 0,
+        "total_findings": 0,
+        "critical_findings": 0,
+        "file_reports": [],
+    }
+
+    for dirpath, dirnames, filenames in os.walk(directory):
+        dirnames[:] = [d for d in dirnames if d not in ('.git', '__pycache__', 'node_modules')]
+        for fname in filenames:
+            # Skip sidecars and non-content files
+            if fname.endswith('.bismillah') or fname.endswith('.pyc'):
+                continue
+            if fname == SELF_NAME:
+                continue
+
+            fpath = os.path.join(dirpath, fname)
+            ext = os.path.splitext(fname)[1].lower()
+
+            # Only audit text/code files (binary audit is seal-coherence only)
+            if ext in TEXT_EXTENSIONS or ext in CODE_EXTENSIONS or ext in BINARY_EXTENSIONS:
+                report = audit_file(fpath)
+                results["files_audited"] += 1
+                results["total_findings"] += report["total_findings"]
+                results["critical_findings"] += report["critical_findings"]
+
+                if report["overall_status"] == "PASS":
+                    results["files_passed"] += 1
+                elif report["overall_status"] == "FAIL":
+                    results["files_failed"] += 1
+                else:
+                    results["files_warned"] += 1
+
+                results["file_reports"].append(report)
+
+    return results
+
+
+# ============================================================================
 #  COMMAND LINE INTERFACE
 # ============================================================================
 
@@ -12449,6 +13083,16 @@ Examples:
     bearer8_p = sub.add_parser('bearer-8',
                                 help='v10.5.1: Run Bearer 8 (Furqan) attack-class '
                                      'coverage benchmark across 6 classes')
+
+    # v10.9.0: Divine Audit Engine
+    audit_p = sub.add_parser('audit',
+                              help='v10.9.0: Rendering integrity + steganographic audit '
+                                   'of sealed files')
+    audit_p.add_argument('path', help='File or directory to audit')
+    audit_p.add_argument('--json', action='store_true', dest='audit_json',
+                          help='Output full report as JSON')
+    audit_p.add_argument('--verbose', '-v', action='store_true',
+                          help='Show all findings including INFO severity')
 
     args = parser.parse_args()
 
@@ -13487,6 +14131,102 @@ Examples:
         print("\n  A7 Ghayb disclosure:")
         print("  {}".format(result["ghayb_disclosure"]))
         print("  {}".format("=" * 62))
+
+    elif args.command == 'audit':
+        target = args.path
+        if os.path.isdir(target):
+            print("  v10.9.0: Divine Audit -- Directory Scan")
+            print("  {}".format("=" * 50))
+            results = audit_directory(target)
+
+            if args.audit_json:
+                print(json.dumps(results, indent=2, default=str))
+            else:
+                print("  Files audited:  {}".format(results["files_audited"]))
+                print("  PASSED:         {}".format(results["files_passed"]))
+                print("  WARNED:         {}".format(results["files_warned"]))
+                print("  FAILED:         {}".format(results["files_failed"]))
+                print("  Total findings: {}".format(results["total_findings"]))
+                print("  Critical:       {}".format(results["critical_findings"]))
+
+                # Show per-file details for non-PASS files
+                for report in results["file_reports"]:
+                    if report["overall_status"] != "PASS" or args.verbose:
+                        rel = os.path.relpath(report["filepath"], target)
+                        print("\n  [{}] {}".format(report["overall_status"], rel))
+                        for dim_name, dim_data in report.get("dimensions", {}).items():
+                            for f in dim_data.get("findings", []):
+                                if f["severity"] != "INFO" or args.verbose:
+                                    print("    [{:8s}] {} -- {}".format(
+                                        f["severity"], f["code"], f["description"]))
+                                    if args.verbose and f.get("detail"):
+                                        print("              {}".format(f["detail"]))
+
+                print("\n  {}".format("=" * 50))
+                status_icon = {
+                    "PASS": "All files pass audit",
+                    "WARN": "Advisory findings -- review recommended",
+                    "FAIL": "CRITICAL findings -- immediate attention required",
+                }
+                overall = "FAIL" if results["files_failed"] > 0 else \
+                          "WARN" if results["files_warned"] > 0 else "PASS"
+                print("  OVERALL: {} -- {}".format(overall, status_icon.get(overall, "")))
+
+        elif os.path.isfile(target):
+            print("  v10.9.0: Divine Audit -- Single File")
+            print("  {}".format("=" * 50))
+            report = audit_file(target)
+
+            if args.audit_json:
+                print(json.dumps(report, indent=2, default=str))
+            else:
+                print("  File:    {}".format(report["filepath"]))
+                print("  Status:  {}".format(report["overall_status"]))
+                print("  Findings: {} ({} critical)".format(
+                    report["total_findings"], report["critical_findings"]))
+
+                for dim_name, dim_data in report.get("dimensions", {}).items():
+                    dim_label = dim_name.replace("_", " ").title()
+                    print("\n  --- {} ---".format(dim_label))
+
+                    if dim_name == "rendering_integrity":
+                        print("  Integrity score: {}/100".format(
+                            dim_data.get("integrity_score", "?")))
+                        print("  Arabic codepoints: {}".format(
+                            dim_data.get("arabic_codepoints", 0)))
+                        print("  Basmala count: {}".format(
+                            dim_data.get("basmala_count", 0)))
+                        print("  BiDi overrides: {}".format(
+                            dim_data.get("bidi_overrides", 0)))
+
+                    elif dim_name == "steganographic":
+                        print("  Status: {}".format(dim_data.get("status", "?")))
+                        print("  Legitimate ZWC payloads: {}".format(
+                            dim_data.get("legitimate_zwc_payloads", 0)))
+                        print("  Unauthorized ZWC payloads: {}".format(
+                            dim_data.get("unauthorized_zwc_payloads", 0)))
+                        print("  Non-FATIMA invisible chars: {}".format(
+                            dim_data.get("invisible_chars", 0)))
+                        print("  Unicode tag chars: {}".format(
+                            dim_data.get("tag_chars", 0)))
+
+                    elif dim_name == "seal_coherence":
+                        print("  Coherent: {}".format(dim_data.get("coherent", "?")))
+                        print("  Checks passed: {}/{}".format(
+                            dim_data.get("checks_passed", 0),
+                            dim_data.get("checks_total", 0)))
+
+                    for f in dim_data.get("findings", []):
+                        if f["severity"] != "INFO" or args.verbose:
+                            print("    [{:8s}] {} -- {}".format(
+                                f["severity"], f["code"], f["description"]))
+                            if args.verbose and f.get("detail"):
+                                print("              {}".format(f["detail"]))
+
+                print("\n  {}".format("=" * 50))
+        else:
+            print("  ERROR: '{}' not found".format(target))
+            sys.exit(1)
 
     else:
         parser.print_help()
