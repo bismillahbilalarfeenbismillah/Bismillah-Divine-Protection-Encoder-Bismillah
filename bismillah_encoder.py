@@ -12426,6 +12426,89 @@ def _audit_rendering_integrity(content, filepath=None):
     }
 
 
+# v10.9.1: when a zero-width character outside a watermark is exempted
+# from SA-005. This is a DOCUMENTED HEURISTIC, not authentication: an
+# exempted character is still counted (heuristic_exempt_zero_width_chars)
+# and can still carry hidden meaning, for example a ZWNJ inside an
+# Arabic-script string that compares unequal to a look-alike without it.
+# Each character has its own rule, and both neighbours must be letters
+# or marks of the SAME script, so mixed-script positions are reported.
+#   U+200C ZWNJ, U+200D ZWJ: inside a word of a joining script
+#     (Arabic incl. Persian/Urdu, Syriac, N'Ko, Mongolian, Indic).
+#   U+200D ZWJ also: inside an emoji sequence (emoji or skin-tone
+#     modifier or VS16 before, emoji after).
+#   U+200B ZWSP: inside a word of a script written without spaces
+#     (Thai, Lao, Khmer, Myanmar, Tibetan), where it marks word breaks.
+#   U+FEFF: only at offset 0 (a byte-order mark).
+_ZW_JOINING_SCRIPTS = frozenset({
+    "ARABIC", "SYRIAC", "NKO", "MONGOLIAN", "DEVANAGARI", "BENGALI",
+    "GURMUKHI", "GUJARATI", "ORIYA", "TAMIL", "TELUGU", "KANNADA",
+    "MALAYALAM", "SINHALA",
+})
+_ZW_NO_SPACE_SCRIPTS = frozenset({"THAI", "LAO", "KHMER", "MYANMAR", "TIBETAN"})
+_ZW_LETTER_CATEGORIES = frozenset({"Lo", "Lm", "Mn", "Mc"})
+
+
+def _zw_script(ch):
+    """Script of a letter or mark, from the first word of its Unicode
+    name (e.g. 'ARABIC LETTER FARSI YEH' -> 'ARABIC'); None otherwise."""
+    if unicodedata.category(ch) not in _ZW_LETTER_CATEGORIES:
+        return None
+    name = unicodedata.name(ch, "")
+    return name.split(" ", 1)[0] if name else None
+
+
+def _zw_same_script(prev_ch, next_ch, scripts):
+    script = _zw_script(prev_ch)
+    return script is not None and script in scripts and _zw_script(next_ch) == script
+
+
+# Code-point blocks where emoji ZWJ sequences occur: Misc Symbols and
+# Dingbats (gender, medical and heart signs, e.g. U+2640, U+2695, U+2764)
+# and the pictograph/emoticon/transport/supplemental blocks (people,
+# objects, skin-tone modifiers U+1F3FB-U+1F3FF). Still a heuristic: these
+# blocks also hold symbols that never join (e.g. U+2603 SNOWMAN).
+_ZW_EMOJI_RANGES = (
+    (0x2600, 0x27BF),
+    (0x1F300, 0x1F5FF),
+    (0x1F600, 0x1F64F),
+    (0x1F680, 0x1F6FF),
+    (0x1F900, 0x1F9FF),
+    (0x1FA70, 0x1FAFF),
+)
+
+
+def _zw_in_emoji_range(ch):
+    cp = ord(ch)
+    return any(lo <= cp <= hi for lo, hi in _ZW_EMOJI_RANGES)
+
+
+def _zw_emoji_sequence(prev_ch, next_ch):
+    """ZWJ between two emoji-block characters (VS16 allowed before it).
+    Letterlike and technical symbols (TRADE MARK, NUMERO, PLACE OF
+    INTEREST) are So above U+2000 but never form emoji sequences."""
+    prev_ok = _zw_in_emoji_range(prev_ch) or prev_ch == "\ufe0f"
+    return prev_ok and _zw_in_emoji_range(next_ch)
+
+
+def _is_heuristic_exempt_zero_width(content, i):
+    """v10.9.1: True if content[i] is exempted from SA-005 by the
+    documented heuristic above. Not a statement that it is harmless."""
+    ch = content[i]
+    if ch == ZW_BOUNDARY:
+        return i == 0
+    if i == 0 or i + 1 >= len(content):
+        return False
+    prev_ch, next_ch = content[i - 1], content[i + 1]
+    if ch in (ZW_ONE, ZW_SEP):  # U+200C ZWNJ, U+200D ZWJ
+        if _zw_same_script(prev_ch, next_ch, _ZW_JOINING_SCRIPTS):
+            return True
+        return ch == ZW_SEP and _zw_emoji_sequence(prev_ch, next_ch)
+    if ch == ZW_ZERO:  # U+200B ZWSP
+        return _zw_same_script(prev_ch, next_ch, _ZW_NO_SPACE_SCRIPTS)
+    return False
+
+
 def _audit_steganographic(content, filepath=None):
     """v10.9.0: Deep steganographic audit beyond ZWC verification.
 
@@ -12484,6 +12567,53 @@ def _audit_steganographic(content, filepath=None):
                 legitimate_payloads, unauthorized_payloads),
         })
         contamination_score += 40
+
+    # --- Check 1b (v10.9.1): Zero-width characters outside any watermark ---
+    # Check 3 skips FATIMA's own ZWC alphabet and Check 1 only examines
+    # closed boundary pairs, so before v10.9.1 a stray U+200B, U+200C,
+    # U+200D or U+FEFF anywhere else was not reported at all (a lone
+    # U+200B inside "admin" audited exactly like the clean file). A
+    # character from the alphabet outside every closed region is now
+    # reported, unless the documented heuristic exempts it (see
+    # _is_heuristic_exempt_zero_width); those are counted, not hidden.
+    stray_zwc_positions = []
+    heuristic_exempt_zero_width = 0
+    region_iter = iter(zwc_regions)
+    current_region = next(region_iter, None)
+    for i, ch in enumerate(content):
+        while current_region is not None and i > current_region[1]:
+            current_region = next(region_iter, None)
+        if ch not in zwc_alphabet:
+            continue
+        if current_region is not None and current_region[0] <= i <= current_region[1]:
+            continue
+        if _is_heuristic_exempt_zero_width(content, i):
+            heuristic_exempt_zero_width += 1
+            continue
+        stray_zwc_positions.append(i)
+
+    stray_zwc_lines = []
+    if stray_zwc_positions:
+        line_no, scanned = 1, 0
+        stray_types = {}
+        for pos in stray_zwc_positions:
+            line_no += content.count('\n', scanned, pos)
+            scanned = pos
+            if not stray_zwc_lines or stray_zwc_lines[-1] != line_no:
+                stray_zwc_lines.append(line_no)
+            label = 'U+{:04X}'.format(ord(content[pos]))
+            stray_types[label] = stray_types.get(label, 0) + 1
+        findings.append({
+            "severity": "HIGH",
+            "code": "SA-005",
+            "description": "Zero-width characters outside any FATIMA watermark -- {} instances".format(
+                len(stray_zwc_positions)),
+            "detail": "Types: {}; lines: {}{}".format(
+                ', '.join('{} x{}'.format(k, v) for k, v in sorted(stray_types.items())),
+                ', '.join(str(n) for n in stray_zwc_lines[:20]),
+                ' ...' if len(stray_zwc_lines) > 20 else ''),
+        })
+        contamination_score += 20
 
     # --- Check 2: Unicode Tag Steganography ---
     # Tags block (U+E0001-U+E007F) carries invisible data
@@ -12584,6 +12714,10 @@ def _audit_steganographic(content, filepath=None):
         "unauthorized_zwc_payloads": unauthorized_payloads,
         "invisible_chars": invisible_count,
         "tag_chars": len(tag_chars),
+        # v10.9.1: structured counterpart of SA-005's detail text.
+        "stray_zwc_chars": len(stray_zwc_positions),
+        "stray_zwc_lines": stray_zwc_lines[:100],
+        "heuristic_exempt_zero_width_chars": heuristic_exempt_zero_width,
     }
 
 
@@ -12752,7 +12886,7 @@ def audit_file(filepath):
     """
     report = {
         "filepath": filepath,
-        "audit_version": "10.9.0",
+        "audit_version": "10.9.1",  # v10.9.1: adds SA-005
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "dimensions": {},
         "overall_status": "UNKNOWN",
@@ -12817,7 +12951,7 @@ def audit_directory(directory):
     """
     results = {
         "directory": directory,
-        "audit_version": "10.9.0",
+        "audit_version": "10.9.1",  # v10.9.1: adds SA-005
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "files_audited": 0,
         "files_passed": 0,
