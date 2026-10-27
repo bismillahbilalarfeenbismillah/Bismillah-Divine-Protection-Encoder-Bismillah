@@ -12463,10 +12463,32 @@ def _zw_same_script(prev_ch, next_ch, scripts):
     return script is not None and script in scripts and _zw_script(next_ch) == script
 
 
+# Code-point blocks where emoji ZWJ sequences occur: Misc Symbols and
+# Dingbats (gender, medical and heart signs, e.g. U+2640, U+2695, U+2764)
+# and the pictograph/emoticon/transport/supplemental blocks (people,
+# objects, skin-tone modifiers U+1F3FB-U+1F3FF). Still a heuristic: these
+# blocks also hold symbols that never join (e.g. U+2603 SNOWMAN).
+_ZW_EMOJI_RANGES = (
+    (0x2600, 0x27BF),
+    (0x1F300, 0x1F5FF),
+    (0x1F600, 0x1F64F),
+    (0x1F680, 0x1F6FF),
+    (0x1F900, 0x1F9FF),
+    (0x1FA70, 0x1FAFF),
+)
+
+
+def _zw_in_emoji_range(ch):
+    cp = ord(ch)
+    return any(lo <= cp <= hi for lo, hi in _ZW_EMOJI_RANGES)
+
+
 def _zw_emoji_sequence(prev_ch, next_ch):
-    prev_ok = (unicodedata.category(prev_ch) in ("So", "Sk") and ord(prev_ch) >= 0x2000) \
-        or prev_ch == "\ufe0f"
-    return prev_ok and unicodedata.category(next_ch) == "So" and ord(next_ch) >= 0x2000
+    """ZWJ between two emoji-block characters (VS16 allowed before it).
+    Letterlike and technical symbols (TRADE MARK, NUMERO, PLACE OF
+    INTEREST) are So above U+2000 but never form emoji sequences."""
+    prev_ok = _zw_in_emoji_range(prev_ch) or prev_ch == "\ufe0f"
+    return prev_ok and _zw_in_emoji_range(next_ch)
 
 
 def _is_heuristic_exempt_zero_width(content, i):

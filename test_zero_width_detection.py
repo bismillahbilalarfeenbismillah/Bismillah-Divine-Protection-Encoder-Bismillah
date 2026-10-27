@@ -25,7 +25,7 @@ with contextlib.redirect_stdout(io.StringIO()):
     import bismillah_encoder as be  # noqa: E402
 
 BASMALA = "# Bismillah ir-Rahman ir-Rahim\n"
-ZWSP, ZWNJ, ZWJ, BOM = "​", "‌", "‍", "﻿"
+ZWSP, ZWNJ, ZWJ, BOM = "\u200b", "\u200c", "\u200d", "\ufeff"
 
 
 def stego(text):
@@ -90,7 +90,7 @@ class TestNoFalsePositives(unittest.TestCase):
         try:
             for name, text in (
                 ("notes.md", "Plain notes\nSecond line\n"),
-                ("arabic.txt", "سلام\n"),
+                ("arabic.txt", "\u0633\u0644\u0627\u0645\n"),
                 ("code.py", "def f(x):\n    return x\n"),
             ):
                 with open(os.path.join(d, name), "w", encoding="utf-8") as fh:
@@ -106,13 +106,13 @@ class TestNoFalsePositives(unittest.TestCase):
 
     def test_persian_zwnj_is_exempt(self):
         # "mi-khaham" with the standard Persian ZWNJ after the prefix.
-        r = stego("می" + ZWNJ + "خواهم\n")
+        r = stego("\u0645\u06cc" + ZWNJ + "\u062e\u0648\u0627\u0647\u0645\n")
         self.assertEqual(r["stray_zwc_chars"], 0)
         self.assertEqual(r["heuristic_exempt_zero_width_chars"], 1)
         self.assertNotIn("SA-005", codes(r))
 
     def test_emoji_zwj_sequence_is_exempt(self):
-        r = stego("dev: \U0001F468‍\U0001F4BB and \U0001F469\U0001F3FD‍\U0001F52C\n")
+        r = stego("dev: \U0001F468\u200d\U0001F4BB and \U0001F469\U0001F3FD\u200d\U0001F52C\n")
         self.assertEqual(r["stray_zwc_chars"], 0)
         self.assertEqual(r["heuristic_exempt_zero_width_chars"], 2)
 
@@ -122,8 +122,8 @@ class TestNoFalsePositives(unittest.TestCase):
 
     def test_cased_script_neighbours_are_not_exempt(self):
         # Cyrillic and Greek letters never qualify for the exemption.
-        self.assertEqual(stego("а" + ZWSP + "б\n")["stray_zwc_chars"], 1)
-        self.assertEqual(stego("α" + ZWJ + "β\n")["stray_zwc_chars"], 1)
+        self.assertEqual(stego("\u0430" + ZWSP + "\u0431\n")["stray_zwc_chars"], 1)
+        self.assertEqual(stego("\u03b1" + ZWJ + "\u03b2\n")["stray_zwc_chars"], 1)
 
 
 class TestExemptionIsNarrow(unittest.TestCase):
@@ -131,7 +131,7 @@ class TestExemptionIsNarrow(unittest.TestCase):
     security boundary. Mixed-script and wrong-character positions that
     the first version of this fix exempted must be reported."""
 
-    AR, TH, CJK, HE = "م", "ก", "中", "א"
+    AR, TH, CJK, HE = "\u0645", "\u0e01", "\u4e2d", "\u05d0"
     MAN, LAPTOP = "\U0001F468", "\U0001F4BB"
 
     def stray(self, text):
@@ -147,7 +147,12 @@ class TestExemptionIsNarrow(unittest.TestCase):
             "ZWNJ between emoji (only ZWJ forms emoji sequences)": self.MAN + ZWNJ + self.LAPTOP,
             "ZWJ from Arabic letter to emoji": self.AR + ZWJ + self.LAPTOP,
             "ZWNJ between Hebrew letters (Hebrew does not join)": self.HE + ZWNJ + self.HE,
-            "ZWJ after a copyright sign": "©" + ZWJ + self.LAPTOP,
+            "ZWJ after a copyright sign": "\xa9" + ZWJ + self.LAPTOP,
+            # GPT-6 watchpoint: So symbols above U+2000 that are not emoji.
+            "ZWJ trade mark + spade": "\u2122" + ZWJ + "\u2660",
+            "ZWJ place-of-interest twice": "\u2318" + ZWJ + "\u2318",
+            "ZWJ numero + circled letter": "\u2116" + ZWJ + "\u24c5",
+            "ZWJ emoji then trade mark": self.MAN + ZWJ + "\u2122",
         }
         for label, text in cases.items():
             self.assertEqual(self.stray(text), 1, label)
@@ -155,16 +160,27 @@ class TestExemptionIsNarrow(unittest.TestCase):
     def test_real_typography_is_exempt_and_counted(self):
         cases = {
             "Thai word break": self.TH + ZWSP + self.TH,
-            "Persian ZWNJ": "می" + ZWNJ + "خ",
-            "Devanagari half-form ZWJ": "क्" + ZWJ + "ष",
+            "Persian ZWNJ": "\u0645\u06cc" + ZWNJ + "\u062e",
+            "Devanagari half-form ZWJ": "\u0915\u094d" + ZWJ + "\u0937",
             "emoji ZWJ": self.MAN + ZWJ + self.LAPTOP,
             "skin tone then ZWJ": "\U0001F469\U0001F3FD" + ZWJ + "\U0001F52C",
-            "VS16 then ZWJ": "\U0001F441️" + ZWJ + "\U0001F5E8",
+            "VS16 then ZWJ": "\U0001F441\ufe0f" + ZWJ + "\U0001F5E8",
+            "health worker (U+2695 dingbat)": "\U0001F469" + ZWJ + "\u2695\ufe0f",
+            "heart on fire (U+2764 then VS16)": "\u2764\ufe0f" + ZWJ + "\U0001F525",
         }
         for label, text in cases.items():
             r = stego("x = '" + text + "'\n")
             self.assertEqual(r["stray_zwc_chars"], 0, label)
             self.assertEqual(r["heuristic_exempt_zero_width_chars"], 1, label)
+
+    def test_known_limit_emoji_blocks_include_non_joining_symbols(self):
+        """KNOWN LIMIT: the emoji rule uses code-point blocks, not the
+        Unicode emoji-sequence data. SNOWMAN + ZWJ + SNOWMAN is not a
+        real sequence but both sit in the Misc Symbols block, so it is
+        exempt (and counted)."""
+        r = stego("x = '\u2603" + ZWJ + "\u2603'\n")
+        self.assertEqual(r["stray_zwc_chars"], 0)
+        self.assertEqual(r["heuristic_exempt_zero_width_chars"], 1)
 
     def test_known_limit_arabic_script_lookalike_strings(self):
         """KNOWN LIMIT of the heuristic, pinned so it stays visible.
@@ -174,7 +190,7 @@ class TestExemptionIsNarrow(unittest.TestCase):
         strings that look identical compare unequal. The audit cannot
         tell these apart; it counts the character instead of reporting it.
         """
-        plain = "مستخدم"
+        plain = "\u0645\u0633\u062a\u062e\u062f\u0645"
         spoof = plain[:4] + ZWNJ + plain[4:]
         self.assertNotEqual(plain, spoof)
         r = stego("user = '" + plain + "'\nadmin = '" + spoof + "'\n")
@@ -195,7 +211,7 @@ class TestCompatibility(unittest.TestCase):
 
     def test_existing_metrics_unchanged(self):
         # invisible_chars keeps its pre-10.9.1 meaning (alphabet excluded).
-        r = stego("a" + ZWSP + "b" + "⁠" + "c\n")
+        r = stego("a" + ZWSP + "b" + "\u2060" + "c\n")
         self.assertEqual(r["invisible_chars"], 1)
         self.assertEqual(r["stray_zwc_chars"], 1)
 
