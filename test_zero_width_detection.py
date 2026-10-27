@@ -104,26 +104,82 @@ class TestNoFalsePositives(unittest.TestCase):
         finally:
             shutil.rmtree(d)
 
-    def test_persian_zwnj_is_typographic(self):
+    def test_persian_zwnj_is_exempt(self):
         # "mi-khaham" with the standard Persian ZWNJ after the prefix.
         r = stego("می" + ZWNJ + "خواهم\n")
         self.assertEqual(r["stray_zwc_chars"], 0)
-        self.assertEqual(r["typographic_zero_width_chars"], 1)
+        self.assertEqual(r["heuristic_exempt_zero_width_chars"], 1)
         self.assertNotIn("SA-005", codes(r))
 
-    def test_emoji_zwj_sequence_is_typographic(self):
+    def test_emoji_zwj_sequence_is_exempt(self):
         r = stego("dev: \U0001F468‍\U0001F4BB and \U0001F469\U0001F3FD‍\U0001F52C\n")
         self.assertEqual(r["stray_zwc_chars"], 0)
-        self.assertEqual(r["typographic_zero_width_chars"], 2)
+        self.assertEqual(r["heuristic_exempt_zero_width_chars"], 2)
 
-    def test_bom_at_start_is_typographic_but_not_mid_file(self):
+    def test_bom_at_start_is_exempt_but_not_mid_file(self):
         self.assertEqual(stego(BOM + "hello\n")["stray_zwc_chars"], 0)
         self.assertEqual(stego("hello" + BOM + "\n")["stray_zwc_chars"], 1)
 
-    def test_cased_script_neighbours_are_not_typographic(self):
-        # Cyrillic and Greek are cased scripts: no typographic exemption.
+    def test_cased_script_neighbours_are_not_exempt(self):
+        # Cyrillic and Greek letters never qualify for the exemption.
         self.assertEqual(stego("а" + ZWSP + "б\n")["stray_zwc_chars"], 1)
         self.assertEqual(stego("α" + ZWJ + "β\n")["stray_zwc_chars"], 1)
+
+
+class TestExemptionIsNarrow(unittest.TestCase):
+    """GPT-6 review: the exemption is a documented heuristic, not a
+    security boundary. Mixed-script and wrong-character positions that
+    the first version of this fix exempted must be reported."""
+
+    AR, TH, CJK, HE = "م", "ก", "中", "א"
+    MAN, LAPTOP = "\U0001F468", "\U0001F4BB"
+
+    def stray(self, text):
+        return stego("x = '" + text + "'\n")["stray_zwc_chars"]
+
+    def test_adversarial_positions_are_reported(self):
+        cases = {
+            "ZWSP between Arabic letters (not Arabic typography)": self.AR + ZWSP + self.AR,
+            "ZWNJ between Arabic and Thai (mixed script)": self.AR + ZWNJ + self.TH,
+            "ZWNJ between Thai letters (Thai does not join)": self.TH + ZWNJ + self.TH,
+            "ZWJ between CJK ideographs": self.CJK + ZWJ + self.CJK,
+            "ZWSP between emoji": self.MAN + ZWSP + self.LAPTOP,
+            "ZWNJ between emoji (only ZWJ forms emoji sequences)": self.MAN + ZWNJ + self.LAPTOP,
+            "ZWJ from Arabic letter to emoji": self.AR + ZWJ + self.LAPTOP,
+            "ZWNJ between Hebrew letters (Hebrew does not join)": self.HE + ZWNJ + self.HE,
+            "ZWJ after a copyright sign": "©" + ZWJ + self.LAPTOP,
+        }
+        for label, text in cases.items():
+            self.assertEqual(self.stray(text), 1, label)
+
+    def test_real_typography_is_exempt_and_counted(self):
+        cases = {
+            "Thai word break": self.TH + ZWSP + self.TH,
+            "Persian ZWNJ": "می" + ZWNJ + "خ",
+            "Devanagari half-form ZWJ": "क्" + ZWJ + "ष",
+            "emoji ZWJ": self.MAN + ZWJ + self.LAPTOP,
+            "skin tone then ZWJ": "\U0001F469\U0001F3FD" + ZWJ + "\U0001F52C",
+            "VS16 then ZWJ": "\U0001F441️" + ZWJ + "\U0001F5E8",
+        }
+        for label, text in cases.items():
+            r = stego("x = '" + text + "'\n")
+            self.assertEqual(r["stray_zwc_chars"], 0, label)
+            self.assertEqual(r["heuristic_exempt_zero_width_chars"], 1, label)
+
+    def test_known_limit_arabic_script_lookalike_strings(self):
+        """KNOWN LIMIT of the heuristic, pinned so it stays visible.
+
+        A ZWNJ inside an Arabic-script word is ordinary Persian/Urdu
+        typography, so it is exempt. The same position can make two
+        strings that look identical compare unequal. The audit cannot
+        tell these apart; it counts the character instead of reporting it.
+        """
+        plain = "مستخدم"
+        spoof = plain[:4] + ZWNJ + plain[4:]
+        self.assertNotEqual(plain, spoof)
+        r = stego("user = '" + plain + "'\nadmin = '" + spoof + "'\n")
+        self.assertEqual(r["stray_zwc_chars"], 0)
+        self.assertEqual(r["heuristic_exempt_zero_width_chars"], 1)
 
 
 class TestCompatibility(unittest.TestCase):

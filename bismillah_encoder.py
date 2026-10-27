@@ -12426,33 +12426,65 @@ def _audit_rendering_integrity(content, filepath=None):
     }
 
 
-# v10.9.1: neighbours that make U+200B/U+200C/U+200D an ordinary
-# typographic character rather than hidden content: letters of uncased
-# scripts (Arabic, Persian, Indic, Thai), combining marks, and symbols
-# (emoji ZWJ sequences, skin-tone modifiers). Cased scripts (Latin,
-# Cyrillic, Greek) are deliberately excluded: a zero-width character
-# inside a Latin identifier or string is the trojan-source case.
-_TYPOGRAPHIC_ZW_NEIGHBOUR_CATEGORIES = frozenset({"Lo", "Lm", "Mn", "Mc", "So", "Sk"})
+# v10.9.1: when a zero-width character outside a watermark is exempted
+# from SA-005. This is a DOCUMENTED HEURISTIC, not authentication: an
+# exempted character is still counted (heuristic_exempt_zero_width_chars)
+# and can still carry hidden meaning, for example a ZWNJ inside an
+# Arabic-script string that compares unequal to a look-alike without it.
+# Each character has its own rule, and both neighbours must be letters
+# or marks of the SAME script, so mixed-script positions are reported.
+#   U+200C ZWNJ, U+200D ZWJ: inside a word of a joining script
+#     (Arabic incl. Persian/Urdu, Syriac, N'Ko, Mongolian, Indic).
+#   U+200D ZWJ also: inside an emoji sequence (emoji or skin-tone
+#     modifier or VS16 before, emoji after).
+#   U+200B ZWSP: inside a word of a script written without spaces
+#     (Thai, Lao, Khmer, Myanmar, Tibetan), where it marks word breaks.
+#   U+FEFF: only at offset 0 (a byte-order mark).
+_ZW_JOINING_SCRIPTS = frozenset({
+    "ARABIC", "SYRIAC", "NKO", "MONGOLIAN", "DEVANAGARI", "BENGALI",
+    "GURMUKHI", "GUJARATI", "ORIYA", "TAMIL", "TELUGU", "KANNADA",
+    "MALAYALAM", "SINHALA",
+})
+_ZW_NO_SPACE_SCRIPTS = frozenset({"THAI", "LAO", "KHMER", "MYANMAR", "TIBETAN"})
+_ZW_LETTER_CATEGORIES = frozenset({"Lo", "Lm", "Mn", "Mc"})
 
 
-def _is_typographic_zero_width(content, i):
-    """v10.9.1: True if content[i] is a zero-width character in an
-    ordinary typographic position.
+def _zw_script(ch):
+    """Script of a letter or mark, from the first word of its Unicode
+    name (e.g. 'ARABIC LETTER FARSI YEH' -> 'ARABIC'); None otherwise."""
+    if unicodedata.category(ch) not in _ZW_LETTER_CATEGORIES:
+        return None
+    name = unicodedata.name(ch, "")
+    return name.split(" ", 1)[0] if name else None
 
-    - U+FEFF only at offset 0 (a byte-order mark).
-    - U+200B/U+200C/U+200D only between two non-ASCII characters whose
-      Unicode categories are in _TYPOGRAPHIC_ZW_NEIGHBOUR_CATEGORIES.
-    """
+
+def _zw_same_script(prev_ch, next_ch, scripts):
+    script = _zw_script(prev_ch)
+    return script is not None and script in scripts and _zw_script(next_ch) == script
+
+
+def _zw_emoji_sequence(prev_ch, next_ch):
+    prev_ok = (unicodedata.category(prev_ch) in ("So", "Sk") and ord(prev_ch) >= 0x2000) \
+        or prev_ch == "\ufe0f"
+    return prev_ok and unicodedata.category(next_ch) == "So" and ord(next_ch) >= 0x2000
+
+
+def _is_heuristic_exempt_zero_width(content, i):
+    """v10.9.1: True if content[i] is exempted from SA-005 by the
+    documented heuristic above. Not a statement that it is harmless."""
     ch = content[i]
     if ch == ZW_BOUNDARY:
         return i == 0
     if i == 0 or i + 1 >= len(content):
         return False
     prev_ch, next_ch = content[i - 1], content[i + 1]
-    if ord(prev_ch) < 0x80 or ord(next_ch) < 0x80:
-        return False
-    return (unicodedata.category(prev_ch) in _TYPOGRAPHIC_ZW_NEIGHBOUR_CATEGORIES
-            and unicodedata.category(next_ch) in _TYPOGRAPHIC_ZW_NEIGHBOUR_CATEGORIES)
+    if ch in (ZW_ONE, ZW_SEP):  # U+200C ZWNJ, U+200D ZWJ
+        if _zw_same_script(prev_ch, next_ch, _ZW_JOINING_SCRIPTS):
+            return True
+        return ch == ZW_SEP and _zw_emoji_sequence(prev_ch, next_ch)
+    if ch == ZW_ZERO:  # U+200B ZWSP
+        return _zw_same_script(prev_ch, next_ch, _ZW_NO_SPACE_SCRIPTS)
+    return False
 
 
 def _audit_steganographic(content, filepath=None):
@@ -12520,10 +12552,10 @@ def _audit_steganographic(content, filepath=None):
     # U+200D or U+FEFF anywhere else was not reported at all (a lone
     # U+200B inside "admin" audited exactly like the clean file). A
     # character from the alphabet outside every closed region is now
-    # reported, unless it sits in an ordinary typographic position
-    # (see _is_typographic_zero_width); those are counted, not hidden.
+    # reported, unless the documented heuristic exempts it (see
+    # _is_heuristic_exempt_zero_width); those are counted, not hidden.
     stray_zwc_positions = []
-    typographic_zero_width = 0
+    heuristic_exempt_zero_width = 0
     region_iter = iter(zwc_regions)
     current_region = next(region_iter, None)
     for i, ch in enumerate(content):
@@ -12533,8 +12565,8 @@ def _audit_steganographic(content, filepath=None):
             continue
         if current_region is not None and current_region[0] <= i <= current_region[1]:
             continue
-        if _is_typographic_zero_width(content, i):
-            typographic_zero_width += 1
+        if _is_heuristic_exempt_zero_width(content, i):
+            heuristic_exempt_zero_width += 1
             continue
         stray_zwc_positions.append(i)
 
@@ -12663,7 +12695,7 @@ def _audit_steganographic(content, filepath=None):
         # v10.9.1: structured counterpart of SA-005's detail text.
         "stray_zwc_chars": len(stray_zwc_positions),
         "stray_zwc_lines": stray_zwc_lines[:100],
-        "typographic_zero_width_chars": typographic_zero_width,
+        "heuristic_exempt_zero_width_chars": heuristic_exempt_zero_width,
     }
 
 
