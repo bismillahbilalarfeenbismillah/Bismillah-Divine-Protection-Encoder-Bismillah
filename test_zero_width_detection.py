@@ -1,0 +1,166 @@
+# Bismillah ir-Rahman ir-Rahim
+"""Tests for the v10.9.1 zero-width detection fix (SA-005).
+
+Before v10.9.1, characters from FATIMA's own ZWC alphabet (U+200B,
+U+200C, U+200D, U+FEFF) outside a closed watermark region were not
+reported at all. These tests pin the fix, its false-positive limits,
+and one known limit that this change does not address.
+
+Runs under pytest or unittest.
+"""
+# Bismillah ir-Rahman ir-Rahim
+
+import contextlib
+import io
+import os
+import shutil
+import sys
+import tempfile
+import unittest
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+
+with contextlib.redirect_stdout(io.StringIO()):
+    import bismillah_encoder as be  # noqa: E402
+
+BASMALA = "# Bismillah ir-Rahman ir-Rahim\n"
+ZWSP, ZWNJ, ZWJ, BOM = "​", "‌", "‍", "﻿"
+
+
+def stego(text):
+    return be._audit_steganographic(text)
+
+
+def codes(result):
+    return [f["code"] for f in result["findings"]]
+
+
+class TestStrayZeroWidthDetected(unittest.TestCase):
+    def test_lone_zwsp_in_ascii_string_is_reported_with_line(self):
+        r = stego(BASMALA + 'password = "adm' + ZWSP + 'in"\n' + BASMALA)
+        self.assertIn("SA-005", codes(r))
+        self.assertEqual(r["stray_zwc_chars"], 1)
+        self.assertEqual(r["stray_zwc_lines"], [2])
+        self.assertNotEqual(r["status"], "CLEAN")
+        sa5 = [f for f in r["findings"] if f["code"] == "SA-005"][0]
+        self.assertEqual(sa5["severity"], "HIGH")
+        self.assertIn("U+200B x1", sa5["detail"])
+        self.assertIn("lines: 2", sa5["detail"])
+
+    def test_clean_control_has_no_sa005(self):
+        r = stego(BASMALA + 'password = "admin"\n' + BASMALA)
+        self.assertNotIn("SA-005", codes(r))
+        self.assertEqual(r["stray_zwc_chars"], 0)
+        self.assertEqual(r["status"], "CLEAN")
+
+    def test_each_alphabet_character_is_reported_in_latin_context(self):
+        for ch in (ZWSP, ZWNJ, ZWJ, BOM):
+            r = stego("x = 'a" + ch + "b'\n")
+            self.assertIn("SA-005", codes(r), "U+{:04X}".format(ord(ch)))
+            self.assertEqual(r["stray_zwc_chars"], 1)
+
+    def test_lines_are_reported_per_line_once(self):
+        text = "a" + ZWSP + "b\nclean\nc" + ZWSP + ZWSP + "d\n"
+        r = stego(text)
+        self.assertEqual(r["stray_zwc_chars"], 3)
+        self.assertEqual(r["stray_zwc_lines"], [1, 3])
+
+    def test_unclosed_boundary_contents_are_reported(self):
+        # An odd number of boundaries leaves a region that never closes.
+        r = stego("start " + BOM + ZWSP + ZWNJ + ZWSP + " end\n")
+        self.assertIn("SA-005", codes(r))
+        self.assertEqual(r["stray_zwc_chars"], 4)
+
+    def test_zero_width_after_a_closed_region_is_reported(self):
+        payload = be.text_to_zwc("Bismillah")
+        r = stego("head " + payload + " tail" + ZWSP + "x\n")
+        self.assertEqual(r["stray_zwc_chars"], 1)
+
+
+class TestNoFalsePositives(unittest.TestCase):
+    def test_fatima_watermark_regions_are_not_stray(self):
+        payload = be.text_to_zwc(be.BISMILLAH_ARABIC)
+        r = stego("text " + payload + " more text\n")
+        self.assertEqual(r["stray_zwc_chars"], 0)
+        self.assertNotIn("SA-005", codes(r))
+
+    def test_files_sealed_by_the_encoder_have_no_sa005(self):
+        d = tempfile.mkdtemp()
+        try:
+            for name, text in (
+                ("notes.md", "Plain notes\nSecond line\n"),
+                ("arabic.txt", "سلام\n"),
+                ("code.py", "def f(x):\n    return x\n"),
+            ):
+                with open(os.path.join(d, name), "w", encoding="utf-8") as fh:
+                    fh.write(text)
+            with contextlib.redirect_stdout(io.StringIO()):
+                be.seal_directory(d)
+                for name in ("notes.md", "arabic.txt", "code.py"):
+                    r = be.audit_file(os.path.join(d, name))
+                    self.assertNotIn("SA-005", [f["code"] for f in r["dimensions"]["steganographic"]["findings"]], name)
+                    self.assertEqual(r["dimensions"]["steganographic"]["stray_zwc_chars"], 0, name)
+        finally:
+            shutil.rmtree(d)
+
+    def test_persian_zwnj_is_typographic(self):
+        # "mi-khaham" with the standard Persian ZWNJ after the prefix.
+        r = stego("می" + ZWNJ + "خواهم\n")
+        self.assertEqual(r["stray_zwc_chars"], 0)
+        self.assertEqual(r["typographic_zero_width_chars"], 1)
+        self.assertNotIn("SA-005", codes(r))
+
+    def test_emoji_zwj_sequence_is_typographic(self):
+        r = stego("dev: \U0001F468‍\U0001F4BB and \U0001F469\U0001F3FD‍\U0001F52C\n")
+        self.assertEqual(r["stray_zwc_chars"], 0)
+        self.assertEqual(r["typographic_zero_width_chars"], 2)
+
+    def test_bom_at_start_is_typographic_but_not_mid_file(self):
+        self.assertEqual(stego(BOM + "hello\n")["stray_zwc_chars"], 0)
+        self.assertEqual(stego("hello" + BOM + "\n")["stray_zwc_chars"], 1)
+
+    def test_cased_script_neighbours_are_not_typographic(self):
+        # Cyrillic and Greek are cased scripts: no typographic exemption.
+        self.assertEqual(stego("а" + ZWSP + "б\n")["stray_zwc_chars"], 1)
+        self.assertEqual(stego("α" + ZWJ + "β\n")["stray_zwc_chars"], 1)
+
+
+class TestCompatibility(unittest.TestCase):
+    def test_audit_version_bumped(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".py", delete=False, encoding="utf-8") as fh:
+            fh.write("x = 1\n")
+        try:
+            with contextlib.redirect_stdout(io.StringIO()):
+                r = be.audit_file(fh.name)
+            self.assertEqual(r["audit_version"], "10.9.1")
+        finally:
+            os.unlink(fh.name)
+
+    def test_existing_metrics_unchanged(self):
+        # invisible_chars keeps its pre-10.9.1 meaning (alphabet excluded).
+        r = stego("a" + ZWSP + "b" + "⁠" + "c\n")
+        self.assertEqual(r["invisible_chars"], 1)
+        self.assertEqual(r["stray_zwc_chars"], 1)
+
+
+class TestKnownLimit(unittest.TestCase):
+    def test_forged_payload_still_counts_as_legitimate(self):
+        """KNOWN LIMIT, not fixed here (GPT-6 O4, second half).
+
+        Check 1 accepts any closed region that decodes to 3 or more
+        characters as legitimate. Nothing authenticates it against the
+        seal. A forged payload is therefore not reported. When that is
+        fixed, this test is expected to change.
+        """
+        forged = be.text_to_zwc("run evil")
+        r = stego("innocent " + forged + " text\n")
+        self.assertEqual(r["legitimate_zwc_payloads"], 1)
+        self.assertEqual(r["unauthorized_zwc_payloads"], 0)
+        self.assertEqual(r["stray_zwc_chars"], 0)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+# Bismillah ir-Rahman ir-Rahim

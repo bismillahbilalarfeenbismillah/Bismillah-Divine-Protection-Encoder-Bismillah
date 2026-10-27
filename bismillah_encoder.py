@@ -12426,6 +12426,35 @@ def _audit_rendering_integrity(content, filepath=None):
     }
 
 
+# v10.9.1: neighbours that make U+200B/U+200C/U+200D an ordinary
+# typographic character rather than hidden content: letters of uncased
+# scripts (Arabic, Persian, Indic, Thai), combining marks, and symbols
+# (emoji ZWJ sequences, skin-tone modifiers). Cased scripts (Latin,
+# Cyrillic, Greek) are deliberately excluded: a zero-width character
+# inside a Latin identifier or string is the trojan-source case.
+_TYPOGRAPHIC_ZW_NEIGHBOUR_CATEGORIES = frozenset({"Lo", "Lm", "Mn", "Mc", "So", "Sk"})
+
+
+def _is_typographic_zero_width(content, i):
+    """v10.9.1: True if content[i] is a zero-width character in an
+    ordinary typographic position.
+
+    - U+FEFF only at offset 0 (a byte-order mark).
+    - U+200B/U+200C/U+200D only between two non-ASCII characters whose
+      Unicode categories are in _TYPOGRAPHIC_ZW_NEIGHBOUR_CATEGORIES.
+    """
+    ch = content[i]
+    if ch == ZW_BOUNDARY:
+        return i == 0
+    if i == 0 or i + 1 >= len(content):
+        return False
+    prev_ch, next_ch = content[i - 1], content[i + 1]
+    if ord(prev_ch) < 0x80 or ord(next_ch) < 0x80:
+        return False
+    return (unicodedata.category(prev_ch) in _TYPOGRAPHIC_ZW_NEIGHBOUR_CATEGORIES
+            and unicodedata.category(next_ch) in _TYPOGRAPHIC_ZW_NEIGHBOUR_CATEGORIES)
+
+
 def _audit_steganographic(content, filepath=None):
     """v10.9.0: Deep steganographic audit beyond ZWC verification.
 
@@ -12484,6 +12513,53 @@ def _audit_steganographic(content, filepath=None):
                 legitimate_payloads, unauthorized_payloads),
         })
         contamination_score += 40
+
+    # --- Check 1b (v10.9.1): Zero-width characters outside any watermark ---
+    # Check 3 skips FATIMA's own ZWC alphabet and Check 1 only examines
+    # closed boundary pairs, so before v10.9.1 a stray U+200B, U+200C,
+    # U+200D or U+FEFF anywhere else was not reported at all (a lone
+    # U+200B inside "admin" audited exactly like the clean file). A
+    # character from the alphabet outside every closed region is now
+    # reported, unless it sits in an ordinary typographic position
+    # (see _is_typographic_zero_width); those are counted, not hidden.
+    stray_zwc_positions = []
+    typographic_zero_width = 0
+    region_iter = iter(zwc_regions)
+    current_region = next(region_iter, None)
+    for i, ch in enumerate(content):
+        while current_region is not None and i > current_region[1]:
+            current_region = next(region_iter, None)
+        if ch not in zwc_alphabet:
+            continue
+        if current_region is not None and current_region[0] <= i <= current_region[1]:
+            continue
+        if _is_typographic_zero_width(content, i):
+            typographic_zero_width += 1
+            continue
+        stray_zwc_positions.append(i)
+
+    stray_zwc_lines = []
+    if stray_zwc_positions:
+        line_no, scanned = 1, 0
+        stray_types = {}
+        for pos in stray_zwc_positions:
+            line_no += content.count('\n', scanned, pos)
+            scanned = pos
+            if not stray_zwc_lines or stray_zwc_lines[-1] != line_no:
+                stray_zwc_lines.append(line_no)
+            label = 'U+{:04X}'.format(ord(content[pos]))
+            stray_types[label] = stray_types.get(label, 0) + 1
+        findings.append({
+            "severity": "HIGH",
+            "code": "SA-005",
+            "description": "Zero-width characters outside any FATIMA watermark -- {} instances".format(
+                len(stray_zwc_positions)),
+            "detail": "Types: {}; lines: {}{}".format(
+                ', '.join('{} x{}'.format(k, v) for k, v in sorted(stray_types.items())),
+                ', '.join(str(n) for n in stray_zwc_lines[:20]),
+                ' ...' if len(stray_zwc_lines) > 20 else ''),
+        })
+        contamination_score += 20
 
     # --- Check 2: Unicode Tag Steganography ---
     # Tags block (U+E0001-U+E007F) carries invisible data
@@ -12584,6 +12660,10 @@ def _audit_steganographic(content, filepath=None):
         "unauthorized_zwc_payloads": unauthorized_payloads,
         "invisible_chars": invisible_count,
         "tag_chars": len(tag_chars),
+        # v10.9.1: structured counterpart of SA-005's detail text.
+        "stray_zwc_chars": len(stray_zwc_positions),
+        "stray_zwc_lines": stray_zwc_lines[:100],
+        "typographic_zero_width_chars": typographic_zero_width,
     }
 
 
@@ -12752,7 +12832,7 @@ def audit_file(filepath):
     """
     report = {
         "filepath": filepath,
-        "audit_version": "10.9.0",
+        "audit_version": "10.9.1",  # v10.9.1: adds SA-005
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "dimensions": {},
         "overall_status": "UNKNOWN",
@@ -12817,7 +12897,7 @@ def audit_directory(directory):
     """
     results = {
         "directory": directory,
-        "audit_version": "10.9.0",
+        "audit_version": "10.9.1",  # v10.9.1: adds SA-005
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "files_audited": 0,
         "files_passed": 0,
