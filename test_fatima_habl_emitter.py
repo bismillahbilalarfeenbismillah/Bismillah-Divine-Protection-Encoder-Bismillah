@@ -245,7 +245,7 @@ class TestRealAudit(unittest.TestCase):
             self.assertEqual([p["code"] for p in payloads if p.get("code") == "FATIMA-AUDIT-ERROR"], ["FATIMA-AUDIT-ERROR"])
 
     def test_lone_zero_width_space_gap_is_disclosed(self):
-        """Characterization of the confirmed Encoder gap (separate fix, PR #2).
+        """Characterization of the confirmed Encoder gap (separate fix, Encoder PR #4).
 
         Today a lone U+200B produces the same native findings as the clean
         control. The run record must disclose the gap. When the Encoder fix
