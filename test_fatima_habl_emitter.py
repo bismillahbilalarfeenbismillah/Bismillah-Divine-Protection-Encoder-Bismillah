@@ -199,7 +199,7 @@ class TestRealAudit(unittest.TestCase):
 
     def test_end_to_end_round_trip(self):
         with tempfile.TemporaryDirectory() as d:
-            _write(d, "bad.py", 'x = "admin‮"\nprint("аdmin")\n')
+            _write(d, "bad.py", 'x = "admin\u202e"\nprint("\u0430dmin")\n')
             _write(d, "ok.py", BASMALA + "def f():\n    return 1\n" + BASMALA)
             code, out, err = self.run_cli([d])
             self.assertEqual(code, fe.EXIT_OK, err)
@@ -253,7 +253,7 @@ class TestRealAudit(unittest.TestCase):
         """
         with tempfile.TemporaryDirectory() as d:
             _write(d, "control.py", BASMALA + 'pw = "admin"\n' + BASMALA)
-            _write(d, "zwsp.py", BASMALA + 'pw = "adm​in"\n' + BASMALA)
+            _write(d, "zwsp.py", BASMALA + 'pw = "adm\u200bin"\n' + BASMALA)
             self.assertEqual(self.run_cli([d])[0], fe.EXIT_OK)
             runs = {
                 f.location.file: f.payload
@@ -265,7 +265,7 @@ class TestRealAudit(unittest.TestCase):
 
     def test_encoder_audit_output_unchanged_by_emitter(self):
         with tempfile.TemporaryDirectory() as d:
-            p = _write(d, "bad.py", 'x = "admin‮"\n')
+            p = _write(d, "bad.py", 'x = "admin\u202e"\n')
             before = fe.run_audit(p)
             self.run_cli([d])
             after = fe.run_audit(p)
@@ -282,7 +282,7 @@ class TestFailClosed(unittest.TestCase):
 
     def test_habl_missing_exits_3_and_writes_nothing(self):
         with tempfile.TemporaryDirectory() as d:
-            _write(d, "a.py", 'x = "‮"\n')
+            _write(d, "a.py", 'x = "\u202e"\n')
             with mock.patch.dict(sys.modules, {"habl": None}):
                 code, _, err = self.run_cli([d])
             self.assertEqual(code, fe.EXIT_EXPORT_FAILED)
@@ -306,7 +306,7 @@ class TestFailClosed(unittest.TestCase):
             return r
 
         with tempfile.TemporaryDirectory() as d:
-            _write(d, "a.py", 'x = "‮"\n')
+            _write(d, "a.py", 'x = "\u202e"\n')
             _write(d, "b.py", "x = 1\n")
             with mock.patch.object(fe, "run_audit", tampered):
                 code, _, err = self.run_cli([d])
@@ -324,7 +324,7 @@ class TestFailClosed(unittest.TestCase):
 
     def test_whole_run_is_one_batch_append(self):
         with tempfile.TemporaryDirectory() as d:
-            _write(d, "a.py", 'x = "‮"\n')
+            _write(d, "a.py", 'x = "\u202e"\n')
             _write(d, "b.py", "x = 1\n")
             with mock.patch.object(habl, "append_findings", wraps=habl.append_findings) as spy:
                 self.assertEqual(self.run_cli([d])[0], fe.EXIT_OK)
