@@ -89,7 +89,9 @@ class TestFreshSealIsCoherent(SealedDir):
     def test_full_audit_reports_version(self):
         with contextlib.redirect_stdout(io.StringIO()):
             r = be.audit_file(self.path("code.py"))
-        self.assertEqual(r["audit_version"], "10.9.2")
+        # The sidecar-2.0 checks arrived in 10.9.2; later versions keep them.
+        version = tuple(int(x) for x in r["audit_version"].split("."))
+        self.assertGreaterEqual(version, (10, 9, 2))
 
 
 class TestChangesAreStillCaught(SealedDir):
