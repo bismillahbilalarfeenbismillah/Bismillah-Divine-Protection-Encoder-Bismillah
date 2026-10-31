@@ -115,22 +115,68 @@ SEVERITY_OVERRIDES: dict[tuple[str, str], str] = {
     ("RI-002", "HIGH"): "advisory",
 }
 
-# Known limits of the audit at the supported version, written into every
-# audit_run record until fixed.
-KNOWN_DETECTION_GAPS = (
-    # The stray-ZWC gap (U+200B/U+200C/U+200D/U+FEFF outside watermarks)
-    # was closed by SA-005 in audit version 10.9.1.
+# E1 (GPT-6): known detection gaps are version-specific. Older audit_run
+# records must carry the gaps that were real at their version, not the
+# current version's reduced set.
+_GAP_LINE_NUMBERS = (
     "Line numbers appear only inside description or detail text, so findings "
-    "carry no structured line.",
+    "carry no structured line."
+)
+_GAP_MULTI_CONDITION = (
     "SC-002, SC-004, SC-005 and SC-006 each name more than one condition; "
-    "(code, native severity) does not identify the condition. Read description.",
-    # v10.9.3: watermark format recognition is not authentication. A
-    # FATIMA-format payload classified by SA-006 may have been copied.
-    # Watermark authentication (B2) is a separate workstream.
+    "(code, native severity) does not identify the condition. Read description."
+)
+_GAP_STRAY_ZWC = (
+    "Zero-width characters in the Encoder's own ZWC alphabet (U+200B, U+200C, "
+    "U+200D, U+FEFF) are not reported when they appear outside a recognized "
+    "watermark: steganographic.invisible_chars skips them and the payload check "
+    "only looks for paired boundaries."
+)
+_GAP_SA006_AUTH = (
     "SA-006 recognizes FATIMA-format watermarks by structure only, not by "
     "cryptographic authentication. The format can be copied. B2 authentication "
-    "is planned but not yet implemented.",
+    "is planned but not yet implemented."
 )
+
+# Gaps present at each version. SA-005 (10.9.1) closed the stray-ZWC gap.
+# SA-006 (10.9.3) introduced the authentication gap.
+_GAPS_BY_VERSION: dict[str, tuple[str, ...]] = {
+    "10.9.0": (_GAP_LINE_NUMBERS, _GAP_MULTI_CONDITION, _GAP_STRAY_ZWC),
+    "10.9.1": (_GAP_LINE_NUMBERS, _GAP_MULTI_CONDITION),
+    "10.9.2": (_GAP_LINE_NUMBERS, _GAP_MULTI_CONDITION),
+    "10.9.3": (_GAP_LINE_NUMBERS, _GAP_MULTI_CONDITION, _GAP_SA006_AUTH),
+}
+
+# For backward compat -- the current version's gaps.
+KNOWN_DETECTION_GAPS = _GAPS_BY_VERSION["10.9.3"]
+
+
+def _gaps_for_version(version: str) -> list[str]:
+    return list(_GAPS_BY_VERSION.get(version, KNOWN_DETECTION_GAPS))
+
+
+# E2 (GPT-6): codes available at each audit version. The emitter must
+# reject a code that does not exist at the declared version.
+_CODES_INTRODUCED: dict[str, str] = {
+    # 10.9.0: all original codes
+    "SA-005": "10.9.1",
+    "SA-006": "10.9.3",
+    "SA-007": "10.9.3",
+}
+
+
+def _code_available_at(code: str, version: str) -> bool:
+    """Return True if code existed at the given audit version."""
+    introduced = _CODES_INTRODUCED.get(code)
+    if introduced is None:
+        return True  # original code, present in all versions
+    # Compare as tuples: "10.9.1" -> (10, 9, 1)
+    try:
+        v = tuple(int(x) for x in version.split("."))
+        i = tuple(int(x) for x in introduced.split("."))
+    except (ValueError, AttributeError):
+        return False
+    return v >= i
 
 
 # ---------------------------------------------------------------------------
@@ -311,6 +357,11 @@ def report_to_findings(
             native = raw.get("severity")
             if code not in CODE_TABLE:
                 raise UnsupportedAuditError("unknown finding code {!r} in {}".format(code, dim))
+            # E2 (GPT-6): reject codes that did not exist at the declared version.
+            if not _code_available_at(code, version):
+                raise UnsupportedAuditError(
+                    "code {} not available at audit version {} (introduced in {})".format(
+                        code, version, _CODES_INTRODUCED.get(code, "?")))
             if not code.startswith(_DIMENSION_PREFIX[dim]):
                 raise UnsupportedAuditError("code {} reported under dimension {}".format(code, dim))
             category, kind = CODE_TABLE[code]
@@ -397,7 +448,7 @@ def report_to_findings(
                 "dimensions_examined": examined,
                 "dimensions_not_examined": skipped,
                 "error": None if error is None else str(error),
-                "known_detection_gaps": list(KNOWN_DETECTION_GAPS),
+                "known_detection_gaps": _gaps_for_version(version),
                 "audit_version": version,
                 "emitter_version": EMITTER_VERSION,
             },

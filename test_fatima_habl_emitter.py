@@ -73,7 +73,8 @@ class TestMapping(unittest.TestCase):
         by_dim = {}
         for code in sorted(fe.CODE_TABLE):
             by_dim.setdefault(dim_for[code[:3]], []).append(_f(code, "HIGH", "d " + code, "x " + code))
-        out = self.convert(_report(by_dim))
+        # Use 10.9.3 -- the version where all codes are available.
+        out = self.convert(_report(by_dim, audit_version="10.9.3"))
         native = [f for f in out if f.payload["record_kind"] == "finding"]
         self.assertEqual(sorted(f.payload["code"] for f in native), sorted(fe.CODE_TABLE))
         for f in native:
@@ -118,10 +119,11 @@ class TestMapping(unittest.TestCase):
         """SA-005 (10.9.1+), SA-006/SA-007 (10.9.3+) are in CODE_TABLE."""
         for code in ("SA-005", "SA-006", "SA-007"):
             self.assertIn(code, fe.CODE_TABLE)
-        # SA-005 at 10.9.1
+        # E2 (GPT-6): SA-005 at native HIGH, not synthetic MEDIUM
         out = self.convert(
-            _report({"steganographic": [_f("SA-005", "MEDIUM")]}, audit_version="10.9.1"))
+            _report({"steganographic": [_f("SA-005", "HIGH")]}, audit_version="10.9.1"))
         self.assertEqual(out[0].payload["code"], "SA-005")
+        self.assertEqual(out[0].payload["native_severity"], "HIGH")
         # SA-006 (INFO) and SA-007 (HIGH) at 10.9.3
         out = self.convert(
             _report({"steganographic": [
@@ -136,6 +138,34 @@ class TestMapping(unittest.TestCase):
         self.assertEqual(sa6.payload["kind"], fe.KIND_COVERAGE)
         self.assertEqual(sa7.category.value, "adversarial")
         self.assertEqual(sa7.payload["kind"], fe.KIND_OBSERVED)
+
+    def test_code_version_compatibility_rejected(self):
+        """E2 (GPT-6): codes not available at the declared version are refused."""
+        # SA-005 did not exist at 10.9.0
+        with self.assertRaises(fe.UnsupportedAuditError):
+            self.convert(_report({"steganographic": [_f("SA-005", "HIGH")]}, audit_version="10.9.0"))
+        # SA-006 did not exist at 10.9.1 or 10.9.2
+        with self.assertRaises(fe.UnsupportedAuditError):
+            self.convert(_report({"steganographic": [_f("SA-006", "INFO")]}, audit_version="10.9.1"))
+        with self.assertRaises(fe.UnsupportedAuditError):
+            self.convert(_report({"steganographic": [_f("SA-007", "HIGH")]}, audit_version="10.9.2"))
+
+    def test_gaps_are_version_specific(self):
+        """E1 (GPT-6): known_detection_gaps vary by audit version."""
+        # 10.9.0 carries the stray-ZWC gap
+        out_0 = self.convert(_report({}, audit_version="10.9.0"))
+        run_0 = [f for f in out_0 if f.payload.get("record_kind") == fe.KIND_AUDIT_RUN][0]
+        self.assertTrue(any("U+200B" in g for g in run_0.payload["known_detection_gaps"]))
+        self.assertFalse(any("SA-006" in g for g in run_0.payload["known_detection_gaps"]))
+        # 10.9.1 does not carry the stray-ZWC gap (closed by SA-005)
+        out_1 = self.convert(_report({}, audit_version="10.9.1"))
+        run_1 = [f for f in out_1 if f.payload.get("record_kind") == fe.KIND_AUDIT_RUN][0]
+        self.assertFalse(any("U+200B" in g for g in run_1.payload["known_detection_gaps"]))
+        # 10.9.3 carries the SA-006 authentication gap
+        out_3 = self.convert(_report({}, audit_version="10.9.3"))
+        run_3 = [f for f in out_3 if f.payload.get("record_kind") == fe.KIND_AUDIT_RUN][0]
+        self.assertTrue(any("SA-006" in g for g in run_3.payload["known_detection_gaps"]))
+        self.assertFalse(any("U+200B" in g for g in run_3.payload["known_detection_gaps"]))
 
     def test_actionable_findings_in_audit_run(self):
         """The audit_run record carries native_actionable_count (v10.9.2+)."""
@@ -181,7 +211,7 @@ class TestMapping(unittest.TestCase):
         self.assertEqual(run.severity.value, "advisory")
         self.assertEqual(run.payload["native_finding_count"], 0)
         self.assertEqual(run.payload["dimensions_examined"], list(fe.DIMENSIONS))
-        self.assertEqual(run.payload["known_detection_gaps"], list(fe.KNOWN_DETECTION_GAPS))
+        self.assertEqual(run.payload["known_detection_gaps"], fe._gaps_for_version(VERSION))
         text = (run.summary + json.dumps(run.payload)).lower()
         for word in ("safe", "authentic", "verified", "clean"):
             self.assertNotIn(word, run.summary.lower())
@@ -281,23 +311,20 @@ class TestRealAudit(unittest.TestCase):
             payloads = _payloads(load_ledger(d).findings)
             self.assertEqual([p["code"] for p in payloads if p.get("code") == "FATIMA-AUDIT-ERROR"], ["FATIMA-AUDIT-ERROR"])
 
-    def test_stray_zwc_gap_closed_and_sa006_gap_disclosed(self):
-        """The U+200B gap was closed by SA-005 (Encoder PR #4). The
-        known_detection_gaps no longer mention it. Instead, the SA-006
-        authentication gap (B2 not yet implemented) is disclosed."""
+    def test_gaps_version_specific_in_real_audit(self):
+        """E1 (GPT-6): real audit_run records carry version-specific gaps.
+        The current Encoder reports its own version (10.9.0 on main, higher
+        on branches). Whatever version it reports, the gaps must match."""
         with tempfile.TemporaryDirectory() as d:
-            _write(d, "control.py", BASMALA + 'pw = "admin"\n' + BASMALA)
-            _write(d, "zwsp.py", BASMALA + 'pw = "adm\u200bin"\n' + BASMALA)
+            _write(d, "test.py", BASMALA + 'x = 1\n' + BASMALA)
             self.assertEqual(self.run_cli([d])[0], fe.EXIT_OK)
-            runs = {
-                f.location.file: f.payload
-                for f in load_ledger(d).findings
-                if f.payload["record_kind"] == fe.KIND_AUDIT_RUN
-            }
-            # The U+200B gap is closed -- no longer in known_detection_gaps
-            self.assertFalse(any("U+200B" in g for g in runs["zwsp.py"]["known_detection_gaps"]))
-            # The SA-006 authentication gap is disclosed
-            self.assertTrue(any("SA-006" in g for g in runs["zwsp.py"]["known_detection_gaps"]))
+            runs = [f for f in load_ledger(d).findings
+                    if f.payload["record_kind"] == fe.KIND_AUDIT_RUN]
+            self.assertEqual(len(runs), 1)
+            run = runs[0]
+            version = run.payload["audit_version"]
+            expected = fe._gaps_for_version(version)
+            self.assertEqual(run.payload["known_detection_gaps"], expected)
 
     def test_encoder_audit_output_unchanged_by_emitter(self):
         with tempfile.TemporaryDirectory() as d:
