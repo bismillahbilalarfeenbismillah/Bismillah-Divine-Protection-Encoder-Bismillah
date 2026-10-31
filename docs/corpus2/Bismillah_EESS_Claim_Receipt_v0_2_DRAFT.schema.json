@@ -586,7 +586,7 @@
         }
       },
       "then": {
-        "description": "CR-01: VERIFIED requires at least one source_evidence item with independence=external AND verification_state in [observed, reproduced]. Additionally, review.authorization must not be not_authorized.",
+        "description": "CR-01: VERIFIED requires at least one source_evidence item with independence=external AND verification_state in [observed, reproduced]. CR-02: review.authorization is NOT checked here -- claim truth and action authorization are independent decision gates. A verified fact may coexist with no_action and not_authorized.",
         "properties": {
           "source_evidence": {
             "minItems": 1,
@@ -600,13 +600,6 @@
                 }
               },
               "required": ["independence", "verification_state"]
-            }
-          },
-          "review": {
-            "properties": {
-              "authorization": {
-                "enum": ["pending", "approved"]
-              }
             }
           }
         }

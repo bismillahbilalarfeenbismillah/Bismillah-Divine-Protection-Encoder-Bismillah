@@ -256,19 +256,21 @@ def test_cr01_verified_mixed_with_one_external(schema):
     expect_valid("CR-01 positive: VERIFIED + mixed with one external reproduced", receipt, schema)
 
 
-def test_cr01_verified_not_authorized_rejected(schema):
-    """CR-01: VERIFIED with external evidence but not_authorized review rejected."""
+def test_cr02_verified_not_authorized_accepted(schema):
+    """CR-02: VERIFIED with external evidence but not_authorized review is ACCEPTED.
+    Truth and authorization are independent gates. A verified fact may coexist
+    with not_authorized -- the claim is true, but no action is permitted."""
     receipt = make_base_receipt(
         status="VERIFIED",
         source_evidence=[external_reproduced_evidence()],
         evidence_independence="external",
         review={
-            "reviewer": "unauthorized",
+            "reviewer": "independent-lab",
             "date": "2026-10-31",
             "authorization": "not_authorized"
         }
     )
-    expect_invalid("CR-01: VERIFIED + external + reproduced but not_authorized", receipt, schema)
+    expect_valid("CR-02: VERIFIED + external + reproduced + not_authorized (truth != permission)", receipt, schema)
 
 
 def test_cr02_verified_no_action(schema):
@@ -415,7 +417,7 @@ def main():
     test_cr01_verified_external_reproduced_accepted(schema)
     test_cr01_verified_external_observed_accepted(schema)
     test_cr01_verified_mixed_with_one_external(schema)
-    test_cr01_verified_not_authorized_rejected(schema)
+    test_cr02_verified_not_authorized_accepted(schema)
 
     print("\n--- CR-02: Verification and authorization are separate ---")
     test_cr02_verified_no_action(schema)
