@@ -1,0 +1,422 @@
+# Bismillah ir-Rahman ir-Rahim
+"""Tests for Shahid (شَهِيد) -- the weight-holder's testimony.
+
+Tests the report schema, serialization round-trip, validation,
+HABL cross-references, and the example report builder.
+
+Runs under pytest or unittest.
+"""
+# Bismillah ir-Rahman ir-Rahim
+
+import json
+import os
+import shutil
+import sys
+import tempfile
+import unittest
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+
+import shahid  # noqa: E402
+
+
+class TestReportSubject(unittest.TestCase):
+    def test_minimal(self):
+        s = shahid.ReportSubject(name="test-model")
+        d = s.to_dict()
+        self.assertEqual(d["name"], "test-model")
+        self.assertEqual(d.get("kind"), "model")
+
+    def test_round_trip(self):
+        s = shahid.ReportSubject(
+            name="FATIMA", version="2.0", kind="tool", identifier="enc-v2"
+        )
+        s2 = shahid.ReportSubject.from_dict(s.to_dict())
+        self.assertEqual(s.name, s2.name)
+        self.assertEqual(s.version, s2.version)
+        self.assertEqual(s.kind, s2.kind)
+        self.assertEqual(s.identifier, s2.identifier)
+
+
+class TestInspectionPeriod(unittest.TestCase):
+    def test_valid(self):
+        p = shahid.InspectionPeriod(
+            start="2026-10-01T00:00:00+00:00",
+            end="2026-10-31T23:59:59+00:00",
+            cadence="monthly",
+        )
+        d = p.to_dict()
+        self.assertEqual(d["cadence"], "monthly")
+
+    def test_bad_timestamp(self):
+        with self.assertRaises(ValueError):
+            shahid.InspectionPeriod(start="not-a-date", end="2026-10-31T00:00:00+00:00")
+
+    def test_no_timezone(self):
+        with self.assertRaises(ValueError):
+            shahid.InspectionPeriod(
+                start="2026-10-01T00:00:00",
+                end="2026-10-31T00:00:00+00:00",
+            )
+
+
+class TestHablReference(unittest.TestCase):
+    def test_must_have_at_least_one_id(self):
+        with self.assertRaises(ValueError):
+            shahid.HablReference()
+
+    def test_finding_id_only(self):
+        r = shahid.HablReference(finding_id="abc123")
+        d = r.to_dict()
+        self.assertEqual(d["finding_id"], "abc123")
+        self.assertNotIn("correlation_id", d)
+
+    def test_both_ids(self):
+        r = shahid.HablReference(
+            finding_id="abc123",
+            correlation_id="habl-xyz",
+            summary="related finding",
+        )
+        d = r.to_dict()
+        self.assertEqual(d["correlation_id"], "habl-xyz")
+        self.assertEqual(d["summary"], "related finding")
+
+    def test_round_trip(self):
+        r = shahid.HablReference(
+            finding_id="abc123",
+            correlation_id="habl-xyz",
+            ledger_path=".habl/findings.jsonl",
+        )
+        r2 = shahid.HablReference.from_dict(r.to_dict())
+        self.assertEqual(r.finding_id, r2.finding_id)
+        self.assertEqual(r.correlation_id, r2.correlation_id)
+        self.assertEqual(r.ledger_path, r2.ledger_path)
+
+
+class TestInspectedDimension(unittest.TestCase):
+    def test_string_coverage_coerced(self):
+        d = shahid.InspectedDimension(name="weights", coverage="full")
+        self.assertEqual(d.coverage, shahid.InspectionCoverage.FULL)
+
+    def test_empty_name_rejected(self):
+        with self.assertRaises(ValueError):
+            shahid.InspectedDimension(name="", coverage=shahid.InspectionCoverage.FULL)
+
+    def test_with_findings(self):
+        f = shahid.DimensionFinding(
+            summary="test finding",
+            habl_refs=[shahid.HablReference(finding_id="ref-001")],
+        )
+        d = shahid.InspectedDimension(
+            name="training_data",
+            coverage=shahid.InspectionCoverage.SAMPLED,
+            method="10% random sample",
+            findings=[f],
+        )
+        out = d.to_dict()
+        self.assertEqual(len(out["findings"]), 1)
+        self.assertEqual(out["findings"][0]["habl_refs"][0]["finding_id"], "ref-001")
+
+    def test_round_trip(self):
+        d = shahid.InspectedDimension(
+            name="activations",
+            coverage=shahid.InspectionCoverage.PARTIAL,
+            method="probing layer 12",
+            scope="transformer block 12 only",
+            metadata={"layer": 12},
+        )
+        d2 = shahid.InspectedDimension.from_dict(d.to_dict())
+        self.assertEqual(d.name, d2.name)
+        self.assertEqual(d.coverage, d2.coverage)
+        self.assertEqual(d.method, d2.method)
+
+
+class TestUninspectedDimension(unittest.TestCase):
+    def test_string_reason_coerced(self):
+        d = shahid.UninspectedDimension(name="weights", reason="cost")
+        self.assertEqual(d.reason, shahid.UninspectedReason.COST)
+
+    def test_empty_name_rejected(self):
+        with self.assertRaises(ValueError):
+            shahid.UninspectedDimension(name="", reason=shahid.UninspectedReason.COST)
+
+
+class TestShahidReport(unittest.TestCase):
+    def _minimal(self) -> shahid.ShahidReport:
+        return shahid.ShahidReport(
+            publisher="test-publisher",
+            subject=shahid.ReportSubject(name="test-model"),
+            period=shahid.InspectionPeriod(
+                start="2026-10-01T00:00:00+00:00",
+                end="2026-10-31T23:59:59+00:00",
+            ),
+            inspected=[
+                shahid.InspectedDimension(
+                    name="weights",
+                    coverage=shahid.InspectionCoverage.FULL,
+                    method="direct examination",
+                ),
+            ],
+            uninspected=[
+                shahid.UninspectedDimension(
+                    name="training_data",
+                    reason=shahid.UninspectedReason.POLICY,
+                    explanation="data license prohibits disclosure",
+                ),
+            ],
+        )
+
+    def test_schema_version(self):
+        r = self._minimal()
+        self.assertEqual(r.schema_version, shahid.SHAHID_SCHEMA_VERSION)
+
+    def test_unsupported_schema_rejected(self):
+        with self.assertRaises(ValueError):
+            shahid.ShahidReport(schema_version="99.99.99")
+
+    def test_derived_properties(self):
+        r = self._minimal()
+        self.assertEqual(r.total_inspected, 1)
+        self.assertEqual(r.total_uninspected, 1)
+        self.assertEqual(r.total_findings, 0)
+        self.assertEqual(r.coverage_summary, {"full": 1})
+        self.assertEqual(r.uninspected_reasons, {"policy": 1})
+
+    def test_canonical_coverage(self):
+        r = self._minimal()
+        cc = r.canonical_coverage
+        self.assertEqual(cc["weights"], "inspected:full")
+        self.assertEqual(cc["training_data"], "uninspected:policy")
+        self.assertEqual(cc["activations"], "absent")
+
+    def test_json_round_trip(self):
+        r = self._minimal()
+        text = r.to_json()
+        parsed = json.loads(text)
+        r2 = shahid.ShahidReport.from_json(text)
+        self.assertEqual(r.report_id, r2.report_id)
+        self.assertEqual(r.publisher, r2.publisher)
+        self.assertEqual(r.subject.name, r2.subject.name)
+        self.assertEqual(len(r.inspected), len(r2.inspected))
+        self.assertEqual(len(r.uninspected), len(r2.uninspected))
+        self.assertEqual(r.inspected[0].name, r2.inspected[0].name)
+        self.assertEqual(r.uninspected[0].reason, r2.uninspected[0].reason)
+
+    def test_summary_in_serialization(self):
+        r = self._minimal()
+        d = r.to_dict()
+        self.assertIn("summary", d)
+        self.assertEqual(d["summary"]["total_inspected"], 1)
+        self.assertEqual(d["summary"]["total_uninspected"], 1)
+
+    def test_schema_version_key_in_json(self):
+        r = self._minimal()
+        d = r.to_dict()
+        self.assertIn("shahid_schema_version", d)
+        self.assertNotIn("schema_version", d)
+
+
+class TestValidation(unittest.TestCase):
+    def test_empty_report_warnings(self):
+        r = shahid.ShahidReport()
+        warnings = r.validate()
+        self.assertTrue(any("publisher" in w for w in warnings))
+        self.assertTrue(any("subject" in w for w in warnings))
+        self.assertTrue(any("period" in w for w in warnings))
+        self.assertTrue(any("empty" in w for w in warnings))
+
+    def test_claimed_coverage_without_method_is_fine(self):
+        r = shahid.ShahidReport(
+            publisher="test",
+            subject=shahid.ReportSubject(name="m"),
+            inspected=[
+                shahid.InspectedDimension(
+                    name="weights",
+                    coverage=shahid.InspectionCoverage.CLAIMED,
+                ),
+            ],
+        )
+        warnings = r.validate()
+        # CLAIMED without method is the correct usage
+        method_warns = [w for w in warnings if "CLAIMED" in w and "method" in w]
+        self.assertEqual(len(method_warns), 0)
+
+    def test_claimed_with_method_warns(self):
+        r = shahid.ShahidReport(
+            publisher="test",
+            subject=shahid.ReportSubject(name="m"),
+            inspected=[
+                shahid.InspectedDimension(
+                    name="weights",
+                    coverage=shahid.InspectionCoverage.CLAIMED,
+                    method="I looked at them",
+                ),
+            ],
+        )
+        warnings = r.validate()
+        method_warns = [w for w in warnings if "CLAIMED" in w and "method" in w]
+        self.assertEqual(len(method_warns), 1)
+
+    def test_non_claimed_without_method_warns(self):
+        r = shahid.ShahidReport(
+            publisher="test",
+            subject=shahid.ReportSubject(name="m"),
+            inspected=[
+                shahid.InspectedDimension(
+                    name="weights",
+                    coverage=shahid.InspectionCoverage.FULL,
+                    # no method
+                ),
+            ],
+        )
+        warnings = r.validate()
+        self.assertTrue(any("method is empty" in w for w in warnings))
+
+    def test_duplicate_dimension_warned(self):
+        r = shahid.ShahidReport(
+            publisher="test",
+            subject=shahid.ReportSubject(name="m"),
+            inspected=[
+                shahid.InspectedDimension(
+                    name="weights",
+                    coverage=shahid.InspectionCoverage.FULL,
+                    method="x",
+                ),
+                shahid.InspectedDimension(
+                    name="weights",
+                    coverage=shahid.InspectionCoverage.SAMPLED,
+                    method="y",
+                ),
+            ],
+        )
+        warnings = r.validate()
+        self.assertTrue(any("more than once" in w for w in warnings))
+
+    def test_absent_canonical_warned(self):
+        r = shahid.ShahidReport(
+            publisher="test",
+            subject=shahid.ReportSubject(name="m"),
+            inspected=[
+                shahid.InspectedDimension(
+                    name="weights",
+                    coverage=shahid.InspectionCoverage.FULL,
+                    method="x",
+                ),
+            ],
+        )
+        warnings = r.validate()
+        absent_warns = [w for w in warnings if "absent" in w]
+        self.assertTrue(len(absent_warns) > 0)
+        # The warning should name the missing canonical dimensions
+        self.assertTrue(any("training_data" in w for w in absent_warns))
+
+
+class TestFileIO(unittest.TestCase):
+    def setUp(self):
+        self.d = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.d)
+
+    def test_write_and_read(self):
+        r = shahid.ShahidReport(
+            publisher="test",
+            subject=shahid.ReportSubject(name="m", version="1.0"),
+            inspected=[
+                shahid.InspectedDimension(
+                    name="weights",
+                    coverage=shahid.InspectionCoverage.FULL,
+                    method="direct",
+                ),
+            ],
+        )
+        path = shahid.write_report(r, self.d)
+        self.assertTrue(path.exists())
+        self.assertTrue(str(path).endswith(shahid.REPORT_SUFFIX))
+
+        r2 = shahid.read_report(path)
+        self.assertEqual(r.report_id, r2.report_id)
+        self.assertEqual(r.publisher, r2.publisher)
+
+    def test_list_reports_empty(self):
+        self.assertEqual(shahid.list_reports(self.d), [])
+
+    def test_list_reports_finds_written(self):
+        r = shahid.ShahidReport(
+            publisher="test",
+            subject=shahid.ReportSubject(name="m"),
+        )
+        shahid.write_report(r, self.d)
+        reports = shahid.list_reports(self.d)
+        self.assertEqual(len(reports), 1)
+
+    def test_report_path_without_id(self):
+        p = shahid.report_path(self.d)
+        self.assertTrue(str(p).endswith(shahid.SHAHID_DIR))
+
+
+class TestExampleReport(unittest.TestCase):
+    def test_example_is_valid(self):
+        r = shahid.example_report()
+        self.assertIsInstance(r, shahid.ShahidReport)
+        self.assertTrue(r.publisher)
+        self.assertTrue(r.subject.name)
+        self.assertIsNotNone(r.period)
+        self.assertTrue(len(r.inspected) > 0)
+        self.assertTrue(len(r.uninspected) > 0)
+        self.assertTrue(r.attestation)
+
+    def test_example_serializes(self):
+        r = shahid.example_report()
+        text = r.to_json()
+        parsed = json.loads(text)
+        self.assertIn("shahid_schema_version", parsed)
+        self.assertEqual(parsed["shahid_schema_version"], shahid.SHAHID_SCHEMA_VERSION)
+
+    def test_example_round_trips(self):
+        r = shahid.example_report()
+        r2 = shahid.ShahidReport.from_json(r.to_json())
+        self.assertEqual(r.report_id, r2.report_id)
+        self.assertEqual(r.subject.name, r2.subject.name)
+        self.assertEqual(len(r.inspected), len(r2.inspected))
+        self.assertEqual(r.inspected[0].name, r2.inspected[0].name)
+        self.assertEqual(r.inspected[0].coverage, r2.inspected[0].coverage)
+        self.assertEqual(len(r.inspected[0].findings), len(r2.inspected[0].findings))
+
+    def test_example_validates_with_acceptable_warnings(self):
+        r = shahid.example_report()
+        warnings = r.validate()
+        # Custom dimensions (not in CANONICAL_DIMENSIONS) cause absent
+        # warnings -- those are expected for a tool (not a model)
+        for w in warnings:
+            # No critical structural issues
+            self.assertNotIn("publisher is empty", w)
+            self.assertNotIn("subject.name is empty", w)
+            self.assertNotIn("report is empty", w)
+
+
+class TestConstants(unittest.TestCase):
+    def test_canonical_dimensions_are_strings(self):
+        for dim in shahid.CANONICAL_DIMENSIONS:
+            self.assertIsInstance(dim, str)
+            self.assertTrue(dim)
+
+    def test_coverage_levels(self):
+        levels = {e.value for e in shahid.InspectionCoverage}
+        self.assertIn("full", levels)
+        self.assertIn("sampled", levels)
+        self.assertIn("claimed", levels)
+
+    def test_uninspected_reasons(self):
+        reasons = {e.value for e in shahid.UninspectedReason}
+        self.assertIn("cost", reasons)
+        self.assertIn("policy", reasons)
+        self.assertIn("deferred", reasons)
+        self.assertIn("not_applicable", reasons)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+# Bismillah ir-Rahman ir-Rahim
