@@ -12509,6 +12509,40 @@ def _is_heuristic_exempt_zero_width(content, i):
     return False
 
 
+# v10.9.3 (N4): protocols whose ZWC payloads the Encoder itself writes
+# (watermark declarations built in this file). Recognizing the format is
+# NOT authentication: anyone can encode the same JSON.
+_ZWC_KNOWN_PROTOCOLS = frozenset({"FATIMA-MURAQABAH", "FATIMA-MURAQABAH-COLOPHON"})
+
+
+def _classify_zwc_payload(decoded):
+    """v10.9.3 (N4): classify one decoded closed ZWC region.
+
+    "fatima_format": decodes to the Basmala (exact or leading), or to
+        JSON whose protocol is one the Encoder writes. Structurally
+        recognized, unverified.
+    "unrecognized": decodes to 3+ characters of anything else.
+    "malformed": does not decode, or decodes to fewer than 3 characters.
+    There is no "verified" class: nothing in 10.9.x authenticates a
+    watermark (see verified_zwc_payloads).
+    """
+    if not decoded or len(decoded) < 3:
+        return "malformed"
+    # R2 (GPT-6): exact or leading match, not substring. The Encoder
+    # writes the Basmala as the entire payload or at the start; a
+    # substring match in arbitrary text would be overly broad.
+    if decoded.startswith(BISMILLAH_ARABIC):
+        return "fatima_format"
+    if decoded.startswith("{"):
+        try:
+            obj = json.loads(decoded)
+        except (ValueError, TypeError):
+            obj = None
+        if isinstance(obj, dict) and obj.get("protocol") in _ZWC_KNOWN_PROTOCOLS:
+            return "fatima_format"
+    return "unrecognized"
+
+
 def _audit_steganographic(content, filepath=None):
     """v10.9.0: Deep steganographic audit beyond ZWC verification.
 
@@ -12523,8 +12557,12 @@ def _audit_steganographic(content, filepath=None):
     findings = []
     contamination_score = 0  # 0 = clean, higher = more contaminated
 
-    # --- Check 1: ZWC Payload Authentication ---
-    # Verify all ZWC payloads are legitimate FATIMA watermarks
+    # --- Check 1: ZWC Payload Classification ---
+    # v10.9.3 (N4): before v10.9.3 this check called every region that
+    # decoded to the Basmala, or to any 3+ characters, "legitimate". No
+    # region was ever authenticated. Regions are now classified by what
+    # can actually be observed (_classify_zwc_payload) and none is called
+    # legitimate or verified.
     zwc_alphabet = {ZW_ZERO, ZW_ONE, ZW_SEP, ZW_BOUNDARY}
     zwc_regions = []
     in_payload = False
@@ -12539,34 +12577,64 @@ def _audit_steganographic(content, filepath=None):
                 in_payload = False
                 zwc_regions.append((payload_start, i))
 
-    # Extract and verify each payload
-    legitimate_payloads = 0
-    unauthorized_payloads = 0
+    # Classify each payload
+    verified_payloads = 0  # no authentication mechanism exists in 10.9.x
+    fatima_format_payloads = 0
+    unrecognized_payloads = 0
+    unrecognized_previews = []
+    malformed_payloads = 0
     for start, end in zwc_regions:
         segment = content[start:end+1]
         try:
             decoded = zwc_to_text(segment)
-            if decoded and BISMILLAH_ARABIC in decoded:
-                legitimate_payloads += 1
-            elif decoded and len(decoded) >= 3:
-                # Non-Basmala payload -- could be legitimate future extension
-                # or could be injected
-                legitimate_payloads += 1  # Conservative: accept as legitimate
-            else:
-                unauthorized_payloads += 1
         except Exception:
-            unauthorized_payloads += 1
+            decoded = None
+        kind = _classify_zwc_payload(decoded)
+        if kind == "fatima_format":
+            fatima_format_payloads += 1
+        elif kind == "unrecognized":
+            unrecognized_payloads += 1
+            if len(unrecognized_previews) < 5:
+                unrecognized_previews.append(ascii(decoded[:40]))
+        else:
+            malformed_payloads += 1
 
-    if unauthorized_payloads > 0:
+    region_summary = ("{} FATIMA-format (unverified), {} unrecognized, {} malformed ZWC "
+                      "regions".format(fatima_format_payloads, unrecognized_payloads,
+                                       malformed_payloads))
+    if malformed_payloads > 0:
         findings.append({
             "severity": "CRITICAL",
             "code": "SA-001",
-            "description": "Unauthorized ZWC payload(s) detected -- {} injected post-seal".format(
-                unauthorized_payloads),
-            "detail": "Found {} legitimate and {} unauthorized ZWC regions".format(
-                legitimate_payloads, unauthorized_payloads),
+            "description": "Malformed ZWC payload(s) -- {} region(s) do not decode or "
+                           "decode to fewer than 3 characters".format(
+                malformed_payloads),
+            "detail": "{}. Not compared with the seal, so this does not show when "
+                      "they were added.".format(region_summary),
         })
         contamination_score += 40
+
+    if unrecognized_payloads > 0:
+        findings.append({
+            "severity": "HIGH",
+            "code": "SA-007",
+            "description": "Unrecognized ZWC payload(s) -- {} region(s) decode to "
+                           "non-FATIMA content".format(unrecognized_payloads),
+            "detail": "{}. Decoded (escaped, first 40 chars): {}".format(
+                region_summary, ", ".join(unrecognized_previews)),
+        })
+        contamination_score += 30
+
+    if fatima_format_payloads > 0:
+        findings.append({
+            "severity": "INFO",
+            "code": "SA-006",
+            "description": "FATIMA-format ZWC watermark(s) not authenticated -- {}".format(
+                fatima_format_payloads),
+            "detail": "Recognized by format only (Basmala, or JSON with protocol "
+                      "FATIMA-MURAQABAH / FATIMA-MURAQABAH-COLOPHON). The format can be "
+                      "copied; nothing in this audit authenticates a watermark.",
+        })
 
     # --- Check 1b (v10.9.1): Zero-width characters outside any watermark ---
     # Check 3 skips FATIMA's own ZWC alphabet and Check 1 only examines
@@ -12710,8 +12778,18 @@ def _audit_steganographic(content, filepath=None):
                   "CONTAMINATED",
         "contamination_score": contamination_score,
         "findings": findings,
-        "legitimate_zwc_payloads": legitimate_payloads,
-        "unauthorized_zwc_payloads": unauthorized_payloads,
+        # v10.9.3 (N4): replaces legitimate_zwc_payloads, which counted
+        # decodable regions as legitimate without authenticating them.
+        "verified_zwc_payloads": verified_payloads,
+        "unverified_zwc_payloads": fatima_format_payloads,
+        "unrecognized_zwc_payloads": unrecognized_payloads,
+        "malformed_zwc_payloads": malformed_payloads,
+        # R2 (GPT-6): legacy alias, misleading name. Kept only for
+        # red_team_audit.py backward compatibility. The name suggests
+        # an authorization check that never existed; what it always
+        # measured was decode failure (now malformed_zwc_payloads).
+        # New consumers should read malformed_zwc_payloads instead.
+        "unauthorized_zwc_payloads": malformed_payloads,
         "invisible_chars": invisible_count,
         "tag_chars": len(tag_chars),
         # v10.9.1: structured counterpart of SA-005's detail text.
@@ -12953,7 +13031,7 @@ def audit_file(filepath):
     """
     report = {
         "filepath": filepath,
-        "audit_version": "10.9.2",  # v10.9.1: SA-005; v10.9.2: seal checks read sidecar 2.0
+        "audit_version": "10.9.3",  # v10.9.1: SA-005; v10.9.2: sidecar 2.0; v10.9.3: SA-006/007
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "dimensions": {},
         "overall_status": "UNKNOWN",
@@ -13028,7 +13106,7 @@ def audit_directory(directory):
     """
     results = {
         "directory": directory,
-        "audit_version": "10.9.2",  # v10.9.1: SA-005; v10.9.2: seal checks read sidecar 2.0
+        "audit_version": "10.9.3",  # v10.9.1: SA-005; v10.9.2: sidecar 2.0; v10.9.3: SA-006/007
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "files_audited": 0,
         "files_passed": 0,
@@ -14414,10 +14492,12 @@ Examples:
 
                     elif dim_name == "steganographic":
                         print("  Status: {}".format(dim_data.get("status", "?")))
-                        print("  Legitimate ZWC payloads: {}".format(
-                            dim_data.get("legitimate_zwc_payloads", 0)))
-                        print("  Unauthorized ZWC payloads: {}".format(
-                            dim_data.get("unauthorized_zwc_payloads", 0)))
+                        print("  ZWC payloads -- verified: {}, FATIMA-format unverified: {}, "
+                              "unrecognized: {}, malformed: {}".format(
+                                  dim_data.get("verified_zwc_payloads", 0),
+                                  dim_data.get("unverified_zwc_payloads", 0),
+                                  dim_data.get("unrecognized_zwc_payloads", 0),
+                                  dim_data.get("malformed_zwc_payloads", 0)))
                         print("  Non-FATIMA invisible chars: {}".format(
                             dim_data.get("invisible_chars", 0)))
                         print("  Unicode tag chars: {}".format(
