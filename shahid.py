@@ -175,6 +175,18 @@ class WitnessOutcome(str, Enum):
     VIOLATED = "violated"              # a test found a failure
     UNKNOWN = "unknown"                # not yet tested
     NOT_APPLICABLE = "not_applicable"  # dimension does not apply
+    NOT_EVALUATED = "not_evaluated"    # R2 (Design Brief v2.1): dimension exists
+                                       # but was not examined. Distinct from UNKNOWN
+                                       # (tested but inconclusive) and NOT_APPLICABLE
+                                       # (dimension does not apply). Silence must not
+                                       # default to perfect.
+
+
+# R1 (Design Brief v2.1): Five-lane evidence taxonomy.
+# Every claim in a finding should declare which lane supports it.
+# Optional -- a finding without a lane is valid but downstream
+# auditors (Bayyinah) will note the absence.
+EVIDENCE_LANES = frozenset({"SRC", "CODE", "MEAS", "PLAN", "HYP"})
 
 
 @dataclass(slots=True)
@@ -303,7 +315,16 @@ class DimensionFinding:
     finding_id: str = field(default_factory=lambda: f"shahid-{uuid.uuid4().hex[:12]}")
     summary: str = ""
     detail: str = ""
+    evidence_lane: str = ""   # R1: one of EVIDENCE_LANES (SRC/CODE/MEAS/PLAN/HYP)
     habl_refs: list[HablReference] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        if self.evidence_lane and self.evidence_lane not in EVIDENCE_LANES:
+            msg = (
+                f"evidence_lane {self.evidence_lane!r} not in "
+                f"EVIDENCE_LANES: {sorted(EVIDENCE_LANES)}"
+            )
+            raise ValueError(msg)
 
     def to_dict(self) -> dict[str, Any]:
         d = {
@@ -312,6 +333,8 @@ class DimensionFinding:
         }
         if self.detail:
             d["detail"] = self.detail
+        if self.evidence_lane:
+            d["evidence_lane"] = self.evidence_lane
         if self.habl_refs:
             d["habl_refs"] = [r.to_dict() for r in self.habl_refs]
         return d
@@ -845,10 +868,23 @@ def write_report(
     data = (report.to_json() + "\n").encode("utf-8")
 
     if overwrite:
-        # SH-07 (GPT-6): atomic replacement via temp + rename.
-        tmp = path.with_suffix(".tmp")
-        tmp.write_bytes(data)
-        _os.replace(str(tmp), str(path))
+        # SH-07 + SH-08 (GPT-6): atomic replacement via unique temp + rename.
+        # SH-08: each writer gets its own temp file to avoid collisions.
+        import tempfile as _tf
+        fd, tmp_path = _tf.mkstemp(dir=str(base), suffix=".tmp")
+        try:
+            _os.write(fd, data)
+            _os.close(fd)
+            fd = -1  # mark as closed
+            _os.replace(tmp_path, str(path))
+        except BaseException:
+            if fd >= 0:
+                _os.close(fd)
+            try:
+                _os.unlink(tmp_path)
+            except OSError:
+                pass
+            raise
     else:
         # SH-07 (GPT-6): exclusive creation -- O_CREAT | O_EXCL.
         # open(..., "x") fails atomically if the file exists,
@@ -919,6 +955,7 @@ def example_report() -> ShahidReport:
                             "Sidecar format 2.0 has no seal_time field. SC-004 "
                             "reports INFO rather than running a temporal comparison."
                         ),
+                        evidence_lane="CODE",
                     ),
                 ],
             ),

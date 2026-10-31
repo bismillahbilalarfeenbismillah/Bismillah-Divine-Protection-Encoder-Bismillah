@@ -738,6 +738,106 @@ class TestConstants(unittest.TestCase):
         self.assertIn("unknown", outcomes)
         self.assertIn("not_applicable", outcomes)
 
+    def test_not_evaluated_outcome(self):
+        """R2 (Design Brief v2.1): NOT_EVALUATED must exist."""
+        self.assertIn("not_evaluated", {e.value for e in shahid.WitnessOutcome})
+        r = shahid.WitnessResilienceRecord(
+            instrument="test", outcome=shahid.WitnessOutcome.NOT_EVALUATED)
+        self.assertEqual(r.outcome, shahid.WitnessOutcome.NOT_EVALUATED)
+        d = r.to_dict()
+        self.assertEqual(d["outcome"], "not_evaluated")
+
+    def test_evidence_lanes_constant(self):
+        """R1 (Design Brief v2.1): five evidence lanes exist."""
+        self.assertEqual(shahid.EVIDENCE_LANES, frozenset({"SRC", "CODE", "MEAS", "PLAN", "HYP"}))
+
+
+class TestEvidenceLane(unittest.TestCase):
+    """R1 (Design Brief v2.1): DimensionFinding evidence_lane field."""
+
+    def test_valid_lane_accepted(self):
+        f = shahid.DimensionFinding(summary="test", evidence_lane="CODE")
+        self.assertEqual(f.evidence_lane, "CODE")
+
+    def test_invalid_lane_rejected(self):
+        with self.assertRaises(ValueError):
+            shahid.DimensionFinding(summary="test", evidence_lane="INVALID")
+
+    def test_empty_lane_accepted(self):
+        """Empty lane is valid -- optional field."""
+        f = shahid.DimensionFinding(summary="test")
+        self.assertEqual(f.evidence_lane, "")
+
+    def test_lane_serialized(self):
+        f = shahid.DimensionFinding(summary="test", evidence_lane="MEAS")
+        d = f.to_dict()
+        self.assertEqual(d["evidence_lane"], "MEAS")
+
+    def test_empty_lane_not_serialized(self):
+        f = shahid.DimensionFinding(summary="test")
+        d = f.to_dict()
+        self.assertNotIn("evidence_lane", d)
+
+    def test_all_five_lanes(self):
+        for lane in ("SRC", "CODE", "MEAS", "PLAN", "HYP"):
+            f = shahid.DimensionFinding(summary="test", evidence_lane=lane)
+            self.assertEqual(f.evidence_lane, lane)
+
+
+class TestSH08ConcurrentOverwrite(unittest.TestCase):
+    """SH-08 (GPT-6): concurrent overwrites must not collide on temp files."""
+
+    def setUp(self):
+        self.d = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.d)
+
+    def test_concurrent_overwrites_both_succeed(self):
+        """Two concurrent overwrite=True writers should not raise."""
+        import threading
+
+        report_id = "shahid-overwrite-race"
+        # Create initial report
+        r0 = shahid.ShahidReport(
+            report_id=report_id, publisher="initial",
+            subject=shahid.ReportSubject(name="m"))
+        shahid.write_report(r0, self.d)
+
+        results = {"success": 0, "error": 0}
+        errors = []
+        lock = threading.Lock()
+        barrier = threading.Barrier(2)
+
+        def writer(pub):
+            r = shahid.ShahidReport(
+                report_id=report_id, publisher=pub,
+                subject=shahid.ReportSubject(name="m"))
+            barrier.wait()
+            try:
+                shahid.write_report(r, self.d, overwrite=True)
+                with lock:
+                    results["success"] += 1
+            except Exception as e:
+                with lock:
+                    results["error"] += 1
+                    errors.append(str(e))
+
+        t1 = threading.Thread(target=writer, args=("A",))
+        t2 = threading.Thread(target=writer, args=("B",))
+        t1.start(); t2.start()
+        t1.join(); t2.join()
+
+        # Both should succeed -- unique temp files prevent collision
+        self.assertEqual(results["error"], 0,
+                         f"Concurrent overwrites should not error: {errors}")
+        self.assertEqual(results["success"], 2)
+
+        # File should exist and be readable (last writer wins)
+        saved = shahid.read_report(
+            shahid.report_path(self.d, report_id))
+        self.assertIn(saved.publisher, ("A", "B"))
+
 
 if __name__ == "__main__":
     unittest.main()
