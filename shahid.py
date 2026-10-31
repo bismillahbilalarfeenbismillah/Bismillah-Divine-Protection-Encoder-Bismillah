@@ -763,19 +763,35 @@ SHAHID_DIR = ".shahid"
 REPORT_SUFFIX = ".shahid.json"
 
 
-def _sanitize_report_id(report_id: str) -> str:
-    """Sanitize a report_id for use as a filename component.
+import re as _re
+
+# SH-01 + SH-06 (GPT-6): report IDs must be safe, stable, and unique
+# as filenames. Reject rather than silently transform.
+_VALID_REPORT_ID = _re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._-]*$')
+
+
+def _validate_report_id(report_id: str) -> str:
+    """Validate a report_id for use as a filename component.
 
     SH-01 (GPT-6): reject path traversal and unsafe characters.
-    Only alphanumerics, hyphens, underscores, and dots are kept.
+    SH-06 (GPT-6): reject rather than silently transform. Two
+    distinct IDs must never map to the same file, and the same ID
+    must always map to the same file.
+
+    Valid IDs: alphanumerics, hyphens, underscores, dots. Must start
+    with an alphanumeric. Must not contain '..'.
     """
-    import re
-    # Strip any path separators and traversal sequences
-    safe = re.sub(r'[^a-zA-Z0-9._-]', '_', report_id)
-    # Reject empty, pure dots, or anything that resolves upward
-    if not safe or safe.startswith('.') or '..' in safe:
-        safe = f"shahid_{uuid.uuid4().hex[:8]}"
-    return safe
+    if not report_id:
+        raise ValueError("report_id must not be empty")
+    if '..' in report_id:
+        raise ValueError(f"report_id {report_id!r} contains '..'")
+    if not _VALID_REPORT_ID.match(report_id):
+        raise ValueError(
+            f"report_id {report_id!r} contains invalid characters. "
+            f"Only alphanumerics, hyphens, underscores, and dots are "
+            f"allowed, and it must start with an alphanumeric."
+        )
+    return report_id
 
 
 def report_path(project_root: str | Path, report_id: str = "") -> Path:
@@ -786,9 +802,9 @@ def report_path(project_root: str | Path, report_id: str = "") -> Path:
     """
     base = Path(project_root) / SHAHID_DIR
     if report_id:
-        safe_id = _sanitize_report_id(report_id)
-        result = base / f"{safe_id}{REPORT_SUFFIX}"
-        # SH-01 (GPT-6): verify the resolved path stays under base.
+        _validate_report_id(report_id)
+        result = base / f"{report_id}{REPORT_SUFFIX}"
+        # Belt-and-suspenders: verify the resolved path stays under base.
         if not result.resolve().is_relative_to(base.resolve()):
             msg = f"report_id {report_id!r} would escape the report directory"
             raise ValueError(msg)
@@ -799,20 +815,35 @@ def report_path(project_root: str | Path, report_id: str = "") -> Path:
 def write_report(
     report: ShahidReport,
     project_root: str | Path,
+    *,
+    overwrite: bool = False,
 ) -> Path:
     """Write a Shahid report to the project's .shahid/ directory.
 
     Returns the path to the written file.
-    SH-01 (GPT-6): report_id is sanitized before use in the path.
+
+    SH-01 (GPT-6): report_id is validated (not silently transformed).
+    SH-06 (GPT-6): existing files are not overwritten unless
+    overwrite=True. A disclosure record must not disappear because
+    another report shares its ID.
+
+    Raises ValueError if the report_id is invalid.
+    Raises FileExistsError if the file already exists and
+    overwrite is False.
     """
+    _validate_report_id(report.report_id)
     base = Path(project_root) / SHAHID_DIR
     base.mkdir(parents=True, exist_ok=True)
-    safe_id = _sanitize_report_id(report.report_id)
-    path = base / f"{safe_id}{REPORT_SUFFIX}"
+    path = base / f"{report.report_id}{REPORT_SUFFIX}"
     # Belt-and-suspenders: verify resolved path stays under base.
     if not path.resolve().is_relative_to(base.resolve()):
         msg = f"report_id {report.report_id!r} would escape the report directory"
         raise ValueError(msg)
+    if path.exists() and not overwrite:
+        raise FileExistsError(
+            f"report {report.report_id!r} already exists at {path}. "
+            f"Pass overwrite=True to replace it."
+        )
     path.write_text(report.to_json() + "\n", encoding="utf-8")
     return path
 

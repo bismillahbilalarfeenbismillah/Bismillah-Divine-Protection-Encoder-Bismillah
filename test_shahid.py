@@ -532,28 +532,78 @@ class TestFileIO(unittest.TestCase):
         p = shahid.report_path(self.d)
         self.assertTrue(str(p).endswith(shahid.SHAHID_DIR))
 
-    def test_path_traversal_sanitized(self):
-        """SH-01 (GPT-6): report_id with ../ must not escape .shahid/."""
-        p = shahid.report_path(self.d, report_id="../../etc/passwd")
-        # Must resolve under .shahid/
-        shahid_dir = (Path(self.d) / shahid.SHAHID_DIR).resolve()
-        self.assertTrue(p.resolve().is_relative_to(shahid_dir))
-        # Must not contain path separators
-        self.assertNotIn("/", p.name.replace(shahid.REPORT_SUFFIX, ""))
+    def test_path_traversal_rejected(self):
+        """SH-01 (GPT-6): report_id with ../ must be rejected."""
+        with self.assertRaises(ValueError):
+            shahid.report_path(self.d, report_id="../../etc/passwd")
 
-    def test_write_report_traversal_safe(self):
-        """SH-01 (GPT-6): write_report with malicious ID stays in .shahid/."""
+    def test_slash_in_id_rejected(self):
+        """SH-06 (GPT-6): slash in report_id must be rejected, not sanitized."""
+        with self.assertRaises(ValueError):
+            shahid.report_path(self.d, report_id="a/b")
+
+    def test_question_mark_in_id_rejected(self):
+        """SH-06 (GPT-6): special chars must be rejected, not mapped to _."""
+        with self.assertRaises(ValueError):
+            shahid.report_path(self.d, report_id="a?b")
+
+    def test_valid_id_accepted(self):
+        p = shahid.report_path(self.d, report_id="shahid-abc123")
+        self.assertTrue(str(p).endswith("shahid-abc123" + shahid.REPORT_SUFFIX))
+
+    def test_write_report_traversal_rejected(self):
+        """SH-01 (GPT-6): write_report with malicious ID raises."""
         r = shahid.ShahidReport(
             report_id="../../../tmp/evil",
             publisher="test",
             subject=shahid.ReportSubject(name="m"),
         )
-        path = shahid.write_report(r, self.d)
-        shahid_dir = (Path(self.d) / shahid.SHAHID_DIR).resolve()
-        self.assertTrue(path.resolve().is_relative_to(shahid_dir))
-        # The file actually exists and is readable
-        r2 = shahid.read_report(path)
-        self.assertEqual(r.publisher, r2.publisher)
+        with self.assertRaises(ValueError):
+            shahid.write_report(r, self.d)
+
+    def test_write_report_no_silent_overwrite(self):
+        """SH-06 (GPT-6): second write to same ID raises FileExistsError."""
+        r = shahid.ShahidReport(
+            report_id="shahid-unique-test",
+            publisher="test",
+            subject=shahid.ReportSubject(name="m"),
+        )
+        shahid.write_report(r, self.d)
+        with self.assertRaises(FileExistsError):
+            shahid.write_report(r, self.d)
+
+    def test_write_report_overwrite_explicit(self):
+        """SH-06 (GPT-6): overwrite=True allows replacement."""
+        r = shahid.ShahidReport(
+            report_id="shahid-overwrite-test",
+            publisher="test",
+            subject=shahid.ReportSubject(name="m"),
+        )
+        shahid.write_report(r, self.d)
+        r2 = shahid.ShahidReport(
+            report_id="shahid-overwrite-test",
+            publisher="updated",
+            subject=shahid.ReportSubject(name="m"),
+        )
+        path = shahid.write_report(r2, self.d, overwrite=True)
+        r3 = shahid.read_report(path)
+        self.assertEqual(r3.publisher, "updated")
+
+    def test_empty_report_id_rejected_on_write(self):
+        """SH-06: empty report_id must raise on write."""
+        r = shahid.ShahidReport(
+            report_id="",
+            publisher="test",
+            subject=shahid.ReportSubject(name="m"),
+        )
+        with self.assertRaises(ValueError):
+            shahid.write_report(r, self.d)
+
+    def test_deterministic_path(self):
+        """SH-06 (GPT-6): same ID always produces same path."""
+        p1 = shahid.report_path(self.d, report_id="shahid-stable")
+        p2 = shahid.report_path(self.d, report_id="shahid-stable")
+        self.assertEqual(p1, p2)
 
 
 class TestExampleReport(unittest.TestCase):
