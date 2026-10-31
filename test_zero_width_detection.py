@@ -205,7 +205,9 @@ class TestCompatibility(unittest.TestCase):
         try:
             with contextlib.redirect_stdout(io.StringIO()):
                 r = be.audit_file(fh.name)
-            self.assertEqual(r["audit_version"], "10.9.1")
+            # SA-005 arrived in 10.9.1; later versions keep it.
+            version = tuple(int(x) for x in r["audit_version"].split("."))
+            self.assertGreaterEqual(version, (10, 9, 1))
         finally:
             os.unlink(fh.name)
 

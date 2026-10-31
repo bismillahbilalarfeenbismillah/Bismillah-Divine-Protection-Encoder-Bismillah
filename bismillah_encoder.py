@@ -12721,8 +12721,45 @@ def _audit_steganographic(content, filepath=None):
     }
 
 
+def _heaven_layer_problems(heavens, total_layers):
+    """v10.9.2: Check the 154-layer record in the shape seal actually
+    writes (sidecar format 2.0): ``heavens`` is a list of 11 dicts, each
+    with ``layer_count`` and a ``layer_seals`` list of that length, and
+    ``total_layers`` is 154. Returns (layers_counted, problems)."""
+    problems = []
+    if not isinstance(heavens, list):
+        return 0, ["heavens is {}, expected a list".format(type(heavens).__name__)]
+    if len(heavens) != 11:
+        problems.append("{} heavens, expected 11".format(len(heavens)))
+    counted = 0
+    for i, heaven in enumerate(heavens):
+        if not isinstance(heaven, dict):
+            problems.append("heaven {} is not an object".format(i))
+            continue
+        seals = heaven.get("layer_seals")
+        count = heaven.get("layer_count")
+        if not isinstance(seals, list):
+            problems.append("heaven {} has no layer_seals list".format(i))
+            continue
+        counted += len(seals)
+        if count != len(seals):
+            problems.append("heaven {} layer_count {} but {} layer_seals".format(i, count, len(seals)))
+    if counted != 154:
+        problems.append("{} layer seals in total, expected 154".format(counted))
+    if total_layers != 154:
+        problems.append("total_layers is {!r}, expected 154".format(total_layers))
+    return counted, problems
+
+
 def _audit_seal_coherence(filepath):
     """v10.9.0: Verify all seal layers agree and sidecar is consistent.
+
+    v10.9.2: checks 4-6 read the fields that ``seal`` actually writes
+    (sidecar format 2.0). Before v10.9.2 they read ``timestamp``,
+    ``dual_seal`` and ``layers``, which no sealing path writes, so every
+    freshly sealed file got three warnings and the content-hash and
+    layer checks never compared anything. Check 3 (HMAC plus master
+    witness recompute) was unaffected and still caught content changes.
 
     Cross-references the file's current state against its witness sidecar,
     checking for partial tampering that might preserve some seals while
@@ -12733,6 +12770,7 @@ def _audit_seal_coherence(filepath):
     findings = []
     checks_passed = 0
     checks_total = 0
+    checks_not_available = []
 
     # --- Check 1: Sidecar Existence ---
     checks_total += 1
@@ -12790,16 +12828,29 @@ def _audit_seal_coherence(filepath):
                 except (ValueError, OSError):
                     pass  # Cannot parse timestamp or get mtime
             else:
+                # v10.9.2: the 2.0 sidecar written by seal has no time
+                # field, so this check cannot run. Recorded as not
+                # available (INFO), not as a defect in the file, and
+                # not counted in checks_total. Nothing is inferred
+                # from the sidecar's own file time.
+                checks_total -= 1
+                checks_not_available.append("seal_time_vs_mtime")
                 findings.append({
-                    "severity": "MEDIUM",
+                    "severity": "INFO",
                     "code": "SC-004",
-                    "description": "No seal timestamp in sidecar",
-                    "detail": "Cannot verify temporal integrity",
+                    "description": "Temporal check not available -- sidecar records no seal time",
+                    "detail": "Sidecar format {} has no timestamp field, so file modification "
+                              "time cannot be compared with seal time. Content changes are "
+                              "checked by SC-003 and SC-005.".format(
+                                  witness_data.get("sidecar_format_version", "unknown")),
                 })
 
             # --- Check 5: Content Hash Match ---
             checks_total += 1
-            stored_seal = witness_inner.get("dual_seal", "")
+            # v10.9.2: seal stores compute_seal(content) as muhkam_seal.
+            # (dual_seal was never written; dual_witness_seal is a
+            # different hash and is not comparable to compute_seal.)
+            stored_seal = witness_inner.get("muhkam_seal", "")
             if stored_seal:
                 try:
                     with open(filepath, 'rb') as f:
@@ -12826,14 +12877,28 @@ def _audit_seal_coherence(filepath):
                 findings.append({
                     "severity": "MEDIUM",
                     "code": "SC-005",
-                    "description": "No dual seal stored in sidecar",
+                    "description": "No muhkam seal stored in sidecar",
                     "detail": "Cannot verify content integrity",
                 })
 
             # --- Check 6: 154-Layer Completeness ---
             checks_total += 1
-            layers = witness_inner.get("layers", [])
-            if isinstance(layers, list) and len(layers) == 154:
+            layers = witness_inner.get("layers")
+            if layers is None:
+                # v10.9.2: the shape seal actually writes.
+                counted, problems = _heaven_layer_problems(
+                    witness_inner.get("heavens"), witness_inner.get("total_layers"))
+                if not problems:
+                    checks_passed += 1
+                else:
+                    findings.append({
+                        "severity": "HIGH",
+                        "code": "SC-006",
+                        "description": "Incomplete layer coverage -- {}/154 layers in sidecar".format(
+                            counted),
+                        "detail": "; ".join(problems),
+                    })
+            elif isinstance(layers, list) and len(layers) == 154:
                 checks_passed += 1
             elif isinstance(layers, list):
                 findings.append({
@@ -12870,6 +12935,8 @@ def _audit_seal_coherence(filepath):
         "coherent": len([f for f in findings if f["severity"] in ("CRITICAL", "HIGH")]) == 0,
         "checks_passed": checks_passed,
         "checks_total": checks_total,
+        # v10.9.2: checks that could not run for lack of sidecar data.
+        "checks_not_available": checks_not_available,
         "findings": findings,
     }
 
@@ -12886,11 +12953,12 @@ def audit_file(filepath):
     """
     report = {
         "filepath": filepath,
-        "audit_version": "10.9.1",  # v10.9.1: adds SA-005
+        "audit_version": "10.9.2",  # v10.9.1: SA-005; v10.9.2: seal checks read sidecar 2.0
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "dimensions": {},
         "overall_status": "UNKNOWN",
         "total_findings": 0,
+        "actionable_findings": 0,  # v10.9.2: excludes INFO
         "critical_findings": 0,
     }
 
@@ -12913,6 +12981,8 @@ def audit_file(filepath):
         ri_result = _audit_rendering_integrity(content, filepath)
         report["dimensions"]["rendering_integrity"] = ri_result
         report["total_findings"] += len(ri_result["findings"])
+        report["actionable_findings"] += len(
+            [f for f in ri_result["findings"] if f["severity"] != "INFO"])
         report["critical_findings"] += len(
             [f for f in ri_result["findings"] if f["severity"] == "CRITICAL"])
 
@@ -12921,6 +12991,8 @@ def audit_file(filepath):
         sa_result = _audit_steganographic(content, filepath)
         report["dimensions"]["steganographic"] = sa_result
         report["total_findings"] += len(sa_result["findings"])
+        report["actionable_findings"] += len(
+            [f for f in sa_result["findings"] if f["severity"] != "INFO"])
         report["critical_findings"] += len(
             [f for f in sa_result["findings"] if f["severity"] == "CRITICAL"])
 
@@ -12928,15 +13000,20 @@ def audit_file(filepath):
     sc_result = _audit_seal_coherence(filepath)
     report["dimensions"]["seal_coherence"] = sc_result
     report["total_findings"] += len(sc_result["findings"])
+    report["actionable_findings"] += len(
+        [f for f in sc_result["findings"] if f["severity"] != "INFO"])
     report["critical_findings"] += len(
         [f for f in sc_result["findings"] if f["severity"] == "CRITICAL"])
 
     # --- Overall Status ---
+    # v10.9.2: INFO findings (SC-004, SA-006) are informational
+    # qualifications, not actionable defects. They do not move a clean
+    # file away from PASS.
     if report["critical_findings"] > 0:
         report["overall_status"] = "FAIL"
-    elif report["total_findings"] > 3:
+    elif report["actionable_findings"] > 3:
         report["overall_status"] = "WARN"
-    elif report["total_findings"] > 0:
+    elif report["actionable_findings"] > 0:
         report["overall_status"] = "ADVISORY"
     else:
         report["overall_status"] = "PASS"
@@ -12951,7 +13028,7 @@ def audit_directory(directory):
     """
     results = {
         "directory": directory,
-        "audit_version": "10.9.1",  # v10.9.1: adds SA-005
+        "audit_version": "10.9.2",  # v10.9.1: SA-005; v10.9.2: seal checks read sidecar 2.0
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "files_audited": 0,
         "files_passed": 0,
