@@ -14,6 +14,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -59,6 +60,31 @@ class TestInspectionPeriod(unittest.TestCase):
                 start="2026-10-01T00:00:00",
                 end="2026-10-31T00:00:00+00:00",
             )
+
+    def test_reversed_period_rejected(self):
+        """SH-05 (GPT-6): end before start must be rejected."""
+        with self.assertRaises(ValueError) as ctx:
+            shahid.InspectionPeriod(
+                start="2026-10-31T00:00:00+00:00",
+                end="2026-10-01T00:00:00+00:00",
+            )
+        self.assertIn("precedes", str(ctx.exception))
+
+    def test_same_start_end_accepted(self):
+        """SH-05: a zero-length period (start == end) is valid."""
+        p = shahid.InspectionPeriod(
+            start="2026-10-15T12:00:00+00:00",
+            end="2026-10-15T12:00:00+00:00",
+        )
+        self.assertEqual(p.start, p.end)
+
+    def test_timezone_equivalent_ordering(self):
+        """SH-05: end in UTC-5 that is actually after start in UTC."""
+        p = shahid.InspectionPeriod(
+            start="2026-10-01T00:00:00+00:00",
+            end="2026-10-31T00:00:00-05:00",  # Nov 1 UTC
+        )
+        self.assertIsNotNone(p)
 
 
 class TestHablReference(unittest.TestCase):
@@ -318,7 +344,13 @@ class TestWitnessResilienceRecord(unittest.TestCase):
             shahid.WitnessResilienceRecord(instrument="")
 
     def test_string_outcome_coerced(self):
-        r = shahid.WitnessResilienceRecord(instrument="FATIMA", outcome="demonstrated")
+        r = shahid.WitnessResilienceRecord(
+            instrument="FATIMA",
+            threat_model="test",
+            detection_claim="test",
+            adversarial_tests="test",
+            outcome="demonstrated",
+        )
         self.assertEqual(r.outcome, shahid.WitnessOutcome.DEMONSTRATED)
 
     def test_round_trip(self):
@@ -328,7 +360,7 @@ class TestWitnessResilienceRecord(unittest.TestCase):
             witness_source="sidecar HMAC",
             trust_dependencies="sidecar on same disk",
             detection_claim="SC-003 detects content change",
-            adversarial_tests="65 tests pass",
+            adversarial_tests="65 tests pass",  # SH-03: required for DEMONSTRATED
             outcome=shahid.WitnessOutcome.DEMONSTRATED,
         )
         d = r.to_dict()
@@ -359,6 +391,72 @@ class TestWitnessResilienceRecord(unittest.TestCase):
         self.assertNotIn("threat_model", d)
 
 
+class TestSH02NonMutation(unittest.TestCase):
+    """SH-02 (GPT-6): from_dict() must not mutate the caller's dict."""
+
+    def test_dimension_finding_from_dict_does_not_mutate(self):
+        d = {
+            "finding_id": "test-001",
+            "summary": "test",
+            "habl_refs": [{"finding_id": "ref-001"}],
+        }
+        original_keys = set(d.keys())
+        shahid.DimensionFinding.from_dict(d)
+        self.assertEqual(set(d.keys()), original_keys)
+        self.assertIn("habl_refs", d)
+
+    def test_inspected_dimension_from_dict_does_not_mutate(self):
+        d = {
+            "name": "weights",
+            "coverage": "full",
+            "findings": [{"finding_id": "f1", "summary": "x"}],
+        }
+        original_keys = set(d.keys())
+        shahid.InspectedDimension.from_dict(d)
+        self.assertEqual(set(d.keys()), original_keys)
+        self.assertIn("findings", d)
+
+
+class TestSH03DemonstratedRequiresEvidence(unittest.TestCase):
+    """SH-03 (GPT-6): DEMONSTRATED must have evidence fields."""
+
+    def test_demonstrated_without_threat_model_rejected(self):
+        with self.assertRaises(ValueError) as ctx:
+            shahid.WitnessResilienceRecord(
+                instrument="test",
+                outcome=shahid.WitnessOutcome.DEMONSTRATED,
+                # no threat_model, detection_claim, adversarial_tests
+            )
+        self.assertIn("threat_model", str(ctx.exception))
+
+    def test_demonstrated_with_all_fields_accepted(self):
+        r = shahid.WitnessResilienceRecord(
+            instrument="test",
+            threat_model="attacker modifies file",
+            detection_claim="hash mismatch detected",
+            adversarial_tests="3 tampering probes passed",
+            outcome=shahid.WitnessOutcome.DEMONSTRATED,
+        )
+        self.assertEqual(r.outcome, shahid.WitnessOutcome.DEMONSTRATED)
+
+    def test_unknown_without_evidence_accepted(self):
+        """UNKNOWN is allowed without evidence -- that is its purpose."""
+        r = shahid.WitnessResilienceRecord(
+            instrument="test",
+            outcome=shahid.WitnessOutcome.UNKNOWN,
+        )
+        self.assertEqual(r.outcome, shahid.WitnessOutcome.UNKNOWN)
+
+    def test_violated_without_full_evidence_accepted(self):
+        """VIOLATED may have partial fields -- the violation is the evidence."""
+        r = shahid.WitnessResilienceRecord(
+            instrument="test",
+            threat_model="attacker forges watermark",
+            outcome=shahid.WitnessOutcome.VIOLATED,
+        )
+        self.assertEqual(r.outcome, shahid.WitnessOutcome.VIOLATED)
+
+
 class TestReportWithResilience(unittest.TestCase):
     def test_resilience_round_trip(self):
         r = shahid.ShahidReport(
@@ -367,6 +465,9 @@ class TestReportWithResilience(unittest.TestCase):
             witness_resilience=[
                 shahid.WitnessResilienceRecord(
                     instrument="FATIMA",
+                    threat_model="content modification",
+                    detection_claim="hash mismatch",
+                    adversarial_tests="tamper test",
                     outcome=shahid.WitnessOutcome.DEMONSTRATED,
                 ),
                 shahid.WitnessResilienceRecord(
@@ -431,6 +532,29 @@ class TestFileIO(unittest.TestCase):
         p = shahid.report_path(self.d)
         self.assertTrue(str(p).endswith(shahid.SHAHID_DIR))
 
+    def test_path_traversal_sanitized(self):
+        """SH-01 (GPT-6): report_id with ../ must not escape .shahid/."""
+        p = shahid.report_path(self.d, report_id="../../etc/passwd")
+        # Must resolve under .shahid/
+        shahid_dir = (Path(self.d) / shahid.SHAHID_DIR).resolve()
+        self.assertTrue(p.resolve().is_relative_to(shahid_dir))
+        # Must not contain path separators
+        self.assertNotIn("/", p.name.replace(shahid.REPORT_SUFFIX, ""))
+
+    def test_write_report_traversal_safe(self):
+        """SH-01 (GPT-6): write_report with malicious ID stays in .shahid/."""
+        r = shahid.ShahidReport(
+            report_id="../../../tmp/evil",
+            publisher="test",
+            subject=shahid.ReportSubject(name="m"),
+        )
+        path = shahid.write_report(r, self.d)
+        shahid_dir = (Path(self.d) / shahid.SHAHID_DIR).resolve()
+        self.assertTrue(path.resolve().is_relative_to(shahid_dir))
+        # The file actually exists and is readable
+        r2 = shahid.read_report(path)
+        self.assertEqual(r.publisher, r2.publisher)
+
 
 class TestExampleReport(unittest.TestCase):
     def test_example_is_valid(self):
@@ -466,17 +590,22 @@ class TestExampleReport(unittest.TestCase):
             self.assertEqual(orig.outcome, rt.outcome)
 
     def test_example_has_witness_resilience(self):
+        """SH-04 (GPT-6): SA-006 format recognition is DEMONSTRATED,
+        watermark origin authentication is UNKNOWN (B2 not implemented)."""
         r = shahid.example_report()
-        self.assertTrue(len(r.witness_resilience) >= 3)
+        self.assertTrue(len(r.witness_resilience) >= 4)
         instruments = [wr.instrument for wr in r.witness_resilience]
         self.assertIn("FATIMA", instruments)
         self.assertIn("HABL", instruments)
         # FATIMA content detection is demonstrated
         fatima = next(wr for wr in r.witness_resilience if wr.instrument == "FATIMA")
         self.assertEqual(fatima.outcome, shahid.WitnessOutcome.DEMONSTRATED)
-        # SA-006 format recognition is violated (known limitation)
-        sa006 = next(wr for wr in r.witness_resilience if "SA-006" in wr.instrument)
-        self.assertEqual(sa006.outcome, shahid.WitnessOutcome.VIOLATED)
+        # SA-006 format recognition is demonstrated (it does what it claims)
+        sa006_fmt = next(wr for wr in r.witness_resilience if "format recognition" in wr.instrument)
+        self.assertEqual(sa006_fmt.outcome, shahid.WitnessOutcome.DEMONSTRATED)
+        # Watermark origin authentication is unknown (B2 not implemented)
+        auth = next(wr for wr in r.witness_resilience if "origin authentication" in wr.instrument)
+        self.assertEqual(auth.outcome, shahid.WitnessOutcome.UNKNOWN)
         # HABL external tampering is unknown
         habl = next(wr for wr in r.witness_resilience if wr.instrument == "HABL")
         self.assertEqual(habl.outcome, shahid.WitnessOutcome.UNKNOWN)

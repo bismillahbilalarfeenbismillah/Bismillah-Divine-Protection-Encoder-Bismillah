@@ -216,6 +216,21 @@ class WitnessResilienceRecord:
             self.outcome = WitnessOutcome(self.outcome)
         if not self.instrument:
             raise ValueError("WitnessResilienceRecord.instrument must not be empty")
+        # SH-03 (GPT-6): DEMONSTRATED requires evidence fields.
+        if self.outcome == WitnessOutcome.DEMONSTRATED:
+            missing = []
+            if not self.threat_model:
+                missing.append("threat_model")
+            if not self.detection_claim:
+                missing.append("detection_claim")
+            if not self.adversarial_tests:
+                missing.append("adversarial_tests")
+            if missing:
+                msg = (
+                    f"outcome is DEMONSTRATED but required evidence fields "
+                    f"are empty: {', '.join(missing)}"
+                )
+                raise ValueError(msg)
 
     def to_dict(self) -> dict[str, Any]:
         d: dict[str, Any] = {"instrument": self.instrument}
@@ -303,8 +318,10 @@ class DimensionFinding:
 
     @classmethod
     def from_dict(cls, d: dict[str, Any]) -> DimensionFinding:
-        refs = [HablReference.from_dict(r) for r in d.pop("habl_refs", [])]
-        return cls(habl_refs=refs, **d)
+        # SH-02 (GPT-6): never mutate the caller's dict.
+        fields_ = dict(d)
+        refs = [HablReference.from_dict(r) for r in fields_.pop("habl_refs", [])]
+        return cls(habl_refs=refs, **fields_)
 
 
 @dataclass(slots=True)
@@ -348,8 +365,10 @@ class InspectedDimension:
 
     @classmethod
     def from_dict(cls, d: dict[str, Any]) -> InspectedDimension:
-        findings = [DimensionFinding.from_dict(f) for f in d.pop("findings", [])]
-        return cls(findings=findings, **d)
+        # SH-02 (GPT-6): never mutate the caller's dict.
+        fields_ = dict(d)
+        findings = [DimensionFinding.from_dict(f) for f in fields_.pop("findings", [])]
+        return cls(findings=findings, **fields_)
 
 
 @dataclass(slots=True)
@@ -422,6 +441,7 @@ class InspectionPeriod:
     cadence: str = ""  # "per-release", "quarterly", "monthly", "ad-hoc"
 
     def __post_init__(self) -> None:
+        parsed: dict[str, datetime] = {}
         for name in ("start", "end"):
             val = getattr(self, name)
             try:
@@ -430,6 +450,12 @@ class InspectionPeriod:
                 raise ValueError(f"InspectionPeriod.{name} {val!r} is not ISO-8601") from None
             if ts.tzinfo is None:
                 raise ValueError(f"InspectionPeriod.{name} {val!r} has no timezone offset")
+            parsed[name] = ts
+        # SH-05 (GPT-6): end must not precede start.
+        if parsed["end"] < parsed["start"]:
+            raise ValueError(
+                f"InspectionPeriod.end ({self.end}) precedes start ({self.start})"
+            )
 
     def to_dict(self) -> dict[str, Any]:
         d: dict[str, Any] = {"start": self.start, "end": self.end}
@@ -737,6 +763,21 @@ SHAHID_DIR = ".shahid"
 REPORT_SUFFIX = ".shahid.json"
 
 
+def _sanitize_report_id(report_id: str) -> str:
+    """Sanitize a report_id for use as a filename component.
+
+    SH-01 (GPT-6): reject path traversal and unsafe characters.
+    Only alphanumerics, hyphens, underscores, and dots are kept.
+    """
+    import re
+    # Strip any path separators and traversal sequences
+    safe = re.sub(r'[^a-zA-Z0-9._-]', '_', report_id)
+    # Reject empty, pure dots, or anything that resolves upward
+    if not safe or safe.startswith('.') or '..' in safe:
+        safe = f"shahid_{uuid.uuid4().hex[:8]}"
+    return safe
+
+
 def report_path(project_root: str | Path, report_id: str = "") -> Path:
     """Return the path where a Shahid report would be stored.
 
@@ -745,8 +786,13 @@ def report_path(project_root: str | Path, report_id: str = "") -> Path:
     """
     base = Path(project_root) / SHAHID_DIR
     if report_id:
-        safe_id = report_id.replace("/", "_").replace("\\", "_")
-        return base / f"{safe_id}{REPORT_SUFFIX}"
+        safe_id = _sanitize_report_id(report_id)
+        result = base / f"{safe_id}{REPORT_SUFFIX}"
+        # SH-01 (GPT-6): verify the resolved path stays under base.
+        if not result.resolve().is_relative_to(base.resolve()):
+            msg = f"report_id {report_id!r} would escape the report directory"
+            raise ValueError(msg)
+        return result
     return base
 
 
@@ -757,10 +803,16 @@ def write_report(
     """Write a Shahid report to the project's .shahid/ directory.
 
     Returns the path to the written file.
+    SH-01 (GPT-6): report_id is sanitized before use in the path.
     """
-    base = report_path(project_root)
+    base = Path(project_root) / SHAHID_DIR
     base.mkdir(parents=True, exist_ok=True)
-    path = base / f"{report.report_id}{REPORT_SUFFIX}"
+    safe_id = _sanitize_report_id(report.report_id)
+    path = base / f"{safe_id}{REPORT_SUFFIX}"
+    # Belt-and-suspenders: verify resolved path stays under base.
+    if not path.resolve().is_relative_to(base.resolve()):
+        msg = f"report_id {report.report_id!r} would escape the report directory"
+        raise ValueError(msg)
     path.write_text(report.to_json() + "\n", encoding="utf-8")
     return path
 
@@ -808,9 +860,9 @@ def example_report() -> ShahidReport:
                 name="seal_coherence",
                 coverage=InspectionCoverage.FULL,
                 method=(
-                    "All six SC-00x checks executed against sidecar format 2.0. "
-                    "Five checks verified; one (SC-004, temporal) reports INFO "
-                    "because sidecar 2.0 carries no seal timestamp."
+                    "Five of six SC-00x checks executed against sidecar format "
+                    "2.0. SC-004 (temporal) could not run because sidecar 2.0 "
+                    "carries no seal timestamp; it reports INFO."
                 ),
                 scope="audit versions 10.9.0 through 10.9.3",
                 findings=[
@@ -881,24 +933,39 @@ def example_report() -> ShahidReport:
                 outcome=WitnessOutcome.DEMONSTRATED,
             ),
             WitnessResilienceRecord(
-                instrument="FATIMA (SA-006)",
+                instrument="FATIMA (SA-006 format recognition)",
                 threat_model=(
-                    "Attacker copies FATIMA-format watermark structure into "
-                    "a file without using FATIMA."
+                    "Attacker embeds ZWC payloads in FATIMA-MURAQABAH "
+                    "format structure."
                 ),
-                witness_source="Format pattern matching only.",
+                witness_source="Format pattern matching against known protocols.",
                 trust_dependencies=(
                     "No independent authentication. Format is public."
                 ),
                 detection_claim=(
-                    "SA-006 recognizes the format but reports INFO 'not "
-                    "authenticated'. It does not claim origin."
+                    "SA-006 recognizes FATIMA-format watermarks by structure "
+                    "and reports INFO 'not authenticated'. It does not claim "
+                    "origin. Format recognition works correctly."
                 ),
                 adversarial_tests=(
                     "test_copied_fatima_format_is_not_distinguishable: "
-                    "copied watermark classified identically to genuine."
+                    "copied watermark classified identically to genuine. "
+                    "This is the expected behavior -- recognition without "
+                    "authentication."
                 ),
-                outcome=WitnessOutcome.VIOLATED,
+                outcome=WitnessOutcome.DEMONSTRATED,
+            ),
+            WitnessResilienceRecord(
+                instrument="FATIMA (watermark origin authentication)",
+                threat_model=(
+                    "Attacker forges a FATIMA-format watermark to claim "
+                    "false provenance."
+                ),
+                witness_source="None. B2 authentication is not implemented.",
+                trust_dependencies="N/A -- capability does not exist yet.",
+                detection_claim="",
+                adversarial_tests="",
+                outcome=WitnessOutcome.UNKNOWN,
             ),
             WitnessResilienceRecord(
                 instrument="HABL",
