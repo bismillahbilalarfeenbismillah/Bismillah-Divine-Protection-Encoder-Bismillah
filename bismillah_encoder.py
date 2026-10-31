@@ -12958,6 +12958,7 @@ def audit_file(filepath):
         "dimensions": {},
         "overall_status": "UNKNOWN",
         "total_findings": 0,
+        "actionable_findings": 0,  # v10.9.2: excludes INFO
         "critical_findings": 0,
     }
 
@@ -12980,6 +12981,8 @@ def audit_file(filepath):
         ri_result = _audit_rendering_integrity(content, filepath)
         report["dimensions"]["rendering_integrity"] = ri_result
         report["total_findings"] += len(ri_result["findings"])
+        report["actionable_findings"] += len(
+            [f for f in ri_result["findings"] if f["severity"] != "INFO"])
         report["critical_findings"] += len(
             [f for f in ri_result["findings"] if f["severity"] == "CRITICAL"])
 
@@ -12988,6 +12991,8 @@ def audit_file(filepath):
         sa_result = _audit_steganographic(content, filepath)
         report["dimensions"]["steganographic"] = sa_result
         report["total_findings"] += len(sa_result["findings"])
+        report["actionable_findings"] += len(
+            [f for f in sa_result["findings"] if f["severity"] != "INFO"])
         report["critical_findings"] += len(
             [f for f in sa_result["findings"] if f["severity"] == "CRITICAL"])
 
@@ -12995,15 +13000,20 @@ def audit_file(filepath):
     sc_result = _audit_seal_coherence(filepath)
     report["dimensions"]["seal_coherence"] = sc_result
     report["total_findings"] += len(sc_result["findings"])
+    report["actionable_findings"] += len(
+        [f for f in sc_result["findings"] if f["severity"] != "INFO"])
     report["critical_findings"] += len(
         [f for f in sc_result["findings"] if f["severity"] == "CRITICAL"])
 
     # --- Overall Status ---
+    # v10.9.2: INFO findings (SC-004, SA-006) are informational
+    # qualifications, not actionable defects. They do not move a clean
+    # file away from PASS.
     if report["critical_findings"] > 0:
         report["overall_status"] = "FAIL"
-    elif report["total_findings"] > 3:
+    elif report["actionable_findings"] > 3:
         report["overall_status"] = "WARN"
-    elif report["total_findings"] > 0:
+    elif report["actionable_findings"] > 0:
         report["overall_status"] = "ADVISORY"
     else:
         report["overall_status"] = "PASS"
