@@ -12518,8 +12518,9 @@ _ZWC_KNOWN_PROTOCOLS = frozenset({"FATIMA-MURAQABAH", "FATIMA-MURAQABAH-COLOPHON
 def _classify_zwc_payload(decoded):
     """v10.9.3 (N4): classify one decoded closed ZWC region.
 
-    "fatima_format": decodes to the Basmala, or to JSON whose protocol
-        is one the Encoder writes. Structurally recognized, unverified.
+    "fatima_format": decodes to the Basmala (exact or leading), or to
+        JSON whose protocol is one the Encoder writes. Structurally
+        recognized, unverified.
     "unrecognized": decodes to 3+ characters of anything else.
     "malformed": does not decode, or decodes to fewer than 3 characters.
     There is no "verified" class: nothing in 10.9.x authenticates a
@@ -12527,7 +12528,10 @@ def _classify_zwc_payload(decoded):
     """
     if not decoded or len(decoded) < 3:
         return "malformed"
-    if BISMILLAH_ARABIC in decoded:
+    # R2 (GPT-6): exact or leading match, not substring. The Encoder
+    # writes the Basmala as the entire payload or at the start; a
+    # substring match in arbitrary text would be overly broad.
+    if decoded.startswith(BISMILLAH_ARABIC):
         return "fatima_format"
     if decoded.startswith("{"):
         try:
@@ -12602,7 +12606,8 @@ def _audit_steganographic(content, filepath=None):
         findings.append({
             "severity": "CRITICAL",
             "code": "SA-001",
-            "description": "Malformed ZWC payload(s) -- {} region(s) do not decode".format(
+            "description": "Malformed ZWC payload(s) -- {} region(s) do not decode or "
+                           "decode to fewer than 3 characters".format(
                 malformed_payloads),
             "detail": "{}. Not compared with the seal, so this does not show when "
                       "they were added.".format(region_summary),
@@ -12779,8 +12784,11 @@ def _audit_steganographic(content, filepath=None):
         "unverified_zwc_payloads": fatima_format_payloads,
         "unrecognized_zwc_payloads": unrecognized_payloads,
         "malformed_zwc_payloads": malformed_payloads,
-        # Kept for existing consumers (red_team_audit.py): same count as
-        # malformed_zwc_payloads, which is what it always measured.
+        # R2 (GPT-6): legacy alias, misleading name. Kept only for
+        # red_team_audit.py backward compatibility. The name suggests
+        # an authorization check that never existed; what it always
+        # measured was decode failure (now malformed_zwc_payloads).
+        # New consumers should read malformed_zwc_payloads instead.
         "unauthorized_zwc_payloads": malformed_payloads,
         "invisible_chars": invisible_count,
         "tag_chars": len(tag_chars),
@@ -13028,6 +13036,7 @@ def audit_file(filepath):
         "dimensions": {},
         "overall_status": "UNKNOWN",
         "total_findings": 0,
+        "actionable_findings": 0,  # v10.9.2: excludes INFO
         "critical_findings": 0,
     }
 
@@ -13050,6 +13059,8 @@ def audit_file(filepath):
         ri_result = _audit_rendering_integrity(content, filepath)
         report["dimensions"]["rendering_integrity"] = ri_result
         report["total_findings"] += len(ri_result["findings"])
+        report["actionable_findings"] += len(
+            [f for f in ri_result["findings"] if f["severity"] != "INFO"])
         report["critical_findings"] += len(
             [f for f in ri_result["findings"] if f["severity"] == "CRITICAL"])
 
@@ -13058,6 +13069,8 @@ def audit_file(filepath):
         sa_result = _audit_steganographic(content, filepath)
         report["dimensions"]["steganographic"] = sa_result
         report["total_findings"] += len(sa_result["findings"])
+        report["actionable_findings"] += len(
+            [f for f in sa_result["findings"] if f["severity"] != "INFO"])
         report["critical_findings"] += len(
             [f for f in sa_result["findings"] if f["severity"] == "CRITICAL"])
 
@@ -13065,15 +13078,20 @@ def audit_file(filepath):
     sc_result = _audit_seal_coherence(filepath)
     report["dimensions"]["seal_coherence"] = sc_result
     report["total_findings"] += len(sc_result["findings"])
+    report["actionable_findings"] += len(
+        [f for f in sc_result["findings"] if f["severity"] != "INFO"])
     report["critical_findings"] += len(
         [f for f in sc_result["findings"] if f["severity"] == "CRITICAL"])
 
     # --- Overall Status ---
+    # v10.9.2: INFO findings (SC-004, SA-006) are informational
+    # qualifications, not actionable defects. They do not move a clean
+    # file away from PASS.
     if report["critical_findings"] > 0:
         report["overall_status"] = "FAIL"
-    elif report["total_findings"] > 3:
+    elif report["actionable_findings"] > 3:
         report["overall_status"] = "WARN"
-    elif report["total_findings"] > 0:
+    elif report["actionable_findings"] > 0:
         report["overall_status"] = "ADVISORY"
     else:
         report["overall_status"] = "PASS"

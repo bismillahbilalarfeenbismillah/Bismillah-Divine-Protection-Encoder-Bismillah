@@ -53,6 +53,15 @@ class TestClassifier(unittest.TestCase):
         for bad in (None, "", "ab"):
             self.assertEqual(c(bad), "malformed")
 
+    def test_basmala_substring_is_not_fatima_format(self):
+        """R2 (GPT-6): Basmala as a substring in arbitrary text should
+        not classify as fatima_format. Only leading Basmala counts."""
+        c = be._classify_zwc_payload
+        # Leading Basmala with trailing text -- still fatima_format
+        self.assertEqual(c(be.BISMILLAH_ARABIC + " extra"), "fatima_format")
+        # Basmala buried in arbitrary text -- unrecognized
+        self.assertEqual(c("prefix " + be.BISMILLAH_ARABIC), "unrecognized")
+
 
 class TestReporting(unittest.TestCase):
     def test_forged_text_is_unrecognized_high_with_escaped_preview(self):
