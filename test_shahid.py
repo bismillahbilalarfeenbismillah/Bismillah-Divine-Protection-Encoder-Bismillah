@@ -312,6 +312,82 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(any("training_data" in w for w in absent_warns))
 
 
+class TestWitnessResilienceRecord(unittest.TestCase):
+    def test_empty_instrument_rejected(self):
+        with self.assertRaises(ValueError):
+            shahid.WitnessResilienceRecord(instrument="")
+
+    def test_string_outcome_coerced(self):
+        r = shahid.WitnessResilienceRecord(instrument="FATIMA", outcome="demonstrated")
+        self.assertEqual(r.outcome, shahid.WitnessOutcome.DEMONSTRATED)
+
+    def test_round_trip(self):
+        r = shahid.WitnessResilienceRecord(
+            instrument="FATIMA",
+            threat_model="attacker modifies file",
+            witness_source="sidecar HMAC",
+            trust_dependencies="sidecar on same disk",
+            detection_claim="SC-003 detects content change",
+            adversarial_tests="65 tests pass",
+            outcome=shahid.WitnessOutcome.DEMONSTRATED,
+        )
+        d = r.to_dict()
+        r2 = shahid.WitnessResilienceRecord.from_dict(d)
+        self.assertEqual(r.instrument, r2.instrument)
+        self.assertEqual(r.outcome, r2.outcome)
+        self.assertEqual(r.threat_model, r2.threat_model)
+
+    def test_violated_outcome(self):
+        r = shahid.WitnessResilienceRecord(
+            instrument="SA-006",
+            threat_model="attacker copies watermark format",
+            outcome=shahid.WitnessOutcome.VIOLATED,
+        )
+        d = r.to_dict()
+        self.assertEqual(d["outcome"], "violated")
+
+    def test_default_outcome_is_unknown(self):
+        r = shahid.WitnessResilienceRecord(instrument="HABL")
+        self.assertEqual(r.outcome, shahid.WitnessOutcome.UNKNOWN)
+
+    def test_minimal_serialization(self):
+        r = shahid.WitnessResilienceRecord(instrument="test")
+        d = r.to_dict()
+        self.assertEqual(d["instrument"], "test")
+        self.assertEqual(d["outcome"], "unknown")
+        # Empty strings should not appear
+        self.assertNotIn("threat_model", d)
+
+
+class TestReportWithResilience(unittest.TestCase):
+    def test_resilience_round_trip(self):
+        r = shahid.ShahidReport(
+            publisher="test",
+            subject=shahid.ReportSubject(name="m"),
+            witness_resilience=[
+                shahid.WitnessResilienceRecord(
+                    instrument="FATIMA",
+                    outcome=shahid.WitnessOutcome.DEMONSTRATED,
+                ),
+                shahid.WitnessResilienceRecord(
+                    instrument="HABL",
+                    outcome=shahid.WitnessOutcome.UNKNOWN,
+                ),
+            ],
+        )
+        text = r.to_json()
+        r2 = shahid.ShahidReport.from_json(text)
+        self.assertEqual(len(r2.witness_resilience), 2)
+        self.assertEqual(r2.witness_resilience[0].instrument, "FATIMA")
+        self.assertEqual(r2.witness_resilience[0].outcome, shahid.WitnessOutcome.DEMONSTRATED)
+        self.assertEqual(r2.witness_resilience[1].instrument, "HABL")
+
+    def test_empty_resilience_not_serialized(self):
+        r = shahid.ShahidReport(publisher="test", subject=shahid.ReportSubject(name="m"))
+        d = r.to_dict()
+        self.assertNotIn("witness_resilience", d)
+
+
 class TestFileIO(unittest.TestCase):
     def setUp(self):
         self.d = tempfile.mkdtemp()
@@ -383,6 +459,27 @@ class TestExampleReport(unittest.TestCase):
         self.assertEqual(r.inspected[0].name, r2.inspected[0].name)
         self.assertEqual(r.inspected[0].coverage, r2.inspected[0].coverage)
         self.assertEqual(len(r.inspected[0].findings), len(r2.inspected[0].findings))
+        # Witness resilience round-trips
+        self.assertEqual(len(r.witness_resilience), len(r2.witness_resilience))
+        for orig, rt in zip(r.witness_resilience, r2.witness_resilience):
+            self.assertEqual(orig.instrument, rt.instrument)
+            self.assertEqual(orig.outcome, rt.outcome)
+
+    def test_example_has_witness_resilience(self):
+        r = shahid.example_report()
+        self.assertTrue(len(r.witness_resilience) >= 3)
+        instruments = [wr.instrument for wr in r.witness_resilience]
+        self.assertIn("FATIMA", instruments)
+        self.assertIn("HABL", instruments)
+        # FATIMA content detection is demonstrated
+        fatima = next(wr for wr in r.witness_resilience if wr.instrument == "FATIMA")
+        self.assertEqual(fatima.outcome, shahid.WitnessOutcome.DEMONSTRATED)
+        # SA-006 format recognition is violated (known limitation)
+        sa006 = next(wr for wr in r.witness_resilience if "SA-006" in wr.instrument)
+        self.assertEqual(sa006.outcome, shahid.WitnessOutcome.VIOLATED)
+        # HABL external tampering is unknown
+        habl = next(wr for wr in r.witness_resilience if wr.instrument == "HABL")
+        self.assertEqual(habl.outcome, shahid.WitnessOutcome.UNKNOWN)
 
     def test_example_validates_with_acceptable_warnings(self):
         r = shahid.example_report()
@@ -414,6 +511,13 @@ class TestConstants(unittest.TestCase):
         self.assertIn("policy", reasons)
         self.assertIn("deferred", reasons)
         self.assertIn("not_applicable", reasons)
+
+    def test_witness_outcomes(self):
+        outcomes = {e.value for e in shahid.WitnessOutcome}
+        self.assertIn("demonstrated", outcomes)
+        self.assertIn("violated", outcomes)
+        self.assertIn("unknown", outcomes)
+        self.assertIn("not_applicable", outcomes)
 
 
 if __name__ == "__main__":

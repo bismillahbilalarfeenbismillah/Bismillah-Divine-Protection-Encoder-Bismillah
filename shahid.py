@@ -23,6 +23,14 @@ Design principles (from The Shared Condition, Section 5):
        visibility than you had.
     4. Transparency in every direction.
 
+EESS design principle (GPT-6 cross-vendor review, October 2026):
+
+    Preservation before protection claims. Every EESS instrument must
+    state what evidence it preserves, which alterations it can detect,
+    which it cannot detect, and what independent trust assumptions its
+    conclusions require. Preventive protection may be implemented, but
+    must be demonstrated separately.
+
 Schema version: 0.1.0
 
 Addresses Two Witnesses open points:
@@ -46,6 +54,24 @@ HABL compatibility:
     weight-holder's report is a separate document, not a finding in
     the soil. A finding says "I observed X"; a Shahid report says
     "here is what I can and cannot show you."
+
+GPT-6 review disposition (October 2026):
+
+    CONDITIONAL PASS FOR DESIGN INSPIRATION. No canonical schema
+    changes authorized without Gate 4 cross-vendor review.
+
+    Accepted: "Preservation before protection claims" as stated EESS
+    design principle.
+
+    Design candidate (Gate 4 required): witness_independence_and_resilience
+    dimension with six-field contract: threat_model, witness_source,
+    trust_dependencies, detection_claim, adversarial_tests, outcome
+    (demonstrated/violated/unknown/not_applicable).
+
+    Not adopted: inherited/sustained/transmission-weight as HABL moral
+    accountability vocabulary. HABL v0.2 keeps causal provenance,
+    correlation, and propagation history with explicit completeness
+    indicators.
 """
 # Bismillah ir-Rahman ir-Rahim
 
@@ -133,6 +159,82 @@ CANONICAL_DIMENSIONS = (
     "interpretability",     # mechanistic interpretability artifacts
     "version_lineage",      # provenance chain from base to deployed model
 )
+
+
+class WitnessOutcome(str, Enum):
+    """Outcome of a witness independence and resilience assessment.
+
+    DESIGN CANDIDATE (GPT-6 cross-vendor review, October 2026).
+    Gate 4 required before this becomes a canonical Shahid dimension.
+
+    A demonstrated result applies only to the explicitly tested threat
+    model, not to all possible adversaries.
+    """
+
+    DEMONSTRATED = "demonstrated"      # adversarial tests executed and passed
+    VIOLATED = "violated"              # a test found a failure
+    UNKNOWN = "unknown"                # not yet tested
+    NOT_APPLICABLE = "not_applicable"  # dimension does not apply
+
+
+@dataclass(slots=True)
+class WitnessResilienceRecord:
+    """Witness independence and resilience assessment.
+
+    DESIGN CANDIDATE -- not yet a canonical Shahid dimension. Gate 4
+    cross-vendor review is required before schema adoption.
+
+    Proposed by GPT-6 (October 2026) as a replacement for the overly
+    broad "deep_structural_immunity" claim. Each field answers a
+    specific question about the verifier's independence:
+
+        threat_model       -- what can the attacker modify, remove,
+                              forge, or control?
+        witness_source     -- what independently supplies or anchors
+                              the verification evidence?
+        trust_dependencies -- does the witness share keys, storage,
+                              inputs, or execution environment with
+                              the object being checked?
+        detection_claim    -- which specific alterations should be
+                              detectable?
+        adversarial_tests  -- what controlled tampering and forgery
+                              probes have been executed?
+        outcome            -- demonstrated / violated / unknown /
+                              not_applicable
+    """
+
+    instrument: str               # which EESS instrument
+    threat_model: str = ""
+    witness_source: str = ""
+    trust_dependencies: str = ""
+    detection_claim: str = ""
+    adversarial_tests: str = ""
+    outcome: WitnessOutcome = WitnessOutcome.UNKNOWN
+
+    def __post_init__(self) -> None:
+        if isinstance(self.outcome, str):
+            self.outcome = WitnessOutcome(self.outcome)
+        if not self.instrument:
+            raise ValueError("WitnessResilienceRecord.instrument must not be empty")
+
+    def to_dict(self) -> dict[str, Any]:
+        d: dict[str, Any] = {"instrument": self.instrument}
+        if self.threat_model:
+            d["threat_model"] = self.threat_model
+        if self.witness_source:
+            d["witness_source"] = self.witness_source
+        if self.trust_dependencies:
+            d["trust_dependencies"] = self.trust_dependencies
+        if self.detection_claim:
+            d["detection_claim"] = self.detection_claim
+        if self.adversarial_tests:
+            d["adversarial_tests"] = self.adversarial_tests
+        d["outcome"] = self.outcome.value
+        return d
+
+    @classmethod
+    def from_dict(cls, d: dict[str, Any]) -> WitnessResilienceRecord:
+        return cls(**d)
 
 
 # ---------------------------------------------------------------------------
@@ -388,6 +490,9 @@ class ShahidReport:
     inspected: list[InspectedDimension] = field(default_factory=list)
     uninspected: list[UninspectedDimension] = field(default_factory=list)
 
+    # --- Witness resilience (DESIGN CANDIDATE -- Gate 4 required) ---
+    witness_resilience: list[WitnessResilienceRecord] = field(default_factory=list)
+
     # --- Attestation ---
     attestation: str = ""   # free-text statement by the weight-holder
 
@@ -539,6 +644,9 @@ class ShahidReport:
         d["inspected"] = [dim.to_dict() for dim in self.inspected]
         d["uninspected"] = [dim.to_dict() for dim in self.uninspected]
 
+        if self.witness_resilience:
+            d["witness_resilience"] = [r.to_dict() for r in self.witness_resilience]
+
         if self.attestation:
             d["attestation"] = self.attestation
 
@@ -602,6 +710,11 @@ class ShahidReport:
         ]
         fields_["uninspected"] = [
             UninspectedDimension.from_dict(dim) for dim in d.get("uninspected", [])
+        ]
+
+        # Witness resilience (design candidate)
+        fields_["witness_resilience"] = [
+            WitnessResilienceRecord.from_dict(r) for r in d.get("witness_resilience", [])
         ]
 
         # Attestation and metadata
@@ -740,6 +853,74 @@ def example_report() -> ShahidReport:
                     "is planned for Phase 5. Currently SA-006 recognizes "
                     "FATIMA-format watermarks by structure only."
                 ),
+            ),
+        ],
+        witness_resilience=[
+            WitnessResilienceRecord(
+                instrument="FATIMA",
+                threat_model=(
+                    "Attacker modifies file content after sealing. Attacker "
+                    "does not possess the HMAC key or the sidecar file."
+                ),
+                witness_source=(
+                    "Content-derived HMAC and SHA-256 hash stored in the "
+                    "sidecar (.witness.bismillah) file."
+                ),
+                trust_dependencies=(
+                    "Sidecar file integrity (not independently anchored in "
+                    "v0.1.0). HMAC key is derived from content, not external."
+                ),
+                detection_claim=(
+                    "Content modification detectable via SC-003 (HMAC mismatch) "
+                    "and SC-005 (muhkam_seal mismatch)."
+                ),
+                adversarial_tests=(
+                    "Post-merge round trip: clean=PASS, tampered=FAIL with "
+                    "SC-003+SC-005 CRITICAL. 65/65 tests pass."
+                ),
+                outcome=WitnessOutcome.DEMONSTRATED,
+            ),
+            WitnessResilienceRecord(
+                instrument="FATIMA (SA-006)",
+                threat_model=(
+                    "Attacker copies FATIMA-format watermark structure into "
+                    "a file without using FATIMA."
+                ),
+                witness_source="Format pattern matching only.",
+                trust_dependencies=(
+                    "No independent authentication. Format is public."
+                ),
+                detection_claim=(
+                    "SA-006 recognizes the format but reports INFO 'not "
+                    "authenticated'. It does not claim origin."
+                ),
+                adversarial_tests=(
+                    "test_copied_fatima_format_is_not_distinguishable: "
+                    "copied watermark classified identically to genuine."
+                ),
+                outcome=WitnessOutcome.VIOLATED,
+            ),
+            WitnessResilienceRecord(
+                instrument="HABL",
+                threat_model=(
+                    "Attacker deletes or modifies lines in the HABL ledger "
+                    "file directly on disk."
+                ),
+                witness_source=(
+                    "Append-only application contract. No cryptographic chain "
+                    "or independent anchoring in v0.1.1."
+                ),
+                trust_dependencies=(
+                    "File system permissions. Ledger integrity depends on "
+                    "no external modification. HABL README states this."
+                ),
+                detection_claim=(
+                    "New findings append; old findings are not overwritten "
+                    "by the application. External modification is not yet "
+                    "detectable."
+                ),
+                adversarial_tests="",
+                outcome=WitnessOutcome.UNKNOWN,
             ),
         ],
         attestation=(
