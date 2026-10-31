@@ -38,14 +38,15 @@ def _write(directory, name, text, encoding="utf-8"):
 
 
 def _report(findings_by_dim, dims=fe.DIMENSIONS, **extra):
-    """A synthetic audit_file() report in the 10.9.0 shape."""
+    """A synthetic audit_file() report in the 10.9.x shape."""
     report = {
         "filepath": "x.py",
-        "audit_version": VERSION,
+        "audit_version": extra.pop("audit_version", VERSION),
         "timestamp": "2026-10-27T12:00:00+00:00",
         "dimensions": {},
         "overall_status": "FAIL",
         "total_findings": 0,
+        "actionable_findings": 0,
         "critical_findings": 0,
     }
     for d in dims:
@@ -112,6 +113,42 @@ class TestMapping(unittest.TestCase):
         )
         self.assertEqual(out[0].payload["kind"], fe.KIND_POLICY)
         self.assertEqual(out[2].payload["kind"], fe.KIND_OBSERVED)
+
+    def test_new_codes_accepted_at_supported_versions(self):
+        """SA-005 (10.9.1+), SA-006/SA-007 (10.9.3+) are in CODE_TABLE."""
+        for code in ("SA-005", "SA-006", "SA-007"):
+            self.assertIn(code, fe.CODE_TABLE)
+        # SA-005 at 10.9.1
+        out = self.convert(
+            _report({"steganographic": [_f("SA-005", "MEDIUM")]}, audit_version="10.9.1"))
+        self.assertEqual(out[0].payload["code"], "SA-005")
+        # SA-006 (INFO) and SA-007 (HIGH) at 10.9.3
+        out = self.convert(
+            _report({"steganographic": [
+                _f("SA-006", "INFO"), _f("SA-007", "HIGH")]}, audit_version="10.9.3"))
+        codes = [f.payload["code"] for f in out if f.payload.get("record_kind") == "finding"]
+        self.assertIn("SA-006", codes)
+        self.assertIn("SA-007", codes)
+        # SA-006 maps to seal/coverage, SA-007 to adversarial/observed
+        sa6 = [f for f in out if f.payload.get("code") == "SA-006"][0]
+        sa7 = [f for f in out if f.payload.get("code") == "SA-007"][0]
+        self.assertEqual(sa6.category.value, "seal")
+        self.assertEqual(sa6.payload["kind"], fe.KIND_COVERAGE)
+        self.assertEqual(sa7.category.value, "adversarial")
+        self.assertEqual(sa7.payload["kind"], fe.KIND_OBSERVED)
+
+    def test_actionable_findings_in_audit_run(self):
+        """The audit_run record carries native_actionable_count (v10.9.2+)."""
+        out = self.convert(
+            _report({"rendering_integrity": [_f("RI-003", "CRITICAL")]},
+                    actionable_findings=1, audit_version="10.9.2"))
+        run = [f for f in out if f.payload.get("record_kind") == fe.KIND_AUDIT_RUN][0]
+        self.assertEqual(run.payload["native_actionable_count"], 1)
+
+    def test_all_supported_versions_accepted(self):
+        for v in ("10.9.0", "10.9.1", "10.9.2", "10.9.3"):
+            out = self.convert(_report({}, audit_version=v))
+            self.assertTrue(len(out) >= 1, v)
 
     def test_shared_code_conditions_keep_their_own_description(self):
         out = self.convert(
@@ -244,13 +281,10 @@ class TestRealAudit(unittest.TestCase):
             payloads = _payloads(load_ledger(d).findings)
             self.assertEqual([p["code"] for p in payloads if p.get("code") == "FATIMA-AUDIT-ERROR"], ["FATIMA-AUDIT-ERROR"])
 
-    def test_lone_zero_width_space_gap_is_disclosed(self):
-        """Characterization of the confirmed Encoder gap (separate fix, Encoder PR #4).
-
-        Today a lone U+200B produces the same native findings as the clean
-        control. The run record must disclose the gap. When the Encoder fix
-        lands, the first assertion is expected to change.
-        """
+    def test_stray_zwc_gap_closed_and_sa006_gap_disclosed(self):
+        """The U+200B gap was closed by SA-005 (Encoder PR #4). The
+        known_detection_gaps no longer mention it. Instead, the SA-006
+        authentication gap (B2 not yet implemented) is disclosed."""
         with tempfile.TemporaryDirectory() as d:
             _write(d, "control.py", BASMALA + 'pw = "admin"\n' + BASMALA)
             _write(d, "zwsp.py", BASMALA + 'pw = "adm\u200bin"\n' + BASMALA)
@@ -260,8 +294,10 @@ class TestRealAudit(unittest.TestCase):
                 for f in load_ledger(d).findings
                 if f.payload["record_kind"] == fe.KIND_AUDIT_RUN
             }
-            self.assertEqual(runs["control.py"]["native_finding_count"], runs["zwsp.py"]["native_finding_count"])
-            self.assertTrue(any("U+200B" in g for g in runs["zwsp.py"]["known_detection_gaps"]))
+            # The U+200B gap is closed -- no longer in known_detection_gaps
+            self.assertFalse(any("U+200B" in g for g in runs["zwsp.py"]["known_detection_gaps"]))
+            # The SA-006 authentication gap is disclosed
+            self.assertTrue(any("SA-006" in g for g in runs["zwsp.py"]["known_detection_gaps"]))
 
     def test_encoder_audit_output_unchanged_by_emitter(self):
         with tempfile.TemporaryDirectory() as d:

@@ -57,7 +57,7 @@ _HABL_REQUIRED_NAMES = ("Category", "Finding", "Location", "Severity", "append_f
 # The mapping tables below were written against this audit version and
 # checked code by code against its source. Another version must be
 # reviewed before it is accepted.
-SUPPORTED_AUDIT_VERSIONS = frozenset({"10.9.0"})
+SUPPORTED_AUDIT_VERSIONS = frozenset({"10.9.0", "10.9.1", "10.9.2", "10.9.3"})
 
 EXIT_OK = 0
 EXIT_USAGE = 2
@@ -88,6 +88,12 @@ CODE_TABLE: dict[str, tuple[str, str]] = {
     "SA-002": ("adversarial", KIND_OBSERVED),
     "SA-003": ("adversarial", KIND_OBSERVED),
     "SA-004": ("adversarial", KIND_OBSERVED),
+    # v10.9.1: stray zero-width characters outside any watermark.
+    "SA-005": ("adversarial", KIND_OBSERVED),
+    # v10.9.3 (N4 B1): FATIMA-format watermarks recognized but unverified.
+    "SA-006": ("seal", KIND_COVERAGE),
+    # v10.9.3 (N4 B1): unrecognized ZWC payloads.
+    "SA-007": ("adversarial", KIND_OBSERVED),
     # Consistency with the local witness sidecar.
     "SC-001": ("seal", KIND_LOCAL_SEAL),
     "SC-002": ("seal", KIND_LOCAL_SEAL),
@@ -112,14 +118,18 @@ SEVERITY_OVERRIDES: dict[tuple[str, str], str] = {
 # Known limits of the audit at the supported version, written into every
 # audit_run record until fixed.
 KNOWN_DETECTION_GAPS = (
-    "Zero-width characters in the Encoder's own ZWC alphabet (U+200B, U+200C, "
-    "U+200D, U+FEFF) are not reported when they appear outside a recognized "
-    "watermark: steganographic.invisible_chars skips them and the payload check "
-    "only looks for paired boundaries. Confirmed at Encoder d63689e.",
+    # The stray-ZWC gap (U+200B/U+200C/U+200D/U+FEFF outside watermarks)
+    # was closed by SA-005 in audit version 10.9.1.
     "Line numbers appear only inside description or detail text, so findings "
     "carry no structured line.",
     "SC-002, SC-004, SC-005 and SC-006 each name more than one condition; "
     "(code, native severity) does not identify the condition. Read description.",
+    # v10.9.3: watermark format recognition is not authentication. A
+    # FATIMA-format payload classified by SA-006 may have been copied.
+    # Watermark authentication (B2) is a separate workstream.
+    "SA-006 recognizes FATIMA-format watermarks by structure only, not by "
+    "cryptographic authentication. The format can be copied. B2 authentication "
+    "is planned but not yet implemented.",
 )
 
 
@@ -382,6 +392,7 @@ def report_to_findings(
                 "kind": KIND_AUDIT_RUN,
                 "native_overall_status": report.get("overall_status"),
                 "native_finding_count": native_count,
+                "native_actionable_count": report.get("actionable_findings"),
                 "native_critical_count": report.get("critical_findings"),
                 "dimensions_examined": examined,
                 "dimensions_not_examined": skipped,
