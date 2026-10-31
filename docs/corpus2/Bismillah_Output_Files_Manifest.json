@@ -1,0 +1,72 @@
+{
+  "name": "Bismillah EESS Second Corpus Evidence Network",
+  "generated": "2026-10-31",
+  "manifest_scope": "output files only, no trusted signature; sha256 is for checking downloaded bytes",
+  "files": [
+    {
+      "filename": "Bismillah_Corpus_Development_Analysis.md",
+      "size_bytes": 32184,
+      "sha256": "48f7f9e001850b36a94477b2abf6bc1d8b09704386434472b2d459616e8d3aa7"
+    },
+    {
+      "filename": "Bismillah_Corpus_Edges.csv",
+      "size_bytes": 70464,
+      "sha256": "4d38cc0a6ae89953500a245861c78956aade97334dff946b3d5bfd9725115006"
+    },
+    {
+      "filename": "Bismillah_Corpus_Evidence_Index.csv",
+      "size_bytes": 10538,
+      "sha256": "4df9978fc32b5b61329437fecc521d81199ab60fdff68d0867ecb76ab28f561c"
+    },
+    {
+      "filename": "Bismillah_Corpus_Knowledge_Network.graphml",
+      "size_bytes": 173164,
+      "sha256": "882d26e2ac98887d82da3c58aeca425056616fe6aa267331a705d35c05b04f46"
+    },
+    {
+      "filename": "Bismillah_Corpus_Knowledge_Network.json",
+      "size_bytes": 256832,
+      "sha256": "8b4b125c4bd001b1ac03a0b2fe1590ddbc0a818868ccd76fe1c1bc5f62489d85"
+    },
+    {
+      "filename": "Bismillah_Corpus_Legacy_995_Index.csv",
+      "size_bytes": 143605,
+      "sha256": "c3f2227e05c4ef6b3a025b42f828ebc232da2ce670f49616f425081134cb644d"
+    },
+    {
+      "filename": "Bismillah_Corpus_Network_Overview.png",
+      "size_bytes": 785166,
+      "sha256": "848e827e3cbd2d4a6f4c3c634f9de9be7c96fa635ffa3b830a741e1a49718e52"
+    },
+    {
+      "filename": "Bismillah_Corpus_Nodes.csv",
+      "size_bytes": 41677,
+      "sha256": "6e9cca532b3ba62738f3a40946f8ef6885a0521cf2a537601af4efb2a7798edf"
+    },
+    {
+      "filename": "Bismillah_Corpus_Primary_Works_Index.csv",
+      "size_bytes": 31944,
+      "sha256": "b1ad3d2229933096e59aebec26414a8a82ae945b99d5d129e481f915e007a61a"
+    },
+    {
+      "filename": "Bismillah_Corpus_README.md",
+      "size_bytes": 4814,
+      "sha256": "12a3b24b3456db31ee308e19666095fb4337383c4d8fbf2ebce185ab46c5457b"
+    },
+    {
+      "filename": "Bismillah_EESS_Claim_Receipt_v0_1_DRAFT.schema.json",
+      "size_bytes": 10430,
+      "sha256": "f6dbe3eb48698bce283e37a976658a44b5ed47ab2338ab58750f8b9b32d80131"
+    },
+    {
+      "filename": "Bismillah_EESS_Claim_Receipt_v0_1_EXAMPLE.json",
+      "size_bytes": 2338,
+      "sha256": "c1d0efa01007b215516fc1712e687fed83c0b9cb82c6c9715be8da452188e19a"
+    },
+    {
+      "filename": "Bismillah_Interactive_Corpus_Network.html",
+      "size_bytes": 208361,
+      "sha256": "1f90fe0dd59ce20fedb44679c92fe8e965ca7979418cc1e7647ebe6d3921692f"
+    }
+  ]
+}

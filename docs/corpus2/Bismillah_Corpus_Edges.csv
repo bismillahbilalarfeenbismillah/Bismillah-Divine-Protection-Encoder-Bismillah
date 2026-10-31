@@ -1,0 +1,663 @@
+﻿source,target,type,weight,basis,origin
+P061,COLLECTED,part_of_collection,0.45,module catalog entry,P061
+P040,COLLECTED,part_of_collection,0.45,module catalog entry,P040
+P054,COLLECTED,part_of_collection,0.45,module catalog entry,P054
+P017,COLLECTED,part_of_collection,0.45,module catalog entry,P017
+P043,COLLECTED,part_of_collection,0.45,module catalog entry,P043
+P005,COLLECTED,part_of_collection,0.45,module catalog entry,P005
+P006,COLLECTED,part_of_collection,0.45,module catalog entry,P006
+P079,COLLECTED,part_of_collection,0.45,module catalog entry,P079
+P024,COLLECTED,part_of_collection,0.45,module catalog entry,P024
+P075,COLLECTED,part_of_collection,0.45,module catalog entry,P075
+P068,COLLECTED,part_of_collection,0.45,module catalog entry,P068
+P034,COLLECTED,part_of_collection,0.45,module catalog entry,P034
+P045,COLLECTED,part_of_collection,0.45,module catalog entry,P045
+P020,COLLECTED,part_of_collection,0.45,module catalog entry,P020
+P012,COLLECTED,part_of_collection,0.45,module catalog entry,P012
+P025,COLLECTED,part_of_collection,0.45,module catalog entry,P025
+P011,COLLECTED,part_of_collection,0.45,module catalog entry,P011
+P042,COLLECTED,part_of_collection,0.45,module catalog entry,P042
+P013,COLLECTED,part_of_collection,0.45,module catalog entry,P013
+P077,COLLECTED,part_of_collection,0.45,module catalog entry,P077
+P080,COLLECTED,part_of_collection,0.45,module catalog entry,P080
+P076,COLLECTED,part_of_collection,0.45,module catalog entry,P076
+P055,COLLECTED,part_of_collection,0.45,module catalog entry,P055
+P049,COLLECTED,part_of_collection,0.45,module catalog entry,P049
+P065,COLLECTED,part_of_collection,0.45,module catalog entry,P065
+P018,COLLECTED,part_of_collection,0.45,module catalog entry,P018
+P009,COLLECTED,part_of_collection,0.45,module catalog entry,P009
+P015,COLLECTED,part_of_collection,0.45,module catalog entry,P015
+P016,COLLECTED,part_of_collection,0.45,module catalog entry,P016
+P021,COLLECTED,part_of_collection,0.45,module catalog entry,P021
+P073,COLLECTED,part_of_collection,0.45,module catalog entry,P073
+P037,COLLECTED,part_of_collection,0.45,module catalog entry,P037
+P026,COLLECTED,part_of_collection,0.45,module catalog entry,P026
+P023,COLLECTED,part_of_collection,0.45,module catalog entry,P023
+P046,COLLECTED,part_of_collection,0.45,module catalog entry,P046
+P081,COLLECTED,part_of_collection,0.45,module catalog entry,P081
+P008,COLLECTED,part_of_collection,0.45,module catalog entry,P008
+P070,COLLECTED,part_of_collection,0.45,module catalog entry,P070
+P010,COLLECTED,part_of_collection,0.45,module catalog entry,P010
+P066,COLLECTED,part_of_collection,0.45,module catalog entry,P066
+P064,COLLECTED,part_of_collection,0.45,module catalog entry,P064
+P003,COLLECTED,part_of_collection,0.45,module catalog entry,P003
+P032,COLLECTED,part_of_collection,0.45,module catalog entry,P032
+P022,COLLECTED,part_of_collection,0.45,module catalog entry,P022
+P058,COLLECTED,part_of_collection,0.45,module catalog entry,P058
+P019,COLLECTED,part_of_collection,0.45,module catalog entry,P019
+P029,COLLECTED,part_of_collection,0.45,module catalog entry,P029
+P030,COLLECTED,part_of_collection,0.45,module catalog entry,P030
+P052,COLLECTED,part_of_collection,0.45,module catalog entry,P052
+P036,COLLECTED,part_of_collection,0.45,module catalog entry,P036
+P056,COLLECTED,part_of_collection,0.45,module catalog entry,P056
+P004,COLLECTED,part_of_collection,0.45,module catalog entry,P004
+P044,COLLECTED,part_of_collection,0.45,module catalog entry,P044
+P051,COLLECTED,part_of_collection,0.45,module catalog entry,P051
+P027,COLLECTED,part_of_collection,0.45,module catalog entry,P027
+P059,COLLECTED,part_of_collection,0.45,module catalog entry,P059
+P062,COLLECTED,part_of_collection,0.45,module catalog entry,P062
+P078,COLLECTED,part_of_collection,0.45,module catalog entry,P078
+P014,COLLECTED,part_of_collection,0.45,module catalog entry,P014
+P039,COLLECTED,part_of_collection,0.45,module catalog entry,P039
+P067,COLLECTED,part_of_collection,0.45,module catalog entry,P067
+P041,COLLECTED,part_of_collection,0.45,module catalog entry,P041
+P074,COLLECTED,part_of_collection,0.45,module catalog entry,P074
+P071,COLLECTED,part_of_collection,0.45,module catalog entry,P071
+P072,COLLECTED,part_of_collection,0.45,module catalog entry,P072
+P002,COLLECTED,part_of_collection,0.45,module catalog entry,P002
+P047,COLLECTED,part_of_collection,0.45,module catalog entry,P047
+P033,COLLECTED,part_of_collection,0.45,module catalog entry,P033
+P007,COLLECTED,part_of_collection,0.45,module catalog entry,P007
+P028,COLLECTED,part_of_collection,0.45,module catalog entry,P028
+P038,COLLECTED,part_of_collection,0.45,module catalog entry,P038
+P057,COLLECTED,part_of_collection,0.45,module catalog entry,P057
+P050,COLLECTED,part_of_collection,0.45,module catalog entry,P050
+P060,COLLECTED,part_of_collection,0.45,module catalog entry,P060
+P031,COLLECTED,part_of_collection,0.45,module catalog entry,P031
+P069,COLLECTED,part_of_collection,0.45,module catalog entry,P069
+P001,COLLECTED,part_of_collection,0.45,module catalog entry,P001
+P053,COLLECTED,part_of_collection,0.45,module catalog entry,P053
+P063,COLLECTED,part_of_collection,0.45,module catalog entry,P063
+P003,C_claims,topic_mention,3.014,124 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P003
+P057,C_claims,topic_mention,2.803,81 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P057
+P032,C_claims,topic_mention,2.759,74 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P032
+P064,C_claims,topic_mention,2.731,70 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P064
+P026,C_claims,topic_mention,2.647,59 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P026
+P046,C_claims,topic_mention,2.622,56 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P046
+P008,C_claims,topic_mention,2.613,55 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P008
+P081,C_claims,topic_mention,2.594,53 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P081
+P062,C_claims,topic_mention,2.585,52 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P062
+P029,C_claims,topic_mention,2.585,52 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P029
+P023,C_claims,topic_mention,2.585,52 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P023
+P056,C_claims,topic_mention,2.556,49 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P056
+P027,C_claims,topic_mention,2.525,46 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P027
+P019,C_claims,topic_mention,2.444,39 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P019
+P063,C_claims,topic_mention,2.392,35 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P063
+P066,C_claims,topic_mention,2.363,33 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P066
+P014,C_claims,topic_mention,2.363,33 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P014
+P031,C_claims,topic_mention,2.333,31 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P031
+P078,C_claims,topic_mention,2.317,30 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P078
+P004,C_claims,topic_mention,2.301,29 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P004
+P028,C_claims,topic_mention,2.266,27 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P028
+P007,C_claims,topic_mention,2.266,27 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P007
+P025,C_claims,topic_mention,2.248,26 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P025
+P039,C_claims,topic_mention,2.229,25 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P039
+P009,C_claims,topic_mention,2.229,25 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P009
+P037,C_claims,topic_mention,2.189,23 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P037
+P002,C_claims,topic_mention,2.189,23 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P002
+P006,C_claims,topic_mention,2.146,21 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P006
+STRATEGY,C_claims,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P046,C_witness,topic_mention,2.898,19 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P046
+P058,C_witness,topic_mention,1.882,12 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P058
+P004,C_witness,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P004
+P062,C_witness,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P062
+P029,C_witness,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P029
+P081,C_witness,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P081
+P059,C_witness,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P059
+P041,C_witness,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P041
+P023,C_witness,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P023
+STRATEGY,C_witness,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P029,C_replay,topic_mention,3.829,25 phrase hits in sampled module text; 2 in title; NOT independent corroboration,P029
+P019,C_replay,topic_mention,2.817,16 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P019
+P031,C_replay,topic_mention,2.642,11 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P031
+P069,C_replay,topic_mention,2.296,5 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P069
+P053,C_replay,topic_mention,2.205,4 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P053
+P057,C_replay,topic_mention,1.842,11 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P057
+P041,C_replay,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P041
+P063,C_replay,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P063
+P044,C_replay,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P044
+P062,C_replay,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P062
+P008,C_replay,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P008
+P003,C_replay,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P003
+P052,C_replay,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P052
+P002,C_replay,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P002
+STRATEGY,C_replay,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P004,C_effect,topic_mention,3.565,75 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P004
+P044,C_effect,topic_mention,3.314,45 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P044
+P059,C_effect,topic_mention,3.029,25 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P059
+P051,C_effect,topic_mention,2.989,23 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P051
+P027,C_effect,topic_mention,2.922,20 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P027
+P046,C_effect,topic_mention,2.098,19 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P046
+P058,C_effect,topic_mention,1.954,14 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P058
+P049,C_effect,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P049
+P013,C_effect,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P013
+P041,C_effect,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P041
+P037,C_effect,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P037
+P029,C_effect,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P029
+P003,C_effect,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P003
+STRATEGY,C_effect,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P031,C_coverage,topic_mention,3.117,30 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P031
+P029,C_coverage,topic_mention,2.839,87 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P029
+P039,C_coverage,topic_mention,2.576,51 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P039
+P046,C_coverage,topic_mention,2.566,50 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P046
+P027,C_coverage,topic_mention,2.419,37 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P027
+P066,C_coverage,topic_mention,2.378,34 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P066
+P019,C_coverage,topic_mention,2.248,26 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P019
+P003,C_coverage,topic_mention,2.248,26 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P003
+P064,C_coverage,topic_mention,2.146,21 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P064
+P008,C_coverage,topic_mention,2.146,21 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P008
+P026,C_coverage,topic_mention,2.122,20 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P026
+P004,C_coverage,topic_mention,2.122,20 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P004
+P049,C_coverage,topic_mention,2.045,17 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P049
+P058,C_coverage,topic_mention,2.017,16 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P058
+P032,C_coverage,topic_mention,2.017,16 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P032
+P057,C_coverage,topic_mention,1.986,15 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P057
+P067,C_coverage,topic_mention,1.954,14 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P067
+P070,C_coverage,topic_mention,1.92,13 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P070
+P023,C_coverage,topic_mention,1.882,12 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P023
+P033,C_coverage,topic_mention,1.842,11 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P033
+P014,C_coverage,topic_mention,1.842,11 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P014
+P062,C_coverage,topic_mention,1.799,10 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P062
+P002,C_coverage,topic_mention,1.799,10 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P002
+P036,C_coverage,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P036
+P025,C_coverage,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P025
+P059,C_coverage,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P059
+P056,C_coverage,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P056
+P030,C_coverage,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P030
+STRATEGY,C_coverage,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P049,C_invariance,topic_mention,2.551,9 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P049
+P075,C_invariance,topic_mention,1.954,14 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P075
+P002,C_invariance,topic_mention,1.954,14 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P002
+P074,C_invariance,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P074
+P013,C_invariance,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P013
+P008,C_invariance,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P008
+P042,C_invariance,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P042
+P041,C_invariance,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P041
+P066,C_invariance,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P066
+P050,C_invariance,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P050
+P081,C_invariance,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P081
+P080,C_invariance,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P080
+P058,C_invariance,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P058
+P057,C_invariance,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P057
+P047,C_invariance,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P047
+P046,C_invariance,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P046
+P027,C_invariance,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P027
+P026,C_invariance,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P026
+STRATEGY,C_invariance,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P006,C_hypotheses,topic_mention,2.968,22 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P006
+P056,C_hypotheses,topic_mention,2.833,86 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P056
+P029,C_hypotheses,topic_mention,2.672,62 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P029
+P023,C_hypotheses,topic_mention,2.189,23 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P023
+P046,C_hypotheses,topic_mention,2.146,21 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P046
+P037,C_hypotheses,topic_mention,2.122,20 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P037
+P057,C_hypotheses,topic_mention,2.072,18 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P057
+P003,C_hypotheses,topic_mention,2.045,17 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P003
+P027,C_hypotheses,topic_mention,1.986,15 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P027
+P062,C_hypotheses,topic_mention,1.92,13 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P062
+P005,C_hypotheses,topic_mention,1.92,13 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P005
+P019,C_hypotheses,topic_mention,1.842,11 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P019
+P007,C_hypotheses,topic_mention,1.842,11 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P007
+P032,C_hypotheses,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P032
+P025,C_hypotheses,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P025
+P009,C_hypotheses,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P009
+P063,C_hypotheses,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P063
+P024,C_hypotheses,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P024
+P014,C_hypotheses,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P014
+P064,C_hypotheses,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P064
+P047,C_hypotheses,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P047
+P033,C_hypotheses,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P033
+P040,C_hypotheses,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P040
+P017,C_hypotheses,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P017
+P004,C_hypotheses,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P004
+P066,C_hypotheses,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P066
+P049,C_hypotheses,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P049
+P041,C_hypotheses,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P041
+STRATEGY,C_hypotheses,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P014,C_calibration,topic_mention,3.356,49 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P014
+P056,C_calibration,topic_mention,2.695,65 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P056
+P009,C_calibration,topic_mention,2.514,45 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P009
+P029,C_calibration,topic_mention,2.333,31 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P029
+P019,C_calibration,topic_mention,2.229,25 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P019
+P017,C_calibration,topic_mention,2.168,22 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P017
+P040,C_calibration,topic_mention,2.146,21 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P040
+P070,C_calibration,topic_mention,1.986,15 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P070
+P016,C_calibration,topic_mention,1.986,15 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P016
+P037,C_calibration,topic_mention,1.954,14 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P037
+P039,C_calibration,topic_mention,1.799,10 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P039
+P031,C_calibration,topic_mention,1.799,10 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P031
+P027,C_calibration,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P027
+P026,C_calibration,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P026
+P062,C_calibration,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P062
+P046,C_calibration,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P046
+P033,C_calibration,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P033
+P008,C_calibration,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P008
+P002,C_calibration,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P002
+P073,C_calibration,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P073
+P047,C_calibration,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P047
+P022,C_calibration,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P022
+P010,C_calibration,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P010
+P057,C_calibration,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P057
+P053,C_calibration,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P053
+P045,C_calibration,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P045
+P023,C_calibration,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P023
+P078,C_calibration,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P078
+STRATEGY,C_calibration,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P023,C_projections,topic_mention,2.817,16 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P023
+P059,C_projections,topic_mention,2.72,13 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P059
+P026,C_projections,topic_mention,2.642,11 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P026
+P032,C_projections,topic_mention,2.146,21 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P032
+P046,C_projections,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P046
+P081,C_projections,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P081
+P062,C_projections,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P062
+P027,C_projections,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P027
+P008,C_projections,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P008
+P004,C_projections,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P004
+P041,C_projections,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P041
+P022,C_projections,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P022
+P070,C_projections,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P070
+P038,C_projections,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P038
+P019,C_projections,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P019
+STRATEGY,C_projections,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P046,C_privacy,topic_mention,2.514,45 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P046
+P027,C_privacy,topic_mention,2.363,33 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P027
+P049,C_privacy,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P049
+P043,C_privacy,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P043
+P025,C_privacy,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P025
+P019,C_privacy,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P019
+P004,C_privacy,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P004
+P058,C_privacy,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P058
+P039,C_privacy,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P039
+P023,C_privacy,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P023
+P010,C_privacy,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P010
+P029,C_privacy,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P029
+P059,C_privacy,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P059
+P057,C_privacy,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P057
+P056,C_privacy,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P056
+P002,C_privacy,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P002
+P012,C_privacy,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P012
+STRATEGY,C_privacy,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P039,C_versioning,topic_mention,3.43,57 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P039
+P069,C_versioning,topic_mention,3.066,27 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P069
+P066,C_versioning,topic_mention,2.85,89 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P066
+P029,C_versioning,topic_mention,2.731,70 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P029
+P044,C_versioning,topic_mention,2.702,66 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P044
+P062,C_versioning,topic_mention,2.604,54 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P062
+P032,C_versioning,topic_mention,2.585,52 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P032
+P063,C_versioning,topic_mention,2.536,47 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P063
+P026,C_versioning,topic_mention,2.481,42 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P026
+P023,C_versioning,topic_mention,2.457,40 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P023
+P064,C_versioning,topic_mention,2.405,36 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P064
+P019,C_versioning,topic_mention,2.405,36 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P019
+P014,C_versioning,topic_mention,2.405,36 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P014
+P070,C_versioning,topic_mention,2.348,32 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P070
+P058,C_versioning,topic_mention,2.317,30 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P058
+P008,C_versioning,topic_mention,2.301,29 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P008
+P002,C_versioning,topic_mention,2.266,27 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P002
+P031,C_versioning,topic_mention,2.209,24 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P031
+P051,C_versioning,topic_mention,2.189,23 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P051
+P057,C_versioning,topic_mention,2.146,21 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P057
+P071,C_versioning,topic_mention,2.122,20 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P071
+P030,C_versioning,topic_mention,2.072,18 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P030
+P027,C_versioning,topic_mention,2.072,18 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P027
+P003,C_versioning,topic_mention,2.072,18 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P003
+P067,C_versioning,topic_mention,2.045,17 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P067
+P056,C_versioning,topic_mention,2.045,17 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P056
+P025,C_versioning,topic_mention,2.045,17 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P025
+P004,C_versioning,topic_mention,2.045,17 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P004
+STRATEGY,C_versioning,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P056,C_remedy,topic_mention,2.122,20 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P056
+P057,C_remedy,topic_mention,2.098,19 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P057
+P038,C_remedy,topic_mention,1.842,11 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P038
+P039,C_remedy,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P039
+P008,C_remedy,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P008
+P016,C_remedy,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P016
+P045,C_remedy,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P045
+P013,C_remedy,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P013
+P055,C_remedy,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P055
+P036,C_remedy,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P036
+P022,C_remedy,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P022
+P077,C_remedy,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P077
+P064,C_remedy,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P064
+P003,C_remedy,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P003
+STRATEGY,C_remedy,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P023,C_safety_eval,topic_mention,2.072,18 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P023
+P057,C_safety_eval,topic_mention,1.882,12 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P057
+P007,C_safety_eval,topic_mention,1.882,12 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P007
+P024,C_safety_eval,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P024
+P043,C_safety_eval,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P043
+P038,C_safety_eval,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P038
+P029,C_safety_eval,topic_mention,1.573,6 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P029
+P019,C_safety_eval,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P019
+P016,C_safety_eval,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P016
+P009,C_safety_eval,topic_mention,1.496,5 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P009
+P046,C_safety_eval,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P046
+P003,C_safety_eval,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P003
+P078,C_safety_eval,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P078
+P064,C_safety_eval,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P064
+P049,C_safety_eval,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P049
+P047,C_safety_eval,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P047
+STRATEGY,C_safety_eval,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+P038,C_adapters,topic_mention,4.0,46 phrase hits in sampled module text; 2 in title; NOT independent corroboration,P038
+P050,C_adapters,topic_mention,3.244,39 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P050
+P053,C_adapters,topic_mention,3.048,26 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P053
+P057,C_adapters,topic_mention,2.444,39 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P057
+P066,C_adapters,topic_mention,2.405,36 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P066
+P028,C_adapters,topic_mention,2.348,32 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P028
+P056,C_adapters,topic_mention,2.296,5 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P056
+P060,C_adapters,topic_mention,2.205,4 phrase hits in sampled module text; 1 in title; NOT independent corroboration,P060
+P043,C_adapters,topic_mention,2.122,20 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P043
+P002,C_adapters,topic_mention,2.122,20 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P002
+P032,C_adapters,topic_mention,2.098,19 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P032
+P031,C_adapters,topic_mention,1.986,15 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P031
+P026,C_adapters,topic_mention,1.92,13 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P026
+P064,C_adapters,topic_mention,1.842,11 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P064
+P069,C_adapters,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P069
+P013,C_adapters,topic_mention,1.751,9 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P013
+P016,C_adapters,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P016
+P008,C_adapters,topic_mention,1.699,8 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P008
+P003,C_adapters,topic_mention,1.64,7 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P003
+P063,C_adapters,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P063
+P062,C_adapters,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P062
+P029,C_adapters,topic_mention,1.405,4 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P029
+P041,C_adapters,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P041
+P024,C_adapters,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P024
+P010,C_adapters,topic_mention,1.293,3 phrase hits in sampled module text; 0 in title; NOT independent corroboration,P010
+STRATEGY,C_adapters,strategy_principle,1.6,Strategy sections and template contracts,STRATEGY
+I_furqan,C_coverage,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_furqan,C_versioning,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_furqan,C_effect,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_furqan,C_projections,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_fatima,C_versioning,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_fatima,C_claims,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_fatima,C_projections,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_fatima,C_witness,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_lint,C_coverage,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_lint,C_projections,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_lint,C_safety_eval,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_habl,C_versioning,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_habl,C_coverage,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_habl,C_witness,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_habl,C_claims,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_bayyinah,C_replay,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_bayyinah,C_hypotheses,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_bayyinah,C_invariance,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_bayyinah,C_calibration,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_bayyinah,C_safety_eval,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_shahid,C_claims,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_shahid,C_coverage,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_shahid,C_witness,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+I_shahid,C_remedy,engineering_relevance,1.5,"Design inference, not code confirmation",ANALYSIS
+E01,C_claims,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E01,C_versioning,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E01,C_hypotheses,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E01,C_coverage,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E01,I_habl,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E01,I_shahid,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E01,I_bayyinah,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E01,P037,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P037
+E01,P023,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P023
+E01,P046,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P046
+E01,STRATEGY,derived_design_proposal,1.0,Strategy template and research report,ANALYSIS
+E02,C_witness,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E02,C_versioning,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E02,C_safety_eval,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E02,I_habl,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E02,I_shahid,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E02,I_bayyinah,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E02,P046,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P046
+E02,P030,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P030
+E02,P062,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P062
+E02,STRATEGY,derived_design_proposal,1.0,Strategy template and research report,ANALYSIS
+E03,C_hypotheses,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E03,C_invariance,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E03,C_replay,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E03,C_calibration,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E03,I_bayyinah,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E03,I_shahid,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E03,P029,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P029
+E03,P044,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P044
+E03,P052,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P052
+E03,P019,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P019
+E03,STRATEGY,derived_design_proposal,1.0,Strategy template and research report,ANALYSIS
+E04,C_effect,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E04,C_remedy,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E04,C_witness,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E04,C_replay,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E04,I_furqan,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E04,I_bayyinah,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E04,I_habl,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E04,P058,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P058
+E04,P004,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P004
+E04,P027,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P027
+E04,STRATEGY,derived_design_proposal,1.0,Strategy template and research report,ANALYSIS
+E05,C_projections,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E05,C_coverage,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E05,C_versioning,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E05,I_lint,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E05,I_shahid,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E05,I_bayyinah,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E05,I_habl,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E05,P023,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P023
+E05,P039,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P039
+E05,P031,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P031
+E05,STRATEGY,derived_design_proposal,1.0,Strategy template and research report,ANALYSIS
+E06,C_versioning,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E06,C_claims,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E06,C_privacy,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E06,I_fatima,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E06,I_habl,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E06,I_shahid,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E06,P069,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P069
+E06,P001,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P001
+E06,P031,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P031
+E06,STRATEGY,derived_design_proposal,1.0,Strategy template and research report,ANALYSIS
+E07,C_adapters,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E07,C_claims,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E07,C_calibration,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E07,C_remedy,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E07,I_bayyinah,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E07,I_habl,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E07,I_shahid,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E07,P069,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P069
+E07,P031,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P031
+E07,P050,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P050
+E07,STRATEGY,derived_design_proposal,1.0,Strategy template and research report,ANALYSIS
+E08,C_safety_eval,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E08,C_replay,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E08,C_coverage,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E08,I_bayyinah,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E08,I_habl,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E08,I_lint,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E08,P062,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P062
+E08,P030,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P030
+E08,P052,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P052
+E08,STRATEGY,derived_design_proposal,1.0,Strategy template and research report,ANALYSIS
+E09,C_privacy,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E09,C_projections,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E09,C_claims,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E09,C_effect,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E09,I_bayyinah,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E09,I_fatima,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E09,I_lint,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E09,P033,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P033
+E09,P037,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P037
+E09,P027,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P027
+E09,STRATEGY,derived_design_proposal,1.0,Strategy template and research report,ANALYSIS
+E10,C_adapters,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E10,C_remedy,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E10,C_calibration,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E10,C_hypotheses,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E10,I_shahid,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E10,I_bayyinah,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E10,I_habl,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E10,P038,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P038
+E10,P069,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P069
+E10,P002,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P002
+E10,STRATEGY,derived_design_proposal,1.0,Strategy template and research report,ANALYSIS
+E11,C_versioning,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E11,C_coverage,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E11,C_safety_eval,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E11,I_furqan,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E11,I_fatima,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E11,I_lint,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E11,I_habl,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E11,I_shahid,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E11,P081,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P081
+E11,P046,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P046
+E11,P056,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P056
+E11,STRATEGY,derived_design_proposal,1.0,Strategy template and research report,ANALYSIS
+E12,C_calibration,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E12,C_claims,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E12,C_coverage,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E12,C_remedy,addresses,1.4,Proposal mapped to strategy method,ANALYSIS
+E12,I_shahid,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E12,I_bayyinah,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E12,I_habl,instrument_dependency,1.8,Proposed implementation role; requires Gate review,ANALYSIS
+E12,P038,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P038
+E12,P031,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P031
+E12,P044,source_inspiration,1.65,Work text/topic supports use-case; not implementation certification,P044
+E12,STRATEGY,derived_design_proposal,1.0,Strategy template and research report,ANALYSIS
+S01,E07,illustrative_sector,1.0,Domain-specific adapter requires pilot,STRATEGY
+S02,E07,illustrative_sector,1.0,Domain-specific adapter requires pilot,STRATEGY
+S03,E10,illustrative_sector,1.0,Domain-specific adapter requires pilot,STRATEGY
+S04,E09,illustrative_sector,1.0,Domain-specific adapter requires pilot,STRATEGY
+S05,E03,illustrative_sector,1.0,Domain-specific adapter requires pilot,STRATEGY
+S06,E10,illustrative_sector,1.0,Domain-specific adapter requires pilot,STRATEGY
+S07,E04,illustrative_sector,1.0,Domain-specific adapter requires pilot,STRATEGY
+S08,E09,illustrative_sector,1.0,Domain-specific adapter requires pilot,STRATEGY
+STRATEGY,P049,explicit_source_citation,1.605,Explicit [[P049]] references in strategy (n=4),STRATEGY
+STRATEGY,P077,explicit_source_citation,1.349,Explicit [[P077]] references in strategy (n=2),STRATEGY
+STRATEGY,P080,explicit_source_citation,1.147,Explicit [[P080]] references in strategy (n=1),STRATEGY
+STRATEGY,P076,explicit_source_citation,1.147,Explicit [[P076]] references in strategy (n=1),STRATEGY
+STRATEGY,P023,explicit_source_citation,2.042,Explicit [[P023]] references in strategy (n=11),STRATEGY
+STRATEGY,P026,explicit_source_citation,1.605,Explicit [[P026]] references in strategy (n=4),STRATEGY
+STRATEGY,P037,explicit_source_citation,1.147,Explicit [[P037]] references in strategy (n=1),STRATEGY
+STRATEGY,P058,explicit_source_citation,2.346,Explicit [[P058]] references in strategy (n=21),STRATEGY
+STRATEGY,P022,explicit_source_citation,1.349,Explicit [[P022]] references in strategy (n=2),STRATEGY
+STRATEGY,P011,explicit_source_citation,1.147,Explicit [[P011]] references in strategy (n=1),STRATEGY
+STRATEGY,P042,explicit_source_citation,1.147,Explicit [[P042]] references in strategy (n=1),STRATEGY
+STRATEGY,P013,explicit_source_citation,1.147,Explicit [[P013]] references in strategy (n=1),STRATEGY
+STRATEGY,P032,explicit_source_citation,1.147,Explicit [[P032]] references in strategy (n=1),STRATEGY
+STRATEGY,P046,explicit_source_citation,1.147,Explicit [[P046]] references in strategy (n=1),STRATEGY
+STRATEGY,P081,explicit_source_citation,1.147,Explicit [[P081]] references in strategy (n=1),STRATEGY
+STRATEGY,P016,explicit_source_citation,1.349,Explicit [[P016]] references in strategy (n=2),STRATEGY
+STRATEGY,P078,explicit_source_citation,1.349,Explicit [[P078]] references in strategy (n=2),STRATEGY
+STRATEGY,P001,explicit_source_citation,1.696,Explicit [[P001]] references in strategy (n=5),STRATEGY
+STRATEGY,P069,explicit_source_citation,1.84,Explicit [[P069]] references in strategy (n=7),STRATEGY
+STRATEGY,P033,explicit_source_citation,1.605,Explicit [[P033]] references in strategy (n=4),STRATEGY
+STRATEGY,P031,explicit_source_citation,1.696,Explicit [[P031]] references in strategy (n=5),STRATEGY
+STRATEGY,P030,explicit_source_citation,1.493,Explicit [[P030]] references in strategy (n=3),STRATEGY
+STRATEGY,P052,explicit_source_citation,1.605,Explicit [[P052]] references in strategy (n=4),STRATEGY
+STRATEGY,P004,explicit_source_citation,1.84,Explicit [[P004]] references in strategy (n=7),STRATEGY
+STRATEGY,P044,explicit_source_citation,1.349,Explicit [[P044]] references in strategy (n=2),STRATEGY
+STRATEGY,P051,explicit_source_citation,1.349,Explicit [[P051]] references in strategy (n=2),STRATEGY
+STRATEGY,P038,explicit_source_citation,1.773,Explicit [[P038]] references in strategy (n=6),STRATEGY
+STRATEGY,P057,explicit_source_citation,1.493,Explicit [[P057]] references in strategy (n=3),STRATEGY
+STRATEGY,P029,explicit_source_citation,1.84,Explicit [[P029]] references in strategy (n=7),STRATEGY
+STRATEGY,P008,explicit_source_citation,1.349,Explicit [[P008]] references in strategy (n=2),STRATEGY
+STRATEGY,P010,explicit_source_citation,1.349,Explicit [[P010]] references in strategy (n=2),STRATEGY
+STRATEGY,P039,explicit_source_citation,1.773,Explicit [[P039]] references in strategy (n=6),STRATEGY
+STRATEGY,P041,explicit_source_citation,1.349,Explicit [[P041]] references in strategy (n=2),STRATEGY
+STRATEGY,P014,explicit_source_citation,1.147,Explicit [[P014]] references in strategy (n=1),STRATEGY
+STRATEGY,P067,explicit_source_citation,1.147,Explicit [[P067]] references in strategy (n=1),STRATEGY
+STRATEGY,P056,explicit_source_citation,1.349,Explicit [[P056]] references in strategy (n=2),STRATEGY
+STRATEGY,P074,explicit_source_citation,1.147,Explicit [[P074]] references in strategy (n=1),STRATEGY
+STRATEGY,P071,explicit_source_citation,1.147,Explicit [[P071]] references in strategy (n=1),STRATEGY
+STRATEGY,P072,explicit_source_citation,1.349,Explicit [[P072]] references in strategy (n=2),STRATEGY
+STRATEGY,P002,explicit_source_citation,1.493,Explicit [[P002]] references in strategy (n=3),STRATEGY
+STRATEGY,P028,explicit_source_citation,1.147,Explicit [[P028]] references in strategy (n=1),STRATEGY
+STRATEGY,P050,explicit_source_citation,1.147,Explicit [[P050]] references in strategy (n=1),STRATEGY
+STRATEGY,P060,explicit_source_citation,1.147,Explicit [[P060]] references in strategy (n=1),STRATEGY
+STRATEGY,P053,explicit_source_citation,1.147,Explicit [[P053]] references in strategy (n=1),STRATEGY
+STRATEGY,P063,explicit_source_citation,1.147,Explicit [[P063]] references in strategy (n=1),STRATEGY
+STRATEGY,P047,explicit_source_citation,1.147,Explicit [[P047]] references in strategy (n=1),STRATEGY
+STRATEGY,P006,explicit_source_citation,1.147,Explicit [[P006]] references in strategy (n=1),STRATEGY
+STRATEGY,P079,explicit_source_citation,1.147,Explicit [[P079]] references in strategy (n=1),STRATEGY
+STRATEGY,P003,explicit_source_citation,1.349,Explicit [[P003]] references in strategy (n=2),STRATEGY
+P040,P047,lexical_similarity,0.395,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P040,P017,lexical_similarity,0.347,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P017,P009,lexical_similarity,0.432,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P017,P014,lexical_similarity,0.393,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P043,P028,lexical_similarity,0.506,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P005,P006,lexical_similarity,0.396,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P006,P002,lexical_similarity,0.474,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P079,P077,lexical_similarity,0.387,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P075,P074,lexical_similarity,0.559,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P068,P020,lexical_similarity,0.378,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P034,P011,lexical_similarity,0.409,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P034,P045,lexical_similarity,0.381,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P034,P042,lexical_similarity,0.334,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P045,P011,lexical_similarity,0.432,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P045,P020,lexical_similarity,0.3,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P012,P025,lexical_similarity,0.69,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P011,P055,lexical_similarity,0.373,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P042,P013,lexical_similarity,0.441,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P042,P055,lexical_similarity,0.413,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P013,P055,lexical_similarity,0.369,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P080,P076,lexical_similarity,0.291,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P055,P078,lexical_similarity,0.515,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P018,P062,lexical_similarity,0.353,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P009,P014,lexical_similarity,0.323,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P009,P022,lexical_similarity,0.288,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P026,P022,lexical_similarity,0.348,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P026,P032,lexical_similarity,0.305,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P023,P032,lexical_similarity,0.377,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P023,P027,lexical_similarity,0.308,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P023,P046,lexical_similarity,0.281,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P046,P027,lexical_similarity,0.867,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P046,P004,lexical_similarity,0.319,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P008,P010,lexical_similarity,0.461,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P070,P033,lexical_similarity,0.346,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P066,P064,lexical_similarity,0.33,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P066,P003,lexical_similarity,0.322,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P064,P003,lexical_similarity,0.939,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P064,P062,lexical_similarity,0.321,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P003,P062,lexical_similarity,0.318,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P058,P029,lexical_similarity,0.33,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P058,P062,lexical_similarity,0.29,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P058,P019,lexical_similarity,0.287,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P019,P029,lexical_similarity,0.496,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P019,P044,lexical_similarity,0.299,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P030,P052,lexical_similarity,0.5,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P052,P062,lexical_similarity,0.315,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P004,P059,lexical_similarity,0.426,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P004,P027,lexical_similarity,0.291,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P044,P051,lexical_similarity,0.483,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P014,P047,lexical_similarity,0.302,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P039,P067,lexical_similarity,0.731,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P071,P072,lexical_similarity,0.67,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P038,P057,lexical_similarity,0.633,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P050,P060,lexical_similarity,0.527,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P050,P031,lexical_similarity,0.293,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P060,P001,lexical_similarity,0.304,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P031,P063,lexical_similarity,0.294,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P031,P001,lexical_similarity,0.282,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P069,P001,lexical_similarity,0.527,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P069,P053,lexical_similarity,0.369,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P001,P063,lexical_similarity,0.475,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+P053,P063,lexical_similarity,0.545,TF-IDF cosine similarity on first 60k characters; not claim-level agreement,COMPUTED
+LEGACY_INDEX,COLLECTED,part_of_collection,1.0,995 indexed titles included in Part V,ARCHIVE
+LEGACY_INDEX,C_versioning,record_index,0.8,"Legacy metadata, claims not adjudicated",ARCHIVE
+OLD_D01,C_hypotheses,prior_pack_theme,0.65,Prior network title/description mentions theme; not new independent support,PRIOR_NET
+OLD_D01,C_adapters,prior_pack_theme,0.65,Prior network title/description mentions theme; not new independent support,PRIOR_NET
+OLD_D02,C_claims,prior_pack_theme,0.65,Prior network title/description mentions theme; not new independent support,PRIOR_NET
+OLD_D04,C_claims,prior_pack_theme,0.65,Prior network title/description mentions theme; not new independent support,PRIOR_NET
+OLD_D07,C_claims,prior_pack_theme,0.65,Prior network title/description mentions theme; not new independent support,PRIOR_NET
+OLD_D08,COLLECTED,byte_identical,2.0,SHA-256 exact byte match between prior and current packages,COMPARISON
+OLD_D11,C_adapters,prior_pack_theme,0.65,Prior network title/description mentions theme; not new independent support,PRIOR_NET
+OLD_D13,STRATEGY,byte_identical,2.0,SHA-256 exact byte match between prior and current packages,COMPARISON
+OLD_D13,C_witness,prior_pack_theme,0.65,Prior network title/description mentions theme; not new independent support,PRIOR_NET
+OLD_D13,C_calibration,prior_pack_theme,0.65,Prior network title/description mentions theme; not new independent support,PRIOR_NET
+OLD_D13,C_adapters,prior_pack_theme,0.65,Prior network title/description mentions theme; not new independent support,PRIOR_NET
+OLD_D14,C_versioning,prior_pack_theme,0.65,Prior network title/description mentions theme; not new independent support,PRIOR_NET
+OLD_D15,C_claims,prior_pack_theme,0.65,Prior network title/description mentions theme; not new independent support,PRIOR_NET
