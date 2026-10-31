@@ -89,7 +89,21 @@ class TestFreshSealIsCoherent(SealedDir):
     def test_full_audit_reports_version(self):
         with contextlib.redirect_stdout(io.StringIO()):
             r = be.audit_file(self.path("code.py"))
-        self.assertEqual(r["audit_version"], "10.9.2")
+        # The sidecar-2.0 checks arrived in 10.9.2; later versions keep them.
+        version = tuple(int(x) for x in r["audit_version"].split("."))
+        self.assertGreaterEqual(version, (10, 9, 2))
+
+    def test_fresh_seal_overall_status_is_pass(self):
+        """R1 (GPT-6): INFO findings (SC-004, SA-006) must not move a
+        clean file away from PASS. audit_file() must return PASS for
+        every freshly sealed file."""
+        for name in FILES:
+            with contextlib.redirect_stdout(io.StringIO()):
+                r = be.audit_file(self.path(name))
+            self.assertEqual(r["overall_status"], "PASS", name)
+            self.assertEqual(r["actionable_findings"], 0, name)
+            # INFO findings may exist but do not count as actionable
+            self.assertGreaterEqual(r["total_findings"], 0, name)
 
     def test_fresh_seal_overall_status_is_pass(self):
         """R1 (GPT-6): INFO findings (SC-004, SA-006) must not move a
