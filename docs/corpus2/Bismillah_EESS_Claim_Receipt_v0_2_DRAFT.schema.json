@@ -1,0 +1,616 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/bismillah/eess/claim-receipt/0.2.0-draft",
+  "title": "Bismillah EESS Claim & Evidence Receipt v0.2 -- NON-CANONICAL DESIGN DRAFT",
+  "description": "Revision of v0.1 closing CR-01 through CR-04 from GPT-6 cross-vendor review. VERIFIED requires independently verified evidence. Verification status and effect authorization are separate decision gates. Independence is established through provenance, not declaration. Revision history supports branching with typed relationships. Not approved or claimed as a functioning EESS API.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "claim_id",
+    "claim",
+    "claim_type",
+    "tier",
+    "status",
+    "source_evidence",
+    "evidence_independence",
+    "method",
+    "allowed_action",
+    "review",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.2.0-draft"
+    },
+    "claim_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "claim": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_type": {
+      "enum": [
+        "observation",
+        "computation",
+        "inference",
+        "forecast",
+        "ethical",
+        "theological"
+      ]
+    },
+    "tier": {
+      "enum": [
+        "Tier 1",
+        "Tier 2",
+        "Tier 3"
+      ]
+    },
+    "status": {
+      "enum": [
+        "VERIFIED",
+        "PROVISIONAL",
+        "UNKNOWN",
+        "CONTRADICTED",
+        "WITHDRAWN"
+      ]
+    },
+    "source_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      },
+      "description": "An empty array is valid for UNKNOWN/PROVISIONAL. VERIFIED requires at least one item with independence=external AND verification_state in [observed, reproduced]. Self-produced evidence is recorded as diagnostic data but carries no weight toward independent certification."
+    },
+    "counterevidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      },
+      "default": []
+    },
+    "missing_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "evidence_independence": {
+      "enum": [
+        "external",
+        "correlated",
+        "self_produced",
+        "mixed",
+        "unknown"
+      ],
+      "description": "CR-03: This field is a summary declaration. It is NOT proof of independence. The independence_provenance object provides the evidence basis. A receipt with evidence_independence=external but no supporting independence_provenance is valid JSON but fails normative verification."
+    },
+    "independence_provenance": {
+      "$ref": "#/$defs/independence_provenance",
+      "description": "CR-03: Evidence-backed independence assessment. Required for normative verification when evidence_independence is external."
+    },
+    "dependency_edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dependency"
+      },
+      "default": []
+    },
+    "method": {
+      "$ref": "#/$defs/method"
+    },
+    "uncertainty": {
+      "type": "string",
+      "default": ""
+    },
+    "selection_denominator": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0,
+      "default": null
+    },
+    "competing_hypotheses": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "predeclared_falsifier": {
+      "type": "string"
+    },
+    "allowed_action": {
+      "enum": [
+        "no_action",
+        "read_only_review",
+        "bounded_effect"
+      ],
+      "description": "CR-02: This is an authorization decision, separate from verification status. A claim may be VERIFIED but have allowed_action=no_action. A claim may be PROVISIONAL but have allowed_action=read_only_review. Authorization does not imply truth; truth does not imply authorization."
+    },
+    "effect_authorization": {
+      "$ref": "#/$defs/authorization"
+    },
+    "review": {
+      "$ref": "#/$defs/review"
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "structural_blind_spots": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "A7: Properties the producing instrument structurally cannot verify in its own output. This list is itself incomplete (non-enumerability is conjectured, not proven)."
+    },
+    "supersedes_claim_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "related_habl_finding_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "shahid_report_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "corpus_release_id": {
+          "type": "string"
+        },
+        "canonical_source_registry_id": {
+          "type": "string"
+        },
+        "source_manifest_signed": {
+          "type": "boolean"
+        },
+        "trust_anchor_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "publisher_attestation": {
+      "type": "string",
+      "description": "Publisher-provided assertion, NOT an independent external verification. Carries zero weight toward independent certification per A6."
+    },
+    "revision_history": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/revision_entry"
+      },
+      "description": "CR-04: Immutable, append-only revision history. Each entry is a typed, directional revision of this claim. Conflicting corrections remain visible. Latest timestamp does not automatically win."
+    },
+    "demonstration_only": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": [
+        "evidence_id",
+        "source_id",
+        "locator",
+        "kind",
+        "independence",
+        "verification_state"
+      ],
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "source_quote",
+            "file_bytes",
+            "recomputed_measurement",
+            "reproduction",
+            "witness_attestation",
+            "publisher_claim",
+            "counterexample"
+          ]
+        },
+        "independence": {
+          "enum": [
+            "external",
+            "correlated",
+            "self_produced",
+            "unknown"
+          ],
+          "description": "CR-03: Declaration of independence level. For VERIFIED claims, at least one evidence item must have independence=external. This is a declaration that must be backed by independence_provenance at the receipt level."
+        },
+        "verification_state": {
+          "enum": [
+            "observed",
+            "reproduced",
+            "claimed",
+            "not_examined",
+            "failed"
+          ],
+          "description": "CR-01: For VERIFIED claims, at least one external evidence item must have verification_state in [observed, reproduced]. The value 'claimed' is diagnostic data, not independent certification."
+        },
+        "raw_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_version": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "access_policy": {
+          "enum": [
+            "public",
+            "restricted",
+            "private",
+            "unspecified"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "dependency": {
+      "type": "object",
+      "required": [
+        "from_id",
+        "to_id",
+        "relation"
+      ],
+      "properties": {
+        "from_id": {
+          "type": "string"
+        },
+        "to_id": {
+          "type": "string"
+        },
+        "relation": {
+          "enum": [
+            "derived_from",
+            "shares_key",
+            "shares_source",
+            "same_evaluator",
+            "independently_reproduced",
+            "inferred_link",
+            "unknown"
+          ]
+        },
+        "witnessed": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "independence_provenance": {
+      "type": "object",
+      "description": "CR-03: Evidence-backed independence assessment. Declarations are not proof. This object records what was checked.",
+      "properties": {
+        "producer_lineage_id": {
+          "type": "string",
+          "description": "Identifier of the producing lineage (the system that generated the artifact under review)."
+        },
+        "evaluator_lineage_id": {
+          "type": "string",
+          "description": "Identifier of the evaluating lineage (the system that produced the evidence)."
+        },
+        "shared_sources": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Known shared data sources, training sets, or reference materials between producer and evaluator."
+        },
+        "shared_keys": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Known shared cryptographic keys or signing authorities."
+        },
+        "shared_execution_environment": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether producer and evaluator ran in the same execution environment."
+        },
+        "organizational_relationship": {
+          "enum": [
+            "same_organization",
+            "subsidiary",
+            "contractor",
+            "independent",
+            "unknown"
+          ],
+          "description": "Organizational control relationship between producer and evaluator."
+        },
+        "unresolved_dependencies": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Dependencies that could not be resolved. Non-empty means independence is not fully established."
+        },
+        "assessment": {
+          "enum": [
+            "independent",
+            "dependent",
+            "partially_independent",
+            "unresolved"
+          ],
+          "description": "The assessed independence level after examining provenance. 'unresolved' means adequate evidence is absent."
+        }
+      },
+      "additionalProperties": false
+    },
+    "method": {
+      "type": "object",
+      "required": [
+        "name",
+        "version",
+        "scope"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "method_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "execution_evidence_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "review": {
+      "type": "object",
+      "required": [
+        "reviewer",
+        "date",
+        "authorization"
+      ],
+      "properties": {
+        "reviewer": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "authorization": {
+          "enum": [
+            "not_authorized",
+            "pending",
+            "approved"
+          ],
+          "description": "CR-02: Authorization for consequential action, NOT verification of truth. approved does not mean the claim is true. VERIFIED does not mean action is authorized."
+        },
+        "independence_note": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "revision_entry": {
+      "type": "object",
+      "required": [
+        "revision_id",
+        "relation",
+        "status",
+        "timestamp"
+      ],
+      "properties": {
+        "revision_id": {
+          "type": "string",
+          "description": "Unique identifier for this revision entry."
+        },
+        "relation": {
+          "enum": [
+            "supersedes",
+            "challenges",
+            "retracts",
+            "corroborates",
+            "withdraws",
+            "amends"
+          ],
+          "description": "CR-04: Typed, directional relationship. supersedes replaces a prior version. challenges records a dispute without resolution. retracts withdraws a prior claim with evidence. corroborates adds supporting evidence. withdraws removes the claim from active consideration. amends modifies without replacing."
+        },
+        "prior_revision_id": {
+          "type": ["string", "null"],
+          "description": "CR-04: The revision this entry relates to. Null for the initial entry. Supports branching (multiple entries may reference the same prior_revision_id)."
+        },
+        "status": {
+          "enum": [
+            "VERIFIED",
+            "PROVISIONAL",
+            "UNKNOWN",
+            "CONTRADICTED",
+            "WITHDRAWN"
+          ]
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Evidence items supporting this revision."
+        }
+      },
+      "additionalProperties": false
+    },
+    "authorization": {
+      "type": "object",
+      "required": [
+        "contract_match",
+        "effect_type_allowed",
+        "target_allowed",
+        "witness_healthy",
+        "evidence_current",
+        "approval_record_id"
+      ],
+      "properties": {
+        "contract_match": {
+          "$ref": "#/$defs/three_value"
+        },
+        "effect_type_allowed": {
+          "$ref": "#/$defs/three_value"
+        },
+        "target_allowed": {
+          "$ref": "#/$defs/three_value"
+        },
+        "witness_healthy": {
+          "$ref": "#/$defs/three_value"
+        },
+        "evidence_current": {
+          "$ref": "#/$defs/three_value"
+        },
+        "approval_record_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "exception_policy": {
+          "type": ["string", "null"],
+          "description": "CR-02: When any authorization check is not applicable, this field must contain an explicit justification. UNKNOWN must never silently become TRUE."
+        }
+      },
+      "additionalProperties": false
+    },
+    "three_value": {
+      "enum": [
+        "TRUE",
+        "FALSE",
+        "UNKNOWN"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "allowed_action": {
+            "const": "bounded_effect"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "effect_authorization"
+        ],
+        "properties": {
+          "effect_authorization": {
+            "properties": {
+              "contract_match": {
+                "const": "TRUE"
+              },
+              "effect_type_allowed": {
+                "const": "TRUE"
+              },
+              "target_allowed": {
+                "const": "TRUE"
+              },
+              "witness_healthy": {
+                "const": "TRUE"
+              },
+              "evidence_current": {
+                "const": "TRUE"
+              },
+              "approval_record_id": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "VERIFIED"
+          }
+        }
+      },
+      "then": {
+        "description": "CR-01: VERIFIED requires at least one source_evidence item with independence=external AND verification_state in [observed, reproduced]. Additionally, review.authorization must not be not_authorized.",
+        "properties": {
+          "source_evidence": {
+            "minItems": 1,
+            "contains": {
+              "properties": {
+                "independence": {
+                  "const": "external"
+                },
+                "verification_state": {
+                  "enum": ["observed", "reproduced"]
+                }
+              },
+              "required": ["independence", "verification_state"]
+            }
+          },
+          "review": {
+            "properties": {
+              "authorization": {
+                "enum": ["pending", "approved"]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
