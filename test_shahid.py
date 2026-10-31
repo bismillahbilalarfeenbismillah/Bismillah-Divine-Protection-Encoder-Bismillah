@@ -599,6 +599,46 @@ class TestFileIO(unittest.TestCase):
         with self.assertRaises(ValueError):
             shahid.write_report(r, self.d)
 
+    def test_concurrent_writers_exactly_one_succeeds(self):
+        """SH-07 (GPT-6): concurrent exclusive creates -- exactly one wins."""
+        import threading
+
+        report_id = "shahid-race-test"
+        results = {"success": 0, "exists": 0}
+        lock = threading.Lock()
+        barrier = threading.Barrier(2)
+
+        def writer(publisher_name):
+            r = shahid.ShahidReport(
+                report_id=report_id,
+                publisher=publisher_name,
+                subject=shahid.ReportSubject(name="m"),
+            )
+            barrier.wait()  # synchronize both writers
+            try:
+                shahid.write_report(r, self.d)
+                with lock:
+                    results["success"] += 1
+            except FileExistsError:
+                with lock:
+                    results["exists"] += 1
+
+        t1 = threading.Thread(target=writer, args=("writer-1",))
+        t2 = threading.Thread(target=writer, args=("writer-2",))
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
+
+        self.assertEqual(results["success"], 1, "exactly one writer should succeed")
+        self.assertEqual(results["exists"], 1, "exactly one writer should get FileExistsError")
+
+        # The surviving report is readable
+        reports = shahid.list_reports(self.d)
+        self.assertEqual(len(reports), 1)
+        saved = shahid.read_report(reports[0])
+        self.assertIn(saved.publisher, ("writer-1", "writer-2"))
+
     def test_deterministic_path(self):
         """SH-06 (GPT-6): same ID always produces same path."""
         p1 = shahid.report_path(self.d, report_id="shahid-stable")

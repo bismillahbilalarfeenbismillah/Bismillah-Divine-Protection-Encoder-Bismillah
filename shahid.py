@@ -831,6 +831,8 @@ def write_report(
     Raises FileExistsError if the file already exists and
     overwrite is False.
     """
+    import os as _os
+
     _validate_report_id(report.report_id)
     base = Path(project_root) / SHAHID_DIR
     base.mkdir(parents=True, exist_ok=True)
@@ -839,12 +841,26 @@ def write_report(
     if not path.resolve().is_relative_to(base.resolve()):
         msg = f"report_id {report.report_id!r} would escape the report directory"
         raise ValueError(msg)
-    if path.exists() and not overwrite:
-        raise FileExistsError(
-            f"report {report.report_id!r} already exists at {path}. "
-            f"Pass overwrite=True to replace it."
-        )
-    path.write_text(report.to_json() + "\n", encoding="utf-8")
+
+    data = (report.to_json() + "\n").encode("utf-8")
+
+    if overwrite:
+        # SH-07 (GPT-6): atomic replacement via temp + rename.
+        tmp = path.with_suffix(".tmp")
+        tmp.write_bytes(data)
+        _os.replace(str(tmp), str(path))
+    else:
+        # SH-07 (GPT-6): exclusive creation -- O_CREAT | O_EXCL.
+        # open(..., "x") fails atomically if the file exists,
+        # closing the TOCTOU race between exists() and write().
+        try:
+            with open(path, "xb") as fh:
+                fh.write(data)
+        except FileExistsError:
+            raise FileExistsError(
+                f"report {report.report_id!r} already exists at {path}. "
+                f"Pass overwrite=True to replace it."
+            ) from None
     return path
 
 
