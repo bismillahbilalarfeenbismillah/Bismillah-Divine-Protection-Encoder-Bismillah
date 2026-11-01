@@ -1,0 +1,74 @@
+{
+  "schema_version": "0.1.0-draft",
+  "claim_id": "DEMO-PROV-001",
+  "claim": "An illustrative public dataset claims to have been updated within the prior seven days.",
+  "claim_type": "observation",
+  "tier": "Tier 3",
+  "status": "PROVISIONAL",
+  "demonstration_only": true,
+  "source_evidence": [
+    {
+      "evidence_id": "DEMO-EVID-01",
+      "source_id": "DEMO-SRC-01",
+      "locator": "Illustrative sample metadata; not a real dataset",
+      "kind": "publisher_claim",
+      "independence": "self_produced",
+      "verification_state": "claimed",
+      "raw_sha256": null,
+      "source_version": "demo-0",
+      "access_policy": "public"
+    }
+  ],
+  "counterevidence": [],
+  "missing_evidence": [
+    "No independent source timestamp fetched",
+    "No raw bytes or checksum independently examined"
+  ],
+  "evidence_independence": "self_produced",
+  "dependency_edges": [
+    {
+      "from_id": "DEMO-EVID-01",
+      "to_id": "DEMO-SRC-01",
+      "relation": "derived_from",
+      "witnessed": false
+    }
+  ],
+  "method": {
+    "name": "illustrative metadata review",
+    "version": "demo-0.1",
+    "scope": "no data fetched",
+    "method_sha256": null,
+    "execution_evidence_id": null
+  },
+  "uncertainty": "This is a design example, not measured freshness or a real-world claim.",
+  "selection_denominator": null,
+  "competing_hypotheses": [
+    "H0: metadata was formatted incorrectly",
+    "H1: metadata may be stale",
+    "H2: source selection is wrong"
+  ],
+  "predeclared_falsifier": "A documented retrieval of the official dataset showing a conflicting update date.",
+  "allowed_action": "read_only_review",
+  "review": {
+    "reviewer": "illustrative sample only",
+    "date": "2026-10-31",
+    "authorization": "not_authorized",
+    "independence_note": "no independent review performed"
+  },
+  "limitations": [
+    "no independent source examined",
+    "no domain validation",
+    "not suitable for any consequential decision"
+  ],
+  "supersedes_claim_id": null,
+  "related_habl_finding_ids": [],
+  "shahid_report_ids": [],
+  "provenance": {
+    "corpus_release_id": "example-only",
+    "canonical_source_registry_id": "none",
+    "source_manifest_signed": false,
+    "trust_anchor_id": null
+  },
+  "publisher_attestation": "Sample text, not independently authenticated or certified.",
+  "revision_history": []
+}

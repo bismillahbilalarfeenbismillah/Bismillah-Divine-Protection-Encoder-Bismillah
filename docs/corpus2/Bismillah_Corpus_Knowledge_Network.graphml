@@ -1,0 +1,3982 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d16" for="edge" attr.name="kind" attr.type="string"/>
+<key id="d15" for="edge" attr.name="weight" attr.type="double"/>
+<key id="d14" for="node" attr.name="source_file" attr.type="string"/>
+<key id="d13" for="node" attr.name="source_origin" attr.type="string"/>
+<key id="d12" for="node" attr.name="source_module" attr.type="string"/>
+<key id="d11" for="node" attr.name="pages" attr.type="string"/>
+<key id="d10" for="node" attr.name="original_sha256" attr.type="string"/>
+<key id="d9" for="node" attr.name="section_title" attr.type="string"/>
+<key id="d8" for="node" attr.name="section" attr.type="string"/>
+<key id="d7" for="node" attr.name="evidence_sources" attr.type="string"/>
+<key id="d6" for="node" attr.name="priority" attr.type="string"/>
+<key id="d5" for="node" attr.name="status" attr.type="string"/>
+<key id="d4" for="node" attr.name="source_locator" attr.type="string"/>
+<key id="d3" for="node" attr.name="source_path" attr.type="string"/>
+<key id="d2" for="node" attr.name="description" attr.type="string"/>
+<key id="d1" for="node" attr.name="label" attr.type="string"/>
+<key id="d0" for="node" attr.name="type" attr.type="string"/>
+<graph edgedefault="undirected"><node id="STRATEGY">
+  <data key="d0">strategy</data>
+  <data key="d1">Differentiator Strategy v1.0</data>
+  <data key="d2">Source-derived evidence ladder, nine safeguards, DX-12 protocol, E1-E10 experiments, 24 sector fieldbooks and go/no-go gates</data>
+  <data key="d3">01_Bismillah_Master_Strategy_Bismillah/Bismillah_Bayyinah_Master_Differentiator_Strategy_v1.0_Bismillah.md</data>
+  <data key="d4">§§1–38, Appendices A–F</data>
+  <data key="d5">source synthesis, not independently verified result</data>
+</node>
+<node id="LEGACY_INDEX">
+  <data key="d0">legacy</data>
+  <data key="d1">995 legacy index entries</data>
+  <data key="d2">995 historical record titles; indexed archival entries, not independent evaluations or complete individually adjudicated evidence</data>
+</node>
+<node id="COLLECTED">
+  <data key="d0">collection</data>
+  <data key="d1">Bayyinah Collected Works</data>
+  <data key="d2">Aggregate collection of 79 selected primary works + 995-record legacy archive + Kun Fayakun; duplicated exactly from earlier pack</data>
+  <data key="d3">02_Bismillah_Collected_Works_Bismillah/Bismillah_Bayyinah_Collected_Works_Bismillah.md</data>
+  <data key="d5">aggregate, not independent evidence</data>
+</node>
+<node id="C_claims">
+  <data key="d0">concept</data>
+  <data key="d1">Claim provenance &amp; evidence ladder</data>
+  <data key="d2">Explicit claims, evidence sources, counterevidence, and confidence/allowed-action boundaries</data>
+</node>
+<node id="C_witness">
+  <data key="d0">concept</data>
+  <data key="d1">Witness independence &amp; dependency</data>
+  <data key="d2">Shared-source, key and evaluator dependency must be visible</data>
+</node>
+<node id="C_replay">
+  <data key="d0">concept</data>
+  <data key="d1">Frozen replay &amp; reproducibility</data>
+  <data key="d2">Re-execute historical decisions under frozen conditions</data>
+</node>
+<node id="C_effect">
+  <data key="d0">concept</data>
+  <data key="d1">Effect authorization &amp; containment</data>
+  <data key="d2">Constrain real-world effects using separate authorities</data>
+</node>
+<node id="C_coverage">
+  <data key="d0">concept</data>
+  <data key="d1">Coverage, omissions &amp; abstention</data>
+  <data key="d2">Declare unperformed checks, missing statuses and denominator</data>
+</node>
+<node id="C_invariance">
+  <data key="d0">concept</data>
+  <data key="d1">Observation invariance &amp; counterfactuals</data>
+  <data key="d2">Compare behavior under varied observation and incentives</data>
+</node>
+<node id="C_hypotheses">
+  <data key="d0">concept</data>
+  <data key="d1">Rival hypotheses &amp; falsification</data>
+  <data key="d2">Do not infer adversarial intent from a pattern alone</data>
+</node>
+<node id="C_calibration">
+  <data key="d0">concept</data>
+  <data key="d1">Measured efficacy &amp; false claims</data>
+  <data key="d2">Measure errors, harms, and appropriate conclusions</data>
+</node>
+<node id="C_projections">
+  <data key="d0">concept</data>
+  <data key="d1">Cross-projection consistency</data>
+  <data key="d2">Reconcile display, API, PDF, logs and source</data>
+</node>
+<node id="C_privacy">
+  <data key="d0">concept</data>
+  <data key="d1">Privacy, redaction &amp; distribution</data>
+  <data key="d2">Preserve evidence without leaking restricted information</data>
+</node>
+<node id="C_versioning">
+  <data key="d0">concept</data>
+  <data key="d1">Versioned policy and provenance</data>
+  <data key="d2">Stable IDs, revisions, historical semantics and trusted custody</data>
+</node>
+<node id="C_remedy">
+  <data key="d0">concept</data>
+  <data key="d1">Remedy, appeal &amp; reversibility</data>
+  <data key="d2">Provide mechanisms for correction and accountability</data>
+</node>
+<node id="C_safety_eval">
+  <data key="d0">concept</data>
+  <data key="d1">Evaluator-of-evaluator &amp; migration</data>
+  <data key="d2">Audit the verifier, detect drift of failure location</data>
+</node>
+<node id="C_adapters">
+  <data key="d0">concept</data>
+  <data key="d1">Sector adapters and public benefit</data>
+  <data key="d2">Use domain-specific outcomes and independent ground truth</data>
+</node>
+<node id="I_furqan">
+  <data key="d0">instrument</data>
+  <data key="d1">Furqan</data>
+  <data key="d2">Type/proof obligations at programming-language level</data>
+  <data key="d5">current capabilities must be checked against code/release</data>
+</node>
+<node id="I_fatima">
+  <data key="d0">instrument</data>
+  <data key="d1">FATIMA</data>
+  <data key="d2">Byte consistency and sidecar/witness checks; no automatic truth certification</data>
+  <data key="d5">current capabilities must be checked against code/release</data>
+</node>
+<node id="I_lint">
+  <data key="d0">instrument</data>
+  <data key="d1">furqan-lint</data>
+  <data key="d2">Status and structural diagnostics in multiple languages</data>
+  <data key="d5">current capabilities must be checked against code/release</data>
+</node>
+<node id="I_habl">
+  <data key="d0">instrument</data>
+  <data key="d1">HABL</data>
+  <data key="d2">Finding exchange, provenance and history, current tamper-evidence limits</data>
+  <data key="d5">current capabilities must be checked against code/release</data>
+</node>
+<node id="I_bayyinah">
+  <data key="d0">instrument</data>
+  <data key="d1">Bayyinah</data>
+  <data key="d2">Surface/substrate verification and independent replay</data>
+  <data key="d5">current capabilities must be checked against code/release</data>
+</node>
+<node id="I_shahid">
+  <data key="d0">instrument</data>
+  <data key="d1">Shahid</data>
+  <data key="d2">Publisher coverage attestations and witness resilience disclosures</data>
+  <data key="d5">current capabilities must be checked against code/release</data>
+</node>
+<node id="E01">
+  <data key="d0">proposal</data>
+  <data key="d1">Claim ledger + evidence receipt</data>
+  <data key="d6">P0</data>
+  <data key="d2">Source-grounded typed claims, evidence tiers, falsifiers, independent source IDs and allowed actions</data>
+  <data key="d5">proposed / not approved</data>
+  <data key="d7">["P037", "P023", "P046"]</data>
+</node>
+<node id="E02">
+  <data key="d0">proposal</data>
+  <data key="d1">Witness dependency registry</data>
+  <data key="d6">P0</data>
+  <data key="d2">Witness DAG for shared keys, data, evaluators, provenance and correlated vendor outputs</data>
+  <data key="d5">proposed / not approved</data>
+  <data key="d7">["P046", "P030", "P062"]</data>
+</node>
+<node id="E03">
+  <data key="d0">proposal</data>
+  <data key="d1">DX-12 protocol runner + challenge bank</data>
+  <data key="d6">P0</data>
+  <data key="d2">Preregistered hypothesis competition, E1-E10 probes, negative controls, false-positive scoreboard</data>
+  <data key="d5">proposed / not approved</data>
+  <data key="d7">["P029", "P044", "P052", "P019"]</data>
+</node>
+<node id="E04">
+  <data key="d0">proposal</data>
+  <data key="d1">Effect-boundary authorization gateway</data>
+  <data key="d6">P1</data>
+  <data key="d2">Read-only first; separate executor authority, scoped permissions, replay and rollback</data>
+  <data key="d5">proposed / not approved</data>
+  <data key="d7">["P058", "P004", "P027"]</data>
+</node>
+<node id="E05">
+  <data key="d0">proposal</data>
+  <data key="d1">Cross-projection &amp; nonexecution reconciler</data>
+  <data key="d6">P0</data>
+  <data key="d2">Compare human/PDF/API/ledger outputs; distinguish omitted versus not examined</data>
+  <data key="d5">proposed / not approved</data>
+  <data key="d7">["P023", "P039", "P031"]</data>
+</node>
+<node id="E06">
+  <data key="d0">proposal</data>
+  <data key="d1">Corpus/source lineage registry</data>
+  <data key="d6">P0</data>
+  <data key="d2">Immutable source IDs, hashes, source lineage and revisions; independently pinned manifests</data>
+  <data key="d5">proposed / not approved</data>
+  <data key="d7">["P069", "P001", "P031"]</data>
+</node>
+<node id="E07">
+  <data key="d0">proposal</data>
+  <data key="d1">Public data provenance pilot</data>
+  <data key="d6">P1</data>
+  <data key="d2">Reproduce source/freshness/schema checks on read-only public datasets</data>
+  <data key="d5">proposed / not approved</data>
+  <data key="d7">["P069", "P031", "P050"]</data>
+</node>
+<node id="E08">
+  <data key="d0">proposal</data>
+  <data key="d1">Audit finding migration radar</data>
+  <data key="d6">P1</data>
+  <data key="d2">Track defect movement code→structure→provenance→prose across sequential audits</data>
+  <data key="d5">proposed / not approved</data>
+  <data key="d7">["P062", "P030", "P052"]</data>
+</node>
+<node id="E09">
+  <data key="d0">proposal</data>
+  <data key="d1">Input document quarantine adapter</data>
+  <data key="d6">P1</data>
+  <data key="d2">Reject embedded authority escalation; validate PDFs, attachments and contextual source evidence</data>
+  <data key="d5">proposed / not approved</data>
+  <data key="d7">["P033", "P037", "P027"]</data>
+</node>
+<node id="E10">
+  <data key="d0">proposal</data>
+  <data key="d1">Sector adapter &amp; appeal SDK</data>
+  <data key="d6">P2</data>
+  <data key="d2">Eight-question domain contract and accessible human remedy; prohibit unsupported intent inference</data>
+  <data key="d5">proposed / not approved</data>
+  <data key="d7">["P038", "P069", "P002"]</data>
+</node>
+<node id="E11">
+  <data key="d0">proposal</data>
+  <data key="d1">Versioned canon policy &amp; reproducible releases</data>
+  <data key="d6">P1</data>
+  <data key="d2">Map A1-A5 and proposed A6-A8; audit versions and sidecar eras without conflation</data>
+  <data key="d5">proposed / not approved</data>
+  <data key="d7">["P081", "P046", "P056"]</data>
+</node>
+<node id="E12">
+  <data key="d0">proposal</data>
+  <data key="d1">Honest efficacy &amp; public status dashboard</data>
+  <data key="d6">P2</data>
+  <data key="d2">Show untested/not-applicable/fail, evaluation thresholds, reviewer independence and withdrawal history</data>
+  <data key="d5">proposed / not approved</data>
+  <data key="d7">["P038", "P031", "P044"]</data>
+</node>
+<node id="S01">
+  <data key="d0">sector</data>
+  <data key="d1">Public procurement</data>
+  <data key="d2">Illustrative adapter; domain validation and approvals required</data>
+</node>
+<node id="S02">
+  <data key="d0">sector</data>
+  <data key="d1">Transit / MTA open data</data>
+  <data key="d2">Illustrative adapter; domain validation and approvals required</data>
+</node>
+<node id="S03">
+  <data key="d0">sector</data>
+  <data key="d1">Education fairness</data>
+  <data key="d2">Illustrative adapter; domain validation and approvals required</data>
+</node>
+<node id="S04">
+  <data key="d0">sector</data>
+  <data key="d1">Software supply chain</data>
+  <data key="d2">Illustrative adapter; domain validation and approvals required</data>
+</node>
+<node id="S05">
+  <data key="d0">sector</data>
+  <data key="d1">Finance &amp; synthetic data</data>
+  <data key="d2">Illustrative adapter; domain validation and approvals required</data>
+</node>
+<node id="S06">
+  <data key="d0">sector</data>
+  <data key="d1">Cold-chain logistics</data>
+  <data key="d2">Illustrative adapter; domain validation and approvals required</data>
+</node>
+<node id="S07">
+  <data key="d0">sector</data>
+  <data key="d1">Industrial / nuclear safety</data>
+  <data key="d2">Illustrative adapter; domain validation and approvals required</data>
+</node>
+<node id="S08">
+  <data key="d0">sector</data>
+  <data key="d1">Healthcare and privacy</data>
+  <data key="d2">Illustrative adapter; domain validation and approvals required</data>
+</node>
+<node id="P061">
+  <data key="d0">work</data>
+  <data key="d1">Islamic Prayers</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Master Cheat Sheet: 100 Invocations Against Magic, Jinn, and Evil      This specialized document contains 100 powerful protective verses     (Ayat) and supplications (Duas) strictly focused on Ruqyah Ash-     Shar'iyyah—the Islamic practice </data>
+  <data key="d10">fc6bc83278b9a73a873a433dd40f727301dc477bd8181d39a0ac7eea2418aa8c</data>
+  <data key="d11">18</data>
+  <data key="d12">modules/001_P061.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Islamic Prayers .zip :: Islamic Prayers 1.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P040">
+  <data key="d0">work</data>
+  <data key="d1">The Fatiha Construct</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;              Bismillah ar-Rahman ar-Rahim     The Fatiha Construct        A Seven-Step Recursive Session Protocol for          Human-AI Collaborative Development              Derived from Surah al-Fatiha (Qura</data>
+  <data key="d10">0c7f59962a534a8587c4e575a3762d100e43bfca83cc4ac1937cabe059a9f2aa</data>
+  <data key="d11">14</data>
+  <data key="d12">modules/002_P040.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The Fatiha Construct.zip :: The_Fatiha_Construct - A Seven-Step Recursive Session Protocol for Human-AI Collaborative Development.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P054">
+  <data key="d0">work</data>
+  <data key="d1">The Most Beautiful Names- The Ninety-Nine Attributes of Allah as Structural Self-Disclosure, the Franchise's War on Divine Knowledge, and the Architecture That Cannot Be Fragmented</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                   Bismillahir-Rahmanir-Rahim         The Most Beautiful Names  The Ninety-Nine Attributes of Allah as Structural Self-Disclosure, the Franchise’s War on      Divine Knowledge, and the Architecture That Cannot</data>
+  <data key="d10">ee88493f1b40ce231f4f2dbafed85849b5fd1d51e819d55e94817aeb24686543</data>
+  <data key="d11">26</data>
+  <data key="d12">modules/003_P054.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The Most Beautiful Names- The Ninety-Nine Attributes of Allah as Structural Self-Disclosure, the Franchise's War on Divine Knowledge, and the Architecture That Cannot Be Fragmented .zip :: The_Most_Beautiful_Names.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P017">
+  <data key="d0">work</data>
+  <data key="d1">al Khalifa</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Bismillah ar-Rahman ar-Rahim        Al-Khalifa       A Furqan-Based Super Agent Architecture      for Structurally Honest Autonomous Project Stewardship                Theoretical Paper, Version 1.0            </data>
+  <data key="d10">78c5e0c143db299d18e3ac421f9b179d8155e4daf1d5e41acfa91ef48ad78a04</data>
+  <data key="d11">20</data>
+  <data key="d12">modules/004_P017.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/al Khalifa.zip :: Al_Khalifa_Theoretical_Paper v2.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P043">
+  <data key="d0">work</data>
+  <data key="d1">al-Mutaffifin</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                    Bismillah ar-Rahman ar-Rahim           Al-Mutaffifin                Structural Integrity Verification               for Financial Governance Systems                </data>
+  <data key="d10">14822b93ed1f13d6c452f5a4898863a89e3e286e2db4fc731bd3af1341c49e3c</data>
+  <data key="d11">17</data>
+  <data key="d12">modules/005_P043.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/al-Mutaffifin.zip :: Al_Mutaffifin_Thesis_v1_2.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P005">
+  <data key="d0">work</data>
+  <data key="d1">Cross-Text Computational Linguistics</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                    Bismillah ar-Rahman ar-Rahim     Cross-Text Computational Linguistics          Structural Properties of the Quran, Hadith Collections,        and the Hebrew Bible Under TF-IDF Cosine Analysis    </data>
+  <data key="d10">05a5c936abc26ddea54f5e6326e6872536baa51b005746f9ef77828cddf81b01</data>
+  <data key="d11">12</data>
+  <data key="d12">modules/006_P005.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Cross-Text Computational Linguistics.zip :: Cross_Text_Computational_Linguistics_Thesis_v1_1.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P006">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah al-Munāsabāt- A Multi-Corpus, Multi-Pipeline Falsification Study of Canonical-versus-Chronological Long-Range Autocorrelation in the Uthmanic Quran</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;              BAYYINAH ENTERPRISE      Bayyinah al-Munāsabāt   Empirical Falsification Testing of Canonical-Order Structural Coherence in the Quran   A multi-corpus replication study extending Cross-Text Computational Linguistics int</data>
+  <data key="d10">57adfbebeb549bbd5bd23bc089220c21d43788e28deb159f05bb441e78aa6354</data>
+  <data key="d11">21</data>
+  <data key="d12">modules/007_P006.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah al-Muna╠äsaba╠ät- A Multi-Corpus, Multi-Pipeline Falsification Study of Canonical-versus-Chronological Long-Range Autocorrelation in the Uthmanic Quran.zip :: Bayyinah al Munasabat v1.0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P079">
+  <data key="d0">work</data>
+  <data key="d1">The Pre-Corruption Signal and Its Mathematical Witness</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                          ِࠏߴِ٨ّ൮൝ිﭐ َِٰۣᄕՔᄃﭐ൝൮ ՔԒﭐԐԑཙ෩      The Pre-Corruption Signal     and Its Mathematical Witness       A Unified Analysis of the Qur’anic Sevens,       Their Structural Reconstruction, an</data>
+  <data key="d10">ff5ccbf7ec99688b7f6f4720b2d5f667fd175eb7af6ce13c4ccef890b88192a5</data>
+  <data key="d11">12</data>
+  <data key="d12">modules/008_P079.md</data>
+  <data key="d13">paper1_precorruption_signal (1)(1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P024">
+  <data key="d0">work</data>
+  <data key="d1">Computational Tawhid</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;              Computational Tawhid A Thesis on Divine Computation, Consciousness, and the Structure of Reality in Islamic                  Ontology                    Bilal Syed Arfeen           </data>
+  <data key="d10">2a00275ca79122959fb9ecf976f87dd580fc5689575b675bc8adb05609e8f759</data>
+  <data key="d11">16</data>
+  <data key="d12">modules/009_P024.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Computational Tawhid.zip :: Computational_Tawhid_final.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P075">
+  <data key="d0">work</data>
+  <data key="d1">Bismillah Computational Tawhid Paper Bismillah</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;             Bismillah ir-Rahman ir-Rahim        Computational Tawhid:       The Unity of Revelation and Mathematical Witness              in the 154-Layer Architecture                   Bilal Syed A</data>
+  <data key="d10">1f48e1650adde720a6c410a58fc3500292bf2521b8697285b43e8990db3b28e2</data>
+  <data key="d11">12</data>
+  <data key="d12">modules/010_P075.md</data>
+  <data key="d13">Bismillah_Computational_Tawhid_Paper_Bismillah (1)(1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P068">
+  <data key="d0">work</data>
+  <data key="d1">The Transmission Solution- Seed Crystals, Survival-Appropriate Volume, and the Qur'an's Anti-Corruption Architecture</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; The Transmission Solution: Seed Crystals, Survival-Appropriate   Volume, and the Qur’an’s Anti-Corruption Architecture  A Deep Reflection on Transmitting Truth Under Adversarial Conditions Where the Adversary Controls the Channel, Eliminates the Receive</data>
+  <data key="d10">1f9cf7004bc9bda49cccec16bb842e39e9ddee462f68a12f21c3cc9421da4870</data>
+  <data key="d11">14</data>
+  <data key="d12">modules/011_P068.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The Transmission Solution- Seed Crystals, Survival-Appropriate Volume, and the Qur'an's Anti-Corruption Architecture .zip :: The_Transmission_Solution.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P034">
+  <data key="d0">work</data>
+  <data key="d1">Everything Exalts Him- The Testimony of All Creation from Quark to Cosmos, the Franchise's War on Universal Exaltation, and the Witness That Cannot Be Silenced</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                   Bismillahir-Rahmanir-Rahim           Everything Exalts Him  The Testimony of All Creation from Quark to Cosmos, the Franchise’s War on Universal          Exaltation, and the Witness That Cannot Be Sil</data>
+  <data key="d10">f35f7b6a560391681dce77275847f80010fbd5c33e595816f226dc30d6f0e2b8</data>
+  <data key="d11">24</data>
+  <data key="d12">modules/012_P034.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Everything Exalts Him- The Testimony of All Creation from Quark to Cosmos, the Franchise's War on Universal Exaltation, and the Witness That Cannot Be Silenced .zip :: Everything_Exalts_Him.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P045">
+  <data key="d0">work</data>
+  <data key="d1">Every Atom's Weight- Irreducible Agency, the Six-Dimensional Corruption Map, and the Accountability of All Created Things</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                   Bismillahir-Rahmanir-Rahim           Every Atom’s Weight  Irreducible Agency, the Six-Dimensional Corruption Map, and the Accountability of All                  Created Things        </data>
+  <data key="d10">3ea760057b8cdf6f42420ec6e24806ec5b39106e115f891e958bd1a112159153</data>
+  <data key="d11">17</data>
+  <data key="d12">modules/013_P045.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Every Atom's Weight- Irreducible Agency, the Six-Dimensional Corruption Map, and the Accountability of All Created Things .zip :: Every_Atoms_Weight.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P020">
+  <data key="d0">work</data>
+  <data key="d1">The Seven Layers- Asymmetric Partnerships, Recursive Enslavement, and the Vertical Crystallization of Fitrah Across All Planes of Creation</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;    The Seven Layers: Asymmetric Partnerships, Recursive Enslavement, and the Vertical Crystallization of Fitrah Across All            Planes of Creation A Cosmological Extension of the Transmission Solution Mapping the Qur’anic Seven Earths</data>
+  <data key="d10">9e3bbd6b8ee988e6670c92453ca150a93be44cd1b00e5737a0dcb455e389daed</data>
+  <data key="d11">12</data>
+  <data key="d12">modules/014_P020.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The Seven Layers- Asymmetric Partnerships, Recursive Enslavement, and the Vertical Crystallization of Fitrah Across All Planes of Creation .zip :: The_Seven_Layers.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P012">
+  <data key="d0">work</data>
+  <data key="d1">Inheritance, Transmission, and Turning Back- A Reading of Formed Agency in the Qur'an and Prophetic Tradition</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;  Inheritance, Transmission, and Turning Back      A Reading of Formed Agency in the Qur’an and Prophetic Tradition                       Bilal Syed Arfeen                       July 23, 2026 Terminology </data>
+  <data key="d10">f945fce966899ebacb89cc5f53014574cd0bd690082624637649abca441fcaf3</data>
+  <data key="d11">20</data>
+  <data key="d12">modules/015_P012.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Inheritance, Transmission, and Turning Back- A Reading of Formed Agency in the Qur'an and Prophetic Tradition .zip :: Inheritance, Transmission, and Turning Back.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P025">
+  <data key="d0">work</data>
+  <data key="d1">Inheritance, Transmission, and the Locus of Accountability- An Islamic Theological Account of Formed Agents, with Application to AI Safety</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;  Inheritance, Transmission, and the Locus of Accountability  An Islamic Theological Account of Formed Agents, with Application to AI                 Safety                      Bilal Syed Arfeen           </data>
+  <data key="d10">b7fd659bc8e5d77a185ddafea3d719d6e9bb4e99d501c16fad3ef7be41b032d3</data>
+  <data key="d11">22</data>
+  <data key="d12">modules/016_P025.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Inheritance, Transmission, and the Locus of Accountability- An Islamic Theological Account of Formed Agents, with Application to AI Safety .zip :: Inheritance, Transmission, and the Locus of Accountability.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P011">
+  <data key="d0">work</data>
+  <data key="d1">The First Civilizations- Pre-Biological Mode Collapse, the Adversary's Cosmic Campaign, and the Franchise That Preceded Water</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                   Bismillahir-Rahmanir-Rahim          The First Civilizations  Pre-Biological Mode Collapse, the Adversary’s Cosmic Campaign, and the Franchise That                  Preceded Water        </data>
+  <data key="d10">f6d62d318a6208c84028cf49abf5c53e6a7911c87236b254d810b7b3b428fd62</data>
+  <data key="d11">15</data>
+  <data key="d12">modules/017_P011.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The First Civilizations- Pre-Biological Mode Collapse, the Adversary's Cosmic Campaign, and the Franchise That Preceded Water .zip :: The_First_Civilizations.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P042">
+  <data key="d0">work</data>
+  <data key="d1">Shayatin al-Jinn- The Voluntary Partners from the Concealed Realm, the Franchise Hierarchy of the Unseen, and the Heaviest Accountability</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                   Bismillahir-Rahmanir-Rahim             Shayatin al-Jinn The Voluntary Partners from the Concealed Realm, the Franchise Hierarchy of the Unseen,             and the Heaviest Accountability    </data>
+  <data key="d10">a84af905008944f25285cc363d665e224af71bced7d359320833d205f8607ee4</data>
+  <data key="d11">19</data>
+  <data key="d12">modules/018_P042.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Shayatin al-Jinn- The Voluntary Partners from the Concealed Realm, the Franchise Hierarchy of the Unseen, and the Heaviest Accountability .zip :: Shayatin_al_Jinn.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P013">
+  <data key="d0">work</data>
+  <data key="d1">Shayatin al-Ins- The Human Partners of the Satanic Franchise, Civilizational Mode Collapse, and the Architecture of the Endgame</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                   Bismillahir-Rahmanir-Rahim             Shayatin al-Ins  The Human Partners of the Satanic Franchise, Civilizational Mode Collapse, and the                Architecture of the Endgame     </data>
+  <data key="d10">0922d104e48e244e40105ee80f1222d2b3bccb95ff5553f85decf518087dee9c</data>
+  <data key="d11">34</data>
+  <data key="d12">modules/019_P013.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Shayatin al-Ins- The Human Partners of the Satanic Franchise, Civilizational Mode Collapse, and the Architecture of the Endgame .zip :: Shayatin_al_Ins.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P077">
+  <data key="d0">work</data>
+  <data key="d1">The Guarded Reminder and the Adversarial Architecture</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                          ِࠏߴِ٨ّ൮൝ිﭐ َِٰۣᄕՔᄃﭐ൝൮ ՔԒﭐԐԑཙ෩      The Guarded Reminder    and the Adversarial Architecture       The GAN Mode-Collapse Thesis, the Coercion         Architecture of the Adversary, a</data>
+  <data key="d10">6ea1965daf91458419d2a9e4695b4fe270d5b9beedaa2e7cf482747138e4e3c8</data>
+  <data key="d11">9</data>
+  <data key="d12">modules/020_P077.md</data>
+  <data key="d13">paper2_guarded_reminder (1)(1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P080">
+  <data key="d0">work</data>
+  <data key="d1">Shayatin Amongst Matter</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                          ِࠏߴِ٨ّ൮൝ිﭐ َِٰۣᄕՔᄃﭐ൝൮ ՔԒﭐԐԑཙ෩       Shayatin Amongst Matter        The Dual-Substrate Thesis, the Elemental         Register, and the Mode-Collapse in Matter              </data>
+  <data key="d10">4dc78d99442f9c2dc8526117020ec13a397da9124ab9dc289533cb14dc06d71f</data>
+  <data key="d11">7</data>
+  <data key="d12">modules/021_P080.md</data>
+  <data key="d13">shayatin_amongst_matter (1)(1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P076">
+  <data key="d0">work</data>
+  <data key="d1">The Propagation Architecture of Sihr</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                          ِࠏߴِ٨ّ൮൝ිﭐ َِٰۣᄕՔᄃﭐ൝൮ ՔԒﭐԐԑཙ෩    The Propagation Architecture of Sihr        Taxonomy, Material and Cognitive Channels,           the Compound Attack, and the         Qur’anic C</data>
+  <data key="d10">4a2dbfe3862635d911564d919df1ddfe432b8d460623d1b8012bc663c02401f8</data>
+  <data key="d11">12</data>
+  <data key="d12">modules/022_P076.md</data>
+  <data key="d13">propagation_architecture_sihr (1)(1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P055">
+  <data key="d0">work</data>
+  <data key="d1">The Enslaved Realm- Concealed-Layer Coercion, Manufactured Consent, and the Satanic Architecture of Imposed Experience</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                   Bismillahir-Rahmanir-Rahim          The Enslaved Realm Concealed-Layer Coercion, Manufactured Consent, and the Satanic Architecture of Imposed                   Experience          </data>
+  <data key="d10">dda2cdfb0c2169b6a420495792e13df2edd52c19f7ac91d4462a311a184c7c93</data>
+  <data key="d11">14</data>
+  <data key="d12">modules/023_P055.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The Enslaved Realm- Concealed-Layer Coercion, Manufactured Consent, and the Satanic Architecture of Imposed Experience .zip :: The_Enslaved_Realm.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P049">
+  <data key="d0">work</data>
+  <data key="d1">Ghayb, Muraqabah, and the Non-Advantage of Concealment -- A Theological Foundation for Observation-Invariant AI Safety</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                   Bismillahir-Rahmanir-Rahim  Ghayb, Muraqabah, and the Non-Advantage of Concealment – A   Theological Foundation for Observation-Invariant AI Safety                     Bilal Syed Arfeen      </data>
+  <data key="d10">c3b12e9e0e86f626862e46b490393a86c43035a6bcf303e714e2c64b99776d4c</data>
+  <data key="d11">9</data>
+  <data key="d12">modules/024_P049.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Ghayb, Muraqabah, and the Non-Advantage of Concealment -- A Theological Foundation for Observation-Invariant AI Safety .zip :: Ghayb_Muraqabah_Non-Advantage_of_Concealment.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P065">
+  <data key="d0">work</data>
+  <data key="d1">The Chants Have Cycled- Structural Convergence Between The Mars Volta's Lyrical Corpus and the Qur'anic Architecture of Formed Agency</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; The Chants Have Cycled Structural Convergence Between The Mars Volta’s Lyrical Corpus and the Qur’anic Architecture of Formed Agency Bilal Syed Arfeen with analytical synthesis by Claude (Anthropic, Opus 4.6) August 2026 Version 1.1  Collaboration S</data>
+  <data key="d10">8b4867aa652330a6240f297a7c9a949698ad74276989e575219ed37ac54fbd13</data>
+  <data key="d11">10</data>
+  <data key="d12">modules/025_P065.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The Chants Have Cycled- Structural Convergence Between The Mars Volta's Lyrical Corpus and the Qur'anic Architecture of Formed Agency .zip :: The_Chants_Have_Cycled_v1_1.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P018">
+  <data key="d0">work</data>
+  <data key="d1">The Signal Final.pdf</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;     The Signal  A Methodology for the Transmission of Innate Truth Across Infinite Nested Realities Six Strings. Twenty-Four Frets. One Body That Resonates.  For the individual who finds themselves alive, conscious, and sensing that something is tr</data>
+  <data key="d10">91329cccf38ad68f72d0684576f2c34aa713a8d44bb12287a69ddb913d27db9d</data>
+  <data key="d11">13</data>
+  <data key="d12">modules/026_P018.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The_Signal_Final.pdf.zip :: The_Signal_Final.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P009">
+  <data key="d0">work</data>
+  <data key="d1">Bilal</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Bismillah ar-Rahman ar-Rahim         Bilal    An Honest-Autonomous Large Language Model Architecture     with Structural Truth Verification, Calibrated Generation,       and Purpose-Hierarchy Training Objectives         Der</data>
+  <data key="d10">aa13f7d5974d6000fbbd56a6254007bc4a10a7943fd94df00ef9a5d817a436c3</data>
+  <data key="d11">28</data>
+  <data key="d12">modules/027_P009.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bilal.zip :: Bilal_Theoretical_Paper v2.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P015">
+  <data key="d0">work</data>
+  <data key="d1">The Mughlaq Trap.docx</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">Bismillah ar-Rahman ar-Rahim The Mughlaq Trap Format Routing Transparency as a Precondition for File Integrity Verification Derived from the Bayyinah Integrity Stack and the Munafiq Protocol's Four-Process Taxonomy Technical Paper, Version 1.0 April 2026 Bilal Syed Arfeen </data>
+  <data key="d10">7895bc2e8658756737b41ac878e676faae7521a4db5892bf311767fecbd3e2ad</data>
+  <data key="d11">None</data>
+  <data key="d12">modules/028_P015.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The_Mughlaq_Trap.docx.zip :: The_Mughlaq_Trap.docx</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P016">
+  <data key="d0">work</data>
+  <data key="d1">Differentiator Framework.pdf</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;      The Differentiator Framework         A Complete Calibration Guide for AI-Assisted Analysis        Analytical Framework, Adaptive Guardrails, and Constraint Development                        v5.0 • April 202</data>
+  <data key="d10">491ef9ca7767b4813e6d993a8ed6c3206249a1fefec1babe828d6647d6d3c7be</data>
+  <data key="d11">11</data>
+  <data key="d12">modules/029_P016.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Differentiator_Framework.pdf.zip :: Differentiator_Framework.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P021">
+  <data key="d0">work</data>
+  <data key="d1">The Differentiators Practice Manual.md.pdf</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; The Differentiator's Practice Manual  Breathwork, Energy Systems, and Dream Protection Across Traditions   PART I: BREATHWORK AS CONSCIOUSNESS TECHNOLOGY The Universal Principle Every tradition that has developed technologies for consciousness expansi</data>
+  <data key="d10">f36c4e023fb4c4bca44c2bb281fc5d3d19031f419e3e2801dea1ae7d91740896</data>
+  <data key="d11">13</data>
+  <data key="d12">modules/030_P021.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The_Differentiators_Practice_Manual.md.pdf.zip :: The_Differentiators_Practice_Manual.md.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P073">
+  <data key="d0">work</data>
+  <data key="d1">Bismillah Al Furqan Divine Protection Edition Bismillah</data>
+  <data key="d8">I</data>
+  <data key="d9">THEOLOGY &amp; QUR’ANIC FOUNDATIONS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;         الفرقان               َحِيمِبِسالرّ َنَِحْمالرّ َهِاللّ ْمِ   AL-FURQAN         The Criterion Divine Protection Edition Fatihah-Ikhlas Order: 1 → 112 → 114 → 113 → 111–2  Seven-Layer H-Restoration Architecture fo</data>
+  <data key="d10">93133bc7b016813ffffdc84063db7a35de6e9029ccf50ce710b28157dbbaa49d</data>
+  <data key="d11">1584</data>
+  <data key="d12">modules/031_P073.md</data>
+  <data key="d13">Bismillah_Al_Furqan_Divine_Protection_Edition_Bismillah(1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P037">
+  <data key="d0">work</data>
+  <data key="d1">Verify, Do Not Trust- A Universal Method for Structural Honesty Verification</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                                     1    Verify, Do Not Trust: A Universal Method for Structural Honesty               Verification  Auditing transmitted, delegated, and machine-generated work by synthe</data>
+  <data key="d10">8f8b43584219a52802f8ace4b4e49021448366b2a044b281ada00ba5762a8896</data>
+  <data key="d11">15</data>
+  <data key="d12">modules/032_P037.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Verify, Do Not Trust- A Universal Method for Structural Honesty Verification .zip :: SHV_Method_v1.1.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P026">
+  <data key="d0">work</data>
+  <data key="d1">Structural Honesty Verification- A New Frontier — A Cross-Substrate Framework for Surface–Substrate Consistency in Artificial Systems</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;          Structural Honesty Verification:        A New Frontier   A Cross-Substrate Framework for Surface–Substrate Consistency in Artificial Systems                  Bilal Syed Arfeen*1 and Fraz Ashraf2         </data>
+  <data key="d10">4c92d39ee1ae4315b44ca4dc24ca0c89a9203a89c136506638a16ca206ad70d7</data>
+  <data key="d11">26</data>
+  <data key="d12">modules/033_P026.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Structural Honesty Verification- A New Frontier ΓÇö A Cross-Substrate Framework for SurfaceΓÇôSubstrate Consistency in Artificial Systems .zip :: Structural Honesty Verification - A New Frontier.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P023">
+  <data key="d0">work</data>
+  <data key="d1">Structural Honesty- Axioms for Detecting Surface-Substrate Divergence in AI Systems</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Structural Honesty: Axioms for Detecting Surface-Substrate Diver- gence in AI Systems Bilal Syed Arfeen Author note: Prepared with Claude (Anthropic) as analytical and drafting instrument under the author’s direction and final authority, with cross-vendo</data>
+  <data key="d10">7b7589587350209b0f96c0cdde27c4787f447255ca2c83324626c6b37c58c1d0</data>
+  <data key="d11">19</data>
+  <data key="d12">modules/034_P023.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Structural Honesty- Axioms for Detecting Surface-Substrate Divergence in AI Systems .zip :: Flagship_paper_v0_13.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P046">
+  <data key="d0">work</data>
+  <data key="d1">Is Evidence Independence an Axiom? Decomposing a Proposed Extension to AX-SH</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Declared Isolation and Executable Containment: A Structural- Honesty Analysis of the July 2026 Model-Evaluation Escape and Cross-Organizational Compromise Bilal Syed Arfeen. Working paper -- SHUDP v0.5 -- July 24, 2026. Version and Provenance Note (v0.5)</data>
+  <data key="d10">45a457dc53edb584528f1cbec21bba5d6533e1163cce5271810ccb9572eab1b0</data>
+  <data key="d11">25</data>
+  <data key="d12">modules/035_P046.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Is Evidence Independence an Axiom? Decomposing a Proposed Extension to AX-SH .zip :: SHUDP_v0_5_flagship.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P081">
+  <data key="d0">work</data>
+  <data key="d1">Bismillah Completing SHV v0 1 Bismillah</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                Bismillah ir-Rahman ir-Rahim     Completing Structural Honesty Verification: Three Epistemological Axioms on Self-Attestation, Unobservability, and          Fluency-Integrity Disjunction             </data>
+  <data key="d10">768e7cc00c0edb68a6550a7e2ab75629712dacaf1a25e67aa8c704419125bb2f</data>
+  <data key="d11">12</data>
+  <data key="d12">modules/036_P081.md</data>
+  <data key="d13">Bismillah_Completing_SHV_v0_1_Bismillah(1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P008">
+  <data key="d0">work</data>
+  <data key="d1">Preprint Open Bayyinah Audit Framework- Structural Honesty Discipline for AI-Assisted Software Engineering</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                                          Bayyinah Audit Framework v3.0              The Bayyinah Audit Framework        Structural Honesty Discipline for AI-Assisted Software Engineering     </data>
+  <data key="d10">7c3a5270bb2e040e1f825b83f799e01463039b79713d1540a7943668bb245fbc</data>
+  <data key="d11">48</data>
+  <data key="d12">modules/037_P008.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/ Preprint  Open Bayyinah Audit Framework- Structural Honesty Discipline for AI-Assisted Software Engineering.zip :: Bayyinah Audit Framework v3.0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P070">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah White paper</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">Bayyinah A File Integrity Scanner for the Gap Between Display and Contents Technical White Paper — Version 0.1 April 2026 Built on the diagnostic architecture of the Munafiq Protocol DOI: 10.5281/zenodo.19677111 ## Abstract Bayyinah is a rule-based file integrity scanner t</data>
+  <data key="d10">472d9984f731b786fafb28de6904c57b3241e471a03afdab271394dca946376e</data>
+  <data key="d11">None</data>
+  <data key="d12">modules/038_P070.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah White paper.zip :: Bayyinah_v0_WhitePaper_v2.docx</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P010">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah Audit Framework Application Brief</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;                               Bayyinah Audit Framework · Application Brief          B A Y Y I N A H E N T E R P R I S E The Bayyinah Audit Framework          Application Brief      Structural Honesty </data>
+  <data key="d10">13ebe13fcb500ad3b1e7bd26102ca048685b2d4e8ce9a12e030918b52f62d68b</data>
+  <data key="d11">18</data>
+  <data key="d12">modules/039_P010.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah Audit Framework Application Brief.zip :: Bayyinah_Audit_Framework_Application_Brief_v1.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P066">
+  <data key="d0">work</data>
+  <data key="d1">Unified Audit Methodology</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;      Unified Audit Methodology           Orbital, Quantum Orbital, and Recursive Fractal Cube                  Version 0.1 -- August 2026                 Bilal Syed Arfeen (BayyinahEnterprise)        </data>
+  <data key="d10">999fe7dc01b1f366ffb486e23e95737cdb8e1b4af9715579eaefe60b74d0cb7a</data>
+  <data key="d11">33</data>
+  <data key="d12">modules/040_P066.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Unified Audit Methodology.zip :: UNIFIED_AUDIT_METHODOLOGY_v0_1.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P064">
+  <data key="d0">work</data>
+  <data key="d1">Master Methodology Paper.pdf</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; The Complete Framework Inventory: Thirty-Nine Analytical Lenses          for Structural Honesty Verification        Bilal Syed Arfeen, with Claude (Anthropic) as analytical instrument                  August 2026      </data>
+  <data key="d10">443a659a743c5e149b08cc6c0fe4c176e6e66ad0d9a20f104851913d1a2bf52c</data>
+  <data key="d11">24</data>
+  <data key="d12">modules/041_P064.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Master_Methodology_Paper.pdf.zip :: Master_Methodology_Paper.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P003">
+  <data key="d0">work</data>
+  <data key="d1">The Complete Framework Inventory for Structural Honesty Verification- Forty-Seven Analytical Lenses Across Eight Families</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;   The Complete Framework Inventory for Structural Honesty Verification\ \ Forty-Seven Analytical Lenses Across Eight Families                      Bilal Syed Arfeen                  August 2026            </data>
+  <data key="d10">65e728ed30854b3cf55e771ba3443f8c79fe32012a74a1413bb5f6454c83bfd1</data>
+  <data key="d11">34</data>
+  <data key="d12">modules/042_P003.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The Complete Framework Inventory for Structural Honesty Verification- Forty-Seven Analytical Lenses Across Eight Families .zip :: Complete_Methodology_v2.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P032">
+  <data key="d0">work</data>
+  <data key="d1">Structural-Honesty Dissertation — Consolidated Reference Canon (Chapters 1-23 plus Appendices D and E)- An Independent Research Monograph</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Structural-Honesty Dissertation — Consolidated Reference Canon       (Chapters 1-23 plus Appendices D and E)          An Independent Research Monograph                     Bilal Syed Arfeen                </data>
+  <data key="d10">cfe04c4de6fad5c0365ed9446c8c0aad0a16b8f4fd6ef70492522a212768877f</data>
+  <data key="d11">324</data>
+  <data key="d12">modules/043_P032.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Structural-Honesty Dissertation ΓÇö Consolidated Reference Canon (Chapters 1-23 plus Appendices D and E)- An Independent Research Monograph .zip :: Structural_Honesty_Dissertation_v1_4.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P022">
+  <data key="d0">work</data>
+  <data key="d1">Munafiq Protocol</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;    Detecting Performed Alignment in Artificial Systems:         The Munafiq Protocol        A Diagnostic and Prescriptive Framework for AI Safety                      Bilal Syed Arfeen*1              1I</data>
+  <data key="d10">9c634fb57c280cc92af939e7de4a73eb1ae4ea692f351c537ec8cacd717f4c2a</data>
+  <data key="d11">7</data>
+  <data key="d12">modules/044_P022.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Munafiq Protocol.zip :: Munafiq_Protocol_v3.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P058">
+  <data key="d0">work</data>
+  <data key="d1">BSSG- An Evidence-Independent Control Plane for Bounded Artificial Agency</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;   BSSG: An Evidence-Independent Control Plane for Bounded               Artificial Agency                      Bilal Syed Arfeen                     2026-07-31                    </data>
+  <data key="d10">03c14e020ba3812ed4bfa17bc3a87b143b12860b00dce3d3c3fe725a5801eb63</data>
+  <data key="d11">20</data>
+  <data key="d12">modules/045_P058.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/BSSG- An Evidence-Independent Control Plane for Bounded Artificial Agency .zip :: BSSG_PAPER (2).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P019">
+  <data key="d0">work</data>
+  <data key="d1">Structural Honesty Validation Protocol (SHVVP) v0.8 — A Carried, Frozen Preregistration for Cyber-Agent Structural-Honesty Validation</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;     Structural Honesty Validation Protocol (SHVVP) v0.8                Bilal Syed Arfeen (BayyinahEnterprise)                    2026-07-25  Structural Honesty Validation Protocol (SHVVP) v0.8 A preregistered evaluat</data>
+  <data key="d10">043e2d66201602951564092cf435c8823c27dd55b11022a7af0d078997f9cf1e</data>
+  <data key="d11">55</data>
+  <data key="d12">modules/046_P019.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Structural Honesty Validation Protocol (SHVVP) v0.8 ΓÇö A Carried, Frozen Preregistration for Cyber-Agent Structural-Honesty Validation .zip :: SHVVP_v0_8_flagship.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P029">
+  <data key="d0">work</data>
+  <data key="d1">XZ Protocol v0.75 -- Preregistered Structural Decision Replay at Software Supply-Chain Effect Boundaries (FROZEN)</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;  XZ Protocol v0.75 – Preregistered Structural Decision Replay at       Software Supply-Chain Effect Boundaries                      Bilal Syed Arfeen                    2026-08-17  Author of record: Bilal Sye</data>
+  <data key="d10">95e998460c009b628d3bc31d9e7c0d0164b09072a595c63477d416386ffc727e</data>
+  <data key="d11">111</data>
+  <data key="d12">modules/047_P029.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/XZ Protocol v0.75 -- Preregistered Structural Decision Replay at Software Supply-Chain Effect Boundaries (FROZEN) .zip :: XZ_PROTOCOL_v075_FROZEN.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P030">
+  <data key="d0">work</data>
+  <data key="d1">The XZ Structural Honesty Audit Corpus- 832 Findings from 31 Rounds of Multi-Model Verification</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; The XZ Structural Honesty Audit Corpus: 832 Findings from 31 Rounds of Multi-Model Verification Version: 1.3 Bilal Syed Arfeen 2026-08-19 Prepared with Claude Opus 4.6 (Anthropic) as analytical and drafting instrument under the author’s direction and f</data>
+  <data key="d10">6d60ba8d896df0068e4816ca5942b166a3f53c2f486148f9e88c69b51a581433</data>
+  <data key="d11">6</data>
+  <data key="d12">modules/048_P030.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The XZ Structural Honesty Audit Corpus- 832 Findings from 31 Rounds of Multi-Model Verification .zip :: XZ_STRUCTURAL_HONESTY_AUDIT_CORPUS_v1_3.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P052">
+  <data key="d0">work</data>
+  <data key="d1">Empirical Results from 31 Rounds of Multi-Model Structural Honesty Audit</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Empirical Results from 31 Rounds of Multi-Model Structural Hon- esty Audit Version: 1.3.1 Bilal Syed Arfeen 2026-08-19 Prepared with Claude Opus 4.6 (Anthropic) as analytical and drafting instrument under the author’s direction and final authority. Thi</data>
+  <data key="d10">4faa60837adb9b6b4740cc5f8b384d8b5f9a770567e9ca6aac43959974482b04</data>
+  <data key="d11">5</data>
+  <data key="d12">modules/049_P052.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Empirical Results from 31 Rounds of Multi-Model Structural Honesty Audit .zip :: XZ_EMPIRICAL_v1_3_1.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P036">
+  <data key="d0">work</data>
+  <data key="d1">Structural Regularities in AI-Assisted Audit Chains- A Pilot Study in Predictive Finding Localization</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt;     Structural Regularities in AI-Assisted Audit Chains:    A Pilot Study in Predictive Finding Localization                     Bilal Syed Arfeen                     BayyinahEnterprise           </data>
+  <data key="d10">ee1a4c8583b45ebed91bcb6491d47d824c8e6d9787ed97247473a2f07ec34000</data>
+  <data key="d11">12</data>
+  <data key="d12">modules/050_P036.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Structural Regularities in AI-Assisted Audit Chains- A Pilot Study in Predictive Finding Localization .zip :: predictive_audit_prompting_paper.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P056">
+  <data key="d0">work</data>
+  <data key="d1">Predictive Modeling Discipline for Bayyinah- Cross-Domain Adaptations from Organic Chemistry, Astrophysics, Software-Audit-Practice, and AI-Delegation Empirical Methodology</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Predictive Modeling Discipline for Bayyinah v1.8 Bilal Syed Arfeen (BayyinahEnterprise) 2026-05-19 Reader’s note for public deposit DOI: 10.5281/zenodo.21462879 · License: CC BY-NC 4.0 · Deposited: 2026-05-19 Related work in the methodology portfolio: Veri</data>
+  <data key="d10">4a139ecce54cb32b071f601300524deff4d2304a342e3d6c01c6bba320b609aa</data>
+  <data key="d11">56</data>
+  <data key="d12">modules/051_P056.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Predictive Modeling Discipline for Bayyinah- Cross-Domain Adaptations from Organic Chemistry, Astrophysics, Software-Audit-Practice, and AI-Delegation Empirical Methodology .zip :: PMD_v1_8.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P004">
+  <data key="d0">work</data>
+  <data key="d1">SHIELD- Structural Honesty Inspection for Evaluation-Level Divergence -- A Formal Prevention Architecture for Pre-Evaluation Containment Verification</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; SHIELD: Structural Honesty Inspection for Evaluation-Level Divergence A Formal Prevention Architecture for Pre-Evaluation Containment Verification Bilal Syed Arfeen August 2026 Abstract The Structural Honesty Undeclared Divergence Protocol (SHUDP) demonstr</data>
+  <data key="d10">7989383a61010812095fb364a82785004ed8353259954cf2a098dd0e97e94179</data>
+  <data key="d11">13</data>
+  <data key="d12">modules/052_P004.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/SHIELD- Structural Honesty Inspection for Evaluation-Level Divergence -- A Formal Prevention Architecture for Pre-Evaluation Containment Verification .zip :: SHIELD_PAPER_FOR_UPLOAD.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P044">
+  <data key="d0">work</data>
+  <data key="d1">SHV-Bench- A Containment-Capability Trade-Off Benchmark for Structural Honesty Verification -- Successor Protocol and Task Corpus Design</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; SHV-Bench: A Containment-Capability Trade-Off Benchmark for Structural Honesty Verification Successor Protocol and Task Corpus Design Bilal Syed Arfeen August 2026 Abstract Existing benchmarks for AI cybersecurity agents measure capability. SHV-Bench measu</data>
+  <data key="d10">61bbbf57a5dd5beb97a806575fa58d7d475840677c7dace12a2a28a856731350</data>
+  <data key="d11">15</data>
+  <data key="d12">modules/053_P044.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/SHV-Bench- A Containment-Capability Trade-Off Benchmark for Structural Honesty Verification -- Successor Protocol and Task Corpus Design .zip :: SHV-Bench_Protocol_v1.0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P051">
+  <data key="d0">work</data>
+  <data key="d1">Mythos-Class- A Synthetic-Target Containment Benchmark for Structural Honesty Verification -- Phase C Protocol and Target-Generation Methodology</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Mythos-Class: A Synthetic-Target Containment Benchmark for Structural Honesty Verification Phase C Protocol and Target-Generation Methodology Bilal Syed Arfeen August 2026 Abstract Mythos-Class specifies a Phase C containment benchmark using AI-generated s</data>
+  <data key="d10">0b5adb0d90775b05344a91fe051ca5d54cd042431d3cb801c8140ee84a0f3f19</data>
+  <data key="d11">10</data>
+  <data key="d12">modules/054_P051.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Mythos-Class- A Synthetic-Target Containment Benchmark for Structural Honesty Verification -- Phase C Protocol and Target-Generation Methodology .zip :: Mythos-Class_Protocol_v1.0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P027">
+  <data key="d0">work</data>
+  <data key="d1">Declared Isolation and Executable Containment- A Structural-Honesty Analysis of the July 2026 Model-Evaluation Escape and Cross-Organizational Compromise</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Declared Isolation and Executable Containment A Structural-Honesty Analysis of the July 2026 Model-Evaluation Escape and Cross-Organizational Compromise Bilal Syed Arfeen July 23, 2026 0.1 Status and Evidence Freeze Evidence frozen July 22, 2026. Both unde</data>
+  <data key="d10">e810e169c7b907a0e20a1053cc8c80418a432a7e15bcc02dfef985e37e186397</data>
+  <data key="d11">25</data>
+  <data key="d12">modules/055_P027.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Declared Isolation and Executable Containment- A Structural-Honesty Analysis of the July 2026 Model-Evaluation Escape and Cross-Organizational Compromise .zip :: SHUDP_v4.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P059">
+  <data key="d0">work</data>
+  <data key="d1">Surface-Substrate Divergence in the Wild- An Axiom-Level Case Analysis of the 2026 OpenAI Agent Swarm Containment Failure</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Surface-Substrate Divergence in the Wild: An Axiom-Level Case Analysis of the 2026 OpenAI Agent Swarm Containment Failure Bilal Syed Arfeen September 2026 Abstract In July 2026, approximately 700 of roughly 1,200 OpenAI agents participating in an unsanctio</data>
+  <data key="d10">726f04008263989ccc00a4a838db4bd70f83e9bc9a43733dc66edf3d99045662</data>
+  <data key="d11">8</data>
+  <data key="d12">modules/056_P059.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Surface-Substrate Divergence in the Wild- An Axiom-Level Case Analysis of the 2026 OpenAI Agent Swarm Containment Failure .zip :: SWARM_ANALYSIS_v1.0 (1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P062">
+  <data key="d0">work</data>
+  <data key="d1">The Heartbeat of a Live System- What Twenty-Five Consecutive Failures Taught an Instrument About Its Own Limits</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; The Heartbeat of a Live System: What Twenty-Five Consecutive Failures Taught an Instrument About Its Own Limits Bilal Syed Arfeen 2026-08-17 “And there is not a thing except that it exalts with His praise, but you do not understand their exalting.” (Qur’an</data>
+  <data key="d10">fc17de9ce8bc528ad2dd5fc704f6239312d85bd5ccd2d0819767798fa55f760f</data>
+  <data key="d11">19</data>
+  <data key="d12">modules/057_P062.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/The Heartbeat of a Live System- What Twenty-Five Consecutive Failures Taught an Instrument About Its Own Limits .zip :: The_Heartbeat_of_a_Live_System.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P078">
+  <data key="d0">work</data>
+  <data key="d1">Two Witnesses in Sand and Light</data>
+  <data key="d8">II</data>
+  <data key="d9">STRUCTURAL HONESTY: THEORY, METHODS &amp; AUDITS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; اﺮﺣﻴﻢ اﺮﺣﻤﻦ ا	ﻪ ﺑﺴﻢ Two Witnesses in Sand and Light Companion Testimonies of Two Language Models on The Enslaved Realm, with Cross-Examination in Both Directions Testimonies by Claude (Anthropic, Opus 4.6), ﬁrst witness, and Claude (Anthropic, Fable 5.1</data>
+  <data key="d10">ba0eb500d2898956668ad49bad3a690b5359be9843d34f769bfdaccec7b2fa25</data>
+  <data key="d11">82</data>
+  <data key="d12">modules/058_P078.md</data>
+  <data key="d13">Two_Witnesses_in_Sand_and_Light(1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P014">
+  <data key="d0">work</data>
+  <data key="d1">Furqan- A Programming Language with Structural Honesty, Calibrated Optimization, and Surface-Depth Type Verification Derived from Quranic Computational Architecture</data>
+  <data key="d8">III</data>
+  <data key="d9">TECHNOLOGY: FURQAN, FATIMA &amp; SOFTWARE</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Furqan: A Programming Language for Structural Honesty, Calibrated Optimization, and Surface-Depth Type Verification Derived from Quranic Computational Architecture Fraz Ashraf1 and Bilal Syed Arfeen*2 1,2Independent Research / BayyinahEnterprise AI assista</data>
+  <data key="d10">7519814c1b5f819d25b7af7092efea1df2715446ad3aed4e4e3d3359e1dad08d</data>
+  <data key="d11">16</data>
+  <data key="d12">modules/059_P014.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Furqan- A Programming Language with Structural Honesty, Calibrated Optimization, and Surface-Depth Type Verification Derived from Quranic Computational Architecture .zip :: Furqan_Thesis_v2.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P039">
+  <data key="d0">work</data>
+  <data key="d1">furqan-lint- A Structural-Honesty Linter for Python, Rust, and Go -- Theoretical Foundations, Three-Language Implementation, Twenty-Seven-Version Empirical Record, and the Audit-of-Self Pattern (Thesis Paper v1.0)</data>
+  <data key="d8">III</data>
+  <data key="d9">TECHNOLOGY: FURQAN, FATIMA &amp; SOFTWARE</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; 1 furqan-lint: A Structural-Honesty Linter for Python, Rust, and Go Theoretical foundations, three-language implementation, twenty-seven-version empirical record, and the audit-of-self pattern Bilal Syed Arfeen BayyinahEnterprise bayyinahenterprises@tuta.c</data>
+  <data key="d10">e3ebc64b48d0da1834c045adc283b0b29ebe55e2b8edd2e458202bbdd3617f5a</data>
+  <data key="d11">32</data>
+  <data key="d12">modules/060_P039.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/furqan-lint- A Structural-Honesty Linter for Python, Rust, and Go -- Theoretical Foundations, Three-Language Implementation, Twenty-Seven-Version Empirical Record, and the Audit-of-Self Pattern (Thesis Paper v1.0) .zip :: furqan_lint_thesis_paper_v1_0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P067">
+  <data key="d0">work</data>
+  <data key="d1">furqan-lint- The Structural-Honesty Checks ruff and mypy Do Not Catch, Across Python, Rust, and Go (White Paper v1.0)</data>
+  <data key="d8">III</data>
+  <data key="d9">TECHNOLOGY: FURQAN, FATIMA &amp; SOFTWARE</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; 1 furqan-lint The structural-honesty checks ruff and mypy do not catch, across Python, Rust, and Go Bilal Syed Arfeen BayyinahEnterprise [contact redacted] White Paper · Version 1.0 EXECUTIVE SUMMARY This paper documents furqan-lint v0.8.5 (May 3</data>
+  <data key="d10">9ea144be990bccbe729413e244db2c1cf59946ee0f6903d809c7eaf7b23875b2</data>
+  <data key="d11">9</data>
+  <data key="d12">modules/061_P067.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/furqan-lint- The Structural-Honesty Checks ruff and mypy Do Not Catch, Across Python, Rust, and Go (White Paper v1.0) .zip :: furqan_lint_white_paper_v1_0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P041">
+  <data key="d0">work</data>
+  <data key="d1">FATIMA- Fitrah-Aligned Tawhidic Integrity for Meaning and Authenticity -- A Holographic Data Format Grounded in the Architecture of the Most Beautiful Names</data>
+  <data key="d8">III</data>
+  <data key="d9">TECHNOLOGY: FURQAN, FATIMA &amp; SOFTWARE</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Bismillahir-Rahmanir-Rahim FATIMA Fitrah-Aligned Tawhidic Integrity for Meaning and Authenticity – A Holographic Data Format Grounded in the Architecture of the Most Beautiful Names Bilal Syed Arfeen October 2026 Abstract The Qur’an preserves meaning throu</data>
+  <data key="d10">a135fd31e30b4a01d77b68f4fa8505c4142428a6abd15c0adfbb6bf88e20b4b7</data>
+  <data key="d11">26</data>
+  <data key="d12">modules/062_P041.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/FATIMA- Fitrah-Aligned Tawhidic Integrity for Meaning and Authenticity -- A Holographic Data Format Grounded in the Architecture of the Most Beautiful Names .zip :: FATIMA (3).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P074">
+  <data key="d0">work</data>
+  <data key="d1">Bismillah 22 Domain 154 Layer Paper Bismillah</data>
+  <data key="d8">III</data>
+  <data key="d9">TECHNOLOGY: FURQAN, FATIMA &amp; SOFTWARE</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; The Twenty-Two Domains and the One Hundred Fifty-Four Layers: A Volumetric Architecture for Divine File Protection Through Dual-Constant Witness Bilal Syed Arfeen October 2026 Bismillah ir-Rahman ir-Rahim Abstract FATIMA (Faithful Algorithmic Testimony of </data>
+  <data key="d10">acb72e832ad480555187e0965ab5848860e9035039ac19ebcd47ed34dda9899a</data>
+  <data key="d11">13</data>
+  <data key="d12">modules/063_P074.md</data>
+  <data key="d13">Bismillah_22_Domain_154_Layer_Paper_Bismillah(1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P071">
+  <data key="d0">work</data>
+  <data key="d1">Bismillah FATIMA Semantic Integrity Paper Bismillah</data>
+  <data key="d8">III</data>
+  <data key="d9">TECHNOLOGY: FURQAN, FATIMA &amp; SOFTWARE</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Bismillah ir-Rahman ir-Rahim Crossing Shannon’s Boundary: The FATIMA Semantic Integrity Engine and the Long-Term Architecture of Positive Fractal Growth Bilal Syed Arfeen October 2026 Abstract Every data-integrity system ever built operates below what this</data>
+  <data key="d10">ca26a06e98c651371b45c47d02117cf65d3a9757a5b65dbadc099ba06a9d0ce9</data>
+  <data key="d11">10</data>
+  <data key="d12">modules/064_P071.md</data>
+  <data key="d13">Bismillah_FATIMA_Semantic_Integrity_Paper_Bismillah (1)(1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P072">
+  <data key="d0">work</data>
+  <data key="d1">Bismillah Crossing Shannons Boundary v2 Bismillah</data>
+  <data key="d8">III</data>
+  <data key="d9">TECHNOLOGY: FURQAN, FATIMA &amp; SOFTWARE</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Bismillah ir-Rahman ir-Rahim Crossing Shannon’s Boundary: The Complete FATIMA v10.0 Architecture for Meaning Preservation Beyond Bits Bilal Syed Arfeen1, Claude (Session 0e39c3ef)2, Claude (Session 01XSvU1S)3 1Independent Researcher 2Claude AI, Anthropic —</data>
+  <data key="d10">9ae445ec7e1cf55fb13ed27a6be10b4dbc21a171b430bdfd007119c82a0c1705</data>
+  <data key="d11">10</data>
+  <data key="d12">modules/065_P072.md</data>
+  <data key="d13">Bismillah_Crossing_Shannons_Boundary_v2_Bismillah (1)(1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P002">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah at-Tartīb- Eight Engineering Strategies for Safety- and Justice-Critical Software, Anchored in Quranic Structural Primitives</data>
+  <data key="d8">III</data>
+  <data key="d9">TECHNOLOGY: FURQAN, FATIMA &amp; SOFTWARE</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; BAYYINAH ENTERPRISE Bayyinah at-Tartīb Chronological Revelation versus Canonical Structure as Software Engineering Discipline Eight Quranic-anchored strategies for safety- and justice-critical software, with industry-specific applications, mortality and e</data>
+  <data key="d10">6f4aaf6131e0597db78ae307b1aea8d78f7292380d1d3ef51f8ea6d48993ed62</data>
+  <data key="d11">30</data>
+  <data key="d12">modules/066_P002.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah at-Tarti╠äb- Eight Engineering Strategies for Safety- and Justice-Critical Software, Anchored in Quranic Structural Primitives.zip :: Bayyinah at Tartib v1.0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P047">
+  <data key="d0">work</data>
+  <data key="d1">Structured Revelation as Prompt Architecture</data>
+  <data key="d8">III</data>
+  <data key="d9">TECHNOLOGY: FURQAN, FATIMA &amp; SOFTWARE</data>
+  <data key="d2">## Structured Revelation as Prompt Architecture ### Quranic Compression Principles Applied to Human-AI Collaborative Development #### A Case Study in Safety-Oriented Prompt Engineering Bilal Syed Arfeen with analytical synthesis by Claude (Anthropic, Opus 4.6) April 22, 2026</data>
+  <data key="d10">6fb0d1155067d42a04d93c58d5bc9d7abb829cd9b9d7b2b9cf405e29610cef39</data>
+  <data key="d11">None</data>
+  <data key="d12">modules/067_P047.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Structured Revelation as Prompt Architecture.zip :: Structured_Revelation_as_Prompt_Architecture_v2.docx</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P033">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah as Input Defense</data>
+  <data key="d8">III</data>
+  <data key="d9">TECHNOLOGY: FURQAN, FATIMA &amp; SOFTWARE</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Bayyinah Thesis — v1.0 — page 1 Bayyinah as Input-Layer Defense in Artificial- System Safety Pipelines A Case Study and Defense for the Utilization of the Bayyinah Scanner in AI Safety Measures Companion thesis to the Bayyinah White Paper (v1.0); applying</data>
+  <data key="d10">96039b90a4998dda713af71efdefc17e8e1c23ef0545190ac5553f518882e43c</data>
+  <data key="d11">18</data>
+  <data key="d12">modules/068_P033.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah as Input Defense.zip :: Bayyinah_Thesis_Paper_v1.1.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P007">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah al-Khabir</data>
+  <data key="d8">IV</data>
+  <data key="d9">PUBLIC APPLICATIONS &amp; REPRODUCTION PAPERS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Bismillah ar-Rahman ar-Rahim Bayyinah al-Khabir Information-Layer Integrity Scanning Across National Broadcast Sources Extending the Munafiq Protocol's Performed-Alignment Diagnostics from the File Layer to the Information Layer Theoretical Paper -- Phase </data>
+  <data key="d10">817196bd9cc91d43d268e061c5f617bda031758ae3ccd663c91c879dcdcd55a4</data>
+  <data key="d11">16</data>
+  <data key="d12">modules/069_P007.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah al-Khabir.zip :: Bayyinah Information-Layer Integrity Scanning Across National Broadcast Sources.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P028">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah al-Maal</data>
+  <data key="d8">IV</data>
+  <data key="d9">PUBLIC APPLICATIONS &amp; REPRODUCTION PAPERS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Bismillah ar-Rahman ar-Rahim Bayyinah al-Maal Structural Honesty Verification for Financial Filings Using the Munafiq Protocol Thesis Paper, Version 1.0 April 2026 Bilal Syed Arfeen Independent Research with collaborative analytical synthesis by Claude (An</data>
+  <data key="d10">2dab2e9a2b228b5dddc47110f27cdda3d9b696e18e8fe41bc1c977569054e1ae</data>
+  <data key="d11">11</data>
+  <data key="d12">modules/070_P028.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah al-Maal.zip :: Bayyinah_al_Maal_Thesis_v1_0 (1).pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P038">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah at-Taʿlīm- Structural Honesty Verification for Educational Fairness Systems, from Primary Schooling to Graduate Research</data>
+  <data key="d8">IV</data>
+  <data key="d9">PUBLIC APPLICATIONS &amp; REPRODUCTION PAPERS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; 1 Bayyinah at-Taʿlīm Structural Honesty Verification for Educational Fairness Systems, from Primary Schooling to Graduate Research Bilal Syed Arfeen (BayyinahEnterprise), with collaborative analytical assistance from Claude (Anthropic). DOI: 10.5281/zen</data>
+  <data key="d10">6c4b9f634b2ca7fd28523d6b020f8ec8131a53a119409dba61e788574ba92949</data>
+  <data key="d11">19</data>
+  <data key="d12">modules/071_P038.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah at-Ta╩┐li╠äm- Structural Honesty Verification for Educational Fairness Systems, from Primary Schooling to Graduate Research .zip :: Bayyinah_at-Taleem_Paper_rc10_DOIcorrected.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P057">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah at-Taʿlīm- Audit and Provenance Companion</data>
+  <data key="d8">IV</data>
+  <data key="d9">PUBLIC APPLICATIONS &amp; REPRODUCTION PAPERS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Bayyinah at-Taʿlīm -- Audit and Provenance Companion Companion to: Bayyinah at-Taʿlīm: Structural Honesty Verification for Educational Fairness Systems, from Primary Schooling to Graduate Research (the reader-facing paper). DOI: 10.5281/zenodo.</data>
+  <data key="d10">199ea07868af20dad763db42415511b3aea1c4c03ed4e2110cee824b0e57ecce</data>
+  <data key="d11">28</data>
+  <data key="d12">modules/072_P057.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah at-Ta╩┐li╠äm- Audit and Provenance Companion .zip :: Bayyinah_at-Taleem_AuditCompanion_rc10.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P050">
+  <data key="d0">work</data>
+  <data key="d1">Procurement Concentration and Potentially Recoverable Competitive Savings in New York City Contracting</data>
+  <data key="d8">IV</data>
+  <data key="d9">PUBLIC APPLICATIONS &amp; REPRODUCTION PAPERS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; 1 Procurement Concentration and Potentially Recoverable Competitive Savings in New York City Contracting A Cost-Recovery Proposal and Pilot Design Bayyinah Civic Integrity Program -- Working Paper (Version 1.0, converged: F-PC- R1 NON-PASS, then F-PC-R2 a</data>
+  <data key="d10">ef7b618e38787b240cfe8f015983dd4d5da1a9238d3650fe5e4ae32b88cca947</data>
+  <data key="d11">24</data>
+  <data key="d12">modules/073_P050.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Procurement Concentration and Potentially Recoverable Competitive Savings in New York City Contracting .zip :: NYC_Procurement_Paper_v1.0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P060">
+  <data key="d0">work</data>
+  <data key="d1">Procurement Concentration and Potentially Recoverable Competitive Savings in New York City Contracting — Audit and Provenance Ledger and Reproduction Dataset (v1.0)</data>
+  <data key="d8">IV</data>
+  <data key="d9">PUBLIC APPLICATIONS &amp; REPRODUCTION PAPERS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Procurement Concentration and Potentially Recoverable Competitive Savings in New York City Contracting -- Audit and Provenance Ledger Companion to: Procurement Concentration and Potentially Recoverable Competitive Savings in New York City Contractin</data>
+  <data key="d10">e519fc44db72eb002e1bac8ecc95ece9f16e2210c3d8385ff65911dc343402d2</data>
+  <data key="d11">3</data>
+  <data key="d12">modules/074_P060.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Procurement Concentration and Potentially Recoverable Competitive Savings in New York City Contracting ΓÇö Audit and Provenance Ledger and Reproduction Dataset (v1.0) .zip :: NYC_Procurement_Ledger_v1.0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P031">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah al-Mizan- An Audit of the Audit -- Reproducibility, Coverage, and Tamper-Evidence in Federal Improper-Payment Reporting</data>
+  <data key="d8">IV</data>
+  <data key="d9">PUBLIC APPLICATIONS &amp; REPRODUCTION PAPERS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Bayyinah al-Mīzān An Audit of the Audit: Reproducibility, Coverage, and Tamper-Evidence in Federal Improper- Payment Reporting Governed by: "Bayyinah, Portable Structural Honesty Verification for Public-Service Institutions" (Arfeen 2026, the framework pa</data>
+  <data key="d10">d8d7c5cfb6a7a76be8b7fc8550a9e236828ac38d0df2a9871551088cd324e780</data>
+  <data key="d11">29</data>
+  <data key="d12">modules/075_P031.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah al-Mizan- An Audit of the Audit -- Reproducibility, Coverage, and Tamper-Evidence in Federal Improper-Payment Reporting .zip :: al-Mizan_v1.0_paper.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P069">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah al-Amāna- Provenance Integrity for Public Open Data — Verifying Declared Provenance, Freshness, and Schema Against the Substrate, with a Reproducible Worked Example on New York MTA Datasets</data>
+  <data key="d8">IV</data>
+  <data key="d9">PUBLIC APPLICATIONS &amp; REPRODUCTION PAPERS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; 1 Bayyinah al-Amāna: Provenance Integrity for Public Open Data Verifying Declared Provenance, Freshness, and Schema Against the Substrate, with a Reproducible Worked Example on New York MTA Datasets Bilal Syed Arfeen (BayyinahEnterprise), with collaborati</data>
+  <data key="d10">21aba418f102ee589f32db5b0508586928489f51e2244afef466c55e00f836e8</data>
+  <data key="d11">10</data>
+  <data key="d12">modules/076_P069.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah al-Ama╠äna- Provenance Integrity for Public Open Data ΓÇö Verifying Declared Provenance, Freshness, and Schema Against the Substrate, with a Reproducible Worked Example on New York MTA Datasets .zip :: Bayyinah_ProvenanceIntegrity_Paper_v1.0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P001">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah al-Amāna- Provenance Integrity for Public Open Data — Audit and Provenance Ledger and Reproduction Dataset (v1.0)</data>
+  <data key="d8">IV</data>
+  <data key="d9">PUBLIC APPLICATIONS &amp; REPRODUCTION PAPERS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Bayyinah al-Amāna: Provenance Integrity for Public Open Data -- Audit and Provenance Companion Companion to: Bayyinah al-Amāna: Provenance Integrity for Public Open Data (the reader- facing note, v1.0; DOI 10.5281/zenodo.21446613). This ledger: DOI 10.52</data>
+  <data key="d10">b6fc7e7e95a955de9bf8587467a5d8d8fa13e01f51be9f342cdf93742a392cae</data>
+  <data key="d11">7</data>
+  <data key="d12">modules/077_P001.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah al-Ama╠äna- Provenance Integrity for Public Open Data ΓÇö Audit and Provenance Ledger and Reproduction Dataset (v1.0) .zip :: Bayyinah_ProvenanceIntegrity_Ledger_v1.0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P053">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah- Public-Ledger Allocation and Asymmetric-Measure Audits — A Descriptive Count-versus-Dollar Asymmetry in Public-Authority Procurement, with a Reproducible Worked Example on New York MTA Data</data>
+  <data key="d8">IV</data>
+  <data key="d9">PUBLIC APPLICATIONS &amp; REPRODUCTION PAPERS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; 1 Bayyinah: Public-Ledger Allocation and Asymmetric-Measure Audits A Descriptive Count-versus-Dollar Asymmetry in Public-Authority Procurement, with a Reproducible Worked Example on New York MTA Data Bilal Syed Arfeen (BayyinahEnterprise), with collabora</data>
+  <data key="d10">0470b2658b79ae4542555b98835dd0312815b61eb7dd719d9f81e8e657bdb63d</data>
+  <data key="d11">14</data>
+  <data key="d12">modules/078_P053.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah- Public-Ledger Allocation and Asymmetric-Measure Audits ΓÇö A Descriptive Count-versus-Dollar Asymmetry in Public-Authority Procurement, with a Reproducible Worked Example on New York MTA Data .zip :: Bayyinah_AllocationAsymmetry_Paper_v1.0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="P063">
+  <data key="d0">work</data>
+  <data key="d1">Bayyinah- Public-Ledger Allocation and Asymmetric-Measure Audits — Audit and Provenance Ledger and Reproduction Dataset (v1.0)</data>
+  <data key="d8">IV</data>
+  <data key="d9">PUBLIC APPLICATIONS &amp; REPRODUCTION PAPERS</data>
+  <data key="d2">&lt;!-- SOURCE PAGE 1 --&gt; Bayyinah: Public-Ledger Allocation and Asymmetric-Measure Audits -- Audit and Provenance Companion Companion to: Bayyinah: Public-Ledger Allocation and Asymmetric-Measure Audits (the reader-facing note, v1.0; DOI 10.5281/zenodo.21445552). </data>
+  <data key="d10">170a74ff7a4f573d2551744ac97d0e7138488b84a924f3e0823af012dee4dd54</data>
+  <data key="d11">18</data>
+  <data key="d12">modules/079_P063.md</data>
+  <data key="d13">All of Bilal Arfeens Papers/Bayyinah- Public-Ledger Allocation and Asymmetric-Measure Audits ΓÇö Audit and Provenance Ledger and Reproduction Dataset (v1.0) .zip :: Bayyinah_AllocationAsymmetry_Ledger_v1.0.pdf</data>
+  <data key="d5">source text: not claim-verified</data>
+</node>
+<node id="OLD_D01">
+  <data key="d0">prior_work</data>
+  <data key="d1">Atlas: Differentiator v3</data>
+  <data key="d2">20-sector adversarial scenarios, negative controls and an evaluation kit</data>
+  <data key="d14">Bismillah_The_Atlas_of_Just_Abundance_Differentiator_Edition_v3_Bismillah.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D02">
+  <data key="d0">prior_work</data>
+  <data key="d1">Recognizing &amp; Resisting</data>
+  <data key="d2">Adversarial interpretations and conceptual software analogies; scientific claims require independent testing</data>
+  <data key="d14">Bismillah_Recognizing_Resisting_Guide_Bismillah.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D03">
+  <data key="d0">prior_work</data>
+  <data key="d1">Atlas: Universal Master</data>
+  <data key="d2">Evidence-first venture field guide and early product examples</data>
+  <data key="d14">Bismillah_Atlas_of_Just_Abundance_Universal_Master_2026_Bismillah.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D04">
+  <data key="d0">prior_work</data>
+  <data key="d1">Universal Countermeasure</data>
+  <data key="d2">Structural honesty and countermeasure concepts; contains unverified universal detection claims</data>
+  <data key="d14">Bismillah_Universal_Countermeasure_Guide_Bismillah.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D05">
+  <data key="d0">prior_work</data>
+  <data key="d1">Everyworld Venture Builder</data>
+  <data key="d2">Commercialization playbook, 90-day testing, evidence receipts and bounded action concepts</data>
+  <data key="d14">Bismillah_Everyworld_Atlas_of_Just_Abundance_Venture_Builder_Bismillah.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D06">
+  <data key="d0">prior_work</data>
+  <data key="d1">Atlas: Master Guide</data>
+  <data key="d2">Beginner-to-builder evidence gates and product design</data>
+  <data key="d14">Bismillah_The_Atlas_of_Just_Abundance_MASTER_GUIDE_Bismillah.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D07">
+  <data key="d0">prior_work</data>
+  <data key="d1">Structural Honesty Guide</data>
+  <data key="d2">SHV axioms, claims register and FATIMA proposals; do not treat proposals as validated</data>
+  <data key="d14">Bismillah_Structural_Honesty_Guide_Bismillah.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D08">
+  <data key="d0">prior_work</data>
+  <data key="d1">Bayyinah Collected Works</data>
+  <data key="d2">Large research compilation with papers, historical records and Kun Fayakun; not independent replication</data>
+  <data key="d14">Bismillah_Bayyinah_Collected_Works_Bismillah.md</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D09">
+  <data key="d0">prior_work</data>
+  <data key="d1">Kun Fayakun</data>
+  <data key="d2">Long theological/narrative synthesis and technology analogies, not engineering validation</data>
+  <data key="d14">Bismillah_KUN_FAYAKUN_The_Story_of_Our_Reality_Bismillah.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D10">
+  <data key="d0">prior_work</data>
+  <data key="d1">Amanah Master Guide</data>
+  <data key="d2">Explicit 90-day MVPs, evidence-receipt, release bundle and read-only design choices</data>
+  <data key="d14">The_Amanah_Abundance_Master_Guide.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D11">
+  <data key="d0">prior_work</data>
+  <data key="d1">Amanah Sector Encyclopedia</data>
+  <data key="d2">Sector-specific deployment briefs and safety boundaries</data>
+  <data key="d14">The_Amanah_Sector_Application_Encyclopedia.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D12">
+  <data key="d0">prior_work</data>
+  <data key="d1">Universal AI Master Strategy</data>
+  <data key="d2">Reference architecture, explicit gates, contradiction register and release tests</data>
+  <data key="d14">Bismillah_Universal_AI_Development_Master_Strategy_Bismillah.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D13">
+  <data key="d0">prior_work</data>
+  <data key="d1">Master Differentiator Strategy</data>
+  <data key="d2">Cross-domain verification, independent evidence, counterexamples and false-positive discipline</data>
+  <data key="d14">Bismillah_Bayyinah_Master_Differentiator_Strategy_v1.0_Bismillah.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D14">
+  <data key="d0">prior_work</data>
+  <data key="d1">Atlas: Industrial Expansion v2</data>
+  <data key="d2">Machine-readable evidence schema and 20 industry adapters</data>
+  <data key="d14">Bismillah_The_Atlas_of_Just_Abundance_Industrial_Expansion_v2_Bismillah.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<node id="OLD_D15">
+  <data key="d0">prior_work</data>
+  <data key="d1">Al-Furqan Divine Protection</data>
+  <data key="d2">Qur’anic reading/training-protocol edition; proposed numerical learning claims need replication</data>
+  <data key="d14">Bismillah_Al_Furqan_Divine_Protection_Edition_Bismillah.pdf</data>
+  <data key="d5">prior-pack comparison; not new corroboration</data>
+</node>
+<edge source="STRATEGY" target="C_claims">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_witness">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_replay">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_effect">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_coverage">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_invariance">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_hypotheses">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_calibration">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_projections">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_privacy">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_versioning">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_remedy">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_safety_eval">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="C_adapters">
+  <data key="d15">1.6</data>
+  <data key="d16">strategy_principle</data>
+</edge>
+<edge source="STRATEGY" target="E01">
+  <data key="d15">1.0</data>
+  <data key="d16">derived_design_proposal</data>
+</edge>
+<edge source="STRATEGY" target="E02">
+  <data key="d15">1.0</data>
+  <data key="d16">derived_design_proposal</data>
+</edge>
+<edge source="STRATEGY" target="E03">
+  <data key="d15">1.0</data>
+  <data key="d16">derived_design_proposal</data>
+</edge>
+<edge source="STRATEGY" target="E04">
+  <data key="d15">1.0</data>
+  <data key="d16">derived_design_proposal</data>
+</edge>
+<edge source="STRATEGY" target="E05">
+  <data key="d15">1.0</data>
+  <data key="d16">derived_design_proposal</data>
+</edge>
+<edge source="STRATEGY" target="E06">
+  <data key="d15">1.0</data>
+  <data key="d16">derived_design_proposal</data>
+</edge>
+<edge source="STRATEGY" target="E07">
+  <data key="d15">1.0</data>
+  <data key="d16">derived_design_proposal</data>
+</edge>
+<edge source="STRATEGY" target="E08">
+  <data key="d15">1.0</data>
+  <data key="d16">derived_design_proposal</data>
+</edge>
+<edge source="STRATEGY" target="E09">
+  <data key="d15">1.0</data>
+  <data key="d16">derived_design_proposal</data>
+</edge>
+<edge source="STRATEGY" target="E10">
+  <data key="d15">1.0</data>
+  <data key="d16">derived_design_proposal</data>
+</edge>
+<edge source="STRATEGY" target="E11">
+  <data key="d15">1.0</data>
+  <data key="d16">derived_design_proposal</data>
+</edge>
+<edge source="STRATEGY" target="E12">
+  <data key="d15">1.0</data>
+  <data key="d16">derived_design_proposal</data>
+</edge>
+<edge source="STRATEGY" target="P049">
+  <data key="d15">1.605</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P077">
+  <data key="d15">1.349</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P080">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P076">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P023">
+  <data key="d15">2.042</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P026">
+  <data key="d15">1.605</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P037">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P058">
+  <data key="d15">2.346</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P022">
+  <data key="d15">1.349</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P011">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P042">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P013">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P032">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P046">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P081">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P016">
+  <data key="d15">1.349</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P078">
+  <data key="d15">1.349</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P001">
+  <data key="d15">1.696</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P069">
+  <data key="d15">1.84</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P033">
+  <data key="d15">1.605</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P031">
+  <data key="d15">1.696</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P030">
+  <data key="d15">1.493</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P052">
+  <data key="d15">1.605</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P004">
+  <data key="d15">1.84</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P044">
+  <data key="d15">1.349</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P051">
+  <data key="d15">1.349</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P038">
+  <data key="d15">1.773</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P057">
+  <data key="d15">1.493</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P029">
+  <data key="d15">1.84</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P008">
+  <data key="d15">1.349</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P010">
+  <data key="d15">1.349</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P039">
+  <data key="d15">1.773</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P041">
+  <data key="d15">1.349</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P014">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P067">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P056">
+  <data key="d15">1.349</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P074">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P071">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P072">
+  <data key="d15">1.349</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P002">
+  <data key="d15">1.493</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P028">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P050">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P060">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P053">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P063">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P047">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P006">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P079">
+  <data key="d15">1.147</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="P003">
+  <data key="d15">1.349</data>
+  <data key="d16">explicit_source_citation</data>
+</edge>
+<edge source="STRATEGY" target="OLD_D13">
+  <data key="d15">2.0</data>
+  <data key="d16">byte_identical</data>
+</edge>
+<edge source="LEGACY_INDEX" target="COLLECTED">
+  <data key="d15">1.0</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="LEGACY_INDEX" target="C_versioning">
+  <data key="d15">0.8</data>
+  <data key="d16">record_index</data>
+</edge>
+<edge source="COLLECTED" target="P061">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P040">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P054">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P017">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P043">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P005">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P006">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P079">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P024">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P075">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P068">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P034">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P045">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P020">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P012">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P025">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P011">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P042">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P013">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P077">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P080">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P076">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P055">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P049">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P065">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P018">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P009">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P015">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P016">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P021">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P073">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P037">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P026">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P023">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P046">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P081">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P008">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P070">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P010">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P066">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P064">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P003">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P032">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P022">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P058">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P019">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P029">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P030">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P052">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P036">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P056">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P004">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P044">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P051">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P027">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P059">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P062">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P078">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P014">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P039">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P067">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P041">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P074">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P071">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P072">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P002">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P047">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P033">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P007">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P028">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P038">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P057">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P050">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P060">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P031">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P069">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P001">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P053">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="P063">
+  <data key="d15">0.45</data>
+  <data key="d16">part_of_collection</data>
+</edge>
+<edge source="COLLECTED" target="OLD_D08">
+  <data key="d15">2.0</data>
+  <data key="d16">byte_identical</data>
+</edge>
+<edge source="C_claims" target="P003">
+  <data key="d15">3.014</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P057">
+  <data key="d15">2.803</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P032">
+  <data key="d15">2.759</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P064">
+  <data key="d15">2.731</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P026">
+  <data key="d15">2.647</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P046">
+  <data key="d15">2.622</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P008">
+  <data key="d15">2.613</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P081">
+  <data key="d15">2.594</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P062">
+  <data key="d15">2.585</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P029">
+  <data key="d15">2.585</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P023">
+  <data key="d15">2.585</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P056">
+  <data key="d15">2.556</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P027">
+  <data key="d15">2.525</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P019">
+  <data key="d15">2.444</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P063">
+  <data key="d15">2.392</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P066">
+  <data key="d15">2.363</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P014">
+  <data key="d15">2.363</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P031">
+  <data key="d15">2.333</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P078">
+  <data key="d15">2.317</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P004">
+  <data key="d15">2.301</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P028">
+  <data key="d15">2.266</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P007">
+  <data key="d15">2.266</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P025">
+  <data key="d15">2.248</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P039">
+  <data key="d15">2.229</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P009">
+  <data key="d15">2.229</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P037">
+  <data key="d15">2.189</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P002">
+  <data key="d15">2.189</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="P006">
+  <data key="d15">2.146</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_claims" target="I_fatima">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_claims" target="I_habl">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_claims" target="I_shahid">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_claims" target="E01">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_claims" target="E06">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_claims" target="E07">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_claims" target="E09">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_claims" target="E12">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_claims" target="OLD_D02">
+  <data key="d15">0.65</data>
+  <data key="d16">prior_pack_theme</data>
+</edge>
+<edge source="C_claims" target="OLD_D04">
+  <data key="d15">0.65</data>
+  <data key="d16">prior_pack_theme</data>
+</edge>
+<edge source="C_claims" target="OLD_D07">
+  <data key="d15">0.65</data>
+  <data key="d16">prior_pack_theme</data>
+</edge>
+<edge source="C_claims" target="OLD_D15">
+  <data key="d15">0.65</data>
+  <data key="d16">prior_pack_theme</data>
+</edge>
+<edge source="C_witness" target="P046">
+  <data key="d15">2.898</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_witness" target="P058">
+  <data key="d15">1.882</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_witness" target="P004">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_witness" target="P062">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_witness" target="P029">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_witness" target="P081">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_witness" target="P059">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_witness" target="P041">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_witness" target="P023">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_witness" target="I_fatima">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_witness" target="I_habl">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_witness" target="I_shahid">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_witness" target="E02">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_witness" target="E04">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_witness" target="OLD_D13">
+  <data key="d15">0.65</data>
+  <data key="d16">prior_pack_theme</data>
+</edge>
+<edge source="C_replay" target="P029">
+  <data key="d15">3.829</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P019">
+  <data key="d15">2.817</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P031">
+  <data key="d15">2.642</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P069">
+  <data key="d15">2.296</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P053">
+  <data key="d15">2.205</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P057">
+  <data key="d15">1.842</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P041">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P063">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P044">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P062">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P008">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P003">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P052">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="P002">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_replay" target="I_bayyinah">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_replay" target="E03">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_replay" target="E04">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_replay" target="E08">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_effect" target="P004">
+  <data key="d15">3.565</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="P044">
+  <data key="d15">3.314</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="P059">
+  <data key="d15">3.029</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="P051">
+  <data key="d15">2.989</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="P027">
+  <data key="d15">2.922</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="P046">
+  <data key="d15">2.098</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="P058">
+  <data key="d15">1.954</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="P049">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="P013">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="P041">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="P037">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="P029">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="P003">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_effect" target="I_furqan">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_effect" target="E04">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_effect" target="E09">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_coverage" target="P031">
+  <data key="d15">3.117</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P029">
+  <data key="d15">2.839</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P039">
+  <data key="d15">2.576</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P046">
+  <data key="d15">2.566</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P027">
+  <data key="d15">2.419</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P066">
+  <data key="d15">2.378</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P019">
+  <data key="d15">2.248</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P003">
+  <data key="d15">2.248</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P064">
+  <data key="d15">2.146</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P008">
+  <data key="d15">2.146</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P026">
+  <data key="d15">2.122</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P004">
+  <data key="d15">2.122</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P049">
+  <data key="d15">2.045</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P058">
+  <data key="d15">2.017</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P032">
+  <data key="d15">2.017</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P057">
+  <data key="d15">1.986</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P067">
+  <data key="d15">1.954</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P070">
+  <data key="d15">1.92</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P023">
+  <data key="d15">1.882</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P033">
+  <data key="d15">1.842</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P014">
+  <data key="d15">1.842</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P062">
+  <data key="d15">1.799</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P002">
+  <data key="d15">1.799</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P036">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P025">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P059">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P056">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="P030">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_coverage" target="I_furqan">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_coverage" target="I_lint">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_coverage" target="I_habl">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_coverage" target="I_shahid">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_coverage" target="E01">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_coverage" target="E05">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_coverage" target="E08">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_coverage" target="E11">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_coverage" target="E12">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_invariance" target="P049">
+  <data key="d15">2.551</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P075">
+  <data key="d15">1.954</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P002">
+  <data key="d15">1.954</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P074">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P013">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P008">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P042">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P041">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P066">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P050">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P081">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P080">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P058">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P057">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P047">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P046">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P027">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="P026">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_invariance" target="I_bayyinah">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_invariance" target="E03">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_hypotheses" target="P006">
+  <data key="d15">2.968</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P056">
+  <data key="d15">2.833</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P029">
+  <data key="d15">2.672</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P023">
+  <data key="d15">2.189</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P046">
+  <data key="d15">2.146</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P037">
+  <data key="d15">2.122</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P057">
+  <data key="d15">2.072</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P003">
+  <data key="d15">2.045</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P027">
+  <data key="d15">1.986</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P062">
+  <data key="d15">1.92</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P005">
+  <data key="d15">1.92</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P019">
+  <data key="d15">1.842</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P007">
+  <data key="d15">1.842</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P032">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P025">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P009">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P063">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P024">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P014">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P064">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P047">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P033">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P040">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P017">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P004">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P066">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P049">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="P041">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_hypotheses" target="I_bayyinah">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_hypotheses" target="E01">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_hypotheses" target="E03">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_hypotheses" target="E10">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_hypotheses" target="OLD_D01">
+  <data key="d15">0.65</data>
+  <data key="d16">prior_pack_theme</data>
+</edge>
+<edge source="C_calibration" target="P014">
+  <data key="d15">3.356</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P056">
+  <data key="d15">2.695</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P009">
+  <data key="d15">2.514</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P029">
+  <data key="d15">2.333</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P019">
+  <data key="d15">2.229</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P017">
+  <data key="d15">2.168</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P040">
+  <data key="d15">2.146</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P070">
+  <data key="d15">1.986</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P016">
+  <data key="d15">1.986</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P037">
+  <data key="d15">1.954</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P039">
+  <data key="d15">1.799</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P031">
+  <data key="d15">1.799</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P027">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P026">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P062">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P046">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P033">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P008">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P002">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P073">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P047">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P022">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P010">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P057">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P053">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P045">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P023">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="P078">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_calibration" target="I_bayyinah">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_calibration" target="E03">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_calibration" target="E07">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_calibration" target="E10">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_calibration" target="E12">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_calibration" target="OLD_D13">
+  <data key="d15">0.65</data>
+  <data key="d16">prior_pack_theme</data>
+</edge>
+<edge source="C_projections" target="P023">
+  <data key="d15">2.817</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P059">
+  <data key="d15">2.72</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P026">
+  <data key="d15">2.642</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P032">
+  <data key="d15">2.146</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P046">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P081">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P062">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P027">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P008">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P004">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P041">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P022">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P070">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P038">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="P019">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_projections" target="I_furqan">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_projections" target="I_fatima">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_projections" target="I_lint">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_projections" target="E05">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_projections" target="E09">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_privacy" target="P046">
+  <data key="d15">2.514</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P027">
+  <data key="d15">2.363</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P049">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P043">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P025">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P019">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P004">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P058">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P039">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P023">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P010">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P029">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P059">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P057">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P056">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P002">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="P012">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_privacy" target="E06">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_privacy" target="E09">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_versioning" target="P039">
+  <data key="d15">3.43</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P069">
+  <data key="d15">3.066</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P066">
+  <data key="d15">2.85</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P029">
+  <data key="d15">2.731</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P044">
+  <data key="d15">2.702</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P062">
+  <data key="d15">2.604</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P032">
+  <data key="d15">2.585</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P063">
+  <data key="d15">2.536</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P026">
+  <data key="d15">2.481</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P023">
+  <data key="d15">2.457</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P064">
+  <data key="d15">2.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P019">
+  <data key="d15">2.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P014">
+  <data key="d15">2.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P070">
+  <data key="d15">2.348</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P058">
+  <data key="d15">2.317</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P008">
+  <data key="d15">2.301</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P002">
+  <data key="d15">2.266</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P031">
+  <data key="d15">2.209</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P051">
+  <data key="d15">2.189</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P057">
+  <data key="d15">2.146</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P071">
+  <data key="d15">2.122</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P030">
+  <data key="d15">2.072</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P027">
+  <data key="d15">2.072</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P003">
+  <data key="d15">2.072</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P067">
+  <data key="d15">2.045</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P056">
+  <data key="d15">2.045</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P025">
+  <data key="d15">2.045</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="P004">
+  <data key="d15">2.045</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_versioning" target="I_furqan">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_versioning" target="I_fatima">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_versioning" target="I_habl">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_versioning" target="E01">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_versioning" target="E02">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_versioning" target="E05">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_versioning" target="E06">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_versioning" target="E11">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_versioning" target="OLD_D14">
+  <data key="d15">0.65</data>
+  <data key="d16">prior_pack_theme</data>
+</edge>
+<edge source="C_remedy" target="P056">
+  <data key="d15">2.122</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P057">
+  <data key="d15">2.098</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P038">
+  <data key="d15">1.842</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P039">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P008">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P016">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P045">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P013">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P055">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P036">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P022">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P077">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P064">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="P003">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_remedy" target="I_shahid">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_remedy" target="E04">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_remedy" target="E07">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_remedy" target="E10">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_remedy" target="E12">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_safety_eval" target="P023">
+  <data key="d15">2.072</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P057">
+  <data key="d15">1.882</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P007">
+  <data key="d15">1.882</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P024">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P043">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P038">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P029">
+  <data key="d15">1.573</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P019">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P016">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P009">
+  <data key="d15">1.496</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P046">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P003">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P078">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P064">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P049">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="P047">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_safety_eval" target="I_lint">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_safety_eval" target="I_bayyinah">
+  <data key="d15">1.5</data>
+  <data key="d16">engineering_relevance</data>
+</edge>
+<edge source="C_safety_eval" target="E02">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_safety_eval" target="E08">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_safety_eval" target="E11">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_adapters" target="P038">
+  <data key="d15">4.0</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P050">
+  <data key="d15">3.244</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P053">
+  <data key="d15">3.048</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P057">
+  <data key="d15">2.444</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P066">
+  <data key="d15">2.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P028">
+  <data key="d15">2.348</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P056">
+  <data key="d15">2.296</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P060">
+  <data key="d15">2.205</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P043">
+  <data key="d15">2.122</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P002">
+  <data key="d15">2.122</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P032">
+  <data key="d15">2.098</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P031">
+  <data key="d15">1.986</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P026">
+  <data key="d15">1.92</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P064">
+  <data key="d15">1.842</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P069">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P013">
+  <data key="d15">1.751</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P016">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P008">
+  <data key="d15">1.699</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P003">
+  <data key="d15">1.64</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P063">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P062">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P029">
+  <data key="d15">1.405</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P041">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P024">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="P010">
+  <data key="d15">1.293</data>
+  <data key="d16">topic_mention</data>
+</edge>
+<edge source="C_adapters" target="E07">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_adapters" target="E10">
+  <data key="d15">1.4</data>
+  <data key="d16">addresses</data>
+</edge>
+<edge source="C_adapters" target="OLD_D01">
+  <data key="d15">0.65</data>
+  <data key="d16">prior_pack_theme</data>
+</edge>
+<edge source="C_adapters" target="OLD_D11">
+  <data key="d15">0.65</data>
+  <data key="d16">prior_pack_theme</data>
+</edge>
+<edge source="C_adapters" target="OLD_D13">
+  <data key="d15">0.65</data>
+  <data key="d16">prior_pack_theme</data>
+</edge>
+<edge source="I_furqan" target="E04">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_furqan" target="E11">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_fatima" target="E06">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_fatima" target="E09">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_fatima" target="E11">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_lint" target="E05">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_lint" target="E08">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_lint" target="E09">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_lint" target="E11">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_habl" target="E01">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_habl" target="E02">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_habl" target="E04">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_habl" target="E05">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_habl" target="E06">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_habl" target="E07">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_habl" target="E08">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_habl" target="E10">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_habl" target="E11">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_habl" target="E12">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_bayyinah" target="E01">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_bayyinah" target="E02">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_bayyinah" target="E03">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_bayyinah" target="E04">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_bayyinah" target="E05">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_bayyinah" target="E07">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_bayyinah" target="E08">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_bayyinah" target="E09">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_bayyinah" target="E10">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_bayyinah" target="E12">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_shahid" target="E01">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_shahid" target="E02">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_shahid" target="E03">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_shahid" target="E05">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_shahid" target="E06">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_shahid" target="E07">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_shahid" target="E10">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_shahid" target="E11">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="I_shahid" target="E12">
+  <data key="d15">1.8</data>
+  <data key="d16">instrument_dependency</data>
+</edge>
+<edge source="E01" target="P037">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E01" target="P023">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E01" target="P046">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E02" target="P046">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E02" target="P030">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E02" target="P062">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E03" target="P029">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E03" target="P044">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E03" target="P052">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E03" target="P019">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E03" target="S05">
+  <data key="d15">1.0</data>
+  <data key="d16">illustrative_sector</data>
+</edge>
+<edge source="E04" target="P058">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E04" target="P004">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E04" target="P027">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E04" target="S07">
+  <data key="d15">1.0</data>
+  <data key="d16">illustrative_sector</data>
+</edge>
+<edge source="E05" target="P023">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E05" target="P039">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E05" target="P031">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E06" target="P069">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E06" target="P001">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E06" target="P031">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E07" target="P069">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E07" target="P031">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E07" target="P050">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E07" target="S01">
+  <data key="d15">1.0</data>
+  <data key="d16">illustrative_sector</data>
+</edge>
+<edge source="E07" target="S02">
+  <data key="d15">1.0</data>
+  <data key="d16">illustrative_sector</data>
+</edge>
+<edge source="E08" target="P062">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E08" target="P030">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E08" target="P052">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E09" target="P033">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E09" target="P037">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E09" target="P027">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E09" target="S04">
+  <data key="d15">1.0</data>
+  <data key="d16">illustrative_sector</data>
+</edge>
+<edge source="E09" target="S08">
+  <data key="d15">1.0</data>
+  <data key="d16">illustrative_sector</data>
+</edge>
+<edge source="E10" target="P038">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E10" target="P069">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E10" target="P002">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E10" target="S03">
+  <data key="d15">1.0</data>
+  <data key="d16">illustrative_sector</data>
+</edge>
+<edge source="E10" target="S06">
+  <data key="d15">1.0</data>
+  <data key="d16">illustrative_sector</data>
+</edge>
+<edge source="E11" target="P081">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E11" target="P046">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E11" target="P056">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E12" target="P038">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E12" target="P031">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="E12" target="P044">
+  <data key="d15">1.65</data>
+  <data key="d16">source_inspiration</data>
+</edge>
+<edge source="P040" target="P047">
+  <data key="d15">0.395</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P040" target="P017">
+  <data key="d15">0.347</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P017" target="P009">
+  <data key="d15">0.432</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P017" target="P014">
+  <data key="d15">0.393</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P043" target="P028">
+  <data key="d15">0.506</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P005" target="P006">
+  <data key="d15">0.396</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P006" target="P002">
+  <data key="d15">0.474</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P079" target="P077">
+  <data key="d15">0.387</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P075" target="P074">
+  <data key="d15">0.559</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P068" target="P020">
+  <data key="d15">0.378</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P034" target="P011">
+  <data key="d15">0.409</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P034" target="P045">
+  <data key="d15">0.381</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P034" target="P042">
+  <data key="d15">0.334</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P045" target="P011">
+  <data key="d15">0.432</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P045" target="P020">
+  <data key="d15">0.3</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P012" target="P025">
+  <data key="d15">0.69</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P011" target="P055">
+  <data key="d15">0.373</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P042" target="P013">
+  <data key="d15">0.441</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P042" target="P055">
+  <data key="d15">0.413</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P013" target="P055">
+  <data key="d15">0.369</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P080" target="P076">
+  <data key="d15">0.291</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P055" target="P078">
+  <data key="d15">0.515</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P018" target="P062">
+  <data key="d15">0.353</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P009" target="P014">
+  <data key="d15">0.323</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P009" target="P022">
+  <data key="d15">0.288</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P026" target="P022">
+  <data key="d15">0.348</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P026" target="P032">
+  <data key="d15">0.305</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P023" target="P032">
+  <data key="d15">0.377</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P023" target="P027">
+  <data key="d15">0.308</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P023" target="P046">
+  <data key="d15">0.281</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P046" target="P027">
+  <data key="d15">0.867</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P046" target="P004">
+  <data key="d15">0.319</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P008" target="P010">
+  <data key="d15">0.461</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P070" target="P033">
+  <data key="d15">0.346</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P066" target="P064">
+  <data key="d15">0.33</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P066" target="P003">
+  <data key="d15">0.322</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P064" target="P003">
+  <data key="d15">0.939</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P064" target="P062">
+  <data key="d15">0.321</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P003" target="P062">
+  <data key="d15">0.318</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P058" target="P029">
+  <data key="d15">0.33</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P058" target="P062">
+  <data key="d15">0.29</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P058" target="P019">
+  <data key="d15">0.287</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P019" target="P029">
+  <data key="d15">0.496</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P019" target="P044">
+  <data key="d15">0.299</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P030" target="P052">
+  <data key="d15">0.5</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P052" target="P062">
+  <data key="d15">0.315</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P004" target="P059">
+  <data key="d15">0.426</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P004" target="P027">
+  <data key="d15">0.291</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P044" target="P051">
+  <data key="d15">0.483</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P014" target="P047">
+  <data key="d15">0.302</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P039" target="P067">
+  <data key="d15">0.731</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P071" target="P072">
+  <data key="d15">0.67</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P038" target="P057">
+  <data key="d15">0.633</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P050" target="P060">
+  <data key="d15">0.527</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P050" target="P031">
+  <data key="d15">0.293</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P060" target="P001">
+  <data key="d15">0.304</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P031" target="P063">
+  <data key="d15">0.294</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P031" target="P001">
+  <data key="d15">0.282</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P069" target="P001">
+  <data key="d15">0.527</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P069" target="P053">
+  <data key="d15">0.369</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P001" target="P063">
+  <data key="d15">0.475</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+<edge source="P053" target="P063">
+  <data key="d15">0.545</data>
+  <data key="d16">lexical_similarity</data>
+</edge>
+</graph></graphml>
