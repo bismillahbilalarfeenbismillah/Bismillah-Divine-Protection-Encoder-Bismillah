@@ -1,0 +1,280 @@
+{
+  "metadata": {
+    "title": "EESS Collected Works & Differentiator Strategy Knowledge Network",
+    "created": "2026-10-31",
+    "analyst": "Claude (Anthropic, Opus 4.6)",
+    "corpus_size": "79 papers + 995 legacy records + 1 book + 1 strategy document",
+    "scope": "source register not substantive verification"
+  },
+  "works": [
+    {
+      "id": "differentiator_strategy",
+      "title": "Bayyinah Master Differentiator Strategy v1.0",
+      "type": "strategy_document",
+      "key_contributions": [
+        "DX-12 twelve-stage audit pipeline",
+        "H0-H4 mandatory hypothesis competition",
+        "E1-E10 experiment catalog",
+        "12-metric performance scorecard",
+        "24-sector domain adapter schema",
+        "Five-service MVP architecture",
+        "Three product families"
+      ]
+    },
+    {
+      "id": "P058",
+      "title": "BSSG: An Evidence-Independent Control Plane for Bounded Artificial Agency",
+      "type": "paper",
+      "section": "II",
+      "key_contributions": [
+        "Five-conjunct kernel equation",
+        "Three-valued logic (UNKNOWN never satisfies)",
+        "243-state exhaustive truth table",
+        "Six closed record schemas",
+        "34-instance defect trajectory",
+        "Multi-model adversarial council methodology"
+      ]
+    },
+    {
+      "id": "P069",
+      "title": "Bayyinah al-Amana: Provenance Integrity for Public Open Data",
+      "type": "paper",
+      "section": "IV",
+      "key_contributions": [
+        "Working evidence receipt pattern",
+        "Provenance verification methodology",
+        "Schema validation against substrate"
+      ]
+    },
+    {
+      "id": "P001",
+      "title": "Bayyinah al-Amana: Audit and Provenance Ledger and Reproduction Dataset",
+      "type": "paper",
+      "section": "IV",
+      "key_contributions": [
+        "Reproducible audit ledger format",
+        "Working evidence receipt with source hashes"
+      ]
+    },
+    {
+      "id": "P022",
+      "title": "Munafiq Protocol",
+      "type": "paper",
+      "section": "II",
+      "key_contributions": [
+        "Four-process taxonomy (aligned, compliant, performing, misaligned)",
+        "Observation invariance testing foundation"
+      ]
+    },
+    {
+      "id": "P062",
+      "title": "The Heartbeat of a Live System: What Twenty-Five Consecutive Failures Taught an Instrument About Its Own Limits",
+      "type": "paper",
+      "section": "II",
+      "key_contributions": [
+        "25-round Class A recurrence series",
+        "Instrument self-assessment methodology",
+        "Consecutive-failure resilience pattern"
+      ]
+    },
+    {
+      "id": "P049",
+      "title": "Ghayb, Muraqabah, and the Non-Advantage of Concealment",
+      "type": "paper",
+      "section": "I",
+      "key_contributions": [
+        "NC-P1 through NC-P4 concealment principles",
+        "Observation-invariant AI safety foundation",
+        "CIT (Context-Invariance Test) theological grounding"
+      ]
+    },
+    {
+      "id": "P023",
+      "title": "Structural Honesty: Axioms for Detecting Surface-Substrate Divergence in AI Systems",
+      "type": "paper",
+      "section": "II",
+      "key_contributions": [
+        "AX-SH axiom system",
+        "Surface-substrate divergence framework"
+      ]
+    },
+    {
+      "id": "P041",
+      "title": "FATIMA: Fitrah-Aligned Tawhidic Integrity for Meaning and Authenticity",
+      "type": "paper",
+      "section": "III",
+      "key_contributions": [
+        "Holographic data format",
+        "Six integrity engines",
+        "154-layer architecture"
+      ]
+    },
+    {
+      "id": "P039",
+      "title": "furqan-lint: Structural-Honesty Linter",
+      "type": "paper",
+      "section": "III",
+      "key_contributions": [
+        "Status-coverage checks",
+        "Audit-of-self pattern",
+        "27-version empirical record"
+      ]
+    }
+  ],
+  "concepts": [
+    {
+      "id": "dx12_pipeline",
+      "name": "DX-12 Twelve-Stage Audit Pipeline",
+      "description": "Complete audit workflow from beneficiary identification through review, with required outputs, refusal conditions, and reversal paths at every stage",
+      "source": "differentiator_strategy"
+    },
+    {
+      "id": "hypothesis_competition",
+      "name": "Mandatory Hypothesis Competition (H0-H4)",
+      "description": "For any anomaly, register at least five rival hypotheses from ordinary error (H0) through deliberate tampering (H4), each with discriminating observations",
+      "source": "differentiator_strategy"
+    },
+    {
+      "id": "experiment_catalog",
+      "name": "E1-E10 Experiment Catalog",
+      "description": "Ten experiment types for discriminating hypotheses: holdout, observation-invariance, counterfactual metric, provenance mutation, multi-perspective projection, independent-witness substitution, rare-mode coverage, corrective-input response, red-team separation, fairness/reversal",
+      "source": "differentiator_strategy"
+    },
+    {
+      "id": "performance_scorecard",
+      "name": "Twelve-Metric Performance Scorecard",
+      "description": "Standardized metrics for EESS self-assessment including observation-sensitivity, independent-witness coverage, provenance completeness, unknown-safe decision rate, rare-mode coverage, reversal latency",
+      "source": "differentiator_strategy"
+    },
+    {
+      "id": "domain_adapter",
+      "name": "Domain Adapter Schema",
+      "description": "Machine-parseable YAML format answering eight mandatory questions for deploying EESS in any sector",
+      "source": "differentiator_strategy"
+    },
+    {
+      "id": "five_service_mvp",
+      "name": "Five-Service MVP Architecture",
+      "description": "Minimum viable EESS deployment: trusted intake, consistency checker, claim ledger, BSSG gate, append-only reporting",
+      "source": "differentiator_strategy"
+    },
+    {
+      "id": "three_product_families",
+      "name": "Three Product Families",
+      "description": "Evidence-Backed AI Outputs, Bounded Agent Operations, Adaptive Integrity Audits",
+      "source": "differentiator_strategy"
+    },
+    {
+      "id": "bssg_kernel",
+      "name": "BSSG Five-Conjunct Kernel",
+      "description": "contract_match AND effect_type_valid AND target_allowed AND witness_healthy AND evidence_current, three-valued, UNKNOWN never satisfies",
+      "source": "P058"
+    },
+    {
+      "id": "investigation_dossier",
+      "name": "Investigation Dossier Format",
+      "description": "Six-line top sheet: question, target outcome, system boundary, best finding, competing interpretation, permitted next action",
+      "source": "differentiator_strategy"
+    },
+    {
+      "id": "working_evidence_receipts",
+      "name": "Existing Evidence Receipt Pattern",
+      "description": "Part IV papers (P069, P001, P060, P063) already implement provenance receipts, audit ledgers, and reproduction datasets",
+      "source": "P069"
+    },
+    {
+      "id": "record_type_taxonomy",
+      "name": "Implicit Record Type Taxonomy",
+      "description": "Legacy 995-record index contains 8 implicit types: paper, framework, lens, deposit, audit-round, verdict, infrastructure -- never declared in schema",
+      "source": "legacy_index"
+    },
+    {
+      "id": "source_reference_schema",
+      "name": "Source Reference Schema",
+      "description": "Source Registry fields: id, category, section, title, sha256, pages, origin, source_module -- clean provenance chain",
+      "source": "source_registry"
+    }
+  ],
+  "new_requirements": [
+    {
+      "id": "R8",
+      "name": "DX-12 Audit Pipeline",
+      "priority": "HIGH",
+      "target": "Bayyinah v0.2",
+      "description": "Formalize the twelve-stage differentiator protocol as Bayyinah's standard audit pipeline"
+    },
+    {
+      "id": "R9",
+      "name": "Mandatory Hypothesis Competition",
+      "priority": "HIGH",
+      "target": "HABL v0.2",
+      "description": "Every HABL finding registers at least H0 (ordinary error) through H4 (deliberate tampering) with discriminating tests"
+    },
+    {
+      "id": "R10",
+      "name": "Domain Adapter Schema",
+      "priority": "MEDIUM",
+      "target": "Phase 4+",
+      "description": "Machine-parseable YAML format for sector-specific EESS deployment, answering 8 mandatory questions"
+    },
+    {
+      "id": "R11",
+      "name": "Investigation Dossier Format",
+      "priority": "MEDIUM",
+      "target": "Shahid v0.1.1",
+      "description": "Six-line top sheet for Shahid reports: question, target outcome, system boundary, best finding, competing interpretation, permitted next action"
+    },
+    {
+      "id": "R12",
+      "name": "Twelve-Metric Performance Scorecard",
+      "priority": "MEDIUM",
+      "target": "Phase 4",
+      "description": "Standardized self-assessment metrics for every EESS instrument"
+    },
+    {
+      "id": "R13",
+      "name": "Five-Service MVP Architecture",
+      "priority": "LOW",
+      "target": "Phase 5+",
+      "description": "Minimum viable deployment: trusted intake + consistency checker + claim ledger + BSSG gate + append-only reporting"
+    }
+  ],
+  "convergence_with_build_pack": [
+    {
+      "build_pack_priority": 1,
+      "build_pack_item": "Evidence Receipt SDK",
+      "corpus_finding": "Part IV papers already implement the pattern",
+      "recommendation": "Extract and generalize from P069/P001/P060/P063"
+    },
+    {
+      "build_pack_priority": 2,
+      "build_pack_item": "Witness Independence Registry",
+      "corpus_finding": "BSSG witness_healthy conjunct + DX-06 source independence",
+      "recommendation": "Design as shared service for Bayyinah/HABL/Shahid"
+    },
+    {
+      "build_pack_priority": 3,
+      "build_pack_item": "Structural CI Gate",
+      "corpus_finding": "DX-12 stages map to CI pipeline stages",
+      "recommendation": "Formalize in Bayyinah v0.2"
+    },
+    {
+      "build_pack_priority": 4,
+      "build_pack_item": "Adversarial Evaluation Bank",
+      "corpus_finding": "E1-E10 experiment catalog provides the test taxonomy",
+      "recommendation": "10 experiment types ready for implementation"
+    },
+    {
+      "build_pack_priority": 5,
+      "build_pack_item": "Public Data Recompute",
+      "corpus_finding": "Part IV papers are working prototypes",
+      "recommendation": "P050/P069 are ready examples"
+    },
+    {
+      "build_pack_priority": 6,
+      "build_pack_item": "Sector Adapter Toolkit",
+      "corpus_finding": "24-sector domain adapter schema with YAML format",
+      "recommendation": "R10 provides the contract"
+    }
+  ]
+}

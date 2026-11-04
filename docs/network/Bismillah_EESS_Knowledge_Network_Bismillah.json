@@ -1,0 +1,2344 @@
+{
+  "schema": "bayyinah-eess-document-network-1.0",
+  "generated": "2026-10-31",
+  "title": "Bismillah | The Evidence-to-Enterprise Neural-Style Knowledge Network | Bismillah",
+  "methods": {
+    "type": "transparent concept/document graph with auxiliary TF-IDF similarities",
+    "trained_neural_network": false,
+    "source_policy": "packed documents; descriptive links not independent corroboration",
+    "living_encyclopedia": "not verified: live artifact unavailable; saved HTML contains viewer shell, not entries",
+    "dedupe": "One exact duplicate PDF and two alternate-format work pairs consolidated."
+  },
+  "nodes": [
+    {
+      "id": "D01",
+      "type": "document",
+      "label": "Atlas: Differentiator v3",
+      "description": "20-sector adversarial scenarios, negative controls and an evaluation kit",
+      "group": "applied",
+      "file": "Bismillah_The_Atlas_of_Just_Abundance_Differentiator_Edition_v3_Bismillah.pdf",
+      "pages": 60,
+      "aliases": [
+        "Bismillah_Differentiator_Guide_Bismillah.pdf (exact duplicate SHA-256)"
+      ],
+      "size_bytes": 342361
+    },
+    {
+      "id": "D02",
+      "type": "document",
+      "label": "Recognizing & Resisting",
+      "description": "Adversarial interpretations and conceptual software analogies; scientific claims require independent testing",
+      "group": "interpretive",
+      "file": "Bismillah_Recognizing_Resisting_Guide_Bismillah.pdf",
+      "pages": 31,
+      "aliases": [],
+      "size_bytes": 107955
+    },
+    {
+      "id": "D03",
+      "type": "document",
+      "label": "Atlas: Universal Master",
+      "description": "Evidence-first venture field guide and early product examples",
+      "group": "applied",
+      "file": "Bismillah_Atlas_of_Just_Abundance_Universal_Master_2026_Bismillah.pdf",
+      "pages": 41,
+      "aliases": [],
+      "size_bytes": 213167
+    },
+    {
+      "id": "D04",
+      "type": "document",
+      "label": "Universal Countermeasure",
+      "description": "Structural honesty and countermeasure concepts; contains unverified universal detection claims",
+      "group": "interpretive",
+      "file": "Bismillah_Universal_Countermeasure_Guide_Bismillah.pdf",
+      "pages": 42,
+      "aliases": [],
+      "size_bytes": 129191
+    },
+    {
+      "id": "D05",
+      "type": "document",
+      "label": "Everyworld Venture Builder",
+      "description": "Commercialization playbook, 90-day testing, evidence receipts and bounded action concepts",
+      "group": "applied",
+      "file": "Bismillah_Everyworld_Atlas_of_Just_Abundance_Venture_Builder_Bismillah.pdf",
+      "pages": 107,
+      "aliases": [],
+      "size_bytes": 698780
+    },
+    {
+      "id": "D06",
+      "type": "document",
+      "label": "Atlas: Master Guide",
+      "description": "Beginner-to-builder evidence gates and product design",
+      "group": "applied",
+      "file": "Bismillah_The_Atlas_of_Just_Abundance_MASTER_GUIDE_Bismillah.pdf",
+      "pages": 25,
+      "aliases": [],
+      "size_bytes": 195588
+    },
+    {
+      "id": "D07",
+      "type": "document",
+      "label": "Structural Honesty Guide",
+      "description": "SHV axioms, claims register and FATIMA proposals; do not treat proposals as validated",
+      "group": "research",
+      "file": "Bismillah_Structural_Honesty_Guide_Bismillah.pdf",
+      "pages": 47,
+      "aliases": [],
+      "size_bytes": 152112
+    },
+    {
+      "id": "D08",
+      "type": "document",
+      "label": "Bayyinah Collected Works",
+      "description": "Large research compilation with papers, historical records and Kun Fayakun; not independent replication",
+      "group": "corpus",
+      "file": "Bismillah_Bayyinah_Collected_Works_Bismillah.md",
+      "pages": null,
+      "aliases": [
+        "Bismillah_Bayyinah_Collected_Works_Bismillah.pdf (alternate collection format)"
+      ],
+      "size_bytes": 46126010
+    },
+    {
+      "id": "D09",
+      "type": "document",
+      "label": "Kun Fayakun",
+      "description": "Long theological/narrative synthesis and technology analogies, not engineering validation",
+      "group": "interpretive",
+      "file": "Bismillah_KUN_FAYAKUN_The_Story_of_Our_Reality_Bismillah.pdf",
+      "pages": 914,
+      "aliases": [
+        "Bismillah_KUN_FAYAKUN_The_Story_of_Our_Reality_Bismillah.md (alternate format)"
+      ],
+      "size_bytes": 1887891
+    },
+    {
+      "id": "D10",
+      "type": "document",
+      "label": "Amanah Master Guide",
+      "description": "Explicit 90-day MVPs, evidence-receipt, release bundle and read-only design choices",
+      "group": "applied",
+      "file": "The_Amanah_Abundance_Master_Guide.pdf",
+      "pages": 67,
+      "aliases": [],
+      "size_bytes": 656499
+    },
+    {
+      "id": "D11",
+      "type": "document",
+      "label": "Amanah Sector Encyclopedia",
+      "description": "Sector-specific deployment briefs and safety boundaries",
+      "group": "applied",
+      "file": "The_Amanah_Sector_Application_Encyclopedia.pdf",
+      "pages": 131,
+      "aliases": [],
+      "size_bytes": 1143084
+    },
+    {
+      "id": "D12",
+      "type": "document",
+      "label": "Universal AI Master Strategy",
+      "description": "Reference architecture, explicit gates, contradiction register and release tests",
+      "group": "engineering",
+      "file": "Bismillah_Universal_AI_Development_Master_Strategy_Bismillah.pdf",
+      "pages": 45,
+      "aliases": [],
+      "size_bytes": 229504
+    },
+    {
+      "id": "D13",
+      "type": "document",
+      "label": "Master Differentiator Strategy",
+      "description": "Cross-domain verification, independent evidence, counterexamples and false-positive discipline",
+      "group": "engineering",
+      "file": "Bismillah_Bayyinah_Master_Differentiator_Strategy_v1.0_Bismillah.pdf",
+      "pages": 48,
+      "aliases": [],
+      "size_bytes": 311052
+    },
+    {
+      "id": "D14",
+      "type": "document",
+      "label": "Atlas: Industrial Expansion v2",
+      "description": "Machine-readable evidence schema and 20 industry adapters",
+      "group": "applied",
+      "file": "Bismillah_The_Atlas_of_Just_Abundance_Industrial_Expansion_v2_Bismillah.pdf",
+      "pages": 33,
+      "aliases": [],
+      "size_bytes": 262340
+    },
+    {
+      "id": "D15",
+      "type": "document",
+      "label": "Al-Furqan Divine Protection",
+      "description": "Qur’anic reading/training-protocol edition; proposed numerical learning claims need replication",
+      "group": "interpretive",
+      "file": "Bismillah_Al_Furqan_Divine_Protection_Edition_Bismillah.pdf",
+      "pages": 1584,
+      "aliases": [],
+      "size_bytes": 8536939
+    },
+    {
+      "id": "T01",
+      "type": "theme",
+      "label": "Claim ↔ evidence contract",
+      "description": "Exact claim scope, evidence pointers and independently checkable decisions",
+      "group": "theme"
+    },
+    {
+      "id": "T02",
+      "type": "theme",
+      "label": "Independent witnesses",
+      "description": "Common-mode failure, separate keys and genuinely independent sources",
+      "group": "theme"
+    },
+    {
+      "id": "T03",
+      "type": "theme",
+      "label": "Coverage, UNKNOWN & abstention",
+      "description": "Inspected/uninspected denominators, missing evidence and fail-closed behavior",
+      "group": "theme"
+    },
+    {
+      "id": "T04",
+      "type": "theme",
+      "label": "Integrity & provenance",
+      "description": "Digests, custody chains, signed witnesses and proof boundaries",
+      "group": "theme"
+    },
+    {
+      "id": "T05",
+      "type": "theme",
+      "label": "Adversarial falsification",
+      "description": "Negative controls, hostile test cases, preregistered metrics and reviewer challenge",
+      "group": "theme"
+    },
+    {
+      "id": "T06",
+      "type": "theme",
+      "label": "Release governance",
+      "description": "Decision gates, source-of-truth discipline and reversible rollout",
+      "group": "theme"
+    },
+    {
+      "id": "T07",
+      "type": "theme",
+      "label": "Equity, remedy & human authority",
+      "description": "Affected-party feedback, appeals and benefit-sharing",
+      "group": "theme"
+    },
+    {
+      "id": "T08",
+      "type": "theme",
+      "label": "Sector evidence adapters",
+      "description": "Read-only adapters for sector evidence and distinct authoritative sources",
+      "group": "theme"
+    },
+    {
+      "id": "T09",
+      "type": "theme",
+      "label": "Venture validation",
+      "description": "Who pays, measurable pilot value, cost and falsifiable commercial tests",
+      "group": "theme"
+    },
+    {
+      "id": "T10",
+      "type": "theme",
+      "label": "Formal verification & static rules",
+      "description": "Typed invariants and automated prevention of silent uncertainty",
+      "group": "theme"
+    },
+    {
+      "id": "T11",
+      "type": "theme",
+      "label": "Bounded authorization",
+      "description": "No irreversible autonomous effects on incomplete evidence",
+      "group": "theme"
+    },
+    {
+      "id": "T12",
+      "type": "theme",
+      "label": "Interpretive framing",
+      "description": "Theological/metaphorical analogies; not empirical or cryptographic evidence",
+      "group": "theme"
+    },
+    {
+      "id": "T13",
+      "type": "theme",
+      "label": "Semantic-versus-byte boundary",
+      "description": "Hash/format integrity versus meaning, authenticity and validated semantics",
+      "group": "theme"
+    },
+    {
+      "id": "T14",
+      "type": "theme",
+      "label": "Training/evaluation provenance",
+      "description": "Data lineage, reward claims, model/benchmark traceability",
+      "group": "theme"
+    },
+    {
+      "id": "I01",
+      "type": "instrument",
+      "label": "Furqan",
+      "description": "Type-checked honesty properties, explicit result states",
+      "group": "instrument"
+    },
+    {
+      "id": "I02",
+      "type": "instrument",
+      "label": "FATIMA",
+      "description": "File/seal consistency and format detection; distinguish independent authentication",
+      "group": "instrument"
+    },
+    {
+      "id": "I03",
+      "type": "instrument",
+      "label": "furqan-lint",
+      "description": "Structural lint rules and measured checker coverage",
+      "group": "instrument"
+    },
+    {
+      "id": "I04",
+      "type": "instrument",
+      "label": "HABL",
+      "description": "Finding transport, provenance, correlation and tamper-evidence roadmap",
+      "group": "instrument"
+    },
+    {
+      "id": "I05",
+      "type": "instrument",
+      "label": "Bayyinah",
+      "description": "Cross-artifact and cross-vendor audit; detector coverage and falsification",
+      "group": "instrument"
+    },
+    {
+      "id": "I06",
+      "type": "instrument",
+      "label": "Shahid",
+      "description": "Publisher disclosure, inspection coverage, witness-resilience design candidate",
+      "group": "instrument"
+    },
+    {
+      "id": "P01",
+      "type": "product",
+      "label": "Evidence Receipt SDK",
+      "description": "Scoped claim+source+check+UNKNOWN/FAIL/PASS+reproduction bundle",
+      "group": "product",
+      "status": "Now",
+      "priority": "High"
+    },
+    {
+      "id": "P02",
+      "type": "product",
+      "label": "Structural CI Gate",
+      "description": "CI policy for code, artifacts and evidence before release",
+      "group": "product",
+      "status": "Now",
+      "priority": "High"
+    },
+    {
+      "id": "P03",
+      "type": "product",
+      "label": "Public Data Recompute",
+      "description": "Read-only public numbers + reproducible discrepancy receipts",
+      "group": "product",
+      "status": "Pilot",
+      "priority": "High"
+    },
+    {
+      "id": "P04",
+      "type": "product",
+      "label": "Procurement Evidence Desk",
+      "description": "Read-only contract/award cross-check and human remediation",
+      "group": "product",
+      "status": "Pilot",
+      "priority": "Medium"
+    },
+    {
+      "id": "P05",
+      "type": "product",
+      "label": "Shahid Disclosure Portal",
+      "description": "Human-readable coverage attestations; signed evidence pointers later",
+      "group": "product",
+      "status": "Gate 4",
+      "priority": "Medium"
+    },
+    {
+      "id": "P06",
+      "type": "product",
+      "label": "Independent Audit Harness",
+      "description": "Holdouts, negative controls, cross-vendor independence and failure taxonomy",
+      "group": "product",
+      "status": "Now",
+      "priority": "High"
+    },
+    {
+      "id": "P07",
+      "type": "product",
+      "label": "Sector Adapter SDK",
+      "description": "Domain-specific evidence oracles with privacy and liability gates",
+      "group": "product",
+      "status": "Later",
+      "priority": "Medium"
+    },
+    {
+      "id": "P08",
+      "type": "product",
+      "label": "Bounded Action Gateway",
+      "description": "Synthetic sandbox until explicit auth + rollback + kill-switch evidence",
+      "group": "product",
+      "status": "Design only",
+      "priority": "Low"
+    }
+  ],
+  "edges": [
+    {
+      "source": "D01",
+      "target": "T01",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.2",
+          "phrase": "refuses to convert fluency into proof",
+          "excerpt": ". A genuinely beneficial system makes the user more capable after using it. A trustworthy differentiator refuses to convert fluency into proof, missing evidence into assent, or internal self-attestation into independent authority. Reading key: [SOURCE] documents the supplied author’s proposal or scientific paper; [DESIGN] marks a new e"
+        }
+      ]
+    },
+    {
+      "source": "D01",
+      "target": "T02",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D01",
+      "target": "T05",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.37",
+          "phrase": "frozen seed",
+          "excerpt": "BSSG: DENY on every failed/unknown conjunct; separate effect contract and witness plane. XZ discipline: frozen seed, independent evaluator, preregistered metric, new negative controls, holdout report. FATIMA: digest preserved pre/post export, recomputation, sidecar validation, separately controlled signature."
+        }
+      ]
+    },
+    {
+      "source": "D01",
+      "target": "T06",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D01",
+      "target": "T07",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.37",
+          "phrase": "appeal flow",
+          "excerpt": "erved pre/post export, recomputation, sidecar validation, separately controlled signature. Justice: test appeal flow, minority-language failures, accessible output, public-facing incident remedy. Financial: actual customer count matched to invoices, direct costs, CAC, support hours, churn and cash runway. 20."
+        }
+      ]
+    },
+    {
+      "source": "D01",
+      "target": "T08",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D01",
+      "target": "T09",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D01",
+      "target": "T13",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D02",
+      "target": "T04",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.12",
+          "phrase": "Append-Only Provenance",
+          "excerpt": "while its internal representations are uncertain fails SHV. Four axioms define the discipline: AX-SH-1: Append-Only Provenance. Every claim must carry an unbroken chain of evidence back to its source. Evidence may be added but never removed. A system that deletes its audit trail violates this axiom regardless of what th"
+        }
+      ]
+    },
+    {
+      "source": "D02",
+      "target": "T05",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D02",
+      "target": "T10",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D02",
+      "target": "T12",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D02",
+      "target": "T13",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.8",
+          "phrase": "semantic integrity",
+          "excerpt": "syntactic integrity (bits preserved during transmission) can be achieved with arbitrary reliability. But semantic integrity (meaning preserved) falls outside his theory entirely. The gap between syntactic and semantic integrity is Shannon’s Boundary – and it is precisely the gap through which the adversary operates."
+        }
+      ]
+    },
+    {
+      "source": "D03",
+      "target": "T01",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.4",
+          "phrase": "Claim. “All shipments were delivered.”",
+          "excerpt": "iscipline of testing claims against the right witnesses. Four words that make the product understandable Claim. “All shipments were delivered.” Source. The raw scan events. Check. Search for shipments with no delivered event. Receipt. The mismatch, its timestamp, the limits of the log, and the person who reviewed it. That is a Different"
+        }
+      ]
+    },
+    {
+      "source": "D03",
+      "target": "T03",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.3",
+          "phrase": "correct answer is UNKNOWN",
+          "excerpt": "sounding answer from an answer they can verify, challenge and repair. When evidence is insufficient, the correct answer is UNKNOWN, not a polished green checkmark. The first purchase to seek: A paid, read-only pilot in which an audit team or software team identifies a costly discrepancy, resolves it faster than its existing"
+        }
+      ]
+    },
+    {
+      "source": "D03",
+      "target": "T06",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D03",
+      "target": "T07",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D03",
+      "target": "T08",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D03",
+      "target": "T09",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D04",
+      "target": "T04",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.6",
+          "phrase": "Append-Only Provenance",
+          "excerpt": "s where what something claims to be differs from what it actually is. The Four Axioms (AX-SH): Axiom 1 – Append-Only Provenance: No prior declaration can be silently rewritten. The audit trail grows monotonically; corrections are appended as corrigenda, never substituted. Axiom 2 – Surface-Substrate Consistency: Every su"
+        }
+      ]
+    },
+    {
+      "source": "D04",
+      "target": "T05",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D04",
+      "target": "T10",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.9",
+          "phrase": "What it detects",
+          "excerpt": "Al-Furqan (“The Criterion” – the Qur’anic term for the faculty that distinguishes truth from falsehood). What it detects: Claims that contradict the document’s own stated premises Statistical assertions without verifiable sources Circular reasoning chains Terminology drift (the same term used with different meanin"
+        }
+      ]
+    },
+    {
+      "source": "D04",
+      "target": "T12",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D04",
+      "target": "T13",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D05",
+      "target": "T01",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.5",
+          "phrase": "Evidence Receipt",
+          "excerpt": "er the rules permit the action, and whether a real person can disagree. The smallest sellable unit is an evidence receipt—a machine-readable and human-readable record of (1) the claim; (2) source material and date; (3) checks performed; (4) evidence not available; (5) PASS/FAIL/UNKNOWN for a precisely defined test;"
+        }
+      ]
+    },
+    {
+      "source": "D05",
+      "target": "T02",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D05",
+      "target": "T03",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D05",
+      "target": "T05",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D05",
+      "target": "T06",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D05",
+      "target": "T07",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D05",
+      "target": "T08",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D05",
+      "target": "T09",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.7",
+          "phrase": "Interview people who will live with failures",
+          "excerpt": ", and as many as needed to test buyer patterns. Do not treat an arbitrary count as statistical evidence. Interview people who will live with failures, not just executives who buy dashboards. Problem selection score (0–5 each) Dimension 0 5 Pain Occasional inconvenience Costly recurring failure documented by buyer Accessible evidence No le"
+        }
+      ]
+    },
+    {
+      "source": "D05",
+      "target": "T11",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.8",
+          "phrase": "Bounded Action Gateway",
+          "excerpt": "attestations Advisory CI on permitted repositories Security, enterprise software, regulated supplier QA Bounded Action Gateway External authorization for tool or agent effects Synthetic simulation, not production writes Highly controlled enterprise workflows after formal evaluation Kimi’s 2026 council readout names a si"
+        }
+      ]
+    },
+    {
+      "source": "D06",
+      "target": "T01",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D06",
+      "target": "T03",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D06",
+      "target": "T06",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D06",
+      "target": "T07",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D06",
+      "target": "T08",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.18",
+          "phrase": "12-month expansion rule",
+          "excerpt": "nt. Deliverable: real revenue or a clear no-go decision; public impact report; next-quarter backlog. The 12-month expansion rule Expand to new countries or sectors only after reproducing safety performance in the new language, jurisdiction, data source and customer group. Don’t infer worldwide effectiveness from one favor"
+        }
+      ]
+    },
+    {
+      "source": "D06",
+      "target": "T09",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D06",
+      "target": "T11",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.7",
+          "phrase": "PASS / FAIL / UNKNOWN",
+          "excerpt": "ection + audit trail + fair economic settlement For any proposed external action, evaluate the gate with PASS / FAIL / UNKNOWN. If an irreversible effect’s authorization is unknown, no action occurs. A request for general information can still be answered with uncertainty and an explanation; “fail closed” is not a licen"
+        }
+      ]
+    },
+    {
+      "source": "D07",
+      "target": "T04",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D07",
+      "target": "T05",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D07",
+      "target": "T06",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.12",
+          "phrase": "Falsification Protocols",
+          "excerpt": "hy the five FATIMA engines operate independently – corrupting one engine does not compromise the others. Falsification Protocols: SHV specifies five falsification protocols with registered durability checkpoints at Year 10, 25, and 50. The Ten Core Claims Register explicitly lists each claim with its epistemic status – wh"
+        }
+      ]
+    },
+    {
+      "source": "D07",
+      "target": "T10",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D07",
+      "target": "T12",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D07",
+      "target": "T13",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.12",
+          "phrase": "Ten Core Claims Register",
+          "excerpt": "pecifies five falsification protocols with registered durability checkpoints at Year 10, 25, and 50. The Ten Core Claims Register explicitly lists each claim with its epistemic status – what is proven, what is conjectured, what is empirically supported but not yet proven. This level of epistemic honesty is itself a structu"
+        }
+      ]
+    },
+    {
+      "source": "D08",
+      "target": "T01",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D08",
+      "target": "T04",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D08",
+      "target": "T05",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D08",
+      "target": "T06",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D08",
+      "target": "T10",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D08",
+      "target": "T12",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D08",
+      "target": "T13",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D08",
+      "target": "T14",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D09",
+      "target": "T02",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.83",
+          "phrase": "independent observations",
+          "excerpt": "he surveyor does not need to visit the unknown point. The unknown point is located by the convergence of independent observations made from positions whose coordinates are already established. The unknown is found by what the known agrees upon. In medicine, the mathematics is even more striking. A diagnostic test with a 5%"
+        }
+      ]
+    },
+    {
+      "source": "D09",
+      "target": "T05",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.28",
+          "phrase": "reward hacking",
+          "excerpt": "lly, and the being who saw the names and calculated how to game them. The researchers call this problem \"reward hacking\" or \"Goodhart's law\" -- when a measure becomes a target, it ceases to be a good measure. But the Qur'an's description is older and more precise: it is the substitution of local evaluation for gl"
+        }
+      ]
+    },
+    {
+      "source": "D09",
+      "target": "T07",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D09",
+      "target": "T12",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D09",
+      "target": "T14",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D10",
+      "target": "T01",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D10",
+      "target": "T03",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D10",
+      "target": "T06",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.31",
+          "phrase": "three consecutive bundles",
+          "excerpt": "not a proprietary seal. 90-day MVP: support one customer’s one application and one release type. Produce three consecutive bundles; measure preparation time, discrepancies caught, and reviewer reproduction success. Do not: certify “safe AI,” guarantee compliance, or let the producer purchase a predetermined verdict. Bluepri"
+        }
+      ]
+    },
+    {
+      "source": "D10",
+      "target": "T07",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D10",
+      "target": "T08",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D10",
+      "target": "T09",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.31",
+          "phrase": "90-day MVP",
+          "excerpt": "Moat: integrations, verified historical record, and trusted correction practice—not a proprietary seal. 90-day MVP: support one customer’s one application and one release type. Produce three consecutive bundles; measure preparation time, discrepancies caught, and reviewer reproduction success. Do not: certif"
+        }
+      ]
+    },
+    {
+      "source": "D10",
+      "target": "T11",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.33",
+          "phrase": "Prove denial on UNKNOWN",
+          "excerpt": "recy of the policy engine. 90-day MVP: one low-value reversible effect, such as creating a draft ticket. Prove denial on UNKNOWN, replay rejection, witness-loss narrowing, and exact request binding. Add an unmediated-channel review. Do not: claim complete mediation without a system-wide channel analysis, or claim harm red"
+        }
+      ]
+    },
+    {
+      "source": "D11",
+      "target": "T01",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D11",
+      "target": "T03",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D11",
+      "target": "T06",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D11",
+      "target": "T07",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.6",
+          "phrase": "remedy",
+          "excerpt": "ose benefit and whose risk? Mission language hides extraction 2. Rights Stakeholder, consent, appeal and remedy map Who may contest, correct or refuse? People become mere inputs 3. Substrate T00 manifest and raw-evidence custody What bytes, records, assets and configurations actually exist? Surface confid"
+        }
+      ]
+    },
+    {
+      "source": "D11",
+      "target": "T08",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.4",
+          "phrase": "Nuclear Facilities and Nuclear-Adjacent Evidence Systems",
+          "excerpt": "c Evidence Part II — Fourteen Sector Application Briefs 10. Automotive and Software-Defined Vehicles 11. Nuclear Facilities and Nuclear-Adjacent Evidence Systems 12. Aerospace, Aviation and Space Systems 13. Financial Markets, Cooperative Capital and Financial Infrastructure 14. Rail, Public Transport and Mobility 15. Education, Learning "
+        }
+      ]
+    },
+    {
+      "source": "D11",
+      "target": "T09",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D11",
+      "target": "T11",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D12",
+      "target": "T01",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.4",
+          "phrase": "Adopt a Differentiator Platform",
+          "excerpt": "EXECUTIVE DECISION Adopt a Differentiator Platform rather than a general-purpose answer generator as the first commercial and scientific objective. The platform receives a claim, a declared scope, and a set of authorized artifacts; tests claims"
+        }
+      ]
+    },
+    {
+      "source": "D12",
+      "target": "T02",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D12",
+      "target": "T03",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D12",
+      "target": "T04",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.14",
+          "phrase": "3.2 Seven-stage evidence path",
+          "excerpt": "LUATED when evidence is absent. A model must not turn unanswered fields into PASS through summarization. 3.2 Seven-stage evidence path Ingress and consent: establish data owner, authorization, retention limits and purpose; reject out-of-scope data. Format routing and safe parsing: declare analyzer coverage and unsupported parts"
+        }
+      ]
+    },
+    {
+      "source": "D12",
+      "target": "T05",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.33",
+          "phrase": "7.1 Canonical six adverse cases",
+          "excerpt": "determines empirical truth and release authority. PART VII — AUDIT TEST CASES AND REPRODUCTION EXAMPLES 7.1 Canonical six adverse cases A — Absent evidence disguised as certainty: claim lists a reference that does not exist. Expected UNKNOWN or FAIL for unsupported citation, with trace. B — Valid benign Unicode: Arabic text legi"
+        }
+      ]
+    },
+    {
+      "source": "D12",
+      "target": "T06",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.17",
+          "phrase": "3.8 Explicit acceptance gates",
+          "excerpt": "iew random PASS/FAIL/UNKNOWN samples and document disagreement; release only after independent sign-off. 3.8 Explicit acceptance gates G0 Legal/data access: lawful basis, purpose, jurisdiction and licenses documented. G1 Technical reproducibility: clean checkout + deterministic examples; no unpinned dependencies; immutable arti"
+        }
+      ]
+    },
+    {
+      "source": "D12",
+      "target": "T07",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D12",
+      "target": "T08",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D12",
+      "target": "T09",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D12",
+      "target": "T10",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D12",
+      "target": "T11",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D12",
+      "target": "T13",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.36",
+          "phrase": "8.4 Claim and contradiction register",
+          "excerpt": "endorse every theological thesis. Religious conviction is not a software privilege escalation mechanism. 8.4 Claim and contradiction register — high priority Key Issue Current status Closure experiment or proof obligation C01 Version architecture 22×7 vs 11×14 OPEN Produce tagged algorithm comparison, fixture matrix, witness schema co"
+        }
+      ]
+    },
+    {
+      "source": "D12",
+      "target": "T14",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D13",
+      "target": "T01",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.4",
+          "phrase": "Core strategy in one line",
+          "excerpt": "nal comparisons, not a claim that all such systems literally implement a generative adversarial network. Core strategy in one line: Specify the genuine purpose; bind outputs to independent, reproducible evidence; test behavior under changed conditions; prevent unverifiable claims from authorizing consequential effects; offe"
+        }
+      ]
+    },
+    {
+      "source": "D13",
+      "target": "T02",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D13",
+      "target": "T03",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.6",
+          "phrase": "A false output can arise without malicious intent",
+          "excerpt": "ssion What changed in the world? BSSG-style effect gate, least privilege, rollback, human accountability A false output can arise without malicious intent. An adversarially optimized output may be syntactically correct. The aim is to detect material divergence and address its cause while resisting speculative attribution. [P023] [P026] [P"
+        }
+      ]
+    },
+    {
+      "source": "D13",
+      "target": "T04",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.21",
+          "phrase": "Repeated hashing does not multiply independent witnesses",
+          "excerpt": "ct specified contradictions or drift but require well-defined reference claims and validated evaluators. Repeated hashing does not multiply independent witnesses by itself. [P041] [P074] [P071] [P072] The source framework’s 154-layer / dual-constant numerology should be accurately described as the paper’s architecture and religiously moti"
+        }
+      ]
+    },
+    {
+      "source": "D13",
+      "target": "T05",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D13",
+      "target": "T06",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D13",
+      "target": "T07",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D13",
+      "target": "T08",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D13",
+      "target": "T10",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D13",
+      "target": "T11",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D13",
+      "target": "T13",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D14",
+      "target": "T01",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.5",
+          "phrase": "\"claim_id\"",
+          "excerpt": "— OPERATIONAL DESIGN AND DEPLOYMENT GATES 6. The evidence contract (minimum machine-readable record) {   \"claim_id\": \"CLAIM-001\", \"sector\": \"WARE\",   \"surface_statement\": \"Shipment has been delivered\",   \"substrate_source_id\": \"authorized_wms_eventlog_2026-10-25\",   \"substrate_sha256\": \"<actual content digest"
+        }
+      ]
+    },
+    {
+      "source": "D14",
+      "target": "T02",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D14",
+      "target": "T03",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D14",
+      "target": "T04",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.4",
+          "phrase": "seven-stage evidence path",
+          "excerpt": "ctor for every incident. [SRC: XZ v0.75 frozen; SHVVP v0.8.] 3. From sources to a reference product: the seven-stage evidence path AUTHORIZED INPUT (original bytes + lawful basis)   -> BAYYINAH SCANNER (file type, parse coverage, anomalies)   -> FATIMA / STANDARD HASH (versioned content witness; optional keyed signature)"
+        }
+      ]
+    },
+    {
+      "source": "D14",
+      "target": "T05",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.32",
+          "phrase": "frozen seed",
+          "excerpt": "BSSG: DENY on every failed/unknown conjunct; separate effect contract and witness plane. XZ discipline: frozen seed, independent evaluator, preregistered metric, new negative controls, holdout report. FATIMA: digest preserved pre/post export, recomputation, sidecar validation, separately controlled signature."
+        }
+      ]
+    },
+    {
+      "source": "D14",
+      "target": "T06",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D14",
+      "target": "T07",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D14",
+      "target": "T08",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D14",
+      "target": "T09",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D14",
+      "target": "T11",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D15",
+      "target": "T10",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D15",
+      "target": "T12",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D15",
+      "target": "T13",
+      "relation": "discusses",
+      "strength": 0.52,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": []
+    },
+    {
+      "source": "D15",
+      "target": "T14",
+      "relation": "discusses",
+      "strength": 0.84,
+      "basis": "manual thematic classification (not independent proof)",
+      "evidence": [
+        {
+          "locator": "p.3",
+          "phrase": "TRAINING PROTOCOL PREAMBLE",
+          "excerpt": "TRAINING PROTOCOL PREAMBLE -- DIVINE PROTECTION EDITION §0 -- The Computational Frame If reality is an Islamic divine computation -- where Allah is the Architect- Programmer, the Qur'an is the source specification, and bo"
+        }
+      ]
+    },
+    {
+      "source": "D01",
+      "target": "D14",
+      "relation": "textual_similarity",
+      "strength": 0.7802,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D02",
+      "target": "D07",
+      "relation": "textual_similarity",
+      "strength": 0.6061,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D03",
+      "target": "D05",
+      "relation": "textual_similarity",
+      "strength": 0.493,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D04",
+      "target": "D07",
+      "relation": "textual_similarity",
+      "strength": 0.4826,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D02",
+      "target": "D04",
+      "relation": "textual_similarity",
+      "strength": 0.4435,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D03",
+      "target": "D14",
+      "relation": "textual_similarity",
+      "strength": 0.4364,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D05",
+      "target": "D06",
+      "relation": "textual_similarity",
+      "strength": 0.4275,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D03",
+      "target": "D12",
+      "relation": "textual_similarity",
+      "strength": 0.4262,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D06",
+      "target": "D10",
+      "relation": "textual_similarity",
+      "strength": 0.3907,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D10",
+      "target": "D11",
+      "relation": "textual_similarity",
+      "strength": 0.3877,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D11",
+      "target": "D13",
+      "relation": "textual_similarity",
+      "strength": 0.3729,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D10",
+      "target": "D13",
+      "relation": "textual_similarity",
+      "strength": 0.3719,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D08",
+      "target": "D09",
+      "relation": "textual_similarity",
+      "strength": 0.3566,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D12",
+      "target": "D13",
+      "relation": "textual_similarity",
+      "strength": 0.3563,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D01",
+      "target": "D05",
+      "relation": "textual_similarity",
+      "strength": 0.3531,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D09",
+      "target": "D15",
+      "relation": "textual_similarity",
+      "strength": 0.3281,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D06",
+      "target": "D12",
+      "relation": "textual_similarity",
+      "strength": 0.324,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D07",
+      "target": "D09",
+      "relation": "textual_similarity",
+      "strength": 0.3065,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "D08",
+      "target": "D11",
+      "relation": "textual_similarity",
+      "strength": 0.2262,
+      "basis": "TF-IDF cosine on length-limited, sampled text; shared wording ≠ independent corroboration",
+      "evidence": []
+    },
+    {
+      "source": "T01",
+      "target": "I01",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T01",
+      "target": "I03",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T01",
+      "target": "I04",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T01",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T01",
+      "target": "I06",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T02",
+      "target": "I02",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T02",
+      "target": "I04",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T02",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T02",
+      "target": "I06",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T03",
+      "target": "I01",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T03",
+      "target": "I03",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T03",
+      "target": "I04",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T03",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T03",
+      "target": "I06",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T04",
+      "target": "I02",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T04",
+      "target": "I04",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T04",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T04",
+      "target": "I06",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T05",
+      "target": "I03",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T05",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T05",
+      "target": "I06",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T06",
+      "target": "I01",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T06",
+      "target": "I03",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T06",
+      "target": "I04",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T06",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T06",
+      "target": "I06",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T07",
+      "target": "I04",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T07",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T07",
+      "target": "I06",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T08",
+      "target": "I02",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T08",
+      "target": "I03",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T08",
+      "target": "I04",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T08",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T08",
+      "target": "I06",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T09",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T09",
+      "target": "I06",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T10",
+      "target": "I01",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T10",
+      "target": "I03",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T10",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T11",
+      "target": "I01",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T11",
+      "target": "I03",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T11",
+      "target": "I04",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T11",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T11",
+      "target": "I06",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T13",
+      "target": "I02",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T13",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T13",
+      "target": "I06",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T14",
+      "target": "I01",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T14",
+      "target": "I04",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T14",
+      "target": "I05",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "T14",
+      "target": "I06",
+      "relation": "design_relevance",
+      "strength": 0.58,
+      "basis": "proposed design mapping; requires implementation validation",
+      "evidence": []
+    },
+    {
+      "source": "I01",
+      "target": "P01",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I01",
+      "target": "P02",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I01",
+      "target": "P08",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I02",
+      "target": "P01",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I02",
+      "target": "P02",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I02",
+      "target": "P03",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I02",
+      "target": "P04",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I02",
+      "target": "P05",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I03",
+      "target": "P01",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I03",
+      "target": "P02",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I03",
+      "target": "P06",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I03",
+      "target": "P07",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I03",
+      "target": "P08",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I04",
+      "target": "P01",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I04",
+      "target": "P02",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I04",
+      "target": "P03",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I04",
+      "target": "P04",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I04",
+      "target": "P05",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I04",
+      "target": "P06",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I04",
+      "target": "P07",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I05",
+      "target": "P01",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I05",
+      "target": "P02",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I05",
+      "target": "P03",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I05",
+      "target": "P04",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I05",
+      "target": "P05",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I05",
+      "target": "P06",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I05",
+      "target": "P07",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I05",
+      "target": "P08",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I06",
+      "target": "P01",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I06",
+      "target": "P03",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I06",
+      "target": "P04",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I06",
+      "target": "P05",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I06",
+      "target": "P06",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I06",
+      "target": "P07",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    },
+    {
+      "source": "I06",
+      "target": "P08",
+      "relation": "could_enable",
+      "strength": 0.65,
+      "basis": "proposed product integration, not deployed feature",
+      "evidence": []
+    }
+  ],
+  "meta": {
+    "source_documents": 15,
+    "source_entries": 18,
+    "node_count": 43,
+    "edge_count": 216,
+    "source_citations": 35
+  }
+}
