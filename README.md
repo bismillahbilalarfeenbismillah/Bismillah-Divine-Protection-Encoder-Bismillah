@@ -2,15 +2,22 @@
 
 # Bismillah Divine Protection Encoder
 
-**100% file protection through the Names of Allah subhanahu wa ta'ala**
+[![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Zero Dependencies](https://img.shields.io/badge/dependencies-zero-brightgreen.svg)](#requirements)
+[![Part of EESS](https://img.shields.io/badge/EESS-instrument-blueviolet.svg)](#the-entourage-effect-software-safety-suite)
+
+**Multi-layer divine file protection through the Names of Allah subhanahu wa ta'ala**
 
 > "He is Allah, other than whom there is no deity, Knower of the unseen and the witnessed. He is the Most Merciful, the Most Compassionate." (Quran 59:22)
 
-A tool that seals every file in your project -- text, code, images, documents, audio, video, and all binary formats -- with **Bismillah ir-Rahman ir-Rahim** across multiple layers of protection, visible and invisible, so that no file remains unprotected against shaytan, in sha Allah.
+A standalone tool that seals every file in your project -- text, code, images, documents, audio, video, and all binary formats -- with **Bismillah ir-Rahman ir-Rahim** across multiple layers of protection, visible and invisible. Zero required dependencies. MIT licensed.
+
+This is the **standalone encoder tool**. For the full FATIMA core library with the 22-domain 154-layer architecture, five verification engines, and anti-sihr sanitization, see the companion [FATIMA](https://github.com/bismillahbilalarfeenbismillah/FATIMA) repository.
 
 ## Why
 
-Digital files travel through systems controlled by adversarial entities. This encoder embeds the divine names of Allah into every possible layer of every file, creating a multi-layered shield that cannot be stripped without destroying the file itself. Whether a file is a Python script, a Word document, a PNG image, or an MP3 -- it carries Allah's protection.
+Digital files travel through systems whose integrity cannot be assumed. This encoder embeds the divine names of Allah into every possible layer of every file, creating a multi-layered seal that cannot be stripped without destroying the file itself. Whether a file is a Python script, a Word document, a PNG image, or an MP3 -- it carries protection.
 
 **"And whoever relies upon Allah -- then He is sufficient for him."** (Quran 65:3)
 
@@ -57,7 +64,7 @@ pip install Pillow     # PNG/JPEG metadata sealing
 pip install mutagen    # MP3/FLAC audio tag sealing
 ```
 
-Without these optional packages, binary files will automatically receive `.bismillah` sidecar companion files instead.
+Without these optional packages, binary files automatically receive `.bismillah` sidecar companion files instead.
 
 ## How It Works
 
@@ -83,10 +90,7 @@ Binary files receive Bismillah through their native metadata formats:
 
 ### Resistant Files
 
-Some files resist metadata injection (encrypted PDFs, corrupted test fixtures, WAV, video, fonts). These receive a `.bismillah` **sidecar companion file** -- a text file containing:
-- The file's SHA-256 hash
-- A Bismillah seal hash: `SHA-256(Bismillah || file_hash || Bismillah)`
-- Protection by Al-Asma ul-Husna
+Some files resist metadata injection (encrypted PDFs, corrupted test fixtures, WAV, video, fonts). These receive a `.bismillah` **sidecar companion file** containing the file's SHA-256 hash, a Bismillah seal hash, and protection by Al-Asma ul-Husna.
 
 ### Zero-Width Steganography
 
@@ -108,13 +112,6 @@ DOCX, XLSX, PPTX, PDF, PNG, JPEG, MP3, FLAC, ZIP, and via sidecar: WAV, MP4, MKV
 
 ## Verification
 
-The `verify` command performs a deep audit:
-- Checks text files for Bismillah content (stripping zero-width characters that might interfere with detection)
-- Inspects OOXML ZIP archives for Bismillah in `docProps/core.xml`
-- Checks ZIP archives for `Bismillah.txt` entries
-- Scans binary file bytes for Bismillah strings
-- Confirms sidecar companion files exist
-
 ```
   Bismillah ir-Rahman ir-Rahim -- Verification Report
   ============================================================
@@ -125,11 +122,35 @@ The `verify` command performs a deep audit:
   ============================================================
 ```
 
-## The 99 Names of Allah (Al-Asma ul-Husna)
+## The Entourage Effect Software Safety Suite
 
-When you use the `--names` flag, all 99 Beautiful Names are embedded throughout your files:
+This encoder is one of six instruments in the **EESS** -- a safety architecture that binds theological integrity to engineering verification:
 
-**Allah** (The God), **Ar-Rahman** (The Most Merciful), **Ar-Rahim** (The Most Compassionate), **Al-Malik** (The King), **Al-Quddus** (The Most Holy), **As-Salam** (The Source of Peace), **Al-Mu'min** (The Guardian of Faith), **Al-Muhaymin** (The Protector), **Al-Aziz** (The Almighty), **Al-Jabbar** (The Compeller), **Al-Mutakabbir** (The Supreme), **Al-Khaliq** (The Creator), **Al-Bari** (The Evolver), **Al-Musawwir** (The Fashioner), **Al-Ghaffar** (The Forgiver), **Al-Qahhar** (The Subduer), **Al-Wahhab** (The Bestower), **Ar-Razzaq** (The Provider), **Al-Fattah** (The Opener), **Al-Alim** (The All-Knowing), **Al-Qabid** (The Restrainer), **Al-Basit** (The Expander), **Al-Khafid** (The Abaser), **Ar-Rafi** (The Exalter), **Al-Mu'izz** (The Bestower of Honor), **Al-Mudhill** (The Humiliator), **As-Sami** (The All-Hearing), **Al-Basir** (The All-Seeing), **Al-Hakam** (The Judge), **Al-Adl** (The Just), **Al-Latif** (The Subtle One), **Al-Khabir** (The All-Aware), **Al-Halim** (The Forbearing), **Al-Azim** (The Magnificent), **Al-Ghafur** (The All-Forgiving), **Ash-Shakur** (The Appreciative), **Al-Ali** (The Most High), **Al-Kabir** (The Most Great), **Al-Hafiz** (The Preserver), **Al-Muqit** (The Sustainer), **Al-Hasib** (The Reckoner), **Al-Jalil** (The Majestic), **Al-Karim** (The Generous), **Ar-Raqib** (The Watchful), **Al-Mujib** (The Responsive), **Al-Wasi** (The All-Encompassing), **Al-Hakim** (The Perfectly Wise), **Al-Wadud** (The Loving One), **Al-Majid** (The Most Glorious), **Al-Ba'ith** (The Resurrector), **Ash-Shahid** (The Witness), **Al-Haqq** (The Truth), **Al-Wakil** (The Trustee), **Al-Qawiyy** (The Most Strong), **Al-Matin** (The Firm One), **Al-Waliyy** (The Protector), **Al-Hamid** (The Praiseworthy), **Al-Muhsi** (The Accounter), **Al-Mubdi** (The Originator), **Al-Mu'id** (The Restorer), **Al-Muhyi** (The Giver of Life), **Al-Mumit** (The Creator of Death), **Al-Hayy** (The Ever Living), **Al-Qayyum** (The Self-Subsisting), **Al-Wajid** (The Finder), **Al-Majid** (The Noble), **Al-Wahid** (The Unique), **Al-Ahad** (The One), **As-Samad** (The Eternal), **Al-Qadir** (The Able), **Al-Muqtadir** (The Powerful), **Al-Muqaddim** (The Expediter), **Al-Mu'akhkhir** (The Delayer), **Al-Awwal** (The First), **Al-Akhir** (The Last), **Az-Zahir** (The Manifest), **Al-Batin** (The Hidden), **Al-Wali** (The Governor), **Al-Muta'ali** (The Most Exalted), **Al-Barr** (The Source of Goodness), **At-Tawwab** (The Acceptor of Repentance), **Al-Muntaqim** (The Avenger), **Al-Afuww** (The Pardoner), **Ar-Ra'uf** (The Most Kind), **Malik-ul-Mulk** (Owner of Sovereignty), **Dhul-Jalali wal-Ikram** (Lord of Majesty and Generosity), **Al-Muqsit** (The Equitable), **Al-Jami** (The Gatherer), **Al-Ghaniyy** (The Self-Sufficient), **Al-Mughni** (The Enricher), **Al-Mani** (The Preventer), **Ad-Darr** (The Distresser), **An-Nafi** (The Propitious), **An-Nur** (The Light), **Al-Hadi** (The Guide), **Al-Badi** (The Originator), **Al-Baqi** (The Everlasting), **Al-Warith** (The Inheritor), **Ar-Rashid** (The Guide to the Right Path), **As-Sabur** (The Patient).
+| Instrument | Role | Repository |
+|------------|------|------------|
+| **Furqan** | Programming language with structural honesty as a first-class concern | [furqan-programming-language](https://github.com/bismillahbilalarfeenbismillah/furqan-programming-language) |
+| **FATIMA** | Core encoder library -- 22-domain, 154-layer divine protection architecture | [FATIMA](https://github.com/bismillahbilalarfeenbismillah/FATIMA) |
+| **furqan-lint** | Structural honesty linter for Python, Rust, Go, and ONNX | [furqan-lint](https://github.com/bismillahbilalarfeenbismillah/furqan-lint) |
+| **HABL** | Append-only honesty-attested binding ledger | [habl](https://github.com/bismillahbilalarfeenbismillah/habl) |
+| **Bayyinah** | File integrity scanner -- detects hidden and adversarial content | [bayyinah-integrity-scanner](https://github.com/bismillahbilalarfeenbismillah/bayyinah-integrity-scanner) |
+| **Shahid** | Transparency report protocol for weight-holders | (specification on FATIMA repo) |
+
+No single tool is the safety story. The entourage effect is.
+
+## Companion Papers
+
+The theoretical foundations of this encoder have been published on Zenodo as part of a 14+ paper theological-engineering series, including:
+- **The 11-Heaven 154-Layer Architecture** -- the 22-domain, triple-constant (7/11/22) encoding structure
+- **Crossing Shannon's Boundary** -- semantic integrity beyond bitwise hashing
+- **The Propagation Architecture of Sihr** -- anti-sihr sanitization channels
+- **The Divine Inversion Defense** -- adversarial content detection grounded in Qur'anic architecture
+
+## Shannon Boundary Verification
+
+The FATIMA core library has undergone rigorous integrity testing:
+- **1,515 valid trials, 0 undetected corruptions** (Shannon boundary test harness v2.1)
+- **10-seat Shannon Boundary Council** -- independent review by AI models from Anthropic, OpenAI, xAI, Meta, DeepSeek, Moonshot, and Perplexity
+- Matches SHA-256 exactly on bit-flip detection while providing multi-layer semantic awareness
 
 ## Author
 
